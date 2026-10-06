@@ -6,8 +6,8 @@ import path from "node:path";
  * carries the demo seed, so every spec run starts from the same state.
  *
  * The database lives at <repo>/db/e2e.db (gitignored like every db/*.db).
- * `DATABASE_URL="file:../db/e2e.db"` resolves against prisma/ for the CLI
- * and against the schema anchor at runtime — one file, both tools.
+ * `DATABASE_URL="file:../db/e2e.db"` resolves against prisma/ for the CLI —
+ * one file for push, seed, and the running server.
  */
 export default function globalSetup(): void {
   const repo = path.resolve(__dirname, "..", "..");
@@ -16,18 +16,8 @@ export default function globalSetup(): void {
     DATABASE_URL: "file:../db/e2e.db",
   } as NodeJS.ProcessEnv;
 
-  // Prefer bun (the documented runtime); fall back to npx tsx for npm users.
-  const run = (cmd: string) =>
-    execSync(cmd, { cwd: repo, env, stdio: "pipe" }).toString();
+  const run = (cmd: string) => execSync(cmd, { cwd: repo, env, stdio: "pipe" }).toString();
 
-  try {
-    run("bunx prisma db push --skip-generate");
-  } catch {
-    run("npx prisma db push --skip-generate");
-  }
-  try {
-    run("bun prisma/seed.ts");
-  } catch {
-    run("npx tsx prisma/seed.ts");
-  }
+  run("npx prisma db push --skip-generate");
+  run("npx tsx prisma/seed.ts");
 }

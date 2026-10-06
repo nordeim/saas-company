@@ -1,16 +1,16 @@
 {
-  "name": "orbital",
-  "version": "1.0.0",
-  "description": "ORBITAL — AI project management workspace (Next.js 16 + React 19 + Prisma/SQLite)",
+  "name": "saas-company",
+  "version": "2.0.0",
+  "description": "SAAS Company — NovaAI marketing site + workspace (Next.js 16 + React 19 + Prisma/SQLite), a production-ready clone of saas-company.base44.app with a functional superset",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000 2>&1 | tee dev.log",
     "build": "next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/",
-    "start": "NODE_ENV=production bun .next/standalone/server.js 2>&1 | tee server.log",
+    "start": "NODE_ENV=production node .next/standalone/server.js 2>&1 | tee server.log",
     "lint": "eslint .",
     "db:push": "prisma db push --accept-data-loss",
     "db:generate": "prisma generate",
-    "db:seed": "bun prisma/seed.ts",
+    "db:seed": "tsx prisma/seed.ts",
     "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset",
     "test": "vitest run",
@@ -20,15 +20,6 @@
   },
   "dependencies": {
     "@prisma/client": "^6.11.1",
-    "@radix-ui/react-alert-dialog": "^1.1.14",
-    "@radix-ui/react-dialog": "^1.1.14",
-    "@radix-ui/react-label": "^2.1.7",
-    "@radix-ui/react-popover": "^1.1.14",
-    "@radix-ui/react-radio-group": "^1.3.7",
-    "@radix-ui/react-select": "^2.2.5",
-    "@radix-ui/react-slot": "^1.2.3",
-    "@radix-ui/react-toast": "^1.2.14",
-    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.525.0",
     "next": "^16.1.1",
@@ -36,24 +27,29 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss-animate": "^1.0.7",
-    "z-ai-web-dev-sdk": "^0.0.18",
-    "zustand": "^5.0.6"
+    "z-ai-web-dev-sdk": "^0.0.18"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4",
+    "@types/node": "^26.6.4",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "bun-types": "^1.3.4",
     "eslint": "^9",
     "eslint-config-next": "^16.1.1",
     "tailwindcss": "^4",
-    "tw-animate-css": "^1.3.5",
+    "tsx": "^4.20.3",
     "typescript": "^5",
-    "vitest": "^5.0.1"
+    "vitest": "^3.2.4"
   },
   "trustedDependencies": [
-    "unrs-resolver"
-  ]
+    "unrs-resolver",
+    "@tailwindcss/oxide",
+    "esbuild"
+  ],
+  "allowScripts": {
+    "unrs-resolver@1.12.2": true,
+    "@prisma/engines@6.19.3": true,
+    "esbuild@0.28.2": true
+  }
 }

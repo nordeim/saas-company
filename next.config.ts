@@ -11,21 +11,11 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   reactStrictMode: false,
-  // Path-based SPA routing: the reference app's views live at real paths
-  // (/goals, /goals/<id>, /my-tasks, /activity, /team, /settings). We keep
-  // ONE page (src/app/page.tsx) and rewrite those paths onto it; the client
-  // store syncs view state with location.pathname (see src/lib/router.ts).
-  async rewrites() {
-    return [
-      { source: "/goals", destination: "/" },
-      { source: "/goals/:goalId", destination: "/" },
-      { source: "/my-tasks", destination: "/" },
-      { source: "/tasks", destination: "/" },
-      { source: "/activity", destination: "/" },
-      { source: "/team", destination: "/" },
-      { source: "/settings", destination: "/" },
-    ];
-  },
+  // Keep the dev-tools indicator out of the viewport (parity screenshots).
+  devIndicators: false,
+  // The app is a conventional multi-route Next.js site (/, /login, /faq,
+  // /privacy, /terms, /accessibility, /refund-policy, /dashboard). No SPA
+  // view rewrites are needed; unknown paths fall through to not-found.tsx.
 };
 
 export default nextConfig;

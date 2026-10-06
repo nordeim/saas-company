@@ -1,173 +1,163 @@
 #!/usr/bin/env bash
-# ORBITAL end-to-end API smoke test.
-# Boots the production standalone server, exercises auth + CRUD + status-update
-# pipeline, prints PASS/FAIL per step, cleans up, exits non-zero on any failure.
+# ---------------------------------------------------------------------------
+# Smoke suite — end-to-end API + page checks against the PRODUCTION build.
+#
+# Boots the standalone server on :3200 with its OWN scratch database
+# (db/smoke.db — schema-pushed + seeded first), then runs numbered checks
+# and prints PASS/FAIL per check. Exits non-zero on any failure.
+#
+# Prerequisites: `npm run build` (the standalone server must exist).
+#
+# NOTE (the v2.14 lesson, inherited from this repo's history): the script
+# PINS its own DATABASE_URL — an exported absolute value in the shell would
+# otherwise boot the server against a foreign database file.
+# ---------------------------------------------------------------------------
 set -u
 cd "$(dirname "$0")/.."
-PROJECT_DIR="$(pwd)"
 
-BASE="http://localhost:3000"
-CJ="/tmp/orbital-smoke-cookies.txt"
-PASS=0; FAIL=0
+PORT=3200
+BASE="http://localhost:$PORT"
+SMOKE_DB_URL="file:../db/smoke.db"
+SMOKE_DB_FILE="db/smoke.db"
+PASS=0
+FAIL=0
+SERVER_PID=""
 
-say() { printf '%s\n' "$*"; }
-ok()  { PASS=$((PASS+1)); say "PASS: $*"; }
-bad() { FAIL=$((FAIL+1)); say "FAIL: $*"; }
+say_pass() { PASS=$((PASS + 1)); echo "PASS: $1"; }
+say_fail() { FAIL=$((FAIL + 1)); echo "FAIL: $1"; }
 
-# ---- 0. clean slate: kill any server holding port 3000 ----
-pkill -f "standalone/server.js" 2>/dev/null
-sleep 1
-rm -f "$CJ" /tmp/smoke-*.json
+check() { # check <label> <expected> <actual>
+  if [ "$2" = "$3" ]; then say_pass "$1"; else say_fail "$1 (expected [$2] got [$3])"; fi
+}
 
-# ---- 1. boot server ----
-# Pin the DB URL explicitly: a relative `file:` URL resolves against
-# prisma/schema.prisma (via src/lib/db-path.ts) exactly like the CLI, while
-# an inherited absolute DATABASE_URL (e.g. a parent-workspace path exported
-# by the operator's shell) passes through untouched and the server boots
-# against a database that does not exist (Error code 14). The Playwright
-# webServer pins its own value the same way (playwright.config.ts).
-DATABASE_URL="file:../db/custom.db" \
-bun .next/standalone/server.js > /tmp/smoke-server.log 2>&1 < /dev/null &
-SRV=$!
-disown $SRV 2>/dev/null || true
+cleanup() {
+  if [ -n "$SERVER_PID" ]; then kill "$SERVER_PID" 2>/dev/null; wait "$SERVER_PID" 2>/dev/null; fi
+}
+trap cleanup EXIT
 
-ready=0
-for i in $(seq 1 30); do
-  if curl -s --max-time 2 "$BASE/api/health" | grep -q '"ok"'; then ready=1; break; fi
-  sleep 1
+echo "== smoke: scratch database =="
+rm -f "$SMOKE_DB_FILE"
+DATABASE_URL="$SMOKE_DB_URL" npx prisma db push --skip-generate >/dev/null 2>&1 || { echo "FAIL: prisma db push"; exit 1; }
+DATABASE_URL="$SMOKE_DB_URL" npx tsx prisma/seed.ts >/dev/null 2>&1 || { echo "FAIL: seed"; exit 1; }
+say_pass "scratch db pushed + seeded"
+
+echo "== smoke: boot production server on :$PORT =="
+DATABASE_URL="$SMOKE_DB_URL" AUTH_SECRET="smoke-secret" PORT=$PORT NODE_ENV=production \
+  node .next/standalone/server.js >/tmp/smoke-server.log 2>&1 &
+SERVER_PID=$!
+
+for i in $(seq 1 40); do
+  if curl -sf "$BASE/api/health" >/dev/null 2>&1; then break; fi
+  sleep 0.5
 done
-if [ "$ready" != "1" ]; then
-  bad "server did not become ready"; kill $SRV 2>/dev/null; exit 1
-fi
-ok "server ready (health check)"
 
-# ---- 2. login ----
-code=$(curl -s -o /tmp/smoke-login.json -w "%{http_code}" --max-time 10 \
-  -c "$CJ" -X POST "$BASE/api/auth/login" \
+json() { curl -s "$@"; }
+field() { python3 -c "import json,sys;d=json.load(sys.stdin);print(d$1)" 2>/dev/null; }
+
+echo "== smoke: health =="
+HEALTH=$(json "$BASE/api/health")
+check "health ok envelope" "True" "$(echo "$HEALTH" | field "['ok']")"
+check "health app name" "saas-company" "$(echo "$HEALTH" | field "['data']['app']")"
+
+echo "== smoke: auth =="
+LOGIN=$(curl -s -c /tmp/smoke-cookies.txt -X POST "$BASE/api/auth/login" \
   -H "Content-Type: application/json" \
-  -d '{"email":"demo@orbital.app","password":"Demo1234!"}')
-if [ "$code" = "200" ] && grep -q '"ok":true' /tmp/smoke-login.json; then ok "login (200)"; else bad "login -> $code $(cat /tmp/smoke-login.json)"; fi
+  -d '{"email":"demo@novaai.app","password":"Demo1234!"}')
+check "login ok" "True" "$(echo "$LOGIN" | field "['ok']")"
 
-# ---- 3. wrong password must be rejected ----
-code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 \
-  -X POST "$BASE/api/auth/login" \
+BAD=$(curl -s -X POST "$BASE/api/auth/login" -H "Content-Type: application/json" \
+  -d '{"email":"demo@novaai.app","password":"wrong"}')
+check "wrong password rejected (401)" "401" "$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BASE/api/auth/login" -H 'Content-Type: application/json' -d '{"email":"demo@novaai.app","password":"wrong"}')"
+check "wrong password code" "INVALID_CREDENTIALS" "$(echo "$BAD" | field "['error']['code']")"
+
+ME=$(curl -s -b /tmp/smoke-cookies.txt "$BASE/api/auth/me")
+check "session user resolves" "demo@novaai.app" "$(echo "$ME" | field "['data']['email']")"
+
+ANON=$(curl -s "$BASE/api/auth/me")
+check "anonymous me is null" "None" "$(echo "$ANON" | field "['data']")"
+
+REG=$(curl -s -X POST "$BASE/api/auth/register" -H "Content-Type: application/json" \
+  -d '{"name":"Smoke User","email":"smoke@example.com","password":"Smoke123!"}')
+check "registration ok" "True" "$(echo "$REG" | field "['ok']")"
+
+DUP=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BASE/api/auth/register" -H "Content-Type: application/json" \
+  -d '{"name":"Smoke User","email":"smoke@example.com","password":"Smoke123!"}')
+check "duplicate email rejected (409)" "409" "$DUP"
+
+SHORT=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BASE/api/auth/register" -H "Content-Type: application/json" \
+  -d '{"name":"X","email":"short@example.com","password":"short"}')
+check "short password rejected (400)" "400" "$SHORT"
+
+echo "== smoke: protected reads =="
+for ENDPOINT in workflows; do
+  CODE=$(curl -s -o /dev/null -w '%{http_code}' "$BASE/api/$ENDPOINT")
+  check "/api/$ENDPOINT requires a session (401)" "401" "$CODE"
+done
+
+WF=$(curl -s -b /tmp/smoke-cookies.txt "$BASE/api/workflows")
+check "workflows list ok" "True" "$(echo "$WF" | field "['ok']")"
+WF_COUNT=$(echo "$WF" | python3 -c "import json,sys;print(len(json.load(sys.stdin)['data']))")
+check "seeded workflow count" "6" "$WF_COUNT"
+
+echo "== smoke: workflow crud =="
+CREATED=$(curl -s -b /tmp/smoke-cookies.txt -X POST "$BASE/api/workflows" \
   -H "Content-Type: application/json" \
-  -d '{"email":"demo@orbital.app","password":"WrongPassword!"}')
-if [ "$code" = "401" ]; then ok "wrong password rejected (401)"; else bad "wrong password -> $code"; fi
+  -d '{"name":"Smoke workflow","description":"created by the smoke suite","category":"Ops"}')
+check "workflow create ok" "True" "$(echo "$CREATED" | field "['ok']")"
+WF_ID=$(echo "$CREATED" | field "['data']['id']")
 
-# ---- 4. unauthenticated access must be 401 ----
-code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$BASE/api/stats")
-if [ "$code" = "401" ]; then ok "unauthenticated stats blocked (401)"; else bad "unauth stats -> $code"; fi
+BADSTATUS=$(curl -s -o /dev/null -w '%{http_code}' -b /tmp/smoke-cookies.txt -X POST "$BASE/api/workflows" \
+  -H "Content-Type: application/json" -d '{"name":"Bad","status":"exploded"}')
+check "invalid status rejected (400)" "400" "$BADSTATUS"
 
-# ---- 5. reads ----
-for ep in stats goals tasks team activity settings; do
-  code=$(curl -s -o "/tmp/smoke-$ep.json" -w "%{http_code}" --max-time 10 -b "$CJ" "$BASE/api/$ep")
-  if [ "$code" = "200" ] && grep -q '"ok":true' "/tmp/smoke-$ep.json"; then ok "GET /api/$ep"; else bad "GET /api/$ep -> $code"; fi
+PAUSED=$(curl -s -b /tmp/smoke-cookies.txt -X PATCH "$BASE/api/workflows/$WF_ID" \
+  -H "Content-Type: application/json" -d '{"status":"paused"}')
+check "workflow pause ok" "paused" "$(echo "$PAUSED" | field "['data']['status']")"
+
+DELETED=$(curl -s -b /tmp/smoke-cookies.txt -X DELETE "$BASE/api/workflows/$WF_ID")
+check "workflow delete ok" "True" "$(echo "$DELETED" | field "['ok']")"
+
+echo "== smoke: newsletter + demo =="
+NEWS=$(curl -s -X POST "$BASE/api/newsletter" -H "Content-Type: application/json" \
+  -d '{"email":"smoke-reader@example.com"}')
+check "newsletter subscribe ok" "True" "$(echo "$NEWS" | field "['ok']")"
+BADNEWS=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BASE/api/newsletter" \
+  -H "Content-Type: application/json" -d '{"email":"nope"}')
+check "newsletter invalid email (400)" "400" "$BADNEWS"
+
+DEMO=$(curl -s -X POST "$BASE/api/demo" -H "Content-Type: application/json" \
+  -d '{"name":"Smoke","email":"smoke@example.com","plan":"pro"}')
+check "demo request ok" "True" "$(echo "$DEMO" | field "['ok']")"
+
+echo "== smoke: pages =="
+for PATH_ROUTE in / /login /faq /privacy /terms /accessibility /refund-policy; do
+  CODE=$(curl -s -o /dev/null -w '%{http_code}' "$BASE$PATH_ROUTE")
+  check "page $PATH_ROUTE serves 200" "200" "$CODE"
+done
+# /dashboard is session-gated: anonymous gets the login redirect…
+check "page /dashboard redirects anonymous (307)" "307" "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/dashboard")"
+# …and the authenticated session renders the workspace.
+check "page /dashboard serves 200 with session" "200" "$(curl -s -b /tmp/smoke-cookies.txt -o /dev/null -w '%{http_code}' "$BASE/dashboard")"
+
+LANDING=$(curl -s "$BASE/")
+for MARKER in "Automated Workflows" "Trusted by 5,000+ teams" "Simple, Transparent Pricing" "NovaaAI"; do
+  if echo "$LANDING" | grep -q "$MARKER"; then say_pass "landing contains: $MARKER"; else say_fail "landing contains: $MARKER"; fi
 done
 
-GOAL_ID=$(python3 -c "import json;print(json.load(open('/tmp/smoke-goals.json'))['data'][0]['id'])")
+NOTFOUND=$(curl -s -o /dev/null -w '%{http_code}' "$BASE/definitely-not-a-route")
+check "unknown path 404s" "404" "$NOTFOUND"
 
-# ---- 6. create task ----
-code=$(curl -s -o /tmp/smoke-task.json -w "%{http_code}" --max-time 10 -b "$CJ" \
-  -X POST "$BASE/api/tasks" -H "Content-Type: application/json" \
-  -d "{\"title\":\"SMOKE verify pipeline\",\"description\":\"temp\",\"goalId\":\"$GOAL_ID\",\"status\":\"pending\",\"estimatedHours\":1}")
-if [ "$code" = "201" ] && grep -q '"ok":true' /tmp/smoke-task.json; then ok "create task (201)"; else bad "create task -> $code $(cat /tmp/smoke-task.json)"; fi
-TASK_ID=$(python3 -c "import json;print(json.load(open('/tmp/smoke-task.json'))['data']['id'])" 2>/dev/null)
+SITEMAP=$(curl -s "$BASE/sitemap.xml")
+if echo "$SITEMAP" | grep -q "/faq"; then say_pass "sitemap lists /faq"; else say_fail "sitemap lists /faq"; fi
 
-# ---- 7. invalid status must be rejected ----
-code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 -b "$CJ" \
-  -X POST "$BASE/api/tasks" -H "Content-Type: application/json" \
-  -d "{\"title\":\"bad\",\"goalId\":\"$GOAL_ID\",\"status\":\"todo\"}")
-if [ "$code" = "400" ]; then ok "invalid status rejected (400)"; else bad "invalid status -> $code"; fi
+echo "== smoke: logout =="
+LOGOUT=$(curl -s -b /tmp/smoke-cookies.txt -c /tmp/smoke-cookies.txt -X POST "$BASE/api/auth/logout")
+check "logout ok" "True" "$(echo "$LOGOUT" | field "['ok']")"
+AFTER=$(curl -s -b /tmp/smoke-cookies.txt "$BASE/api/auth/me")
+check "session invalidated after logout" "None" "$(echo "$AFTER" | field "['data']")"
 
-if [ -n "${TASK_ID:-}" ]; then
-  # ---- 8. post status update (done + note) ----
-  code=$(curl -s -o /tmp/smoke-upd.json -w "%{http_code}" --max-time 10 -b "$CJ" \
-    -X POST "$BASE/api/tasks/$TASK_ID/updates" -H "Content-Type: application/json" \
-    -d '{"status":"done","note":"smoke test note"}')
-  if [ "$code" = "201" ]; then ok "post status update (201)"; else bad "status update -> $code"; fi
-
-  # ---- 9. verify task status flipped + update recorded ----
-  curl -s --max-time 10 -b "$CJ" "$BASE/api/tasks/$TASK_ID" -o /tmp/smoke-verify.json
-  if python3 -c "import json,sys; d=json.load(open('/tmp/smoke-verify.json'))['data']; sys.exit(0 if (d['status']=='done' and len(d.get('updates',[]))>=1) else 1)"; then
-    ok "task status flipped + update recorded"
-  else
-    bad "status flip verification"
-  fi
-
-  # ---- 10. delete ----
-  code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 -b "$CJ" -X DELETE "$BASE/api/tasks/$TASK_ID")
-  if [ "$code" = "200" ]; then ok "delete task (200)"; else bad "delete task -> $code"; fi
-fi
-
-# ---- 11. logout ----
-code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 -b "$CJ" -c "$CJ" -X POST "$BASE/api/auth/logout")
-if [ "$code" = "200" ]; then ok "logout (200)"; else bad "logout -> $code"; fi
-
-# ---- 12. session cookie invalidated after logout ----
-code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 -b "$CJ" "$BASE/api/stats")
-if [ "$code" = "401" ]; then ok "post-logout stats blocked (401)"; else bad "post-logout stats -> $code"; fi
-
-# ---- 13. page render ----
-code=$(curl -s -o /tmp/smoke-page.html -w "%{http_code}" --max-time 15 "$BASE/")
-if [ "$code" = "200" ] && grep -q "<!DOCTYPE html" /tmp/smoke-page.html; then ok "page renders (200)"; else bad "page render -> $code"; fi
-
-# ---- 14. path-based SPA routes serve the app shell (rewrites) ----
-for path in goals my-tasks activity team settings; do
-  code=$(curl -s -o /tmp/smoke-path.html -w "%{http_code}" --max-time 10 "$BASE/$path")
-  if [ "$code" = "200" ] && grep -q "<!DOCTYPE html" /tmp/smoke-path.html; then ok "GET /$path serves the SPA (200)"; else bad "GET /$path -> $code"; fi
-done
-code=$(curl -s -o /tmp/smoke-path.html -w "%{http_code}" --max-time 10 "$BASE/goals/$GOAL_ID")
-if [ "$code" = "200" ] && grep -q "<!DOCTYPE html" /tmp/smoke-path.html; then ok "GET /goals/<id> serves the SPA (200)"; else bad "GET /goals/<id> -> $code"; fi
-code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$BASE/not-a-real-page")
-if [ "$code" = "404" ]; then ok "unknown path 404s (no blanket rewrite)"; else bad "unknown path -> $code"; fi
-
-# ---- 15. wizard clarify endpoint (auth + envelope + 3 questions) ----
-# Re-login: step 11 logged us out.
-curl -s -o /dev/null --max-time 10 -c "$CJ" -X POST "$BASE/api/auth/login" \
-  -H "Content-Type: application/json" \
-  -d '{"email":"demo@orbital.app","password":"Demo1234!"}'
-code=$(curl -s -o /tmp/smoke-clarify.json -w "%{http_code}" --max-time 30 -b "$CJ" \
-  -X POST "$BASE/api/goals/clarify" -H "Content-Type: application/json" \
-  -d '{"title":"Smoke clarify goal","description":"verify the wizard step"}')
-if [ "$code" = "200" ] && python3 -c "import json,sys; d=json.load(open('/tmp/smoke-clarify.json')); sys.exit(0 if (d.get('ok') is True and len(d['data']['questions'])==3) else 1)"; then
-  ok "POST /api/goals/clarify (3 questions)"
-else
-  bad "clarify -> $code $(cat /tmp/smoke-clarify.json)"
-fi
-code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 -b "$CJ" \
-  -X POST "$BASE/api/goals/clarify" -H "Content-Type: application/json" -d '{"description":"no title"}')
-if [ "$code" = "400" ]; then ok "clarify without title rejected (400)"; else bad "clarify no-title -> $code"; fi
-
-# ---- 16. team endpoint validation (reference-app form contracts) ----
-code=$(curl -s -o /tmp/smoke-team-bad.json -w "%{http_code}" --max-time 10 -b "$CJ" \
-  -X POST "$BASE/api/team" -H "Content-Type: application/json" \
-  -d '{"kind":"human","email":"not-an-email","role":"member"}')
-if [ "$code" = "400" ]; then ok "invite with invalid email rejected (400)"; else bad "invite bad email -> $code"; fi
-
-code=$(curl -s -o /tmp/smoke-team-agent.json -w "%{http_code}" --max-time 10 -b "$CJ" \
-  -X POST "$BASE/api/team" -H "Content-Type: application/json" \
-  -d '{"kind":"agent","name":"   "}')
-if [ "$code" = "400" ]; then ok "agent without name rejected (400)"; else bad "agent no name -> $code"; fi
-
-# ---- 17. rate limiting on /api/auth/login (10 attempts / 15 min / IP) ----
-# Steps 2, 3 and 15 consumed 3 attempts; 7 more reach the limit, so attempt
-# 11 must answer 429 RATE_LIMITED with a Retry-After header.
-limited=0
-for i in $(seq 1 8); do
-  code=$(curl -s -o /tmp/smoke-rl.json -w "%{http_code}" --max-time 10 \
-    -X POST "$BASE/api/auth/login" -H "Content-Type: application/json" \
-    -d '{"email":"demo@orbital.app","password":"WrongPassword!"}')
-  if [ "$code" = "429" ]; then limited=$((limited+1)); fi
-done
-if [ "$limited" -ge 1 ] && grep -q 'RATE_LIMITED' /tmp/smoke-rl.json; then
-  ok "login rate limit engages (429 RATE_LIMITED)"
-else
-  bad "rate limit -> last code $code $(cat /tmp/smoke-rl.json)"
-fi
-
-# ---- shutdown ----
-kill $SRV 2>/dev/null
-say ""
-say "RESULT: $PASS passed, $FAIL failed"
-[ "$FAIL" = "0" ]
+echo
+echo "=============================="
+echo "SMOKE RESULT: $PASS passed, $FAIL failed"
+echo "=============================="
+[ "$FAIL" -eq 0 ]

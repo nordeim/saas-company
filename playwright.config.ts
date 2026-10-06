@@ -1,27 +1,21 @@
 import { defineConfig, devices } from "@playwright/test";
 
-// E2E layer (v2.3): boots the PRODUCTION standalone server on an isolated
-// port with its own scratch database (db/e2e.db, schema-pushed + seeded by
-// the global setup), then drives the real UI in Chromium.
+// E2E layer: boots the PRODUCTION standalone server on an isolated port
+// with its own scratch database (db/e2e.db, schema-pushed + seeded by the
+// global setup), then drives the real UI in Chromium.
 //
-// Prerequisites: `bun run build` (the standalone server must exist).
-// Run with: `bun run test:e2e`.
+// Prerequisites: `npm run build` (the standalone server must exist).
+// Run with: `npm run test:e2e`.
 //
-// Auth strategy: the "setup" project signs the demo user in ONCE and saves
-// the session cookie to tests/e2e/.auth/user.json; every spec in the main
-// project starts with that storageState. This is not just speed — the auth
-// endpoints are rate-limited (10 attempts/IP/15 min), so per-test logins
-// would trip the limiter mid-suite. tests/e2e/auth.spec.ts opts back out
-// with an empty storageState because it tests the logged-out surface.
+// The unit layer stays in Vitest (vitest.config.ts matches *.test.ts only,
+// so these *.spec.ts files are never picked up twice).
 //
-// The unit layer stays in Vitest (see vitest.config.ts — it matches
-// *.test.ts only, so these *.spec.ts / *.setup.ts files are never picked
-// up twice).
+// The webServer pins its own DATABASE_URL — a shell-exported absolute value
+// would otherwise boot it against a foreign database (the v2.14 lesson).
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
 const BASE_URL = `http://localhost:${PORT}`;
 const E2E_DATABASE_URL = "file:../db/e2e.db";
-const AUTH_STATE = "tests/e2e/.auth/user.json";
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -38,22 +32,19 @@ export default defineConfig({
   },
   projects: [
     {
-      name: "setup",
-      testMatch: /auth\.setup\.ts/,
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
     },
     {
-      name: "chromium",
-      dependencies: ["setup"],
-      testIgnore: /auth\.setup\.ts/,
-      use: {
-        ...devices["Desktop Chrome"],
-        storageState: AUTH_STATE,
-      },
+      name: "mobile-chrome",
+      use: { ...devices["Pixel 7"] },
+      testIgnore: /.*/, // reserved for future mobile-device specs; the
+      // mobile-navigation suite drives its own 390×844 contexts.
     },
   ],
   globalSetup: "./tests/e2e/global-setup.ts",
   webServer: {
-    command: "bun .next/standalone/server.js",
+    command: "node .next/standalone/server.js",
     url: `${BASE_URL}/api/health`,
     timeout: 60_000,
     reuseExistingServer: !process.env.CI,

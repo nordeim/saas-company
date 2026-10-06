@@ -1,73 +1,96 @@
 import { expect, test } from "@playwright/test";
+import { DEMO_EMAIL, DEMO_PASSWORD } from "./helpers";
 
-// Login surface: the /login route renders the reference auth card, rejects
-// bad credentials, signs the demo user in, and honors authenticated visits.
-// This file OPTS OUT of the shared storageState (empty cookies) because it
-// tests the logged-out surface. (Deliberately does NOT probe the rate
-// limiter — 10 attempts/IP/15 min would poison the whole suite.)
+// Auth flow: the /login card renders its three states, rejects bad
+// credentials, signs the demo user in to the dashboard, and signs out.
+// The seed's demo account is recreated by global-setup on every run.
 
-test.use({ storageState: { cookies: [], origins: [] } });
-
-test.describe("login route", () => {
-  test("renders the auth card with the circular logo chip", async ({ page }) => {
+test.describe("login page", () => {
+  test("renders the reference auth card", async ({ page }) => {
     await page.goto("/login");
-    await expect(page.getByRole("heading", { name: "Welcome to Project Management App" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Welcome to SAAS Company" })).toBeVisible();
+    await expect(page.getByText("Sign in to continue")).toBeVisible();
 
-    // v2.3: the logo is a white CIRCULAR chip (rounded-full + ring-4
-    // ring-white/50 + shadow-lg), not the retired rounded-square mark.
-    // (Tailwind v4 computes rounded-full as calc(infinity * 1px) → Chrome
-    // reports 33554432px, and ring-white/50 serializes in oklab() — so the
-    // assertions check the geometry and the 4px ring, not exact strings.)
+    // The circular logo chip with the 4px white ring.
     const chip = page.locator("span.rounded-full.ring-4").first();
     await expect(chip).toBeVisible();
     const radius = await chip.evaluate((el) => parseFloat(getComputedStyle(el).borderRadius));
     expect(radius).toBeGreaterThan(1000);
-    const shadow = await chip.evaluate((el) => getComputedStyle(el).boxShadow);
-    expect(shadow).toMatch(/0\.5\) 0px 0px 0px 4px/);
+
+    await expect(page.getByRole("button", { name: "Continue with Google" })).toBeVisible();
+    await expect(page.getByLabel("Email")).toBeVisible();
+    await expect(page.getByLabel("Password")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Sign in", exact: true })).toBeVisible();
   });
 
-  test("wrong password is rejected without a session", async ({ page }) => {
+  test("the page carries the slate gradient background", async ({ page }) => {
     await page.goto("/login");
-    await page.getByLabel("Email").fill("demo@orbital.app");
-    await page.getByLabel("Password").fill("definitely-wrong");
-    await page.getByRole("button", { name: "Sign in" }).click();
-    // .first(): a double-render of the toast (observed once in a full-suite
-    // run) must not turn the rejection check into a strict-mode violation —
-    // any visible instance proves the 401 path.
-    await expect(page.getByText("Incorrect email or password").first()).toBeVisible({ timeout: 15_000 });
-    await expect(page).toHaveURL(/\/login/);
-  });
-
-  test("valid credentials sign in and land on the workspace", async ({ page }) => {
-    await page.goto("/login");
-    await page.getByLabel("Email").fill("demo@orbital.app");
-    await page.getByLabel("Password").fill("Demo1234!");
-    await page.getByRole("button", { name: "Sign in" }).click();
-    await expect(page).toHaveURL(/\/$/, { timeout: 15_000 });
-    // Desktop chrome: the sticky sidebar (not the mobile app bar) is the
-    // visible landmark once signed in.
-    await expect(page.locator("aside")).toBeVisible();
-  });
-
-  test("authenticated visits render the login card (the live's behavior — no redirect)", async ({ page }) => {
-    // F13/v2.11 (measured on the live 2026-09-24): the reference renders
-    // the FULL login card for authenticated visitors — the URL stays on
-    // /login, the card is byte-identical to the logged-out one, and
-    // signing in from that state lands on the workspace. The clone
-    // redirected authenticated visitors to / from v1.4 to v2.10; that
-    // drift is now closed (the page renders the card unconditionally).
-    const res = await page.request.post("/api/auth/login", {
-      data: { email: "demo@orbital.app", password: "Demo1234!" },
+    const bg = await page.evaluate(() => {
+      const main = document.querySelector("main");
+      return main ? getComputedStyle(main).backgroundImage : "NO_MAIN";
     });
-    expect(res.ok()).toBeTruthy();
+    expect(bg).toContain("linear-gradient");
+  });
+
+  test("wrong password is rejected with the error message", async ({ page }) => {
     await page.goto("/login");
+    await page.getByLabel("Email").fill(DEMO_EMAIL);
+    await page.getByLabel("Password").fill("definitely-wrong");
+    await page.getByRole("button", { name: "Sign in", exact: true }).click();
+    await expect(page.getByText("Incorrect email or password")).toBeVisible({ timeout: 15_000 });
     await expect(page).toHaveURL(/\/login/);
-    await expect(page.getByRole("heading", { name: "Welcome to Project Management App" })).toBeVisible();
-    // Re-signing in from the authenticated state lands on the workspace
-    // (the live's flow: POST → router lands on from_url, default "/").
-    await page.getByLabel("Email").fill("demo@orbital.app");
-    await page.getByLabel("Password").fill("Demo1234!");
-    await page.getByRole("button", { name: "Sign in" }).click();
+  });
+
+  test("valid credentials land on the dashboard", async ({ page }) => {
+    await page.goto("/login");
+    await page.getByLabel("Email").fill(DEMO_EMAIL);
+    await page.getByLabel("Password").fill(DEMO_PASSWORD);
+    await page.getByRole("button", { name: "Sign in", exact: true }).click();
+    await expect(page).toHaveURL(/\/dashboard$/, { timeout: 15_000 });
+    await expect(page.getByRole("heading", { name: /Compose a workflow with AI/i })).toBeVisible();
+  });
+
+  test("sign-up state toggles and validates", async ({ page }) => {
+    await page.goto("/login");
+    await page.getByRole("button", { name: /Need an account\?/ }).click();
+    await expect(page.getByRole("heading", { name: "Create your account" })).toBeVisible();
+    await expect(page.getByLabel("Name")).toBeVisible();
+
+    // A short password is rejected by the API (policy: 8+).
+    await page.getByLabel("Name").fill("E2E User");
+    await page.getByLabel("Email").fill(`e2e-${Date.now()}@example.com`);
+    await page.getByLabel("Password").fill("short");
+    await page.getByRole("button", { name: "Create account" }).click();
+    await expect(page.getByText("at least 8 characters", { exact: false })).toBeVisible({ timeout: 15_000 });
+  });
+
+  test("registration round-trip: sign up then sign in", async ({ page }) => {
+    const email = `e2e-${Date.now()}@example.com`;
+    await page.goto("/login");
+    await page.getByRole("button", { name: /Need an account\?/ }).click();
+    await page.getByLabel("Name").fill("E2E Signup");
+    await page.getByLabel("Email").fill(email);
+    await page.getByLabel("Password").fill("Signup123!");
+    await page.getByRole("button", { name: "Create account" }).click();
+    await expect(page).toHaveURL(/\/dashboard$/, { timeout: 15_000 });
+
+    // Sign out via the dashboard button.
+    await page.getByRole("button", { name: "Sign out" }).click();
     await expect(page).toHaveURL(/\/$/, { timeout: 15_000 });
+  });
+
+  test("the dashboard requires a session (redirects to /login)", async ({ page }) => {
+    await page.goto("/dashboard");
+    await expect(page).toHaveURL(/\/login/);
+    await expect(page.getByRole("heading", { name: "Welcome to SAAS Company" })).toBeVisible();
+  });
+
+  test("forgot-password state acknowledges without leaving the page", async ({ page }) => {
+    await page.goto("/login");
+    await page.getByRole("button", { name: "Forgot password?" }).click();
+    await expect(page.getByRole("heading", { name: "Reset your password" })).toBeVisible();
+    await page.getByLabel("Email").fill(DEMO_EMAIL);
+    await page.getByRole("button", { name: "Send reset link" }).click();
+    await expect(page.getByText(/reset link is on its way/i)).toBeVisible();
   });
 });

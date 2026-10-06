@@ -1,0 +1,63 @@
+// SAAS Company — Prisma schema (SQLite by default; see .env.example for the
+// PostgreSQL swap). The marketing surface persists newsletter subscribers and
+// demo requests; the authenticated workspace persists users and their
+// automation workflows (the functional superset over the reference site).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  workflows    Workflow[]
+
+  @@index([email])
+}
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  source    String   @default("footer")
+  createdAt DateTime @default(now())
+}
+
+model DemoRequest {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  company   String?
+  plan      String?
+  message   String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+model Workflow {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name           String
+  description    String?
+  // active | paused | draft — validated in the route handler (lib/workflow.ts)
+  status         String   @default("active")
+  // e.g. "Marketing", "Sales", "Engineering", "Ops"
+  category       String?
+  runs           Int      @default(0)
+  successRate    Float    @default(99.5)
+  timeSavedHours Float    @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([userId, status])
+}
