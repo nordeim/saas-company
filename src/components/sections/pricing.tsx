@@ -55,7 +55,7 @@ export function Pricing() {
             >
               Annual
               <span className="text-xs px-2 py-0.5 rounded-full bg-violet text-white">
-                Save {Math.round(ANNUAL_DISCOUNT * 100)}%
+                {`Save ${Math.round(ANNUAL_DISCOUNT * 100)}%`}
               </span>
             </button>
           </div>

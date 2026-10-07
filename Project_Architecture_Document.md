@@ -9,6 +9,23 @@
 
 #### Revision Block — v1.0
 
+- `[NOTE]` **Session 3 remediation (2026-10-07)** — a token-level re-measurement
+  against the live's compiled CSS (`/assets/index-*.css`) found the brand
+  tokens had been read from the reference's UNMOUNTED `.dark` block in
+  Session 1: `:root` is what renders — primary = hsl(267 100% 57%) =
+  **#8624ff** (not the 290° magenta) and accent/electric-blue = hsl(220 100%
+  50%) = **#0055ff** (not #008cff); `violet` (290° magenta) was already
+  correct. Also fixed: the body font now renders the Display cut like the
+  live (`--font-body: "Vend Sans", …` — no element on the live ever resolves
+  the Text cut), testimonial/AI-suggestion quotes are straight ASCII like
+  the live, page titles use the live's `X | SAAS Company` pattern, the 404
+  card quotes the missing pathname, **Lenis 1.3** smooth scrolling runs like
+  the live (`window.lenis`), the login shell carries the Vite noscript
+  fallback (login route only), and the apple-mobile-web-app-title meta is
+  emitted. Word parity after remediation: **1.0 on every page** (FAQ's
+  collapsed-accordion DOM artifact aside). Gate re-locked at **165 checks**
+  (73 unit + 54 e2e incl. the new brand-parity suite + 38 smoke). See
+  `docs/remediation-plan-session3.md` (F1–F11 → R1–R10).
 - `[NOTE]` **Full rebuild against the CURRENT reference (2026-10-06/07 survey).** The live app at `saas-company.base44.app` was redeployed as the dark-theme "NovaAI" SaaS marketing site; this repository's previous cycle (the ORBITAL PM-workspace clone, v2.x with 115 e2e checks) targeted the OLD deployment and was retired wholesale — its specs, seed, and chrome were replaced. Parity was re-established with a fresh paired survey (agent-browser computed styles at 1440/768/390 + VLM side-by-side comparisons: hero ≈ 90% → fixed → full-page ≈ 96%), and the clone ships a functional superset (real auth, workflow dashboard, capture forms) where the reference has dead links (`/checkout` 404s on the live).
 - `[NOTE]` **Gate status at lock:** lint ✓ · typecheck ✓ · Vitest 69/69 ✓ · build ✓ · smoke 38/38 ✓ · Playwright 36/36 ✓.
 - `[NOTE]` **Session 2 remediation (2026-10-07)** — parity re-audit against the
@@ -23,7 +40,8 @@
   braces/micromatch/fast-glob/deepmerge-ts — the residual braces advisory has
   no patched release upstream and is lint-toolchain-only, documented as F10).
   Gate at re-lock: lint ✓ · typecheck ✓ · Vitest 73/73 ✓ · build ✓ · smoke
-  38/38 ✓ · Playwright 41/41 ✓ (152 checks). VLM parity: full-page 98, mobile
+  38/38 ✓ · Playwright 54/54 ✓ (165 checks — Session 3 added the 13-check
+  brand-parity suite). VLM parity: full-page 98, mobile
   menu 98, features 95, hero 95.
 
 ## Table of Contents
@@ -63,7 +81,8 @@ SAAS Company is a self-hosted clone of the reference Base44 marketing site for t
 | Auth | Node `crypto` | — | scrypt + HMAC cookies; auditable, zero external services |
 | AI planner | z-ai-web-dev-sdk | 0.0.x | Server-side workflow composition; deterministic fallback keeps the feature alive without it |
 | Fonts | Self-hosted Wix Madefor ("Vend Sans") + next/font (Playfair, DM Serif Display) | — | Byte-identical type rendering with the reference's Base44-hosted cuts |
-| Tests | Vitest 3 / Playwright 1.63 / bash+curl | — | Three layers over three seams: pure logic, browser, production HTTP |
+| Tests | Vitest 5 / Playwright 1.63 / bash+curl | — | Three layers over three seams: pure logic, browser, production HTTP |
+| Smooth scroll | lenis 1.3.x | — | The reference's momentum scrolling; client wrapper, reduced-motion guarded |
 
 ### 1.3 Architecture Decision Records (ADRs)
 
@@ -432,9 +451,9 @@ The reference serves its "Vend Sans" as Base44-hosted Wix Madefor faces; this re
 | `--color-background` | `#000000` | Page canvas |
 | `--color-card` | `#0f0f0f` (hsl 0 0% 6%) | Raised dark surfaces |
 | `--color-border` / `--color-input` | `#242424` (hsl 0 0% 14%) | Hairlines |
-| `--color-primary` | `#d500ff` (hsl 290 100% 50%) | Brand magenta — badges, rings, gradients, the Most Popular treatment |
-| `--color-accent` / `--color-electric-blue` | `#008cff` (hsl 220 100% 50%) | Gradient partner |
-| `--color-violet` | `#d500ff` | The reference's violet alias |
+| `--color-primary` | `#8624ff` (hsl 267 100% 57%) | The reference's `:root` primary — the purple gradient partner (mockup bars, glows, icon chips, stats). Session 3: corrected from the unmounted `.dark` block's 290° magenta |
+| `--color-accent` / `--color-electric-blue` | `#0055ff` (hsl 220 100% 50%) | Electric blue — the gradient end (Most Popular badge, chart bars) |
+| `--color-violet` | `#d500ff` (hsl 290 100% 50%) | The brand magenta for text/border/bg-violet surfaces (distinct from primary on the live) |
 | `--color-destructive` | `#ef4444` | Problem cards, delete affordances |
 | Slate scale (login/404) | slate-50…900 | The reference's light auth + 404 pages |
 
@@ -460,6 +479,10 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D8 | Legal/FAQ copy | Wix templates | captured verbatim into `src/lib/*-content.ts` (Session 2 completed the accessibility page's lists + no-caption rule) | Parity |
 | D9 | Login page | a bare dead-end auth card (no nav/footer/anchors) | back-link removed; zero-anchor pin in the e2e suite | Parity (Session 2) |
 | D10 | Features card + hero motion | per-tab DOM (chart/steps) + rAF-driven indicator | rebuilt from the live DOM (ANALYTICS_BARS, stat chips, builder steps, per-tab icons); `animate-scroll-dot` matches the sampled motion | Parity (Session 2) |
+| D11 | Brand tokens | `:root` block: primary #8624ff (267°), accent/electric-blue #0055ff (220°) | restored to the `:root` values (Session 3) — Session 1 had shipped the unmounted `.dark` block's magenta/#008cff | Parity (Session 3) |
+| D12 | Body typeface | "Vend Sans" (the Display cut) for EVERY element | `--font-body` now resolves the Display cut first, like the live (the Text cut stays as fallback) | Parity (Session 3) |
+| D13 | Scroll feel | Lenis 1.3.23, defaults, `html.lenis` | lenis 1.3.x client wrapper (`src/components/site/smooth-scroll.tsx`), reduced-motion guarded | Parity (Session 3) |
+| D14 | Page titles / 404 / quotes / noscript | `X \| SAAS Company` titles; 404 quotes the pathname; straight quotes; login-only noscript + apple-web-app-title | all matched (Session 3, pinned by `tests/e2e/brand-parity.spec.ts`) | Parity (Session 3) |
 
 ### 5.5 Tailwind v4 Trap Log (enforced here)
 
@@ -508,7 +531,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 7 + db-path | 73 | `src/lib/*.test.ts`, `tests/` | Vitest 5 (`npm run test`) |
-| Browser E2E | 5 specs | 41 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Browser E2E | 6 specs | 54 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 38 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins
@@ -587,7 +610,7 @@ Demo login: `demo@novaai.app` / `Demo1234!`. Full verification: the §7.3 gate.
 | `npm run lint` / `npm run typecheck` | ESLint / `tsc --noEmit` (the real type gate) |
 | `npx prisma generate` | Regenerate the client after schema edits |
 | `npm run db:push` / `npm run db:seed` | Apply schema / reset to demo data |
-| `npm run test` / `npm run test:e2e` | 69 unit / 36 browser checks |
+| `npm run test` / `npm run test:e2e` | 73 unit / 54 browser checks |
 | `./scripts/smoke-test.sh` | 38-check suite against the production build |
 | `npx playwright test tests/e2e/mobile-navigation.spec.ts` | Re-run the chrome suite alone |
 
@@ -625,6 +648,7 @@ TypeScript strict (with the template-era `noImplicitAny: false`); ESLint flat co
 | File | Purpose |
 |------|---------|
 | `src/app/globals.css` | Tailwind 4 `@theme` tokens, the Vend Sans `@font-face` blocks, every measured custom class + keyframe, the reduced-motion query |
+| `src/components/site/smooth-scroll.tsx` | The Lenis wrapper — the reference's momentum scrolling (reduced-motion guarded) |
 | `src/components/site/navbar.tsx` | The fixed nav: glass pill, LOG IN + Get Started, the measured mobile burger dropdown (highest-regression chrome) |
 | `src/components/site/logo.tsx` | The reference's exact SVG wordmark + animated four-petal mark |
 | `src/components/sections/hero.tsx` | Video hero: shimmer badge SVG, gradient heading, Book a Demo |
@@ -641,6 +665,7 @@ TypeScript strict (with the template-era `noImplicitAny: false`); ESLint flat co
 | `prisma/schema.prisma` / `prisma/seed.ts` | 4 models / idempotent demo workspace |
 | `scripts/smoke-test.sh` | 38-check production HTTP suite (pins its own `DATABASE_URL`) |
 | `tests/e2e/mobile-navigation.spec.ts` | The chrome pins: burger dropdown rows, close-on-navigate, tablet pill |
+| `tests/e2e/brand-parity.spec.ts` | The Session-3 token/copy/metadata pins: gradient stops (oklab-converted), font chain, straight quotes, titles, 404 pathname, Lenis, noscript |
 | `docs/Tailwind-V4-Validation-Report.md` | The v4 trap log this codebase enforces |
 | `docs/how-to-git-push-using-ssh-wrapper_SKILL.md` | The push runbook |
 

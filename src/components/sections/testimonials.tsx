@@ -26,7 +26,7 @@ const TESTIMONIALS = [
   },
   {
     quote: "Enterprise-grade, startup-fast",
-    copy: "Security was our top concern. NovaAI's SOC 2 compliance and on-premise option made it an easy sell to our board. The speed was a bonus.",
+    copy: "Security was our top concern. NovaAI's SOC 2 compliance and on-prem option made it an easy sell to our board. The speed was a bonus.",
     initials: "DP",
     name: "David Park",
   },
@@ -65,7 +65,7 @@ export function Testimonials() {
                 ))}
               </div>
               <p className="font-heading text-base font-semibold text-white mb-3">
-                &ldquo;{t.quote}&rdquo;
+                {`"${t.quote}"`}
               </p>
               <p className="text-sm text-white/50 font-body leading-relaxed mb-6">{t.copy}</p>
               <div className="flex items-center gap-3 pt-4 border-t border-white/5">

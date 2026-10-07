@@ -32,7 +32,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (38) | 73 unit + 41 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (38) | 73 unit + 54 browser checks |
 
 ## Foundational Principles
 
@@ -114,9 +114,12 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 ### Styling rules (Tailwind v4)
 
-- Tokens ONLY in `@theme` (globals.css): brand `--color-primary: #d500ff`,
-  `--color-accent: #008cff`, surfaces, fonts. Full color values, never bare
-  HSL triplets (the transparent trap).
+- Tokens ONLY in `@theme` (globals.css): brand `--color-primary: #8624ff`
+  (the reference's `:root` 267° purple — NOT the unmounted `.dark` block's
+  magenta), `--color-accent`/`--color-electric-blue: #0055ff`,
+  `--color-violet: #d500ff`, surfaces, fonts. Full color values, never bare
+  HSL triplets (the transparent trap). The reference uses the SAME face
+  ("Vend Sans", the Display cut) for headings AND body.
 - The reference's custom classes live in globals.css:
   `.workflows-gradient-text`, `.animated-gradient-text`,
   `.border-shimmer-*`, `.anim-logo-*`, `.get-started-shimmer`,
@@ -149,6 +152,15 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 3 (2026-10-07) remediation** — see
+  `docs/remediation-plan-session3.md`: the brand tokens restored to the
+  reference's `:root` values (primary #8624ff, accent/electric-blue #0055ff
+  — Session 1 had read the unused `.dark` block), the body font switched to
+  the Display cut like the live, straight quotes on testimonial/AI-suggestion
+  copy, the reference's `X | SAAS Company` page titles, the 404 card quoting
+  the missing pathname, Lenis 1.3 smooth scrolling, the login-only noscript,
+  and the apple-mobile-web-app-title meta. Gate: 165 checks.
 
 - **Session 2 (2026-10-07) remediation** — see
   `docs/remediation-plan-session2.md`: accessibility-page content restored

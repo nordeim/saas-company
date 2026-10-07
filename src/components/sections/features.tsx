@@ -153,7 +153,7 @@ export function Features() {
                     <div className="flex-1">
                       <div className="text-xs text-gray-600 mb-1">AI Suggestion</div>
                       <div className="text-sm text-gray-900">
-                        &#8220;Merge steps 3-5 to save 12 min/run&#8221;
+                        {`"Merge steps 3-5 to save 12 min/run"`}
                       </div>
                     </div>
                     <div className="px-3 py-1 rounded-full bg-violet/10 text-xs text-violet border border-violet/20">

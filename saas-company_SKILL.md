@@ -1,11 +1,12 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.1.0 · **Last updated:** 2026-10-07 (Session 2 remediation)
+> **Version:** 2.2.0 · **Last updated:** 2026-10-07 (Session 3 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
 > `CLAUDE.md` (agent contract) · `Project_Architecture_Document.md` (source of
-> truth) · `docs/remediation-plan-session2.md` (this revision's audit).
+> truth) · `docs/remediation-plan-session2.md` (Session 2) ·
+> `docs/remediation-plan-session3.md` (Session 3 — this revision's audit).
 
 ---
 
@@ -47,7 +48,8 @@ PAD's §5.4 ledger instead of silently picking a side.
 | Auth | Node `crypto` (scrypt + HMAC-SHA256) | Zero external auth services; timing-safe comparisons |
 | AI | z-ai-web-dev-sdk 0.0.x (server-only) | `src/lib/workflow.ts` fallback keeps the feature alive without it |
 | Fonts | Self-hosted Wix Madefor ("Vend Sans") + next/font (Playfair, DM Serif Display) | Byte-identical type rendering with the reference |
-| Tests | Vitest 5 (73) · Playwright 1.63 (41) · bash/curl smoke (38) | 152 checks; the local gate is the only gate (no hosted CI) |
+| Tests | Vitest 5 (73) · Playwright 1.63 (54) · bash/curl smoke (38) | 165 checks; the local gate is the only gate (no hosted CI) |
+| Smooth scroll | lenis 1.3.x | The reference's momentum scrolling (`window.lenis`); wrapper in `src/components/site/smooth-scroll.tsx` |
 
 Dependency policy: `package.json` carries `overrides` for
 `braces`/`micromatch`/`fast-glob`/`deepmerge-ts` — patched transitive versions
@@ -92,10 +94,11 @@ never bare HSL triplets (v4 resolves those to transparent):
 | `--color-background` | `#000000` | Page canvas |
 | `--color-card` | `#0f0f0f` | Raised dark surfaces |
 | `--color-border`/`--color-input` | `#242424` | Hairlines |
-| `--color-primary`/`--color-violet` | `#d500ff` | Brand magenta |
-| `--color-accent`/`--color-electric-blue` | `#008cff` | Gradient partner |
+| `--color-primary` | `#8624ff` (hsl 267 100% 57%) | The `:root` primary — the purple gradient partner (mockup bars, glows, chips, stats) |
+| `--color-violet` | `#d500ff` (hsl 290 100% 50%) | Brand magenta — text/border/bg-violet surfaces |
+| `--color-accent`/`--color-electric-blue` | `#0055ff` (hsl 220 100% 50%) | Electric blue — the gradient end |
 | `--color-destructive` | `#ef4444` | Problem cards, delete |
-| `--font-heading`/`--font-body` | "Vend Sans" / "Vend Sans Text" | Self-hosted Wix Madefor woff2 in `src/fonts/`, declared via `@font-face` |
+| `--font-heading`/`--font-body` | "Vend Sans" for BOTH | The live uses the Display cut for every element (no element resolves the Text cut — censused); the Text cut stays as fallback |
 | `--font-serif` | Playfair Display → DM Serif Display | Client wordmarks; declared in `@theme inline` so the next/font var chain survives (the v4 var()-chain trap) |
 
 Custom measured classes & keyframes (reuse — never re-derive):
@@ -229,7 +232,7 @@ npm run typecheck     # tsc --noEmit         — exit 0
 npm run test          # 73/73
 env -u DATABASE_URL npm run build
 ./scripts/smoke-test.sh   # 38/38 (boots prod on :3200, own db/smoke.db)
-npm run test:e2e      # 41/41 (boots prod on :3100, own db/e2e.db)
+npm run test:e2e      # 54/54 (boots prod on :3100, own db/e2e.db)
 npm audit             # expect only the accepted braces advisory
 git status            # no .env, *.key, db/*.db, dev.log staged
 ```
@@ -265,6 +268,24 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 7. **TDD across layers** — Session 2's fixes each went RED first: unit pins
    (content), then e2e pins (features cards, login bare-card, scroll-dot
    class), then the code. Every RED was observed failing before its GREEN.
+8. **Read the token block that RENDERS, not the one that exists** — the
+   reference's stylesheet ships `:root` AND `.dark` token blocks; the app
+   never mounts `.dark`. Session 1 measured the `.dark` block and shipped a
+   wrong primary/accent for two sessions (Session 3's F1/F2). Always verify
+   tokens against RENDERED computed styles, not just the stylesheet text.
+9. **The reference's typography is single-face** — "Vend Sans" (the Display
+   cut) renders EVERY element on the live; "Vend Sans Text" is declared but
+   never resolved by any element. A `--font-body` pointing at the Text cut
+   produces measurable metric drift (Book a Demo pill 197px vs 190px).
+10. **VLM "different colors" findings can be wrong even when the direction
+    feels right** — Session 3's mockup compare scored 85 with "duller bars"
+    flags; the DOM probe showed exact rgb matches on every surface. Settle
+    color disputes with computed-style probes (oklab converts to rgb:
+    `oklab(0.550071 0.118375 -0.255039)` = `rgb(134, 36, 255)`).
+11. **`find text` can click the wrong element** — `find text "Sign in"`
+    matched the "Sign in to continue" subtitle (never the button) and
+    silently no-opped the scripted login; role-based clicks
+    (`find role button click --name "Sign in"`) are the reliable form.
 
 ## §13. Pitfalls to Avoid
 
@@ -354,12 +375,16 @@ pill). Treat failures there as parity regressions.
 ## §19. Color Reference (complete `@theme` set)
 
 ```
-primary #d500ff · primary-foreground #ffffff · accent #008cff ·
-accent-foreground #ffffff · violet #d500ff · electric-blue #008cff ·
+primary #8624ff · primary-foreground #ffffff · accent #0055ff ·
+accent-foreground #ffffff · violet #d500ff · electric-blue #0055ff ·
 background #000000 · foreground #ffffff · card #0f0f0f ·
 card-foreground #ffffff · muted #161616 · muted-foreground #a1a1aa ·
 border #242424 · input #242424 · destructive #ef4444
 ```
+
+(Session 3: primary/accent/electric-blue were re-measured from the live's
+compiled CSS `:root` block — Session 1 had read the unmounted `.dark` block.
+The reference's own CSS declares BOTH blocks; `:root` is what renders.)
 
 Login/404 pages run the reference's light slate theme (slate-50…900) instead
 of the dark tokens — intentional reference parity.

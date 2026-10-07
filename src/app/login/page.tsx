@@ -82,6 +82,10 @@ function LoginCard() {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
+      {/* The reference's login shell carries the Vite noscript fallback as a
+          direct body child (the only route that does — Session 3 measurement).
+          Invisible with JS enabled; closes the /login word-parity gap. */}
+      <noscript>You need to enable JavaScript to run this app.</noscript>
       <div className="w-full max-w-md">
         <div className="text-card-foreground relative overflow-hidden border-0 shadow-2xl bg-white/95 backdrop-blur-sm rounded-2xl">
           {/* 4px top gradient bar */}

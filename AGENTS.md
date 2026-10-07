@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (73 checks) | `npm run test` |
-| Browser E2E (41 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (54 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (73/73) → `npm run build` → `./scripts/smoke-test.sh` (38/38)
-→ `npm run test:e2e` (41/41) — 152 checks across three layers (boots the standalone server on :3100 against its own
+→ `npm run test:e2e` (54/54) — 165 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -85,6 +85,13 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
 10. **`/dashboard` is session-gated** (`redirect("/login?from_url=/dashboard")`)
    — expect 307 for anonymous requests; the smoke suite pins both the 307
    and the cookie'd 200.
+11. **The reference ships TWO token blocks — `:root` and `.dark`.** The app
+   never mounts `.dark`, so `:root` is what renders: primary = hsl(267 100%
+   57%) = #8624ff, accent/electric-blue = hsl(220 100% 50%) = #0055ff, while
+   `violet` (the magenta used by text/border/bg-violet) = #d500ff. Session 1
+   read the `.dark` block and shipped the wrong primary/accent for two
+   sessions — the Session-3 audit fixed it (see
+   `docs/remediation-plan-session3.md` F1/F2).
 
 ## Architecture invariants
 

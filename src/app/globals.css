@@ -35,13 +35,20 @@
 }
 
 @theme {
-  /* Brand palette (measured from the reference's design tokens) */
-  --color-primary: #d500ff; /* hsl(290 100% 50%) — the dark-theme primary */
+  /* Brand palette (measured from the reference's compiled CSS).
+     CAREFUL: the reference's stylesheet ships BOTH a :root and a .dark
+     token block — the app never mounts .dark, so :root is what renders
+     (Session 3 re-measurement; the Session-1 survey mistakenly read the
+     .dark block). Rendered ground truth from the live:
+       from-primary  → rgba(134, 36, 255, …) = hsl(267 100% 57%)
+       to-accent / to-electric-blue → rgba(0, 85, 255, …) = hsl(220 100% 50%)
+       text-violet / from-violet    → rgb(213, 0, 255)   = hsl(290 100% 50%) */
+  --color-primary: #8624ff; /* hsl(267 100% 57%) — the :root primary (NOT the .dark 290° magenta) */
   --color-primary-foreground: #ffffff;
-  --color-accent: #008cff; /* hsl(220 100% 50%) — electric blue */
+  --color-accent: #0055ff; /* hsl(220 100% 50%) — electric blue */
   --color-accent-foreground: #ffffff;
-  --color-violet: #d500ff;
-  --color-electric-blue: #008cff;
+  --color-violet: #d500ff; /* hsl(290 100% 50%) — the magenta used by text/border/bg-violet */
+  --color-electric-blue: #0055ff;
 
   /* Dark surfaces */
   --color-background: #000000;
@@ -54,9 +61,12 @@
   --color-input: #242424;
   --color-destructive: #ef4444;
 
-  /* Fonts */
+  /* Fonts — the reference uses the SAME face ("Vend Sans", the Display
+     cut) for headings AND body: --font-body: "Vend Sans", sans-serif.
+     No element on the live ever resolves the Text cut (censused in
+     Session 3); it stays here only as a fallback. */
   --font-heading: "Vend Sans", "Vend Sans Text", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Vend Sans Text", "Vend Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Vend Sans", "Vend Sans Text", ui-sans-serif, system-ui, sans-serif;
   /* Animations (measured keyframe names from the reference bundle) */
   --animate-marquee: marquee 40s linear infinite;
   --animate-float: float 6s ease-in-out infinite;

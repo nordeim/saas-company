@@ -1,11 +1,14 @@
 "use client";
 
 import { Home } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
-/** 404 — the reference's slate-50 centered card with the Go Home button. */
+/** 404 — the reference's slate-50 centered card with the Go Home button.
+ * The sentence quotes the missing pathname in a medium-weight slate span
+ * (measured from the live: `The page "xyz" could not be found…`). */
 export default function NotFound() {
   const router = useRouter();
+  const pathname = usePathname();
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-slate-50">
       <div className="max-w-md w-full">
@@ -17,7 +20,11 @@ export default function NotFound() {
           <div className="space-y-3">
             <h2 className="text-2xl font-medium text-slate-800">Page Not Found</h2>
             <p className="text-slate-600 leading-relaxed">
-              The page could not be found in this application.
+              The page{" "}
+              <span className="font-medium text-slate-700">
+                {`"${pathname.replace(/^\//, "")}"`}
+              </span>{" "}
+              could not be found in this application.
             </p>
           </div>
           <div className="pt-6">

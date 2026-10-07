@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Serif_Display, Playfair_Display } from "next/font/google";
+import { SmoothScroll } from "@/components/site/smooth-scroll";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -25,9 +26,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: {
     default: SITE_NAME,
-    template: `%s — ${SITE_NAME}`,
+    // The reference's title pattern: "FAQ | SAAS Company" (short page
+    // name + pipe, measured from the live <title>s — Session 3).
+    template: `%s | ${SITE_NAME}`,
   },
   description: DESCRIPTION,
+  appleWebApp: {
+    title: SITE_NAME,
+  },
   openGraph: {
     title: SITE_NAME,
     description: DESCRIPTION,
@@ -57,6 +63,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${dmSerif.variable}`}>
       <body className="min-h-screen bg-black text-white antialiased font-body overflow-x-hidden">
+        {/* The reference's Lenis smooth scrolling (window.lenis on the live) */}
+        <SmoothScroll />
         {children}
       </body>
     </html>
