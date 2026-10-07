@@ -353,3 +353,17 @@ Stage Summary:
 - Gate re-locked at 284 checks (92 unit + 150 e2e incl. the palette-parity suite + 42 smoke incl. the header pins); VLM problem/testimonials/login IDENTICAL; word parity 1.0000 everywhere.
 - Root causes documented for posterity: survey the RENDERED PALETTE (v4's oklch defaults are approximations — convert to sRGB and compare VALUES, not spellings); a utility referencing a missing @theme token never emits (pin the RENDERED effect, not the mechanism's variables); v4's compiled rule order can flip v3-era cascade outcomes (specificity nudges for elements carrying conflicting utilities).
 - Next: final gate on the exact tree + commit + SSH push (Task 19).
+
+---
+Task ID: 19
+Agent: Super Z (main, session 13)
+Task: Final commit + SSH push of the Session 9 remediation
+
+Work Log:
+- Operator key materialized to a 0600 file in /tmp (never inside the repo); fingerprint verified (ssh-ed25519, SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — matches the Session 1-8 records).
+- Paramiko shim on PATH (workspace bin/ssh, outside the checkout per runbook rule 5). Wrapper dry-run: auth OK, remote main @ e598a51, fast-forward e598a51..d7392d1 accepted.
+- Real push via docs/ssh_git_wrapper_v3.py --remote git@github.com:nordeim/saas-company.git: wrapper verified remote refs/heads/main @ d7392d1 == local HEAD, tracking ref synced. Operator key shredded; working tree clean.
+
+Stage Summary:
+- Commit d7392d1 pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 28 files changed: the 31 @theme palette pins (the v4 oklch-roundtrip fix — the stars, problem reds, features grays/greens, avatar gradient endpoints, every login slate now render the live's exact v3 hex), the --color-ring emission path + the inputs' cascade nudge (the Sign in's keyboard ring renders the live's slate-950), the ::selection removal, the login overscroll + light-border pins, the four security headers, 18 new checks (gate: 284 = 92 unit + 150 e2e + 42 smoke), the remediation plan + session log, refreshed screenshots, docs + SKILL v2.8.0.
+- Session 9 complete.
