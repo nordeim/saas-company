@@ -395,3 +395,18 @@ Stage Summary:
 - Gate re-locked at 299 checks (92 unit + 164 e2e incl. the mockup-motion-parity suite + 43 smoke incl. the asset-caching pin); VLM IDENTICAL on both changed surfaces; word parity 1.0000 everywhere.
 - Root causes documented for posterity: a JS animation engine is invisible to a CSS-property census — survey motion by sampling VALUES over time and extracting the bundle's animate configs; framer's inline transform replaces v3's translate composition (v4's separate translate property needs an explicit kill); pixel adjudication settles clipping questions the DOM cannot.
 - Next: final gate on the exact tree + commit + SSH push (Task 21).
+
+---
+Task ID: 21
+Agent: Super Z (main, session 15)
+Task: Final commit + SSH push of the Session 10 remediation
+
+Work Log:
+- Operator key materialized to a 0600 file in /tmp (never inside the repo); fingerprint verified (ssh-ed25519, SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — matches the Session 1-9 records).
+- Environment was reset since Session 13: paramiko 5.0.0 reinstalled for the active interpreter (the system pip targets a different Python — python3 -m pip is the way) and the paramiko ssh shim re-deployed from the runbook's Appendix A to the workspace bin/ (outside the checkout per runbook rule 5).
+- Wrapper dry-run (after pointing --remote at git@github.com:nordeim/saas-company.git — the wrapper's default is its legacy task-management remote): auth OK, remote main @ 694cd7f, fast-forward 694cd7f..05d08f0 accepted.
+- Real push via docs/ssh_git_wrapper_v3.py --remote git@github.com:nordeim/saas-company.git: wrapper verified remote refs/heads/main @ 05d08f0 == local HEAD, tracking ref synced. Operator key shredded (both the wrapper's temp copy and the /tmp original); working tree clean.
+
+Stage Summary:
+- Commit 05d08f0 pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 29 files changed (+1040/−65): the seven measured --animate-* loop tokens + keyframes (the ambient glow, red chrome dot, staggered list dots, under-glow, and mini-dashboard skeletons — the live's eight missing loop groups), the under-glow restructure (sibling + translate-none + animate-mockup-glow — rendered geometry byte-identical), the dashboard a11y floor (the single h1 + white/60 muted lines), the asset-caching headers, 15 new checks (gate: 299 = 92 unit + 164 e2e incl. the mockup-motion-parity suite + 43 smoke incl. the asset-caching pin), the remediation plan + session log, refreshed screenshots, docs + SKILL v2.9.0.
+- Session 10 complete.
