@@ -311,3 +311,42 @@ assertions must read the right property per stack. (c) Next 16's dev-origin
 protection silently blocks dev chunks for the `127.0.0.1` origin (unhydrated page,
 native form GET fallbacks) — `allowedDevOrigins: ["127.0.0.1"]` in next.config.ts
 restores both origins.
+
+## Session-7 additions (2026-10-07)
+
+**13. The reference's Tailwind CONFIG overrides scale values — v4's
+`--tracking-*` theme variables are the override point.** The live's SPA
+bundle doubles the two widest tracking steps: `tracking-wider` computes
+**0.1em** and `tracking-widest` **0.2em** (measured on the live's rendered
+elements: the 12px hero badge at 1.2px, the 14px "Trusted by" label at
+2.8px, the 12px section eyebrows at 2.4px). v4's defaults are
+0.05em/0.1em — every eyebrow label rendered at half the reference's
+tracking for six sessions because no survey ever read computed
+`letter-spacing`. The fix lives in globals.css `@theme`:
+
+```css
+--tracking-wider: 0.1em;
+--tracking-widest: 0.2em;
+```
+
+…because v4 compiles `tracking-wider` to
+`letter-spacing: var(--tracking-wider)` — the utility reads the custom
+property at RENDER time, which also enables the route-scoped pin: the
+live's LOGIN bundle keeps the standard scale (its "or" divider computes
+0.6px), so the login route's `<style>` pins
+`--tracking-wider: 0.05em` on its body rule and the custom property
+inherits down the route. Pinned by `tests/e2e/typography-parity.spec.ts`.
+
+**14. Backticks inside a template-literal `<style>` comment break the JSX
+parse.** A CSS comment like `` emit `letter-spacing: …` `` inside
+`<style>{`…`}</style>` terminates the template literal early — the
+compiler reports TS1381 (`Unexpected token. Did you mean {'}'}`) on
+innocent-looking lines below it. Keep backticks out of template-style
+comments (write the property name bare).
+
+**15. Classes and inline styles answer different questions.** The live
+styles its three serif wordmarks with INLINE `font-family` declarations
+(Thrune = `"DM Serif Display", serif`); a `font-serif` utility here masked
+that the third face never rendered. Class-string diffs (Session 6) and
+computed-family probes both miss inline-style-only styling unless you ask
+each element what it resolves — survey both layers.

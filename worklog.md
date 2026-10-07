@@ -243,3 +243,31 @@ Work Log:
 Stage Summary:
 - Commit bb8d38f pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 40 files changed, +994/-57: the seven Session-6 parity fixes (the four per-person avatar gradients, the Enterprise Custom 30px DIV, the un-swapped edge fades, the full-white AI-suggestion paragraph, the per-route head pattern + working og-image + manifest, the bare body, the three class-string cleanups), 23 new checks (gate: 215 = 80 unit + 97 e2e + 38 smoke), the remediation plan + session log, 17 refreshed screenshots, docs + SKILL v2.5.0.
 - Session 6 complete.
+
+---
+Task ID: 14
+Agent: Super Z (main, session 9)
+Task: Session 7 parity audit + remediation (typography layer, asset inventory, keyboard/axe, edge viewports, mobile-menu resize robustness)
+
+Work Log:
+- Workspace refreshed (git pull 21826c2..248ab06 — the operator's session_8.md note); root + session docs reviewed; scandihaven patterns re-checked; the shell's exported absolute DATABASE_URL neutralized for every command (the AGENTS.md trap was live in this shell). Sandbox kills background servers — every paired survey ran through a boot→probe→kill wrapper pinning its own DATABASE_URL.
+- Baseline gate ALL GREEN (215 = 80 unit + 97 e2e + 38 smoke) — the codebase matched the documented Session-6 state exactly.
+- Drift check: reference UNCHANGED since Session 6 — word parity 1.0000 on all 8 routes.
+- Operator standing asks re-verified: the live's burger is STILL pointer-blocked by its toast portal (real click times out — D32); post-login still lands on / with unchanged chrome (all dashboard-ish routes SPA-404); docs/saas-company-dashboard.png VLM-verified as the CLONE's own seeded dashboard (the superset the image documents).
+- NEW audit surface #1 — full asset/network inventory: hero video md5-IDENTICAL, Gasparyan SVG byte-identical, the live's favicon URL DEAD (storage 404, the og:image class), the live's login apple-touch-icon also dead; document.fonts census showed DM Serif Display loaded on the live but unused on the clone.
+- NEW audit surface #2 — the TYPOGRAPHY layer (computed letter-spacing + first-resolved font-family of every element): (F1) the live's SPA bundle DOUBLES the tracking scale (tracking-wider 0.1em, tracking-widest 0.2em — every eyebrow here rendered at HALF the live's tracking for six sessions; class strings identical, only the scale values differ); (F2) the live's login bundle keeps the STANDARD scale (its "or" divider = 0.6px); (F3) the live's three serif wordmarks carry INLINE font-families — Thrune renders DM SERIF DISPLAY, the clone rendered all three Playfair-first; (F4) the Testimonials H2 tracking-tight (−1.2px) vs tracking-normal; (F5) the Gasparyan alt="Logo" vs "Gasparyan logo".
+- NEW audit surface #3 — keyboard + axe: 22-step Tab walk IDENTICAL both sides, focus ring violet/50 everywhere; axe-core: the clone's only unique flag = the star rows' bare aria-label on role-less divs (F6); the live's critical flags (unnamed buttons/links, 103 landmark-less nodes) are supersets here; contrast/scrollable-region flags fire on BOTH sides (parity).
+- NEW audit surface #4 — edge viewports + resize-while-open: geometry exact at 1920/320; the mobile menu byte-identical at 320–767 (rows/hrefs/blur, Escape/X/navigate all close) BUT (F7) resizing 390→1200 with the menu open left the page scroll-locked (panel mounted-but-hidden + body overflow:hidden until Escape) — fixed with a matchMedia close-on-md listener; the live locks nothing when its menu is open (our lock documented as D39 superset). (F8) no apple-touch-icon here — the working self-hosted one is the D30-class superset (the live's URL is dead).
+- Also dismissed with evidence: the badge shimmer (SVG SMIL gradients structurally identical), the live's dead keyframes (lens-flare, .animate-wave-flow), the live's <style>-in-H1 textContent artifact.
+- TDD remediation (17 e2e pins observed RED first, then GREEN): R1 @theme tracking overrides + the login route's --tracking-wider: 0.05em pin; R2 the wordmark inline font-families (font-serif dropped — class parity too); R3 tracking-tight on the Testimonials H2; R4 alt="Logo"; R5 role="img" + aria-hidden stars; R6 the navbar matchMedia resize guard; R7 metadata.icons.apple. Build lesson: backticks inside a template-literal <style> comment break the JSX parse (TS1381).
+- Re-verified: word parity 1.0000 all 8 routes; the typography diff 14 → 7 (all remaining = text-matcher false positives, live eyebrows vs clone nav pills); VLM hero 100 / pricing 99 (logo-cloud flags dismissed with DOM evidence — all logos/steps/cards exist on both sides); 17 screenshots refreshed.
+- Docs: remediation plan (docs/remediation-plan-session7.md, F1–F8 + L1–L4 → R1–R8 with pre-execution validation); PAD (revision block, ledger D33–D40, §5.5 traps 11–12, §7 counts, §11 key files); AGENTS (gotchas 19–20); CLAUDE (session-7 context, counts); README (227 badge, typography row, counts); saas-company_SKILL.md v2.6.0 (lessons 22–23); session log (docs/session_9.md); .env.example re-verified (no new env vars).
+
+Stage Summary:
+- The clone's typography now matches the live exactly: every eyebrow renders the live's doubled tracking (with the login route's standard-scale exception reproduced), Thrune wears DM Serif Display, the Testimonials H2 carries tracking-tight, and the Gasparyan alt is verbatim.
+- The mobile menu is robust across the resize/rotate boundary (the operator's standing mobile-nav concern closed with both evidence and a fix), the star ratings carry valid ARIA, and a working apple-touch-icon ships app-wide (the live's own URL is dead).
+- Byte-verified clean: the hero video and Gasparyan SVG are identical to the live's; the live's favicon/og-image/apple-touch URLs are all dead (our working assets are the supersets).
+- Gate re-locked at 227 checks (80 unit + 109 e2e + 38 smoke); VLM hero 100 / pricing 99; word parity 1.0000 everywhere.
+- Root causes documented for posterity: survey the TYPOGRAPHY layer (config-level scale overrides + inline font-families are invisible to class-string diffs and word parity); breakpoint-mounted chrome needs a resize guard; asset inventories catch dead-URL drift.
+- Next: final gate on the exact tree + commit + SSH push (Task 15).
+

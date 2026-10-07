@@ -23,10 +23,13 @@ export function LogoCloud() {
         </Reveal>
 
         <Reveal className="flex flex-wrap justify-center items-center gap-3 md:gap-x-10 md:gap-y-8">
-          {/* Zphlix — serif wordmark */}
+          {/* Zphlix — serif wordmark. The live's three serif wordmarks carry
+              INLINE font-family styles (Session 7 F3): Zphlix/Melpyx
+              "Playfair Display", Thrune "DM Serif Display" — measured on
+              the live's DOM (the spans carry no font class at all). */}
           <div className="text-white/60 hover:text-white/90 transition-all duration-500 cursor-default hover:scale-110 flex justify-center scale-[0.825] md:scale-100">
             <div className="flex items-center gap-2">
-              <span className="text-lg font-medium tracking-wide font-serif">Zphlix</span>
+              <span className="text-lg font-medium tracking-wide" style={{ fontFamily: '"Playfair Display", serif' }}>Zphlix</span>
             </div>
           </div>
           {/* KVORAT — stacked monogram */}
@@ -36,11 +39,13 @@ export function LogoCloud() {
               <span className="font-body font-light text-[9px] tracking-[0.35em] uppercase">KVORAT</span>
             </div>
           </div>
-          {/* Thrune — aperture + serif */}
+          {/* Thrune — aperture + serif (the live's DM Serif Display cut,
+              italic — its inline style measured on the live; the face is
+              loaded via next/font with the italic variant included) */}
           <div className="text-white/60 hover:text-white/90 transition-all duration-500 cursor-default hover:scale-110 flex justify-center scale-[0.825] md:scale-100">
             <div className="flex items-center gap-2">
               <Aperture className="w-5 h-5" strokeWidth={1} />
-              <span className="text-lg italic tracking-wide font-serif">Thrune</span>
+              <span className="text-lg italic tracking-wide" style={{ fontFamily: '"DM Serif Display", serif' }}>Thrune</span>
             </div>
           </div>
           {/* BRANTOX — bordered spaced caps */}
@@ -49,11 +54,11 @@ export function LogoCloud() {
               <span className="font-heading font-bold text-xs tracking-[0.45em] mr-[-0.45em]">BRANTOX</span>
             </div>
           </div>
-          {/* Melpyx — activity + serif */}
+          {/* Melpyx — activity + serif (Playfair Display, the live's inline style) */}
           <div className="text-white/60 hover:text-white/90 transition-all duration-500 cursor-default hover:scale-110 flex justify-center scale-[0.825] md:scale-100">
             <div className="flex items-center gap-2.5">
               <Activity className="w-6 h-6" strokeWidth={1.2} />
-              <span className="text-2xl font-bold tracking-tight font-serif">Melpyx</span>
+              <span className="text-2xl font-bold tracking-tight" style={{ fontFamily: '"Playfair Display", serif' }}>Melpyx</span>
             </div>
           </div>
           {/* QUIXTAL — satellite */}
@@ -70,11 +75,12 @@ export function LogoCloud() {
               <span className="font-heading font-black text-xl tracking-[0.15em]">DROLE</span>
             </div>
           </div>
-          {/* Gasparyan — image logo */}
+          {/* Gasparyan — image logo (the SVG bytes are identical to the
+              live's; its alt is the live's verbatim "Logo" — Session 7 F5) */}
           <div className="text-white/60 hover:text-white/90 transition-all duration-500 cursor-default hover:scale-110 flex justify-center scale-[0.825] md:scale-100">
             <img
               src="/media/gasparyan-logo.svg"
-              alt="Gasparyan logo"
+              alt="Logo"
               className="h-6 w-auto brightness-0 invert opacity-60 hover:opacity-90 transition-opacity duration-500"
             />
           </div>

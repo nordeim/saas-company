@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (80 checks) | `npm run test` |
-| Browser E2E (97 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (109 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (80/80) → `npm run build` → `./scripts/smoke-test.sh` (38/38)
-→ `npm run test:e2e` (97/97) — 215 checks across three layers (boots the standalone server on :3100 against its own
+→ `npm run test:e2e` (109/109) — 227 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -153,6 +153,18 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    portal** (fixed top-0 z-[100], 390×32, pointer-events auto — a JS
    click opens the live's menu, a real tap cannot; D32). The clone keeps
    the WORKING burger; never "fix" it toward the live's broken state.
+19. **The reference's SPA bundle DOUBLES the tracking scale** (Session 7):
+   `tracking-wider` renders 0.1em and `tracking-widest` 0.2em on the live
+   — the overrides live in globals.css `@theme`
+   (`--tracking-wider`/`--tracking-widest`), while the live's LOGIN bundle
+   keeps the standard scale (pinned back in the login route's scoped
+   `<style>`). Never "simplify" either side — the divergence is the
+   reference's own two-bundle reality.
+20. **Breakpoint-mounted chrome needs a resize guard** (Session 7): the
+   mobile menu mounted below `md` and hidden above it kept its state (and
+   the body scroll-lock) alive when the viewport crossed 768 — the
+   `matchMedia("(min-width: 768px)")` close-on-match listener in
+   `navbar.tsx` is load-bearing for resize/rotate flows.
 
 ## Architecture invariants
 

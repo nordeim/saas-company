@@ -47,7 +47,9 @@ export function Testimonials() {
           <span className="text-xs tracking-widest uppercase text-violet font-body mb-4 block">
             Testimonials
           </span>
-          <h2 className="font-heading text-3xl md:text-5xl font-bold text-white tracking-normal mb-4">
+          {/* tracking-tight — the live's class (computed −1.2px at 48px;
+              the clone had tracking-normal for six sessions — Session 7 F4) */}
+          <h2 className="font-heading text-3xl md:text-5xl font-bold text-white tracking-tight mb-4">
             Loved by Teams Everywhere
           </h2>
           <p className="text-white/50 max-w-xl mx-auto font-body">
@@ -71,9 +73,13 @@ export function Testimonials() {
               key={`${t.name}-${i}`}
               className="flex-shrink-0 w-[280px] md:w-[380px] p-6 rounded-2xl border border-violet/40 bg-transparent hover:border-violet/60 transition-colors duration-500"
             >
-              <div className="flex items-center gap-1 mb-4" aria-label="5 out of 5 stars">
+              {/* Star rating — role="img" makes the aria-label VALID ARIA
+                  (axe: aria-label is prohibited on role-less non-interactive
+                  divs — Session 7 F6); the glyphs are decorative. The live
+                  has no ARIA here at all (its own axe report is worse). */}
+              <div className="flex items-center gap-1 mb-4" role="img" aria-label="5 out of 5 stars">
                 {[0, 1, 2, 3, 4].map((s) => (
-                  <Star key={s} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+                  <Star key={s} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" aria-hidden="true" />
                 ))}
               </div>
               <p className="font-heading text-base font-semibold text-white mb-3">

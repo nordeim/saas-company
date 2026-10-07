@@ -15,6 +15,11 @@ import { expect, test } from "@playwright/test";
  * plus og:image + twitter:image (the live's URLs are DEAD — the clone's
  * self-hosted /og-image.png is the working superset) and a manifest link.
  * The live ships NO theme-color meta and NO viewport-fit.
+ *
+ * Session 7 F8: the live's login route also links an apple-touch-icon
+ * (its URL is dead — the same storage-404 class as its favicon and
+ * og:image). The clone ships the WORKING self-hosted superset app-wide:
+ * <link rel="apple-touch-icon" href="…/favicon.svg"> on every route.
  */
 
 const DEFAULT_DESC_PREFIX = "Your intelligent AI assistant that streamlines complex";
@@ -51,6 +56,7 @@ for (const r of ROUTES) {
       ogImage: document.querySelector('meta[property="og:image"]')?.getAttribute("content") ?? null,
       twImage: document.querySelector('meta[name="twitter:image"]')?.getAttribute("content") ?? null,
       manifest: document.querySelector('link[rel="manifest"]')?.getAttribute("href") ?? null,
+      appleTouchIcon: document.querySelector('link[rel="apple-touch-icon"]')?.getAttribute("href") ?? null,
       themeColor: document.querySelector('meta[name="theme-color"]')?.getAttribute("content") ?? null,
       viewport: document.querySelector('meta[name="viewport"]')?.getAttribute("content") ?? null,
     }));
@@ -77,6 +83,10 @@ for (const r of ROUTES) {
 
     // The manifest link (the live's Base44 PWA — self-hosted here).
     expect(head.manifest).toContain("/manifest.json");
+
+    // Session 7 F8: the working apple-touch-icon superset (the live's own
+    // URL is dead — storage 404, the D30 working-asset pattern).
+    expect(head.appleTouchIcon).toContain("/favicon.svg");
 
     // The live ships NEITHER of these two.
     expect(head.themeColor).toBeNull();

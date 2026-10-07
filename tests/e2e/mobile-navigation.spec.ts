@@ -92,6 +92,26 @@ test.describe("mobile navigation", () => {
     await page.locator("#mobile-menu").getByRole("button", { name: "Log In", exact: true }).tap();
     await expect(page).toHaveURL(/\/login$/);
   });
+
+  // Session 7 F7 (docs/remediation-plan-session7.md): the resize-while-open
+  // failure class — crossing the md boundary with the menu open used to
+  // leave the page scroll-locked (body overflow:hidden persisted while the
+  // panel was CSS-hidden at md). The navbar now closes the menu when the
+  // (min-width: 768px) media query starts matching.
+  test("resizing across md while open closes the menu and restores body scroll", async ({ page }) => {
+    await page.goto("/");
+    const nav = page.locator("nav").first();
+    await nav.getByRole("button", { name: /open menu/i }).tap();
+    await expect(page.locator("#mobile-menu")).toBeVisible();
+
+    await page.setViewportSize({ width: 1200, height: 900 });
+    await page.waitForTimeout(400);
+
+    // The panel unmounts and the body scroll-lock lifts.
+    await expect(page.locator("#mobile-menu")).toHaveCount(0);
+    const overflow = await page.evaluate(() => document.body.style.overflow);
+    expect(overflow).toBe("");
+  });
 });
 
 test.describe("tablet navigation (768)", () => {

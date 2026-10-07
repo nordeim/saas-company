@@ -87,6 +87,19 @@
      (Session 5 re-measurement of the live's compiled :root.) */
   --font-heading: "Vend Sans", sans-serif;
   --font-body: "Vend Sans", sans-serif;
+
+  /* Letter-spacing scale — the reference's SPA bundle OVERRIDES Tailwind's
+     two widest tracking steps (Session 7 typography audit, measured on the
+     live's rendered elements): `tracking-wider` computes 0.1em (the 12px
+     hero badge renders 1.2px; the live's login bundle does NOT share this
+     — see the login route's pinned standard value) and `tracking-widest`
+     computes 0.2em (the 14px "Trusted by" label renders 2.8px; the 12px
+     section eyebrows render 2.4px). v4's defaults are 0.05em/0.1em —
+     without this override every eyebrow label renders at HALF the
+     reference's tracking. */
+  --tracking-wider: 0.1em;
+  --tracking-widest: 0.2em;
+
   /* Animations (measured keyframe names from the reference bundle) */
   --animate-marquee: marquee 40s linear infinite;
   --animate-float: float 6s ease-in-out infinite;

@@ -139,6 +139,14 @@ function LoginCard() {
           --color-background: #ffffff;
           --color-foreground: #09090b;
           --color-card-foreground: #09090b;
+          /* The reference's login bundle ships the STANDARD tracking scale
+             (its "or" divider computes 0.6px = 0.05em at 12px) while its
+             SPA bundle doubles the two widest steps (globals.css @theme,
+             Session 7 F1/F2). Pin the standard value back on this route —
+             the --tracking-* custom properties inherit, and v4 utilities
+             emit letter-spacing: var(--tracking-wider), so this body
+             rule covers everything the route renders. */
+          --tracking-wider: 0.05em;
         }
         /* The dark routes' base layer sets h1-h6 to var(--font-heading)
            (Vend Sans). The reference's login bundle has no such rule —

@@ -9,6 +9,42 @@
 
 #### Revision Block — v1.0
 
+- `[NOTE]` **Session 7 remediation (2026-10-07)** — a TYPOGRAPHY-LAYER +
+  asset-inventory + interaction-robustness audit (the first systematic
+  computed-`letter-spacing` + first-resolved-`font-family` survey of every
+  text element, live vs clone — plus the full network/asset inventory, a
+  22-step keyboard Tab walk, an axe-core run, edge viewports 1920/320, and
+  the mobile menu's resize-while-open behavior) found and fixed eight
+  clone-side gaps (see `docs/remediation-plan-session7.md` F1–F8 → R1–R8):
+  **the reference's SPA bundle DOUBLES Tailwind's two widest tracking
+  steps** (`tracking-wider` → 0.1em, `tracking-widest` → 0.2em — measured:
+  the 12px hero badge at 1.2px, the 14px "Trusted by" label at 2.8px, the
+  12px eyebrows at 2.4px) while its login bundle keeps the standard scale —
+  the clone had shipped v4 defaults (half the reference's tracking on every
+  eyebrow for six sessions); fixed via `@theme` overrides + a login-scoped
+  `--tracking-wider` pin (the route's own `<style>`); the **Thrune
+  wordmark renders DM SERIF DISPLAY** on the live (its three serif
+  wordmarks carry INLINE `font-family` styles — the clone had rendered all
+  three Playfair-first via `font-serif`); the Testimonials H2's
+  `tracking-tight` restored (the clone had `tracking-normal`); the
+  Gasparyan logo's `alt="Logo"` matched verbatim; the star-rating rows'
+  aria-label made VALID ARIA (`role="img"` + decorative `aria-hidden`
+  stars — axe flagged the bare div); **the mobile menu's resize-while-open
+  bug fixed** (crossing 768px with the menu open used to leave the page
+  scroll-locked — a `matchMedia` listener now closes the menu on md entry);
+  and a WORKING self-hosted apple-touch-icon added app-wide (the live's
+  own URL is dead — storage 404). ALSO DOCUMENTED (live-side): the live's
+  favicon URL is DEAD (media.base44.com storage 404 — the clone's working
+  favicon is the superset); the D32 burger pointer-block is STILL
+  confirmed; the live's css ships dead keyframes (`lens-flare`,
+  `.animate-wave-flow`) and a `<style>` node nested inside its H1.
+  Byte-verified clean: the hero video (md5-identical) and the Gasparyan
+  SVG; edge viewports 1920/320 exact; the 22-step Tab order identical with
+  the violet/50 focus ring everywhere. Gate re-locked at **227 checks**
+  (80 unit + 109 e2e incl. the new typography-parity suite + 38 smoke);
+  VLM hero 100 / pricing 99 (logo-cloud flags dismissed with DOM evidence
+  — reveal-timing artifacts); word parity 1.0000 on all 8 routes.
+
 - `[NOTE]` **Session 6 remediation (2026-10-07)** — a class-string-layer +
   head-metadata audit (the first full-DOM class-string skeleton diff of the
   landing page — tag + class + key attrs, live vs clone — plus a per-route
@@ -584,6 +620,14 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D30 | Per-route `<head>` | per-route og:title/`"X on SAAS Company. …"` description/og:url/canonical; a manifest; og:image + twitter:image (the live's image URL **404s**) | full per-route pattern via `src/lib/seo.ts` (`routeMetadata`); self-hosted WORKING `/og-image.png` (1200×630) + `/manifest.json`; NO theme-color, NO viewport-fit (the live ships neither). `twitter:url` is not expressible through Next's metadata API — accepted engine deviation (og:url carries it) | Parity + **Superset** (working image; Session 6) |
 | D31 | `<body>` | NO class attribute; `body{}` stylesheet rule paints it; `-webkit-font-smoothing: auto` | matched — bare `<body>`, the base-layer rule paints it, the invented antialiased declaration deleted | Parity (Session 6) |
 | D32 | Mobile burger clickability | the live's burger is POINTER-BLOCKED by its own empty toast portal (fixed top-0 z-[100], 390×32, pointer-events auto) — the live's menu is UNOPENABLE by a real tap at 390 (a JS `.click()` still opens it; the panel itself is byte-identical: 0,56 390×397, 7 rows @44px) | the clone's burger WORKS (real-tap opens the byte-identical panel) — the intended UX | **Superset** (Session 6, intentional — D21-class) |
+| D33 | Tracking scale (SPA bundle) | `tracking-wider` = **0.1em**, `tracking-widest` = **0.2em** (measured: hero badge 1.2px @12px, "Trusted by" 2.8px @14px, eyebrows 2.4px @12px) — the live's config doubles the two widest steps | `@theme` overrides `--tracking-wider: 0.1em; --tracking-widest: 0.2em;` — every eyebrow renders at the live's tracking (the clone had v4 defaults = half, for six sessions) | Parity (Session 7) |
+| D34 | Tracking scale (login bundle) | the live's /login css bundle keeps the STANDARD scale — its "or" divider computes 0.6px (0.05em @12px) | the login route's scoped `<style>` pins `--tracking-wider: 0.05em` back (the custom property inherits; v4 utilities emit `letter-spacing: var(--tracking-wider)`) | Parity (Session 7, route-scoped) |
+| D35 | Logo-cloud wordmark fonts | the live's three serif wordmarks carry INLINE `font-family` styles: Zphlix/Melpyx `"Playfair Display", serif`, **Thrune `"DM Serif Display", serif`** (italic) — no font class on the spans | the same inline styles verbatim (the spans carry no `font-serif` class — class-string parity too); the faces load via next/font (DM Serif incl. the italic cut) | Parity (Session 7) |
+| D36 | Testimonials H2 tracking | `tracking-tight` → computed −1.2px at 48px | matched (the clone had `tracking-normal` = `normal` since Session 1) | Parity (Session 7) |
+| D37 | Gasparyan logo alt | `alt="Logo"` | matched verbatim (was "Gasparyan logo") | Parity (Session 7) |
+| D38 | Star-rating ARIA | NO aria at all (the live's own axe report is worse: unnamed buttons/links, 103 landmark-less nodes) | `role="img"` + `aria-label="5 out of 5 stars"` + decorative `aria-hidden` stars — a VALID-ARIA a11y superset (axe-core: the bare aria-label div was `aria-prohibited-attr`) | **Superset** (Session 7) |
+| D39 | Body scroll-lock (mobile menu open) | the live does NOT lock body scroll when its menu is open (verified via JS-click) | the clone locks `overflow:hidden` while the menu is open — the intended modal UX; a `matchMedia("(min-width: 768px)")` listener closes the menu on md entry so a resize never strands the lock | **Superset** (Session 7, documented; the resize bug fixed) |
+| D40 | apple-touch-icon | the live's login route links one whose URL is DEAD (media.base44.com storage 404 — the same class as its favicon and og:image) | a WORKING self-hosted `/favicon.svg` apple-touch-icon emitted app-wide | **Superset** (Session 7; the D30 working-asset pattern) |
 
 ### 5.5 Tailwind v4 Trap Log (enforced here)
 
@@ -597,6 +641,8 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 8. **v4 `space-y-*` puts margin on the PRECEDING sibling** (`:not(:last-child)` margin-bottom) — vertical margins are lost on INLINE children (the login form's labels), and an explicit negative margin on the preceding child CANCELS the gap entirely (the login alternate-states' back button carries the reference's `-mb-2`: under v4 the back→h2 gap rendered −8px vs the live's +8px — a 16px card delta the VLM caught). The login route style restores the measured pattern inside forms (`.space-y-1\.5`) and the auth stacks (`.auth-stack`, `.auth-stack-sm6` — the latter also restores the forgot variant's `sm:space-y-6` 24px gaps).
 9. **Never trust a font's NAME — trace its bytes** (Session 5): the reference's computed `font-family` read `"Vend Sans"` but the RENDERED face was Google Fonts' Vend Sans variable font (gstatic), NOT the "Base44-hosted Wix Madefor" Session 1 identified from @font-face declarations in an unused bundle. Four sessions of sub-pixel drift (pill widths, the D19 card delta, testimonials scrollWidth) were the wrong-file metrics (+2.4% glyph width at 14px). The authoritative probes: `performance.getEntriesByType('resource')` for the woff2 URLs, `document.fonts` for the weight census, and fontTools name tables for the file identity. (`document.fonts.check()` is UNRELIABLE — it returns true for unknown families.)
 10. **The reference ships INERT classes** (Session 5): its markup carries utilities its compiled css never emits — the pricing Pro card's `scale-[1.02] md:scale-105` renders UNSCALED (`scale: none`, 540px at every width). Match the RENDERED computed style, not the class string: v4 here WOULD emit those utilities (540 × 1.05 = the exact 567px we used to render).
+11. **The reference's Tailwind CONFIG overrides scale values — survey the TYPOGRAPHY layer** (Session 7): the live's SPA bundle doubles the two widest tracking steps (`tracking-wider` 0.1em, `tracking-widest` 0.2em) while its login bundle keeps the defaults — v4's `--tracking-*` theme variables are the override point (utilities emit `letter-spacing: var(--tracking-wider)`), and route-scoped pins handle bundle-level divergence (the login route's `<style>` pins the standard value back). The same audit found the live's wordmarks styled via INLINE `font-family` — classes alone hid that the third face (DM Serif Display) never rendered here.
+12. **Resize-while-open is a real failure class for breakpoint-mounted chrome** (Session 7): a menu mounted below md and hidden by `md:hidden` above it keeps its state (and any body scroll-lock) alive across the boundary — a `matchMedia` close-on-md listener is the standard guard (see the mobile-navigation testing taxonomy).
 
 ---
 
@@ -637,18 +683,18 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 8 + db-path | 80 | `src/lib/*.test.ts`, `tests/` | Vitest 5 (`npm run test`) |
-| Browser E2E | 10 specs | 97 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Browser E2E | 11 specs | 109 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 38 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins
 
 - **Unit:** pricing math (plan prices, the 20% annual discount, captions incl. Custom-with-no-suffix), the fixed-window limiter (limit boundary, window reset, eviction, retry-after, key isolation, IP extraction), validation (email/password/string bounds), the workflow template + sanitizer (category inference, clamps, rejection paths), auth crypto (hash/verify round-trip, salt uniqueness, token round-trip, tamper/garbage rejection), content integrity (6 FAQ items, 4 legal pages with sections), the SEO helpers (the per-route description/og:title templates + the routeMetadata assembly — Session 6), and the SQLite URL resolution (anchors, absolute passthrough, standalone repair).
-- **Playwright:** the landing structure (hero, all nine sections, footer columns, anchor scroll, 404, health envelope), **the mobile navigation suite** — the highest-regression-risk chrome: fixed nav geometry, burger→X swap, the dropdown's measured rows (44px, exact hrefs, order), close-on-navigate, Escape, the 768 tablet pill — the auth round-trip (three login states, wrong-password rejection, registration→dashboard→sign-out, session-gated redirect), the dashboard superset (seeded stats, composer end-to-end with cleanup, pause/resume, 401 envelope), the FAQ accordion, the pricing toggle, all four legal pages, the newsletter API pair, **the section-parity suite** (the per-person avatar gradients with an inert-class guard, the Custom-price structure, the edge-fade directions, the AI-suggestion color, body parity, the F7 class strings — Session 6), and **the head-metadata suite** (per-route title/description/og:*/canonical/image/manifest across seven routes, the absence of theme-color/viewport-fit — Session 6).
+- **Playwright:** the landing structure (hero, all nine sections, footer columns, anchor scroll, 404, health envelope), **the mobile navigation suite** — the highest-regression-risk chrome: fixed nav geometry, burger→X swap, the dropdown's measured rows (44px, exact hrefs, order), close-on-navigate, Escape, the 768 tablet pill — the auth round-trip (three login states, wrong-password rejection, registration→dashboard→sign-out, session-gated redirect), the dashboard superset (seeded stats, composer end-to-end with cleanup, pause/resume, 401 envelope), the FAQ accordion, the pricing toggle, all four legal pages, the newsletter API pair, **the section-parity suite** (the per-person avatar gradients with an inert-class guard, the Custom-price structure, the edge-fade directions, the AI-suggestion color, body parity, the F7 class strings — Session 6), and **the head-metadata suite** (per-route title/description/og:*/canonical/image/manifest across seven routes, the absence of theme-color/viewport-fit — Session 6), and **the typography-parity suite** (the doubled SPA tracking scale incl. the login route's standard pin, the wordmark inline font-families, the Testimonials H2 tracking, the Gasparyan alt, the star-rating ARIA — Session 7).
 - **Smoke:** boots the standalone production server on :3200 with its own `db/smoke.db` (schema-pushed + seeded), then asserts: health envelope, login (valid/wrong/short/duplicate), session me (authed/anon/post-logout), workflow CRUD + invalid-status rejection, newsletter + demo endpoints, all eight pages (incl. the 307/200 dashboard pair), landing content markers, the 404 guard, and the sitemap.
 
 ### 7.3 Coverage Thresholds
 
-- **Gate (mandatory before push):** `npm run lint` → `npm run typecheck` → `npm run test` (**80/80**) → `npm run build` → `./scripts/smoke-test.sh` (**38/38**) → `npm run test:e2e` (**97/97**). No hosted CI; the local gate is the only gate. The `typecheck` step is not optional: the build sets `ignoreBuildErrors`.
+- **Gate (mandatory before push):** `npm run lint` → `npm run typecheck` → `npm run test` (**80/80**) → `npm run build` → `./scripts/smoke-test.sh` (**38/38**) → `npm run test:e2e` (**109/109**). No hosted CI; the local gate is the only gate. The `typecheck` step is not optional: the build sets `ignoreBuildErrors`.
 - Line/branch coverage is not measured — the seam list is deliberately small and complete.
 
 ### 7.4 Conventions
@@ -716,7 +762,7 @@ Demo login: `demo@novaai.app` / `Demo1234!`. Full verification: the §7.3 gate.
 | `npm run lint` / `npm run typecheck` | ESLint / `tsc --noEmit` (the real type gate) |
 | `npx prisma generate` | Regenerate the client after schema edits |
 | `npm run db:push` / `npm run db:seed` | Apply schema / reset to demo data |
-| `npm run test` / `npm run test:e2e` | 80 unit / 97 browser checks |
+| `npm run test` / `npm run test:e2e` | 80 unit / 109 browser checks |
 | `./scripts/smoke-test.sh` | 38-check suite against the production build |
 | `npx playwright test tests/e2e/mobile-navigation.spec.ts` | Re-run the chrome suite alone |
 
@@ -771,7 +817,8 @@ TypeScript strict (with the template-era `noImplicitAny: false`); ESLint flat co
 | `src/lib/legal-content.ts` / `faq-content.ts` | Verbatim reference copy (content-as-code) |
 | `prisma/schema.prisma` / `prisma/seed.ts` | 4 models / idempotent demo workspace |
 | `scripts/smoke-test.sh` | 38-check production HTTP suite (pins its own `DATABASE_URL`) |
-| `tests/e2e/mobile-navigation.spec.ts` | The chrome pins: burger dropdown rows, close-on-navigate, tablet pill |
+| `tests/e2e/mobile-navigation.spec.ts` | The chrome pins: burger dropdown rows, close-on-navigate, tablet pill, close-on-md resize |
+| `tests/e2e/typography-parity.spec.ts` | The Session-7 typography pins: the tracking scale (+ the login pin), wordmark fonts, H2 tracking, alt, star ARIA |
 | `tests/e2e/brand-parity.spec.ts` | The Session-3 token/copy/metadata pins: gradient stops (oklab-converted), font chain, straight quotes, titles, 404 pathname, Lenis, noscript |
 | `docs/Tailwind-V4-Validation-Report.md` | The v4 trap log this codebase enforces |
 | `docs/how-to-git-push-using-ssh-wrapper_SKILL.md` | The push runbook |

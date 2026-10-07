@@ -87,6 +87,22 @@ export function Navbar() {
     };
   }, [open]);
 
+  // Close the menu when the viewport crosses INTO md (≥768px) — the
+  // resize-while-open failure class (Session 7 F7): without this, the panel
+  // stayed mounted (CSS-hidden by md:hidden) and the body scroll-lock
+  // (overflow:hidden) persisted at desktop widths, freezing the page until
+  // Escape. Closing on the breakpoint unmounts the panel AND restores
+  // scroll through the effect above. (The scroll-lock itself is a
+  // documented superset — the live locks nothing when its menu is open.)
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const onChange = (e: MediaQueryListEvent) => {
+      if (e.matches) setOpen(false);
+    };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
   const goToLogin = useCallback(() => {
     setOpen(false);
     router.push("/login");

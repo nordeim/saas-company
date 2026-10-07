@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (38) | 80 unit + 97 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (38) | 80 unit + 109 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -148,12 +148,34 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run test` → 80/80 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 38/38 PASS
-- [ ] `npm run test:e2e` → 97/97 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 109/109 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 7 (2026-10-07) remediation** — see
+  `docs/remediation-plan-session7.md`: the first TYPOGRAPHY-LAYER survey
+  (computed letter-spacing + first-resolved font-family of every text
+  element, live vs clone) plus a full asset/network inventory, a 22-step
+  keyboard Tab walk, an axe-core run, edge viewports (1920/320), and the
+  mobile menu's resize-while-open behavior. Found and fixed eight gaps:
+  **the reference's SPA bundle doubles the tracking scale** (`tracking-wider`
+  0.1em / `tracking-widest` 0.2em — every eyebrow had rendered at half the
+  live's tracking for six sessions; fixed via `@theme` overrides, with the
+  login route pinning the standard scale back since the live's login
+  bundle keeps it); the **Thrune wordmark** now renders DM Serif Display
+  (the live's three wordmarks carry INLINE font-family styles — the clone
+  had rendered all three Playfair-first); the Testimonials H2's
+  tracking-tight; the Gasparyan `alt="Logo"`; the star rows' aria made
+  valid (`role="img"`); **the mobile menu's resize-while-open scroll-lock
+  bug** (a matchMedia listener closes the menu on md entry); and a working
+  self-hosted apple-touch-icon (the live's URL is dead). Byte-verified:
+  the hero video (md5-identical) and Gasparyan SVG; the live's favicon URL
+  is DEAD (our working one is the superset); the D32 burger block still
+  confirmed. Gate: 227 checks; VLM hero 100 / pricing 99; word parity
+  1.0000 on all 8 routes.
 
 - **Session 6 (2026-10-07) remediation** — see
   `docs/remediation-plan-session6.md`: the first CLASS-STRING-LAYER audit

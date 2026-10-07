@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.5.0 · **Last updated:** 2026-10-07 (Session 6 remediation)
+> **Version:** 2.6.0 · **Last updated:** 2026-10-07 (Session 7 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -9,7 +9,8 @@
 > `docs/remediation-plan-session3.md` (Session 3) ·
 > `docs/remediation-plan-session4.md` (Session 4) ·
 > `docs/remediation-plan-session5.md` (Session 5) ·
-> `docs/remediation-plan-session6.md` (Session 6 — this revision's audit).
+> `docs/remediation-plan-session6.md` (Session 6) ·
+> `docs/remediation-plan-session7.md` (Session 7 — this revision's audit).
 
 ---
 
@@ -51,7 +52,7 @@ PAD's §5.4 ledger instead of silently picking a side.
 | Auth | Node `crypto` (scrypt + HMAC-SHA256) | Zero external auth services; timing-safe comparisons |
 | AI | z-ai-web-dev-sdk 0.0.x (server-only) | `src/lib/workflow.ts` fallback keeps the feature alive without it |
 | Fonts | Self-hosted **Google "Vend Sans"** (variable wght 300-700, the exact gstatic subsets) + next/font (Playfair, DM Serif Display) | Byte-identical type rendering with the reference (Session 5 forensics) |
-| Tests | Vitest 5 (73) · Playwright 1.63 (81) · bash/curl smoke (38) | 192 checks; the local gate is the only gate (no hosted CI) |
+| Tests | Vitest 5 (80) · Playwright 1.63 (109) · bash/curl smoke (38) | 227 checks; the local gate is the only gate (no hosted CI) |
 | Smooth scroll | lenis 1.3.x | The reference's momentum scrolling (`window.lenis`); wrapper in `src/components/site/smooth-scroll.tsx` |
 
 Dependency policy: `package.json` carries `overrides` for
@@ -239,10 +240,10 @@ space-y-2` / `list-none mt-4 space-y-1`). Content changes go RED-first in
 ```bash
 npm run lint          # eslint .            — exit 0
 npm run typecheck     # tsc --noEmit         — exit 0
-npm run test          # 73/73
+npm run test          # 80/80
 env -u DATABASE_URL npm run build
 ./scripts/smoke-test.sh   # 38/38 (boots prod on :3200, own db/smoke.db)
-npm run test:e2e      # 68/68 (boots prod on :3100, own db/e2e.db)
+npm run test:e2e      # 109/109 (boots prod on :3100, own db/e2e.db)
 npm audit             # expect only the accepted braces advisory
 git status            # no .env, *.key, db/*.db, dev.log staged
 ```
@@ -251,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–5)
+## §12. Lessons Learnt (Sessions 1–7)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -374,6 +375,30 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     matrix(1,0,0,1,2,0)` while v4 emits `translate: 2px` — the same 2px
     render through different PROPERTIES; compare geometry, not property
     names.
+22. **Survey the TYPOGRAPHY layer — the reference's CONFIG overrides
+    scale values** (Session 7) — a systematic computed-letter-spacing +
+    first-resolved-font-family diff of every text element found what six
+    sessions of computed-style spot probes had missed: the live's SPA
+    bundle DOUBLES the two widest tracking steps (`tracking-wider` 0.1em,
+    `tracking-widest` 0.2em — every eyebrow rendered at half the live's
+    tracking here), while its LOGIN bundle keeps the standard scale (the
+    "or" divider computes 0.6px there vs 1.2px on the landing badge).
+    v4's `--tracking-*` `@theme` variables are the override point
+    (utilities emit `letter-spacing: var(--tracking-*)`), and
+    route-scoped pins handle the two-bundle divergence. The same survey
+    surfaced the live's INLINE font-family wordmarks — the third face
+    (DM Serif Display) had never rendered here because a CLASS
+    (`font-serif`, Playfair-first) stood in for the live's inline style.
+    Classes and computed styles answer different questions; ask both.
+23. **Breakpoint-mounted chrome needs a RESIZE guard** (Session 7) — the
+    mobile menu (mounted below md, CSS-hidden above it) kept its `open`
+    state AND its body scroll-lock alive when the viewport crossed 768px:
+    the desktop page froze (overflow:hidden) until Escape. The
+    `matchMedia("(min-width: 768px)")` close-on-match listener is the
+    standard guard (the resize-while-open failure class in the
+    mobile-navigation testing taxonomy). Related: the body scroll-lock
+    itself is a documented SUPERSET — the live locks nothing when its
+    menu is open (verified via JS-click).
 
 ## §13. Pitfalls to Avoid
 

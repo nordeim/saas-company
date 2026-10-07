@@ -61,6 +61,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    // The live's login route links an apple-touch-icon whose URL is DEAD
+    // (media.base44.com storage 404 — the same class as its favicon and
+    // og:image). The WORKING self-hosted icon is the superset (Session 7
+    // F8; the D30 working-asset pattern), emitted app-wide.
+    apple: [{ url: "/favicon.svg" }],
   },
 };
 
