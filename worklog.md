@@ -196,4 +196,10 @@ Agent: Super Z (main, session 5)
 Task: Final commit + SSH push of the Session 5 remediation
 
 Work Log:
-- (pending execution)
+- Operator key materialized to a 0600 file in /tmp (never inside the repo); fingerprint verified (ssh-ed25519, SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — matches the Session 1/2/3/4 records).
+- Paramiko shim on PATH (workspace bin/ssh). Wrapper dry-run: auth OK, remote main @ f2e388a (the operator's session-log commit), fast-forward f2e388a..dfa4e65 accepted.
+- Real push via docs/ssh_git_wrapper_v3.py --remote git@github.com:nordeim/saas-company.git: wrapper verified remote refs/heads/main @ dfa4e65 == local HEAD, tracking ref synced. Operator key + pub shredded; working tree clean.
+
+Stage Summary:
+- Commit dfa4e65 pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 39 files changed: the five Session-5 parity fixes (the authentic Google Vend Sans font, the login alternate states, the focus ring, the inert-scale removal [D19 closed], the full-bleed testimonials strip), 13 new e2e checks (gate: 192 = 73 unit + 81 e2e + 38 smoke), the remediation plan + session log, 18 screenshots (4 new login states), docs + SKILL v2.4.0.
+- Session 5 complete.
