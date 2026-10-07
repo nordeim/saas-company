@@ -53,7 +53,10 @@ export function Testimonials() {
       <Reveal className="relative">
         <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
-        <div className="flex gap-6 overflow-x-auto overflow-y-hidden scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] cursor-grab px-6 pb-4">
+        {/* Full-bleed strip like the reference — NO horizontal padding (the
+            live's first card starts at x=0; px-6 here had inset it 24px and
+            stretched scrollWidth by 48px — Session 5 finding). */}
+        <div className="flex gap-6 overflow-x-auto overflow-y-hidden scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] cursor-grab">
           {cards.map((t, i) => (
             <div
               key={`${t.name}-${i}`}

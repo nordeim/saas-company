@@ -2,7 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Lock, Mail } from "lucide-react";
+import { ArrowLeft, Lock, Mail } from "lucide-react";
 
 type Mode = "signin" | "signup" | "forgot";
 
@@ -17,48 +17,88 @@ function GoogleIcon() {
   );
 }
 
+/**
+ * The reference's shadcn-style alert banner — measured on the live (Session
+ * 5): `div[role="alert"]` with the svg-positioning arbitrary variants, a
+ * red variant for errors (bg-red-50/70 border-red-200, inner text-red-700)
+ * and a green variant for the reset-success notice. Rendered BETWEEN the
+ * last field and the submit button (the reference's DOM order).
+ */
+function AlertBanner({ tone, children }: { tone: "red" | "green"; children: React.ReactNode }) {
+  return (
+    <div
+      role="alert"
+      className={`relative w-full border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground text-foreground rounded-xl ${
+        tone === "red" ? "bg-red-50/70 border-red-200" : "bg-green-50/70 border-green-200"
+      }`}
+    >
+      <div className={`[&_p]:leading-relaxed text-sm ${tone === "red" ? "text-red-700" : "text-green-700"}`}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/* The reference's per-mode input class sets (measured Session 5):
+   - signin: text-base, h-11 sm:h-12, placeholder:text-slate-600
+   - signup: px-3 py-2 (no text-base), h-10 sm:h-11, placeholder:text-slate-400, text-sm sm:text-base
+   - forgot: text-base, h-10 sm:h-11, placeholder:text-slate-400
+   (The live also carries inert focus-visible:ring-ring / file:text-foreground
+   utilities — kept verbatim for DOM parity; the rendered ring comes from
+   focus:ring-slate-400, measured identical both sides.) */
+const SHARED_INPUT =
+  "ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-10";
+const INPUT_SIGNIN = `flex w-full border px-3 py-2 text-base ${SHARED_INPUT} h-11 sm:h-12 bg-slate-50/50 border-slate-200 focus:border-slate-400 focus:ring-slate-400 rounded-xl placeholder:text-slate-600`;
+const INPUT_SIGNUP = `flex w-full border px-3 py-2 ${SHARED_INPUT} h-10 sm:h-11 bg-slate-50/50 border-slate-200 focus:border-slate-400 focus:ring-slate-400 rounded-xl placeholder:text-slate-400 text-sm sm:text-base`;
+const INPUT_FORGOT = `flex w-full border px-3 py-2 text-base ${SHARED_INPUT} h-10 sm:h-11 bg-slate-50/50 border-slate-200 focus:border-slate-400 focus:ring-slate-400 rounded-xl placeholder:text-slate-400`;
+const LABEL = "peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-medium text-slate-700";
+const SUBMIT_SIGNIN =
+  "inline-flex items-center justify-center gap-1 whitespace-nowrap text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 px-3 py-2 w-full h-11 sm:h-12 bg-slate-900 hover:bg-slate-800 text-white font-medium shadow-sm rounded-xl transition-all duration-200";
+const SUBMIT_COMPACT =
+  "inline-flex items-center justify-center gap-1 whitespace-nowrap text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 px-3 py-2 w-full h-10 sm:h-11 bg-slate-900 hover:bg-slate-800 text-white font-medium shadow-sm rounded-xl transition-all duration-200";
+const BACK_TOP =
+  "flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 font-medium transition-colors -mb-2";
+const BACK_FULL =
+  "w-full flex items-center justify-center gap-2 text-sm text-slate-500 hover:text-slate-700 font-medium transition-colors";
+
 function LoginCard() {
   const router = useRouter();
   const params = useSearchParams();
   const fromUrl = params.get("from_url") || "/dashboard";
 
   const [mode, setMode] = useState<Mode>("signin");
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
-
-  const heading =
-    mode === "signup"
-      ? "Create your account"
-      : mode === "forgot"
-        ? "Reset your password"
-        : "Welcome to SAAS Company";
-  const subheading =
-    mode === "signup"
-      ? "Start automating in minutes"
-      : mode === "forgot"
-        ? "We'll send you a reset link"
-        : "Sign in to continue";
+  // The forgot-success view ("Check your email") — the reference renders it
+  // unconditionally after a reset request (no user enumeration).
+  const [resetEmail, setResetEmail] = useState<string | null>(null);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (busy) return;
-    setBusy(true);
     setError("");
     setNotice("");
+    if (mode === "forgot") {
+      // No mail transport in the self-hosted clone — mirror the reference's
+      // unconditional success view (documented deviation: no email is sent).
+      setResetEmail(email);
+      return;
+    }
+    if (mode === "signup" && password !== confirm) {
+      // The reference's client-side mismatch copy (measured).
+      setError("Passwords do not match");
+      return;
+    }
+    setBusy(true);
     try {
-      if (mode === "forgot") {
-        // No mail transport in the self-hosted clone — acknowledge honestly.
-        setNotice("If that address exists, a reset link is on its way.");
-        return;
-      }
       const res = await fetch(`/api/auth/${mode === "signup" ? "register" : "login"}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ email, password }),
       });
       const payload = await res.json().catch(() => null);
       if (res.ok && payload?.ok) {
@@ -100,6 +140,12 @@ function LoginCard() {
           --color-foreground: #09090b;
           --color-card-foreground: #09090b;
         }
+        /* The dark routes' base layer sets h1-h6 to var(--font-heading)
+           (Vend Sans). The reference's login bundle has no such rule —
+           its login h1 renders the SYSTEM stack like the body (measured:
+           h1 ui-sans-serif…, card 746px). Restore the inheritance on
+           this route only. */
+        h1, h2, h3, h4, h5, h6 { font-family: inherit; }
         /* The reference's compiled space-y puts the gap on the FOLLOWING
            sibling (v3-style margin-top). Tailwind v4's margin-bottom on the
            preceding sibling is lost on the form's INLINE labels (vertical
@@ -108,6 +154,20 @@ function LoginCard() {
            forms (block children render identically either way). */
         form .space-y-1\\.5 > :not(:last-child) { margin-bottom: 0; }
         form .space-y-1\\.5 > :not(:first-child) { margin-top: 0.375rem; }
+        /* The alternate-state stack (back button / h2 / form): same v3-style
+           restoration. Critical here because the back button carries the
+           reference's -mb-2 — under v4's preceding-sibling margin the -8px
+           CANCELS the stack gap entirely (back→h2 gap −8px vs the live's
+           +8px = the 16px signup-card delta the VLM caught). These rules
+           put the gap on the following siblings and zero the preceding
+           margins on all but the FIRST child (so -mb-2 keeps working). */
+        .auth-stack > :not(:first-child) { margin-top: 1rem; }
+        .auth-stack > :not(:first-child):not(:last-child) { margin-bottom: 0; }
+        /* The forgot variant's stack is space-y-4 sm:space-y-6 (measured:
+           24px gaps at sm+ on the live) — the signup stack stays 16px. */
+        @media (min-width: 640px) {
+          .auth-stack-sm6 > :not(:first-child) { margin-top: 1.5rem; }
+        }
       `}</style>
       {/* The reference's login shell carries the Vite noscript fallback as a
           direct body child (the only route that does — Session 3 measurement).
@@ -119,173 +179,294 @@ function LoginCard() {
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200" />
           <div className="p-8 sm:p-10 md:pt-12 md:pb-10 md:px-10">
             <div className="flex flex-col items-center text-center space-y-6 sm:space-y-8">
-              {/* Logo chip with blurred halo */}
-              <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 rounded-full blur-xl opacity-30 group-hover:opacity-40 transition-opacity duration-300" />
-                <span className="flex shrink-0 overflow-hidden rounded-full relative h-20 w-20 sm:h-24 sm:w-24 shadow-lg ring-4 ring-white/50 group-hover:shadow-xl transition-all duration-300">
-                  <span className="flex h-full w-full items-center justify-center rounded-full bg-muted bg-gradient-to-br from-slate-100 to-slate-200 text-xl sm:text-2xl font-bold text-slate-700">
-                    S
-                  </span>
-                </span>
-              </div>
 
-              <div className="space-y-2 sm:space-y-3 w-full">
-                <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-                  {heading}
-                </h1>
-                <p className="text-slate-500 text-sm sm:text-base font-medium">{subheading}</p>
-              </div>
-
-              <div className="w-full">
-                {/* Google (parity; degrades to a notice) */}
-                <div className="space-y-3">
+              {resetEmail !== null ? (
+                /* ---------- The reference's reset-success view (measured):
+                     back-full is NOT here — heading block, green alert,
+                     full-width back button, wrapped in space-y-4 sm:space-y-6. */
+                <div className="w-full space-y-4 sm:space-y-6">
+                  <div className="text-center space-y-3 sm:space-y-4">
+                    <div className="space-y-2">
+                      <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+                        Check your email
+                      </h2>
+                      <p className="text-slate-600 text-sm sm:text-base">
+                        We&apos;ve sent password reset instructions to
+                        <br />
+                        <span className="font-medium text-slate-900">{resetEmail}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <AlertBanner tone="green">
+                    Please check your email for the password reset link. It may take a few
+                    minutes to arrive.
+                  </AlertBanner>
                   <button
-                    onClick={onGoogle}
-                    className="w-full flex items-center justify-center gap-3 bg-white text-slate-700 px-5 py-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 hover:border-slate-300 hover:shadow-sm transition-all duration-200 font-medium text-[16px] group"
+                    type="button"
+                    onClick={() => {
+                      setResetEmail(null);
+                      setMode("signin");
+                      setError("");
+                      setNotice("");
+                    }}
+                    className={BACK_FULL}
                   >
-                    <span className="transition-transform duration-200 -ml-4">
-                      <GoogleIcon />
-                    </span>
-                    <span>Continue with Google</span>
+                    <ArrowLeft className="h-4 w-4" />
+                    Back to sign in
                   </button>
                 </div>
-
-                {/* or divider */}
-                <div className="relative my-6">
-                  <div className="absolute inset-0 flex items-center">
-                    <div
-                      data-orientation="horizontal"
-                      role="none"
-                      className="shrink-0 h-[1px] w-full bg-slate-200"
-                    />
-                  </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-white px-3 text-slate-500 font-medium tracking-wider">
-                      or
+              ) : mode === "signin" ? (
+                /* ---------- The default sign-in state (verified parity since
+                     Session 2; the error banner moved to the reference's
+                     position between the fields and the submit in Session 5). */
+                <>
+                  {/* Logo chip with blurred halo */}
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 rounded-full blur-xl opacity-30 group-hover:opacity-40 transition-opacity duration-300" />
+                    <span className="flex shrink-0 overflow-hidden rounded-full relative h-20 w-20 sm:h-24 sm:w-24 shadow-lg ring-4 ring-white/50 group-hover:shadow-xl transition-all duration-300">
+                      <span className="flex h-full w-full items-center justify-center rounded-full bg-muted bg-gradient-to-br from-slate-100 to-slate-200 text-xl sm:text-2xl font-bold text-slate-700">
+                        S
+                      </span>
                     </span>
                   </div>
-                </div>
 
-                <form className="space-y-4 sm:space-y-5" onSubmit={onSubmit}>
-                  <div className="space-y-3 sm:space-y-4">
-                    {mode === "signup" && (
-                      <div className="space-y-1.5">
-                        <label
-                          className="text-sm font-medium text-slate-700"
-                          htmlFor="name"
-                        >
-                          Name
-                        </label>
-                        <input
-                          id="name"
-                          type="text"
-                          required
-                          autoComplete="name"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          className="flex w-full border px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm h-11 sm:h-12 bg-slate-50/50 border-slate-200 focus:border-slate-400 focus:ring-slate-400 rounded-xl placeholder:text-slate-600"
-                          placeholder="Ada Lovelace"
+                  <div className="space-y-2 sm:space-y-3 w-full">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+                      Welcome to SAAS Company
+                    </h1>
+                    <p className="text-slate-500 text-sm sm:text-base font-medium">
+                      Sign in to continue
+                    </p>
+                  </div>
+
+                  <div className="w-full">
+                    {/* Google (parity; degrades to a notice) */}
+                    <div className="space-y-3">
+                      <button
+                        onClick={onGoogle}
+                        className="w-full flex items-center justify-center gap-3 bg-white text-slate-700 px-5 py-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 hover:border-slate-300 hover:shadow-sm transition-all duration-200 font-medium text-[16px] group"
+                      >
+                        <span className="transition-transform duration-200 -ml-4">
+                          <GoogleIcon />
+                        </span>
+                        <span>Continue with Google</span>
+                      </button>
+                    </div>
+
+                    {/* or divider */}
+                    <div className="relative my-6">
+                      <div className="absolute inset-0 flex items-center">
+                        <div
+                          data-orientation="horizontal"
+                          role="none"
+                          className="shrink-0 h-[1px] w-full bg-slate-200"
                         />
                       </div>
-                    )}
-
-                    <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-slate-700" htmlFor="email">
-                        Email
-                      </label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-500" />
-                        <input
-                          id="email"
-                          type="email"
-                          required
-                          autoComplete="email"
-                          placeholder="you@example.com"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="flex w-full border px-3 py-2 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-10 h-11 sm:h-12 bg-slate-50/50 border-slate-200 focus:border-slate-400 focus:ring-slate-400 rounded-xl placeholder:text-slate-600"
-                        />
+                      <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-white px-3 text-slate-500 font-medium tracking-wider">
+                          or
+                        </span>
                       </div>
                     </div>
 
-                    {mode !== "forgot" && (
-                      <div className="space-y-1.5">
-                        <label className="text-sm font-medium text-slate-700" htmlFor="password">
-                          Password
-                        </label>
-                        <div className="relative">
-                          <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-500" />
-                          <input
-                            id="password"
-                            type="password"
-                            required
-                            autoComplete={mode === "signup" ? "new-password" : "current-password"}
-                            placeholder="••••••••"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="flex w-full border px-3 py-2 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-10 h-11 sm:h-12 bg-slate-50/50 border-slate-200 focus:border-slate-400 focus:ring-slate-400 rounded-xl placeholder:text-slate-600"
-                          />
+                    <form className="space-y-4 sm:space-y-5" onSubmit={onSubmit}>
+                      <div className="space-y-3 sm:space-y-4">
+                        <div className="space-y-1.5">
+                          <label className={LABEL} htmlFor="email">
+                            Email
+                          </label>
+                          <div className="relative">
+                            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-500" />
+                            <input
+                              id="email"
+                              type="email"
+                              required
+                              autoComplete="email"
+                              placeholder="you@example.com"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              className={INPUT_SIGNIN}
+                            />
+                          </div>
+                        </div>
+                        <div className="space-y-1.5">
+                          <label className={LABEL} htmlFor="password">
+                            Password
+                          </label>
+                          <div className="relative">
+                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-500" />
+                            <input
+                              id="password"
+                              type="password"
+                              required
+                              autoComplete="current-password"
+                              placeholder="••••••••"
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
+                              className={INPUT_SIGNIN}
+                            />
+                          </div>
                         </div>
                       </div>
-                    )}
-                  </div>
 
-                  <div className="space-y-3">
-                    <button
-                      type="submit"
-                      disabled={busy}
-                      className="inline-flex items-center justify-center gap-1 whitespace-nowrap text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 px-3 py-2 w-full h-11 sm:h-12 bg-slate-900 hover:bg-slate-800 text-white font-medium shadow-sm rounded-xl transition-all duration-200"
-                    >
-                      {mode === "signup" ? "Create account" : mode === "forgot" ? "Send reset link" : "Sign in"}
-                    </button>
+                      {/* The reference renders the error banner BETWEEN the
+                          password field and the submit button (measured
+                          DOM order: Password → alert → Sign in). */}
+                      {error && <AlertBanner tone="red">{error}</AlertBanner>}
 
-                    {error && (
-                      <p role="alert" className="text-sm text-red-600 text-center">
-                        {error}
-                      </p>
-                    )}
-                    {notice && (
-                      <p role="status" className="text-sm text-slate-500 text-center">
-                        {notice}
-                      </p>
-                    )}
-
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setMode(mode === "forgot" ? "signin" : "forgot");
-                          setError("");
-                          setNotice("");
-                        }}
-                        className="text-sm text-slate-500 hover:text-slate-700 font-medium transition-colors"
-                      >
-                        {mode === "forgot" ? "Back to sign in" : "Forgot password?"}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setMode(mode === "signup" ? "signin" : "signup");
-                          setError("");
-                          setNotice("");
-                        }}
-                        className="text-sm text-slate-500 hover:text-slate-700 transition-colors"
-                      >
-                        {mode === "signup" ? (
-                          <>
-                            Have an account? <span className="font-medium text-slate-700">Sign in</span>
-                          </>
-                        ) : (
-                          <>
+                      <div className="space-y-3">
+                        <button type="submit" disabled={busy} className={SUBMIT_SIGNIN}>
+                          Sign in
+                        </button>
+                        {notice && (
+                          <p role="status" className="text-sm text-slate-500 text-center">
+                            {notice}
+                          </p>
+                        )}
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setMode("forgot");
+                              setError("");
+                              setNotice("");
+                            }}
+                            className="text-sm text-slate-500 hover:text-slate-700 font-medium transition-colors"
+                          >
+                            Forgot password?
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setMode("signup");
+                              setError("");
+                              setNotice("");
+                            }}
+                            className="text-sm text-slate-500 hover:text-slate-700 transition-colors"
+                          >
                             Need an account?{" "}
                             <span className="font-medium text-slate-700">Sign up</span>
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </>
+              ) : (
+                /* ---------- The compact alternate states (measured Session
+                     5): a top back button (-mb-2), an H2, an optional
+                     subtitle (forgot only), and the form — NO logo chip, NO
+                     Google, NO OR divider, NO links row. */
+                <div className="w-full">
+                  <div
+                    className={`space-y-4 auth-stack${mode === "forgot" ? " sm:space-y-6 auth-stack-sm6" : ""}`}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMode("signin");
+                        setError("");
+                        setNotice("");
+                      }}
+                      className={BACK_TOP}
+                    >
+                      <ArrowLeft className="h-4 w-4" />
+                      Back to sign in
+                    </button>
+
+                    {mode === "signup" ? (
+                      <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+                        Create your account
+                      </h2>
+                    ) : (
+                      /* The reference wraps the forgot heading + subtitle in
+                         a `text-center space-y-2` block (8px gap), directly
+                         under the back button in the space-y-4 stack. */
+                      <div className="text-center space-y-2">
+                        <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+                          Reset your password
+                        </h2>
+                        <p className="text-slate-600 text-sm sm:text-base">
+                          Enter your email and we&apos;ll send you a link to reset your password
+                        </p>
+                      </div>
+                    )}
+
+                    <form
+                      className={mode === "signup" ? "space-y-3 sm:space-y-4" : "space-y-4 sm:space-y-5"}
+                      onSubmit={onSubmit}
+                    >
+                      <div className={mode === "signup" ? "space-y-3" : "space-y-4"}>
+                        <div className="space-y-1.5">
+                          <label className={LABEL} htmlFor="email">
+                            Email
+                          </label>
+                          <div className="relative">
+                            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+                            <input
+                              id="email"
+                              type="email"
+                              required
+                              autoComplete="email"
+                              placeholder="you@example.com"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              className={mode === "signup" ? INPUT_SIGNUP : INPUT_FORGOT}
+                            />
+                          </div>
+                        </div>
+
+                        {mode === "signup" && (
+                          <>
+                            <div className="space-y-1.5">
+                              <label className={LABEL} htmlFor="password">
+                                Password
+                              </label>
+                              <div className="relative">
+                                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+                                <input
+                                  id="password"
+                                  type="password"
+                                  required
+                                  autoComplete="new-password"
+                                  placeholder="Min. 8 characters"
+                                  value={password}
+                                  onChange={(e) => setPassword(e.target.value)}
+                                  className={INPUT_SIGNUP}
+                                />
+                              </div>
+                            </div>
+                            <div className="space-y-1.5">
+                              <label className={LABEL} htmlFor="confirmPassword">
+                                Confirm Password
+                              </label>
+                              <div className="relative">
+                                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+                                <input
+                                  id="confirmPassword"
+                                  type="password"
+                                  required
+                                  autoComplete="new-password"
+                                  placeholder="Re-enter password"
+                                  value={confirm}
+                                  onChange={(e) => setConfirm(e.target.value)}
+                                  className={INPUT_SIGNUP}
+                                />
+                              </div>
+                            </div>
                           </>
                         )}
+                      </div>
+
+                      {error && <AlertBanner tone="red">{error}</AlertBanner>}
+
+                      <button type="submit" disabled={busy} className={SUBMIT_COMPACT}>
+                        {mode === "signup" ? "Create account" : "Send reset link"}
                       </button>
-                    </div>
+                    </form>
                   </div>
-                </form>
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

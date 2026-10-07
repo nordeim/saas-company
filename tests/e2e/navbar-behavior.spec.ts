@@ -120,7 +120,13 @@ test.describe("navbar scroll behavior (Session 4)", () => {
     expectAlphaColor(spy.pricingBg, "transparent", 0);
 
     // Pricing in view (dark mode): Pricing pill white/30, Features clear.
-    await page.evaluate(() => window.scrollTo(0, 5200));
+    // (Session 5 recalibration: the authentic Vend Sans font moved the
+    // sections up to the LIVE's true offsets — pricing top 4620 /
+    // testimonials top 5646 at this 1280×720 viewport. At the old 5200
+    // checkpoint the ⅔ line (5680) now catches Testimonials — verified on
+    // the live: Pricing active at 4900, Testimonials at 5200. 4900 keeps
+    // this pin on the Pricing section like the original audit intended.)
+    await page.evaluate(() => window.scrollTo(0, 4900));
     await page.waitForTimeout(450);
     const spyDark = await page.evaluate(() => {
       const links = [...document.querySelectorAll('nav a[href^="#"]')];

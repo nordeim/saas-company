@@ -29,7 +29,7 @@ export async function POST(request: Request) {
 
   const user = await db.user.findUnique({ where: { email: data.email.trim().toLowerCase() } });
   if (!user || !verifyPassword(data.password, user.passwordHash)) {
-    return fail("INVALID_CREDENTIALS", "Incorrect email or password.", 401);
+    return fail("INVALID_CREDENTIALS", "Invalid email or password", 401);
   }
 
   await setSessionCookie(user.id);

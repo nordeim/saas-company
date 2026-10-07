@@ -18,7 +18,11 @@
    Tokens measured from the reference app's compiled stylesheet:
    dark canvas #000, raised surfaces hsl(0 0% 6%), hairline borders
    hsl(0 0% 14%), brand magenta hsl(290 100% 50%), electric-blue accent
-   hsl(220 100% 50%). Type: "Vend Sans" (self-hosted Wix Madefor cuts).
+   hsl(220 100% 50%). Type: "Vend Sans" — GOOGLE FONTS' actual variable
+   font (wght 300-700), self-hosted as the two gstatic subsets (Session 5
+   font forensics: the live loads fonts.gstatic.com/s/vendsans/v1/…;
+   the Session-1 files were Wix Madefor — ~2.4% wider glyphs — which the
+   Wix faces declared in the live's login bundle masked).
    NOTE (v4 traps, see docs/Tailwind-V4-Validation-Report.md):
    - tokens are FULL color values (never bare HSL triplets, which resolve
      to transparent under @theme);
@@ -29,22 +33,25 @@
      computed string).
 --------------------------------------------------------------------------- */
 
+/* Google Fonts' Vend Sans variable font (wght 300-700), self-hosted.
+   Same bytes the live serves from fonts.gstatic.com/s/vendsans/v1/ —
+   the exact unicode-range splits of the Google CSS. */
 @font-face {
   font-family: "Vend Sans";
   font-style: normal;
-  font-weight: 400 800;
+  font-weight: 300 700;
   font-display: swap;
-  src: url("../fonts/vend-sans-display.woff2") format("woff2");
+  src: url("../fonts/vend-sans-latin.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
-  font-family: "Vend Sans Text";
+  font-family: "Vend Sans";
   font-style: normal;
-  font-weight: 400 800;
+  font-weight: 300 700;
   font-display: swap;
-  src: url("../fonts/vend-sans-text.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src: url("../fonts/vend-sans-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
 @theme {
@@ -74,12 +81,12 @@
   --color-input: #242424;
   --color-destructive: #ef4444;
 
-  /* Fonts — the reference uses the SAME face ("Vend Sans", the Display
-     cut) for headings AND body: --font-body: "Vend Sans", sans-serif.
-     No element on the live ever resolves the Text cut (censused in
-     Session 3); it stays here only as a fallback. */
-  --font-heading: "Vend Sans", "Vend Sans Text", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Vend Sans", "Vend Sans Text", ui-sans-serif, system-ui, sans-serif;
+  /* Fonts — the reference's :root ships exactly:
+     --font-heading: "Vend Sans", sans-serif; --font-body: "Vend Sans",
+     sans-serif — ONE family, ONE fallback, no Text cut, no system stack.
+     (Session 5 re-measurement of the live's compiled :root.) */
+  --font-heading: "Vend Sans", sans-serif;
+  --font-body: "Vend Sans", sans-serif;
   /* Animations (measured keyframe names from the reference bundle) */
   --animate-marquee: marquee 40s linear infinite;
   --animate-float: float 6s ease-in-out infinite;
@@ -132,9 +139,18 @@
   [role="button"] {
     cursor: pointer;
   }
-  :focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
+  /* The reference's universal base rule (its compiled css ships
+     `*{border-color:hsl(var(--border));outline-color:hsl(var(--ring)/.5)}`
+     with --ring: 290 100% 50%): the UA default focus ring renders VIOLET
+     at 50% on every element. Replaces this repo's invented
+     `:focus-visible { outline: 2px solid primary }` (Session 5 F3) — the
+     live has no such rule; its keyboard ring is the browser default,
+     tinted. Cascade-safe: every bordered element here carries an explicit
+     border-color utility (audited), so the border-color half only sets
+     the same default the live's base layer sets. */
+  * {
+    border-color: var(--color-border);
+    outline-color: rgb(213 0 255 / 0.5);
   }
   ::selection {
     background: rgb(213 0 255 / 0.35);

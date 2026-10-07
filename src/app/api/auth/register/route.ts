@@ -24,13 +24,15 @@ export async function POST(request: Request) {
   }
   const data = (body ?? {}) as Record<string, unknown>;
 
-  const name = cleanString(data.name, 80);
-  if (!name) return fail("VALIDATION", "Name is required.", 400);
   if (!isValidEmail(data.email)) return fail("VALIDATION", "Enter a valid email address.", 400);
+  const email = data.email.trim().toLowerCase();
+  // The reference's sign-up card has NO name field (measured Session 5) —
+  // name is optional and falls back to the email local-part (the smoke
+  // suite's explicit-name calls keep working unchanged).
+  const name = cleanString(data.name, 80) ?? (email.split("@")[0].slice(0, 80) || "New user");
   if (!isValidPassword(data.password)) {
     return fail("VALIDATION", "Password must be at least 8 characters.", 400);
   }
-  const email = data.email.trim().toLowerCase();
 
   const existing = await db.user.findUnique({ where: { email }, select: { id: true } });
   if (existing) {

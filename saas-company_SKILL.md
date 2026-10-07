@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.3.0 · **Last updated:** 2026-10-07 (Session 4 remediation)
+> **Version:** 2.4.0 · **Last updated:** 2026-10-07 (Session 5 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -48,8 +48,8 @@ PAD's §5.4 ledger instead of silently picking a side.
 | Prisma | 6.19.3 + SQLite | `db push` (no migrations by design); `db/custom.db` at the repo root |
 | Auth | Node `crypto` (scrypt + HMAC-SHA256) | Zero external auth services; timing-safe comparisons |
 | AI | z-ai-web-dev-sdk 0.0.x (server-only) | `src/lib/workflow.ts` fallback keeps the feature alive without it |
-| Fonts | Self-hosted Wix Madefor ("Vend Sans") + next/font (Playfair, DM Serif Display) | Byte-identical type rendering with the reference |
-| Tests | Vitest 5 (73) · Playwright 1.63 (68) · bash/curl smoke (38) | 179 checks; the local gate is the only gate (no hosted CI) |
+| Fonts | Self-hosted **Google "Vend Sans"** (variable wght 300-700, the exact gstatic subsets) + next/font (Playfair, DM Serif Display) | Byte-identical type rendering with the reference (Session 5 forensics) |
+| Tests | Vitest 5 (73) · Playwright 1.63 (81) · bash/curl smoke (38) | 192 checks; the local gate is the only gate (no hosted CI) |
 | Smooth scroll | lenis 1.3.x | The reference's momentum scrolling (`window.lenis`); wrapper in `src/components/site/smooth-scroll.tsx` |
 
 Dependency policy: `package.json` carries `overrides` for
@@ -249,7 +249,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–4)
+## §12. Lessons Learnt (Sessions 1–5)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -326,6 +326,33 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     login form's inline labels lost ~4px of gap per field. The reference's
     compiled v3-style (margin-top on the following sibling) renders
     correctly — restored via a scoped rule in the login route style.
+    Session 5 corollary: a negative margin on the preceding child
+    CANCELS the gap entirely (the login alternate-states' back button
+    carries the reference's `-mb-2` — under v4 the back→h2 gap rendered
+    −8px vs the live's +8px, a 16px card delta the VLM caught).
+17. **Never trust a font's NAME — trace its bytes** (Session 5) — the
+    reference's computed `font-family` read `"Vend Sans"` but the RENDERED
+    face was Google Fonts' Vend Sans variable font (gstatic), NOT the
+    "Base44-hosted Wix Madefor" Session 1 identified from @font-face
+    declarations in an unused bundle. Four sessions of sub-pixel drift
+    (pill widths, the D19 card delta, the testimonials strip) were the
+    wrong file's metrics (+2.4% glyph width at 14px). The authoritative
+    probes: `performance.getEntriesByType('resource')` for the woff2 URLs,
+    `document.fonts` for the weight census, fontTools name tables for the
+    file identity. (`document.fonts.check()` is UNRELIABLE — it returns
+    true for unknown families.)
+18. **The reference ships INERT classes** (Session 5) — its markup carries
+    utilities its compiled css never emits: the pricing Pro card's
+    `scale-[1.02] md:scale-105` renders UNSCALED (`scale: none`, 540px at
+    every width). Match the RENDERED computed style, not the class string
+    — v4 here WOULD emit those utilities (540 × 1.05 = the exact 567px we
+    used to render and had documented as the accepted D19 deviation).
+19. **Eval-based `input.value=` writes do NOT sync React state** (Session
+    5) — an eval-driven fill can submit EMPTY forms while looking
+    successful (the live login probe reported "Invalid email or password"
+    for credentials that work — the form had actually submitted empty).
+    Always drive forms with the browser tool's native `fill` (Playwright's
+    value-tracker-aware path) when the page is a React app.
 
 ## §13. Pitfalls to Avoid
 
@@ -456,7 +483,8 @@ type BillingPeriod = "monthly" | "annual";
 - **Audit history:** Session 2's full findings/fixes ledger —
   `docs/remediation-plan-session2.md` (F1–F10, R1–R11); Session 3 —
   `docs/remediation-plan-session3.md` (F1–F11, R1–R10); Session 4 —
-  `docs/remediation-plan-session4.md` (F1–F6, R1–R8).
+  `docs/remediation-plan-session4.md` (F1–F6, R1–R8); Session 5 —
+  `docs/remediation-plan-session5.md` (F1–F5, R1–R4).
 - **Push runbook:** `docs/how-to-git-push-using-ssh-wrapper_SKILL.md` (the
   paramiko ssh shim lives at `docs/ssh.py` for sandboxes without OpenSSH).
 - **Tailwind v4 traps:** `docs/Tailwind-V4-Validation-Report.md` + PAD §5.5.

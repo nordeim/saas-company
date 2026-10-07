@@ -37,7 +37,9 @@ test.describe("login page", () => {
     await page.getByLabel("Email").fill(DEMO_EMAIL);
     await page.getByLabel("Password").fill("definitely-wrong");
     await page.getByRole("button", { name: "Sign in", exact: true }).click();
-    await expect(page.getByText("Incorrect email or password")).toBeVisible({ timeout: 15_000 });
+    // The reference's copy (Session 5 measurement) — shown in the red
+    // alert banner between the password field and the submit button.
+    await expect(page.getByText("Invalid email or password")).toBeVisible({ timeout: 15_000 });
     await expect(page).toHaveURL(/\/login/);
   });
 
@@ -54,12 +56,13 @@ test.describe("login page", () => {
     await page.goto("/login");
     await page.getByRole("button", { name: /Need an account\?/ }).click();
     await expect(page.getByRole("heading", { name: "Create your account" })).toBeVisible();
-    await expect(page.getByLabel("Name")).toBeVisible();
 
-    // A short password is rejected by the API (policy: 8+).
-    await page.getByLabel("Name").fill("E2E User");
+    // A short password is rejected by the API (policy: 8+) — the
+    // reference's sign-up card has no Name field (Session 5), so the
+    // form submits email + password + confirm only.
     await page.getByLabel("Email").fill(`e2e-${Date.now()}@example.com`);
-    await page.getByLabel("Password").fill("short");
+    await page.getByLabel("Password", { exact: true }).fill("short");
+    await page.getByLabel("Confirm Password").fill("short");
     await page.getByRole("button", { name: "Create account" }).click();
     await expect(page.getByText("at least 8 characters", { exact: false })).toBeVisible({ timeout: 15_000 });
   });
@@ -68,9 +71,9 @@ test.describe("login page", () => {
     const email = `e2e-${Date.now()}@example.com`;
     await page.goto("/login");
     await page.getByRole("button", { name: /Need an account\?/ }).click();
-    await page.getByLabel("Name").fill("E2E Signup");
     await page.getByLabel("Email").fill(email);
-    await page.getByLabel("Password").fill("Signup123!");
+    await page.getByLabel("Password", { exact: true }).fill("Signup123!");
+    await page.getByLabel("Confirm Password").fill("Signup123!");
     await page.getByRole("button", { name: "Create account" }).click();
     await expect(page).toHaveURL(/\/dashboard$/, { timeout: 15_000 });
 
@@ -91,6 +94,14 @@ test.describe("login page", () => {
     await expect(page.getByRole("heading", { name: "Reset your password" })).toBeVisible();
     await page.getByLabel("Email").fill(DEMO_EMAIL);
     await page.getByRole("button", { name: "Send reset link" }).click();
-    await expect(page.getByText(/reset link is on its way/i)).toBeVisible();
+    // The reference's unconditional success view (Session 5 measurement —
+    // no user enumeration; the self-hosted clone has no mail transport,
+    // a documented deviation).
+    await expect(page.getByRole("heading", { name: "Check your email" })).toBeVisible({
+      timeout: 10_000,
+    });
+    await expect(
+      page.getByText(/reset link. It may take a few minutes to arrive/),
+    ).toBeVisible();
   });
 });

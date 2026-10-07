@@ -6,7 +6,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?logo=tailwindcss)
 ![Prisma](https://img.shields.io/badge/Prisma-6-2d3748?logo=prisma)
 ![SQLite](https://img.shields.io/badge/DB-SQLite-003b57?logo=sqlite)
-![Tests](https://img.shields.io/badge/tests-179_checks_passing-2ecc8a)
+![Tests](https://img.shields.io/badge/tests-192_checks_passing-2ecc8a)
 
 A production-grade, self-hosted clone of the reference dark-theme SaaS
 marketing site [`saas-company.base44.app`](https://saas-company.base44.app/)
@@ -24,7 +24,7 @@ card. This clone reproduces all of it (measured tokens, self-hosted fonts,
 verbatim copy) and then goes further: cookie-session auth, a workflow
 workspace with an AI composer (`z-ai-web-dev-sdk` with a deterministic
 fallback), newsletter + demo-request capture, sitemap/robots, a health
-probe, Lenis smooth scrolling, and 179 automated checks across three test layers.
+probe, Lenis smooth scrolling, and 192 automated checks across three test layers.
 
 | Dashboard | Landing hero |
 |:---:|:---:|
@@ -44,8 +44,8 @@ probe, Lenis smooth scrolling, and 179 automated checks across three test layers
 | ⚡ **Workflow dashboard (superset)** | The reference's "Dashboard" demo link 404s — here it's real: stats cards, a workflow list with pause/resume/delete, a runs chart, and an AI composer that drafts workflows from one-line ideas (server-side SDK + deterministic fallback, sanitized before persistence) |
 | 📰 **Working capture forms** | Footer newsletter subscribe (idempotent upsert) and demo/contact requests persist to SQLite |
 | ❓ **Interactive FAQ + legal** | The reference's six-question accordion and four legal pages, copy captured verbatim |
-| 🧪 **179 automated checks** | 73 Vitest unit checks (pure domain seams), 68 Playwright browser checks (incl. the mobile-navigation, navbar scroll-behavior, per-tab features-card, login-theme, and brand-parity suites), 38 curl smoke checks against the production build |
-| 🌗 **Measured design system** | Tailwind v4 CSS-first tokens: #000 canvas, #8624FF primary, #0055FF accent, #D500FF violet, self-hosted "Vend Sans" (Wix Madefor — the Display cut for headings AND body, like the reference), the reference's keyframes (organic-gradient, border-shimmer, logo petals, marquee) |
+| 🧪 **192 automated checks** | 73 Vitest unit checks (pure domain seams), 81 Playwright browser checks (incl. the mobile-navigation, navbar scroll-behavior, per-tab features-card, login-theme, login alternate-states, and brand-parity suites), 38 curl smoke checks against the production build |
+| 🌗 **Measured design system** | Tailwind v4 CSS-first tokens: #000 canvas, #8624FF primary, #0055FF accent, #D500FF violet, self-hosted **Google Fonts' "Vend Sans" variable font** (wght 300-700 — the exact gstatic bytes the reference serves; Session 5 font forensics replaced the Session-1 Wix Madefor misidentification), the reference's keyframes (organic-gradient, border-shimmer, logo petals, marquee) |
 
 ## Tech Stack
 
@@ -62,7 +62,7 @@ probe, Lenis smooth scrolling, and 179 automated checks across three test layers
 | AI | z-ai-web-dev-sdk | 0.0.x | Server-side workflow composition (degrades to a template) |
 | Icons | lucide-react | 0.5.x | Icon set |
 | Smooth scroll | lenis | 1.3.x | The reference's momentum scrolling (`window.lenis`, reduced-motion aware) |
-| Fonts | Self-hosted Wix Madefor ("Vend Sans") + next/font Google (Playfair/DM Serif) | — | Reference typography (the Display cut renders headings AND body, like the live) |
+| Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font Google (Playfair/DM Serif) | — | Reference typography — the SAME gstatic woff2 bytes the live serves (Session 5 forensics) |
 | Unit tests | Vitest | 5 | Pure domain seams |
 | E2E tests | Playwright | 1.63 | Browser suite (Chromium) |
 | Smoke | bash + curl | — | 38 checks against the production build |
@@ -143,10 +143,10 @@ Open <http://localhost:3000>, then sign in to the dashboard at
 curl http://localhost:3000/api/health
 # {"ok":true,"data":{"status":"ok","app":"saas-company","ts":"…"}}
 
-# Full verification (179 checks across three layers)
+# Full verification (192 checks across three layers)
 npm run lint && npm run typecheck && npm run test   # 73 unit checks
 npm run build && ./scripts/smoke-test.sh            # 38 smoke checks
-npm run test:e2e                                    # 68 browser checks
+npm run test:e2e                                    # 81 browser checks
 ```
 
 ### Production
@@ -196,7 +196,7 @@ system with magenta and electric-blue brand gradients:
 | `--color-accent` / `--color-electric-blue` | `#0055ff` | Electric blue — hsl(220 100% 50%), the blue gradient end (badge, chart bars) |
 | `--color-violet` | `#d500ff` | Brand magenta — hsl(290 100% 50%) for text/border/bg-violet surfaces |
 | `--color-destructive` | `#ef4444` | Problem cards, delete affordances |
-| `--font-heading` / `--font-body` | "Vend Sans" / "Vend Sans Text" | Self-hosted Wix Madefor cuts |
+| `--font-heading` / `--font-body` | "Vend Sans" / "Vend Sans" | Google Fonts' Vend Sans variable font (wght 300-700), self-hosted — the exact gstatic latin/latin-ext subsets the reference serves (Session 5; the chain is `"Vend Sans", sans-serif` like the live's `:root`) |
 | `--font-serif` | Playfair Display → DM Serif Display | Client wordmarks |
 
 Custom classes in `globals.css`: `.workflows-gradient-text` (the animated
@@ -213,7 +213,7 @@ inline); the login card and 404 page run the reference's light slate theme.
 
 ```bash
 npm run test              # unit — 73 checks on the pure domain seams
-npm run test:e2e          # Playwright — 68 browser checks (needs a build)
+npm run test:e2e          # Playwright — 81 browser checks (needs a build)
 ./scripts/smoke-test.sh   # curl E2E — 38 checks against the production build
 ```
 
@@ -230,7 +230,9 @@ chrome — burger dropdown rows at the measured 44px, close-on-navigate, the
 end-to-end, pause/resume), the FAQ accordion, the pricing toggle, all four
 legal pages, the **per-tab features-card parity suite** (AI caption, analytics
 chart + stats, builder steps), the **login bare-card pin** (zero anchors — the
-reference's dead-end auth card), and the newsletter API pair. The smoke suite boots the production standalone server on
+reference's dead-end auth card), the **login alternate-states suite**
+(sign-up / forgot / reset-success / error-banner structures measured from
+the live), and the newsletter API pair. The smoke suite boots the production standalone server on
 :3200 with its own scratch database (`db/smoke.db`) — it never touches dev
 data.
 
@@ -242,7 +244,7 @@ data.
 | Prisma `P1003` / missing tables | Database not initialized | `npm run db:push && npm run db:seed` |
 | Login suddenly returns 429 | Per-IP rate limit engaged (10 attempts / 15 min) | Wait for the window (see `Retry-After`) or restart the server |
 | "Continue with Google" shows a notice instead of signing in | Expected — the self-hosted clone carries no OAuth credentials (documented deviation) | Use email sign-in |
-| Fonts differ from the reference | The UI font is self-hosted Wix Madefor ("Vend Sans") from `src/fonts/` | Keep the `@font-face` blocks in `globals.css` intact |
+| Fonts differ from the reference | The UI font is self-hosted Google "Vend Sans" (variable 300-700) from `src/fonts/` — the same gstatic bytes the live serves | Keep the `@font-face` blocks in `globals.css` intact |
 | `oklab(...)` colors in computed styles | Tailwind v4 serializes alpha colors through oklab — rendering-identical to rgba | Expected; assertions accept either spelling |
 | Hero indicator dot travels instead of bouncing | The reference drives it with a JS oscillation; this repo ships the measured `animate-scroll-dot` keyframe | Intended parity (rAF-sampled); `prefers-reduced-motion` collapses it |
 

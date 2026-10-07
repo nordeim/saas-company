@@ -77,7 +77,14 @@ export function Pricing() {
                 y={30}
                 className={
                   plan.popular
-                    ? "relative rounded-2xl p-8 transition-all duration-300 border-2 border-violet/40 bg-gradient-to-b from-violet/[0.08] to-transparent scale-[1.02] md:scale-105 shadow-xl shadow-violet/10"
+                    ? // The live's markup carries `scale-[1.02] md:scale-105`
+                      // but its compiled css NEVER EMITS them — its popular
+                      // card renders UNSCALED (measured: scale none, card
+                      // 540px at every width). Session 5 closed the old D19
+                      // +27px delta by matching the RENDERED truth (v4's
+                      // scale utilities here would actually scale: 540×1.05
+                      // = the exact 567px we used to render).
+                      "relative rounded-2xl p-8 transition-all duration-300 border-2 border-violet/40 bg-gradient-to-b from-violet/[0.08] to-transparent shadow-xl shadow-violet/10"
                     : "relative rounded-2xl p-8 transition-all duration-300 border border-white/[0.20] bg-white/[0.02] hover:border-white/10"
                 }
               >

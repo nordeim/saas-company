@@ -9,6 +9,32 @@
 
 #### Revision Block — v1.0
 
+- `[NOTE]` **Session 5 remediation (2026-10-07)** — a font-forensics +
+  interactive-state audit (the login card's alternate modes driven natively
+  on the live — sign-up / forgot / wrong-password / mismatch / reset-success
+  — plus performance-entry font tracing no prior session ran) found and
+  fixed five clone-side gaps (see `docs/remediation-plan-session5.md`
+  F1–F5 → R1–R4): **the UI typeface was the wrong font** — the reference
+  renders GOOGLE's "Vend Sans" variable font (wght 300–700, gstatic), not
+  the Wix Madefor files Session 1 self-hosted (the Wix faces are declared
+  only in the live's unused login bundle; +2.4% glyph width had drifted
+  every text surface for four sessions — the pricing pills, the D19
+  Pro-card delta, the testimonials strip); the login card's alternate
+  states rebuilt to the measured layouts (back-button + h2 + form, no
+  logo/Google/divider, shadcn alert banners BETWEEN field and submit,
+  "Invalid email or password" / "Passwords do not match" / the green
+  check-your-email view; the register API's `name` is now optional); the
+  keyboard focus ring matched (the reference's universal
+  `outline-color: violet/50` on the UA default ring — this repo's
+  `:focus-visible` rule was an invention); the Pro card's inert scale
+  utilities removed (the reference's markup carries them but its css never
+  emits them — 540 × 1.05 was the exact old 567px); the testimonials strip
+  made full-bleed. **D19 RESOLVED.** Gate re-locked at **192 checks** (73
+  unit + 81 e2e incl. the new typeface/focus/login-states pins + 38 smoke);
+  VLM 97/100/100/100/98; section offsets now match the live EXACTLY
+  (features 3323 / how-it-works 4179 / pricing 4800 / testimonials 5826 at
+  1440; identical at 1280 and 390).
+
 - `[NOTE]` **Session 4 remediation (2026-10-07)** — a behavior-level re-audit
   (deep computed-style probes of 13 previously-unprobed surface groups + the
   first scroll-state navbar survey — Sessions 1–3 only ever inspected the
@@ -107,7 +133,7 @@ SAAS Company is a self-hosted clone of the reference Base44 marketing site for t
 | ORM / DB | Prisma 6 / SQLite | — | Zero-config bootstrap; typed queries; `db push` (no migrations by design) |
 | Auth | Node `crypto` | — | scrypt + HMAC cookies; auditable, zero external services |
 | AI planner | z-ai-web-dev-sdk | 0.0.x | Server-side workflow composition; deterministic fallback keeps the feature alive without it |
-| Fonts | Self-hosted Wix Madefor ("Vend Sans") + next/font (Playfair, DM Serif Display) | — | Byte-identical type rendering with the reference's Base44-hosted cuts |
+| Fonts | Self-hosted **Google "Vend Sans"** (variable wght 300-700, the exact gstatic subsets) + next/font (Playfair, DM Serif Display) | — | Byte-identical type rendering with the reference's served font files (Session 5 forensics) |
 | Tests | Vitest 5 / Playwright 1.63 / bash+curl | — | Three layers over three seams: pure logic, browser, production HTTP |
 | Smooth scroll | lenis 1.3.x | — | The reference's momentum scrolling; client wrapper, reduced-motion guarded |
 
@@ -465,11 +491,10 @@ erDiagram
 
 | Face | Weights | Usage |
 |------|---------|-------|
-| **Vend Sans** (self-hosted Wix Madefor Display) | 400–800 variable | Headings (`--font-heading`) |
-| **Vend Sans Text** (self-hosted Wix Madefor Text) | 400–800 variable | Body (`--font-body`) |
+| **Vend Sans** (self-hosted Google variable font, latin + latin-ext) | 300–700 variable | EVERYTHING — headings AND body (`--font-heading` = `--font-body` = `"Vend Sans", sans-serif`) |
 | Playfair Display / DM Serif Display (next/font) | 400–700 / 400 | The client-logo wordmarks in the trusted-by strip |
 
-The reference serves its "Vend Sans" as Base44-hosted Wix Madefor faces; this repo downloaded the two latin woff2 cuts and self-hosts them via `@font-face` in `globals.css` — identical metrics, zero runtime dependency. Base heading tracking is `0.02em` (the reference's base rule); the hero H1 overrides to `-0.02em` inline, with `mix-blend-mode: screen` + `brightness(1.1)` over the video.
+The reference's "Vend Sans" is **Google Fonts' actual Vend Sans variable font** (wght 300–700) served from `fonts.gstatic.com/s/vendsans/v1/…` — traced in Session 5 via performance resource entries + document.fonts + fontTools name tables (the Session-1 belief that it was "Base44-hosted Wix Madefor" was wrong: the Wix faces are declared only in the live's unused login-bundle css, whose route renders the system stack). This repo self-hosts the SAME two gstatic subsets in `src/fonts/` — identical bytes, identical metrics, zero runtime dependency. Base heading tracking is `0.02em` (the reference's base rule); the hero H1 overrides to `-0.02em` inline, with `mix-blend-mode: screen` + `brightness(1.1)` over the video. The login route's headings render the SYSTEM stack (its own bundle has no heading-font rule — the route style restores `font-family: inherit`).
 
 ### 5.2 Color Tokens (measured from the reference's compiled CSS)
 
@@ -514,8 +539,13 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D16 | Pricing model | toggle DEFAULTS TO ANNUAL; Pro $49/mo monthly, $39/mo annual; caption `/month` in both states | corrected domain (`pricing.ts` monthlyPrice 49) + component default `annual` + no-whitespace Annual pill (161px like the live) | Parity (Session 4) |
 | D17 | Navbar scroll behavior | `bg-transparent` at every depth; scroll-spy pills (white/30 dark, black/15 light); light-mode chrome over white sections | section-aware navbar (scroll-spy at the ⅔ viewport line, `[data-nav-theme="light"]` overlap detection); the scrolled-glass bar removed as an invention | Parity (Session 4) |
 | D18 | FAQ accordion DOM | Radix: `data-[state=*]:animate-accordion-*` keyframes; closed panels UNMOUNTED | measured keyframes in `@theme` + unmount-after-close — closes the old 0.6052 word-parity artifact | Parity (Session 4) |
-| D19 | Pro-card micro-spacing | card 540px at 1440 (features rows 20px) | card ~567px (rows 21-22px) — self-hosted font-cut sub-pixel accumulation; same font first-face, line-heights, and colors (D6-class engine artifact) | **Deviation** (accepted, Session 4) |
+| D19 | Pro-card micro-spacing | card 540px at 1440 (unscaled — its `scale-[1.02] md:scale-105` classes are INERT on the live: its css never emits them) | card 540px, `scale: none` — RESOLVED in Session 5: the old +27px was v4's scale utilities actually scaling (540×1.05=567) + the Wix font's wider glyphs | Parity (Session 5; was an accepted deviation in Session 4) |
 | D20 | Mockup bar heights | randomized per load (e.g. 45.93%) | deterministic measured snapshot (42…95%) | Parity (Session 4, documented) |
+| D21 | Mobile-menu anchor click | the live's click updates the URL hash but NEVER scrolls (scrollY stays 0 — a live bug; desktop clicks do scroll) | the clone closes the menu and smooth-scrolls to the section — the intended UX | **Superset** (Session 5, intentional) |
+| D22 | Login input a11y attrs | no autoComplete attrs; burger has no aria-expanded/aria-label | autoComplete (email/current-password/new-password) + aria-expanded + aria-label kept — invisible UX/a11y supersets | **Superset** (Session 5, documented) |
+| D23 | Forgot-password reset | sends a real email via Base44 | no mail transport in the self-hosted clone — the live's unconditional "Check your email" success view is mirrored verbatim (the live itself never enumerates) | Parity (view) + **Deviation** (no email sent; Session 5) |
+| D24 | Register payload | (Base44-internal) | `name` optional on `/api/auth/register` (falls back to the email local-part) — the reference's sign-up card has no name field | Superset-friendly (Session 5) |
+| D25 | Testimonials strip | full-bleed (`scrollWidth` 2408 = 8×280 + 7×24, zero padding) | matched (the old px-6 pb-4 had inset the cards 24px and stretched scrollWidth +48px) | Parity (Session 5) |
 
 ### 5.5 Tailwind v4 Trap Log (enforced here)
 
@@ -526,7 +556,9 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 5. **Auto content detection ignores nothing here** (single app, `src/**` scanned) — no `@source` directives needed.
 6. **Arbitrary aspect ratios use the SLASH form** — the colon spelling of the ratio inside `aspect-[…]` emits the invalid `aspect-ratio: 16:9` and postcss fails the whole build with an opaque `Missed semicolon` at a flattened column; turbopack then CACHES the broken transform (Session 4 — `rm -rf .next` if the error outlives the fix), and Tailwind's scanner reads candidates from MARKDOWN too (docs/ is `@source not`-ed in globals.css).
 7. **Unlayered custom CSS beats layered utilities** — the old unlayered `.skeleton-wave` background overrode the layered `bg-primary/80` on the mockup dots (Session 4 F4); keep custom classes out of the utility cascade or scope them tightly.
-8. **v4 `space-y-*` puts margin on the PRECEDING sibling** (`:not(:last-child)` margin-bottom) — vertical margins are lost on INLINE children (the login form's labels); the reference's compiled v3-style puts it on the following sibling. The login route style restores the measured pattern inside forms.
+8. **v4 `space-y-*` puts margin on the PRECEDING sibling** (`:not(:last-child)` margin-bottom) — vertical margins are lost on INLINE children (the login form's labels), and an explicit negative margin on the preceding child CANCELS the gap entirely (the login alternate-states' back button carries the reference's `-mb-2`: under v4 the back→h2 gap rendered −8px vs the live's +8px — a 16px card delta the VLM caught). The login route style restores the measured pattern inside forms (`.space-y-1\.5`) and the auth stacks (`.auth-stack`, `.auth-stack-sm6` — the latter also restores the forgot variant's `sm:space-y-6` 24px gaps).
+9. **Never trust a font's NAME — trace its bytes** (Session 5): the reference's computed `font-family` read `"Vend Sans"` but the RENDERED face was Google Fonts' Vend Sans variable font (gstatic), NOT the "Base44-hosted Wix Madefor" Session 1 identified from @font-face declarations in an unused bundle. Four sessions of sub-pixel drift (pill widths, the D19 card delta, testimonials scrollWidth) were the wrong-file metrics (+2.4% glyph width at 14px). The authoritative probes: `performance.getEntriesByType('resource')` for the woff2 URLs, `document.fonts` for the weight census, and fontTools name tables for the file identity. (`document.fonts.check()` is UNRELIABLE — it returns true for unknown families.)
+10. **The reference ships INERT classes** (Session 5): its markup carries utilities its compiled css never emits — the pricing Pro card's `scale-[1.02] md:scale-105` renders UNSCALED (`scale: none`, 540px at every width). Match the RENDERED computed style, not the class string: v4 here WOULD emit those utilities (540 × 1.05 = the exact 567px we used to render).
 
 ---
 
@@ -646,7 +678,7 @@ Demo login: `demo@novaai.app` / `Demo1234!`. Full verification: the §7.3 gate.
 | `npm run lint` / `npm run typecheck` | ESLint / `tsc --noEmit` (the real type gate) |
 | `npx prisma generate` | Regenerate the client after schema edits |
 | `npm run db:push` / `npm run db:seed` | Apply schema / reset to demo data |
-| `npm run test` / `npm run test:e2e` | 73 unit / 54 browser checks |
+| `npm run test` / `npm run test:e2e` | 73 unit / 81 browser checks |
 | `./scripts/smoke-test.sh` | 38-check suite against the production build |
 | `npx playwright test tests/e2e/mobile-navigation.spec.ts` | Re-run the chrome suite alone |
 
@@ -716,7 +748,7 @@ TypeScript strict (with the template-era `noImplicitAny: false`); ESLint flat co
 | **Deviation** | A deliberate divergence from reference behavior, documented in §5.4 (e.g. Google sign-in degrading) |
 | **Envelope** | The uniform API response `{ ok, data }` or `{ ok, error: { code, message } }` |
 | **The composer** | `POST /api/workflows/generate` — LLM-backed workflow drafting with a deterministic fallback |
-| **Vend Sans** | The reference's UI typeface — Base44-hosted Wix Madefor, self-hosted here from `src/fonts/` |
+| **Vend Sans** | The reference's UI typeface — GOOGLE FONTS' actual Vend Sans variable font (wght 300-700), self-hosted here from `src/fonts/` (the exact gstatic subsets; Session 5 forensics) |
 | **The env trap** | A shell-exported `DATABASE_URL` overriding `.env`, silently pointing every tool at a foreign database file |
 | **The glass pill** | The nav's centered `bg-white/10 backdrop-blur-md` link container (md+) |
 | **Paired survey** | The parity method: same-viewport computed styles + VLM side-by-side comparison of live vs clone |

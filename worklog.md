@@ -167,3 +167,33 @@ Work Log:
 Stage Summary:
 - Commit 5f4293f pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 29 files changed, +1070/-159: the six Session-4 behavior-parity fixes (login light theme, pricing truth, section-aware navbar, static mockup, animated accordion, status-bar-style), 14 new e2e checks (gate: 179 = 73 unit + 68 e2e + 38 smoke), the @source-not scanner guard, remediation plan, refreshed screenshots, docs + SKILL v2.3.0.
 - Session 4 complete.
+
+---
+Task ID: 10
+Agent: Super Z (main, session 5)
+Task: Session 5 audit → remediation → re-verification → docs → push (font + interactive-state parity)
+
+Work Log:
+- git pull to de18717 (docs/session_4.md added by operator); reviewed all root docs + session docs; baseline gate 179/179 green (lint ✓ typecheck ✓ Vitest 73/73 ✓ build ✓ smoke 38/38 ✓ Playwright 68/68 ✓).
+- Live re-survey: reference UNCHANGED since Session 4 (text similarity 1.0000 on all 8 routes); mobile-menu geometry byte-identical; operator credentials still valid (post-login lands on /, Dashboard → /checkout still SPA-404 — the D1 superset remains valid).
+- NEW audit surface (never surveyed in Sessions 1-4): the login card's alternate modes driven NATIVELY on the live (sign-up / forgot / wrong-password error / password mismatch / reset-success — earlier eval-based fills silently submitted empty React forms; lesson 19), keyboard-focus computed styles, the pricing toggle at 390, the testimonials strip container, the newsletter form's browser validation, the mobile menu's navigate-on-click, and a font-forensics pass (performance resource entries + document.fonts + canvas measureText + fontTools name tables).
+- Findings F1-F5: (F1) THE UI TYPEFACE WAS THE WRONG FONT — the live renders GOOGLE FONTS' "Vend Sans" variable font (wght 300-700, fonts.gstatic.com/s/vendsans/v1/…), not the Wix Madefor files Session 1 self-hosted (the Wix faces exist only in the live's unused login-bundle css); +2.4% glyph width (canvas "Annual" @14px: 44.31 live vs 45.37 clone) was the root cause of the pricing-pill deltas, the D19 Pro-card +27px, and the testimonials scrollWidth delta; (F2) the login card's alternate states diverge structurally (live: back-button+h2+form, NO logo/Google/divider, Email+Password("Min. 8 characters")+Confirm("Re-enter password"), shadcn alert banners BETWEEN field and submit, "Invalid email or password"/"Passwords do not match"/the green check-your-email view; clone had one shared layout with a Name field and post-submit error text); (F3) the focus ring is the live's universal `*{outline-color:hsl(var(--ring)/.5)}` violet/50 tint on the UA default ring (the clone's `:focus-visible{outline:2px solid primary}` was an invention); (F4) the live's mobile-menu anchor click does NOT scroll (live bug) — the clone's scroll kept as intentional superset; (F5) invisible a11y supersets kept (autocomplete attrs, burger aria).
+- TDD remediation (every pin observed RED before GREEN): R1 the authentic font swap (src/fonts/vend-sans-latin[-ext].woff2 = the gstatic bytes; @font-face weight 300 700; font chains `"Vend Sans", sans-serif` like the live's :root; the Wix files deleted) — section offsets now match the live EXACTLY (3323/4179/4800/5826 at 1440; identical at 1280/390); R2 the login alternate states rebuilt (per-mode layouts + classes measured from the live; AlertBanner component; register API name now optional — falls back to the email local-part; login error copy "Invalid email or password"; the auth-stack route-style rules restore the v3-style space-y where the back button's -mb-2 cancels v4's preceding-sibling margin; the login h1-h6 inherit the system font like the live's bundle; card heights now EXACT: 746/470/374); R3 the focus-ring base rule (universal border-color + outline-color violet/50, the invented :focus-visible rule deleted); plus the audit's follow-on fixes: the Pro card's inert scale utilities removed (the live's markup carries them but its css never emits them — 540×1.05 was the exact 567px D19 delta) and the testimonials strip made full-bleed (px-6 pb-4 removed; scrollWidth 2408 like the live).
+- Spec maintenance: the S4 navbar scroll-spy pin recalibrated 5200→4900 (the authentic font moved the sections to the live's true offsets — at 5200 the active section is Testimonials on BOTH sides, verified on the live); auth.spec pins rewritten to the live truth (error copy, confirm-password flow, reset-success view).
+- Re-verified: word parity 1.0000 on EVERY page; pricing toggle EXACT (Annual 161 / Monthly 92 / wrap 275 at 1440 AND 390); Pro card 540 `scale:none`; testimonials sw 2408 pad 0 x 0; focus ring `auto rgba(213,0,255,0.5)`; mobile menu byte-identical; VLM full 97 / login 100 / signup 100 / pricing 100 / mobile 98 (remaining flags all dismissed with DOM evidence — logo SVG byte-identical, marquee position artifacts); npm audit unchanged (5 accepted braces-chain highs).
+- Docs: remediation plan (docs/remediation-plan-session5.md, F1-F5 → R1-R4 with pre-execution validation); README (fonts/counts/192); AGENTS (gotchas 5-6 rewritten + 13 extended); CLAUDE (session-5 context, stack); PAD (revision block, §1.2, §5.1, ledger D19 RESOLVED + D21-D25, traps 8-10, §9 counts, glossary); saas-company_SKILL.md v2.4.0 (§2, §12 lessons 16-19); 18 screenshots refreshed (4 NEW login-state shots); .env.example re-verified (no new env vars).
+
+Stage Summary:
+- The clone now renders the reference's ACTUAL typeface — the single highest-leverage parity fix of all five sessions: pill widths, card heights, section offsets, and the strip metrics all match the live EXACTLY (D19 closed after being "accepted" in Session 4).
+- The auth card's every interactive state (sign-up / forgot / error / reset-success) is now structurally faithful, with the functional supersets (real register/login APIs, honest no-mail notice) preserved and documented.
+- Gate re-locked at 192 checks (73 unit + 81 e2e + 38 smoke); VLM 97/100/100/100/98.
+- Root causes documented for posterity: trace a font's BYTES not its name (check() lies, performance entries don't); the reference ships inert classes — match rendered computed styles; eval-based React fills silently submit empty forms.
+- Next: commit + SSH push (Task 11).
+
+---
+Task ID: 11
+Agent: Super Z (main, session 5)
+Task: Final commit + SSH push of the Session 5 remediation
+
+Work Log:
+- (pending execution)

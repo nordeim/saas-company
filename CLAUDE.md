@@ -15,7 +15,8 @@ replaced by real features (authentication, a persisted workflow dashboard
 with an AI composer, newsletter/demo capture, SEO surfaces).
 
 Visual parity is a first-class requirement: the dark canvas, the Vend Sans
-(Wix Madefor) type system, the magenta/electric-blue brand palette, the
+type system (Google Fonts' actual variable font, wght 300-700 — Session 5
+forensics), the magenta/electric-blue brand palette, the
 animated hero (looping video, shimmer badge, gradient heading), the mobile
 burger dropdown, and the copy are all measured from the live reference. When
 the reference and generic best practice conflict, the reference wins; when
@@ -32,7 +33,8 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (38) | 73 unit + 68 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (38) | 73 unit + 81 browser checks |
+| Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
 
@@ -146,12 +148,30 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run test` → 73/73 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 38/38 PASS
-- [ ] `npm run test:e2e` → 68/68 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 81/81 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 5 (2026-10-07) remediation** — see
+  `docs/remediation-plan-session5.md`: the UI typeface corrected to
+  GOOGLE's actual "Vend Sans" variable font (the Session-1 files were Wix
+  Madefor — ~2.4% wider glyphs; traced via performance entries + fontTools;
+  the swap closed the pricing-pill deltas AND the D19 Pro-card +27px);
+  the login card's alternate states (sign-up / forgot / reset-success /
+  error) rebuilt to the measured layouts (back-button + h2 + form, no
+  logo/Google/divider, shadcn alert banners between field and submit,
+  "Invalid email or password" / "Passwords do not match" / the green
+  check-your-email view; the register API's name is now optional — the
+  reference's sign-up has no name field); the keyboard focus ring matched
+  (the reference's universal `outline-color: violet/50` on the UA default
+  ring, replacing this repo's invented `:focus-visible` rule); the Pro
+  card's inert scale utilities removed (the reference's markup carries
+  them but its css never emits them — rendered truth wins); the
+  testimonials strip made full-bleed. Gate: 192 checks; VLM
+  97/100/100/100/98.
 
 - **Session 4 (2026-10-07) remediation** — see
   `docs/remediation-plan-session4.md`: the login route now swaps the body

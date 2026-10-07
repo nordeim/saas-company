@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (73 checks) | `npm run test` |
-| Browser E2E (68 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (81 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (73/73) → `npm run build` → `./scripts/smoke-test.sh` (38/38)
-→ `npm run test:e2e` (68/68) — 179 checks across three layers (boots the standalone server on :3100 against its own
+→ `npm run test:e2e` (81/81) — 192 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -61,17 +61,26 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    rendering-identical to the reference's rgba strings but
    computed-string-different. E2E assertions accept either spelling (see the
    mobile-navigation spec comments); never "fix" the CSS to chase byte-parity.
-5. **Self-hosted Vend Sans.** The reference's "Vend Sans" is Base44-hosted
-   Wix Madefor; this repo self-hosts the two latin woff2 cuts in
-   `src/fonts/` and declares them in `globals.css` (`@font-face`) — do not
-   swap them for a Google font.
-6. **The reference is a moving target.** The live app at
+5. **The UI font is GOOGLE's "Vend Sans"** (variable wght 300-700),
+   self-hosted as the two gstatic subsets in `src/fonts/` — the SAME bytes
+   the live serves (`fonts.gstatic.com/s/vendsans/v1/…`, traced via
+   performance entries in Session 5). Session 1 misidentified it as
+   "Base44-hosted Wix Madefor" (the Wix faces are declared only in the
+   live's unused login-bundle css) and the wrong metrics (+2.4% glyph
+   width) drifted every text surface for four sessions. Never trust a
+   font's NAME — trace its bytes.
+6. **The reference ships INERT classes** — its markup carries utilities
+   its compiled css never emits (the pricing Pro card's `scale-[1.02]
+   md:scale-105` renders UNSCALED: `scale: none`, 540px at every width).
+   Match the RENDERED computed style, not the class string; v4 here WOULD
+   emit those utilities (540×1.05 = the old 567px D19 delta).
+7. **The reference is a moving target.** The live app at
    `saas-company.base44.app` has been redeployed with different products
    across this repo's history (the previous cycle cloned a PM workspace
    called ORBITAL). Visual parity was re-measured against the CURRENT live
    (dark NovaAI marketing site); the measurements live in
    `Project_Architecture_Document.md` §5 and the e2e pins.
-7. **Rate limits are per-process.** Auth endpoints throttle 10
+8. **Rate limits are per-process.** Auth endpoints throttle 10
    attempts/IP/15 min (in-memory `src/lib/rate-limit.ts`). E2E specs sign in
    through the UI sparingly; per-test logins would trip the limiter
    mid-suite.
@@ -105,8 +114,16 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    body theme via a route-scoped `<style>` in `login/page.tsx`; every other
    route keeps the dark theme. Also: the reference's compiled `space-y-*`
    puts the gap on the FOLLOWING sibling (v3-style) — v4's
-   margin-bottom-on-preceding is lost on inline labels (the login form),
-   so the route style restores that pattern inside forms.
+   margin-bottom-on-preceding is lost on inline labels (the login form)
+   AND is cancelled by the alternate-states' back-button `-mb-2`, so the
+   route style restores that pattern inside forms (`.space-y-1\.5`) and
+   the auth stack (`.auth-stack` / `.auth-stack-sm6`). The card's
+   ALTERNATE states (sign-up / forgot / reset-success) use a DIFFERENT
+   layout from the default: back-button + h2 + form, NO logo chip,
+   NO Google button, NO OR divider, and shadcn-style alert banners
+   (bg-red-50/70 / bg-green-50/70) rendered BETWEEN the last field and
+   the submit button — measured in Session 5, pinned by
+   `tests/e2e/login-states.spec.ts`.
 14. **The navbar is section-aware and never gains a background.** It is
    `bg-transparent` at every scroll depth (no scrolled-glass bar); a
    scroll-spy highlights the section in view (last section whose top passed

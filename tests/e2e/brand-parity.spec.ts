@@ -267,3 +267,135 @@ test.describe("login route theme + head parity (Session 4)", () => {
     await expect(meta).toHaveAttribute("content", "black");
   });
 });
+
+test.describe("typeface (Session 5)", () => {
+  // Session 5 font forensics: the live renders GOOGLE FONTS' "Vend Sans"
+  // variable font (wght 300-700, fonts.gstatic.com/s/vendsans/v1/…), NOT
+  // Wix Madefor as Session 1 believed (the Wix faces are declared only in
+  // the live's login bundle, whose route renders the system stack). The
+  // Session-1 files were Wix Madefor Display/Text — ~2.4% wider glyphs
+  // (canvas "Annual" @14px: live 44.31px vs Wix 45.37px), the root cause
+  // of the pricing pill deltas and the D19 Pro-card +27px.
+
+  test("the font chain is exactly the reference's (no Text cut, no system faces)", async ({ page }) => {
+    await page.goto("/");
+    const font = await page.evaluate(() => getComputedStyle(document.body).fontFamily);
+    // The live's :root: --font-heading/--font-body: "Vend Sans", sans-serif.
+    expect(font).toBe('"Vend Sans", sans-serif');
+  });
+
+  test("the loaded glyph metrics match Google's Vend Sans", async ({ page }) => {
+    await page.goto("/");
+    await page.evaluate(() => document.fonts.ready);
+    const w = await page.evaluate(() => {
+      const c = document.createElement("canvas").getContext("2d")!;
+      c.font = '14px "Vend Sans"';
+      return c.measureText("Annual").width;
+    });
+    // Live measures 44.31px with Google's cut; the Wix Madefor file
+    // measured 45.37px. Pin the authentic metrics.
+    expect(w).toBeGreaterThanOrEqual(43.8);
+    expect(w).toBeLessThanOrEqual(44.8);
+  });
+
+  test("no Wix Madefor / Text-cut family is registered", async ({ page }) => {
+    await page.goto("/");
+    await page.evaluate(() => document.fonts.ready);
+    const families = await page.evaluate(() =>
+      [...new Set([...document.fonts].map((f) => f.family))],
+    );
+    expect(families).not.toContain("Vend Sans Text");
+    expect(families).toContain("Vend Sans");
+  });
+
+  test("the pricing Annual pill is the live's 161px (not the Wix 165px)", async ({ page }) => {
+    await page.goto("/");
+    const pill = page.locator("#pricing button", { hasText: "Annual" });
+    await expect(pill).toBeVisible();
+    const w = await pill.evaluate((el) => el.getBoundingClientRect().width);
+    expect(Math.round(w)).toBeGreaterThanOrEqual(159);
+    expect(Math.round(w)).toBeLessThanOrEqual(163);
+  });
+
+  test("the popular plan card renders UNSCALED like the live (D19 closure)", async ({ page }) => {
+    // The live's markup carries scale utilities its compiled css never
+    // emits — its Pro card renders unscaled at 540px (measured at 1440 and
+    // 390, scale: none). The old clone's v4 scale utilities really scaled:
+    // 540 × 1.05 = the 567px D19 delta.
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/");
+    const pro = page.locator("#pricing h3", { hasText: "Pro" }).locator(
+      "xpath=ancestor::div[contains(@class,'rounded-2xl')][1]",
+    );
+    const m = await pro.evaluate((el) => ({
+      h: Math.round(el.getBoundingClientRect().height),
+      scale: getComputedStyle(el).scale,
+    }));
+    expect(m.scale).toBe("none");
+    expect(m.h).toBeGreaterThanOrEqual(534);
+    expect(m.h).toBeLessThanOrEqual(546);
+  });
+
+  test("the testimonials strip is full-bleed like the live (no px-6)", async ({ page }) => {
+    // The live's strip: scrollWidth 2408 at 390 = 8×280 + 7×24 with ZERO
+    // horizontal padding — the first card starts at x=0. The old clone's
+    // px-6 pb-4 had inset the cards 24px and stretched scrollWidth +48px.
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
+    const strip = page
+      .locator("section", { hasText: /loved by|teams like/i })
+      .locator("div[class*='overflow-x-auto']")
+      .first();
+    const m = await strip.evaluate((el) => ({
+      sw: el.scrollWidth,
+      pad: getComputedStyle(el).padding,
+      x: Math.round(el.getBoundingClientRect().x),
+    }));
+    expect(m.pad).toBe("0px");
+    expect(m.x).toBe(0);
+    expect(m.sw).toBeLessThanOrEqual(2412);
+  });
+});
+
+test.describe("focus ring (Session 5)", () => {
+  // The live's base layer: * { border-color: hsl(var(--border));
+  // outline-color: hsl(var(--ring) / .5) } with --ring: 290 100% 50% —
+  // the UA default focus ring renders VIOLET at 50% (measured on a
+  // focused nav link: auto 1px rgba(213,0,255,0.5)). The clone's
+  // :focus-visible { outline: 2px solid primary } was an invention.
+
+  test("a focused nav link's outline-color is the reference's violet/50", async ({ page }) => {
+    await page.goto("/");
+    const link = page.locator("nav a", { hasText: "Features" }).first();
+    await link.evaluate((el) => (el as HTMLElement).focus());
+    const outline = await link.evaluate(
+      (el) => getComputedStyle(el).outlineColor + " | " + getComputedStyle(el).outlineStyle,
+    );
+    // Accept rgba or the oklab serialization (the D6 rule).
+    const [color, style] = outline.split(" | ");
+    const rgba = /^rgba?\(213, 0, 255, 0\.5\)$/.test(color);
+    const oklab = /^oklab\(/.test(color) && style === "auto";
+    expect(rgba || oklab, `outline ${outline} to be violet/50`).toBe(true);
+    if (rgba) expect(color).toBe("rgba(213, 0, 255, 0.5)");
+  });
+
+  test("keyboard focus renders the UA default ring, not an invented solid one", async ({ page }) => {
+    await page.goto("/");
+    // Tab into the page until the Features nav link is focused.
+    for (let i = 0; i < 15; i++) {
+      await page.keyboard.press("Tab");
+      const isFeatures = await page.evaluate(() => {
+        const a = document.activeElement as HTMLElement | null;
+        return !!a && a.tagName === "A" && /Features/.test(a.innerText || "");
+      });
+      if (isFeatures) break;
+    }
+    const style = await page.evaluate(() => {
+      const a = document.activeElement as HTMLElement | null;
+      return a ? getComputedStyle(a).outlineStyle : "no-active-element";
+    });
+    // The live renders the UA default (auto); the invented rule rendered
+    // solid 2px #8624ff.
+    expect(style).toBe("auto");
+  });
+});
