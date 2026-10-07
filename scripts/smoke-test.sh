@@ -156,6 +156,11 @@ if echo "$HEADERS" | grep -qi "x-frame-options: DENY"; then say_pass "header X-F
 if echo "$HEADERS" | grep -qi "referrer-policy: strict-origin-when-cross-origin"; then say_pass "header Referrer-Policy: strict-origin-when-cross-origin"; else say_fail "header Referrer-Policy: strict-origin-when-cross-origin"; fi
 if echo "$HEADERS" | grep -qi "strict-transport-security: max-age=31536000"; then say_pass "header Strict-Transport-Security: max-age=31536000"; else say_fail "header Strict-Transport-Security: max-age=31536000"; fi
 
+# Session 10 F4: the public/ assets ship the live's CDN caching value (the
+# 1.9MB hero video re-validated on every load at max-age=0 before).
+MEDIA_HEADERS=$(curl -s -I "$BASE/media/hero-ai-loop.mp4")
+if echo "$MEDIA_HEADERS" | grep -qi "cache-control: public, max-age=604800"; then say_pass "asset caching: hero video max-age=604800"; else say_fail "asset caching: hero video max-age=604800"; fi
+
 SITEMAP=$(curl -s "$BASE/sitemap.xml")
 if echo "$SITEMAP" | grep -q "/faq"; then say_pass "sitemap lists /faq"; else say_fail "sitemap lists /faq"; fi
 

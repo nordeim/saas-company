@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (42) | 92 unit + 150 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (43) | 92 unit + 164 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -147,13 +147,37 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run typecheck` exits 0
 - [ ] `npm run test` → 92/92 PASS
 - [ ] `npm run build` compiles clean
-- [ ] `./scripts/smoke-test.sh` → 42/42 PASS
-- [ ] `npm run test:e2e` → 150/150 PASS (needs the build first)
+- [ ] `./scripts/smoke-test.sh` → 43/43 PASS
+- [ ] `npm run test:e2e` → 164/164 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 10 (2026-10-08) remediation** — see
+  `docs/remediation-plan-session10.md`: the first LOOPING-MOTION survey (a
+  full-page census sampling every element's computed transform/opacity
+  across multiple rounds AFTER entrances settle — still-changing = loop —
+  plus animate/transition config extraction from the live's JS bundle)
+  found the clone missing EIGHT of the live's twelve loops: the hero
+  mockup's ambient glow (scale+opacity, 4s), red chrome dot (scale, 2s),
+  four side-list dots (staggered scale pulses), the under-glow (y+opacity,
+  3s — ALSO restructured: a SIBLING of the card, unclipped, rendered
+  un-centered because the live's framer transform kills its
+  `-translate-x-1/2`; pinned via `translate-none`), and the One-Platform
+  mini-dashboard's four skeleton opacity pairs (3s, staggered delays) —
+  all reproduced as seven measured `@theme --animate-*` keyframe tokens
+  (framer's inline writes are invisible to the CSS-property census that
+  produced Session 4's "static mockup" verdict). ALSO: the dashboard's
+  first axe audit (the superset surface) fixed `text-white/40` contrast
+  (→ white/60) and added its `<h1>`; `public/` assets now ship the live's
+  CDN caching (`max-age=604800`); the live's post-login surface was
+  settled definitively (NO authenticated experience — every authed route
+  404s; the repo's /dashboard stays the D1 superset). Gate: 299 checks
+  (92 + 164 e2e incl. the mockup-motion-parity suite + 43 smoke); loop
+  census 12 = 12; VLM mockup + One-Platform IDENTICAL; word parity 1.0000
+  on all 8 routes.
 
 - **Session 9 (2026-10-07) remediation** — see
   `docs/remediation-plan-session9.md`: the first RENDERED-PALETTE survey

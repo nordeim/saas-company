@@ -145,7 +145,9 @@ export function DashboardApp({
               <LogoWordmark className="text-white" />
             </Link>
             <span className="text-white/20">/</span>
-            <span className="text-sm text-white/60 font-body tracking-wide">Dashboard</span>
+            {/* The page's single h1 (Session 10 F3 — axe page-has-heading-one);
+                styled exactly as the breadcrumb span it replaces. */}
+            <h1 className="text-sm text-white/60 font-body tracking-wide">Dashboard</h1>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-sm text-white/60 font-body hidden sm:inline">{user.email}</span>
@@ -240,7 +242,7 @@ export function DashboardApp({
                 <WorkflowIcon className="w-4 h-4 text-violet" />
                 Workflows
               </h2>
-              <span className="text-xs text-white/40 font-body">{workflows.length} total</span>
+              <span className="text-xs text-white/60 font-body">{workflows.length} total</span>
             </div>
 
             {workflows.length === 0 ? (
@@ -278,7 +280,7 @@ export function DashboardApp({
                           {w.status}
                         </span>
                         {w.category && (
-                          <span className="text-[10px] text-white/40 font-body uppercase tracking-wider">
+                          <span className="text-[10px] text-white/60 font-body uppercase tracking-wider">
                             {w.category}
                           </span>
                         )}
@@ -314,7 +316,7 @@ export function DashboardApp({
                       </button>
                     </div>
                   </div>
-                  <div className="flex items-center gap-6 text-xs text-white/40 font-body">
+                  <div className="flex items-center gap-6 text-xs text-white/60 font-body">
                     <span>{w.runs.toLocaleString()} runs</span>
                     <span>{w.successRate.toFixed(1)}% success</span>
                     <span>{w.timeSavedHours.toFixed(1)}h saved</span>
@@ -328,7 +330,7 @@ export function DashboardApp({
           <section aria-label="Runs by workflow" className="rounded-2xl border border-white/10 bg-white/[0.02] p-6">
             <h2 className="font-heading text-base font-semibold text-white mb-6">Runs by workflow</h2>
             {workflows.length === 0 ? (
-              <p className="text-sm text-white/40 font-body">No data yet.</p>
+              <p className="text-sm text-white/60 font-body">No data yet.</p>
             ) : (
               <div className="space-y-4">
                 {workflows.slice(0, 8).map((w) => (

@@ -79,13 +79,14 @@ test.describe("landing page", () => {
   });
 });
 
-test.describe("dashboard mockup (Session 4 static parity)", () => {
-  // The live's mockup is completely STATIC (animation census: zero running
-  // animations) — solid purple list dots (bg-primary/80 → rgba(134,36,255,.8)),
-  // static tiles at full opacity, chart bars at fixed percentages. The old
-  // clone ran a skeleton-wave shimmer (which also OVERRAN the dot's purple
-  // background — unlayered CSS beats layered utilities) and a grow-in
-  // stagger the live doesn't have.
+test.describe("dashboard mockup (dot fill parity)", () => {
+  // The list dots render SOLID purple (bg-primary/80 → rgba(134,36,255,.8))
+  // — the live's loops are transform/opacity only (Session 10: scale pulses
+  // via animate-mockup-dot). The old clone's skeleton-wave shimmer also
+  // overran the dot's purple background (unlayered CSS beats layered
+  // utilities) — never re-add it. The mockup's OTHER motion (the ambient
+  // glow, red dot, under-glow loops) is pinned by the
+  // mockup-motion-parity suite.
 
   test("mockup list dots render solid primary purple (not the white wave)", async ({ page }) => {
     await page.goto("/");
@@ -120,7 +121,7 @@ test.describe("dashboard mockup (Session 4 static parity)", () => {
     }
   });
 
-  test("the mockup runs zero animations (the live is static)", async ({ page }) => {
+  test("the mockup runs ONLY the live's measured loops (Session-10 correction)", async ({ page }) => {
     await page.goto("/");
     await page.evaluate(() => document.querySelectorAll("section")[1].scrollIntoView());
     await page.waitForTimeout(400);
@@ -128,9 +129,24 @@ test.describe("dashboard mockup (Session 4 static parity)", () => {
       const sec = document.querySelectorAll("section")[1];
       return [...sec.querySelectorAll("*")]
         .filter((el) => getComputedStyle(el).animationName !== "none")
-        .map((el) => (el as HTMLElement).className?.toString().slice(0, 60));
+        .map((el) => getComputedStyle(el).animationName);
     });
-    expect(animated).toEqual([]);
+    // Session 10 falsified the Session-4 "zero animations" census (a
+    // CSS-property read cannot see framer's per-frame inline writes — the
+    // live pulses the ambient glow, the red chrome dot, and the four list
+    // dots; docs/remediation-plan-session10.md F1). The only CSS-keyframe
+    // animations in the section are the measured loop equivalents — no
+    // skeleton-wave shimmer, no grow-in stagger.
+    animated.sort();
+    expect(animated).toEqual([
+      "mockup-ambient",
+      "mockup-dot",
+      "mockup-dot",
+      "mockup-dot",
+      "mockup-dot",
+      "mockup-dot",
+      "mockup-glow",
+    ]);
   });
 
   test("chart bars sit at the reference percentages", async ({ page }) => {

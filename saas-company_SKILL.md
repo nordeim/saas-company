@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.8.0 · **Last updated:** 2026-10-07 (Session 9 remediation)
+> **Version:** 2.9.0 · **Last updated:** 2026-10-08 (Session 10 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–9)
+## §12. Lessons Learnt (Sessions 1–10)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -454,6 +454,35 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     `ring-slate-400` in the compiled sheet — when an element carries both
     (the login inputs), the v3-era outcome needs a specificity nudge
     (`input:focus:focus-visible { --tw-ring-color: var(--color-slate-400) }`)
+28. **Survey the LOOP layer — a "static" verdict from animation-property
+    reads is worthless against a JS animation engine** (Session 10): the
+    live's mockup was declared "completely STATIC" in Session 4 (a
+    CSS-property census read `animationName: none` on everything) — while
+    framer-motion pulsed EIGHT loop groups underneath (the ambient glow,
+    the red chrome dot, the staggered list dots, the under-glow, and the
+    mini-dashboard's skeleton shapes). framer writes inline
+    transform/opacity PER FRAME; the `animation`/`transition` computed
+    properties stay `none` the whole time. The survey that finds it:
+    (a) sample every element's computed transform/opacity across multiple
+    rounds AFTER all entrances settle — still-changing = looping; (b)
+    extract the `animate:{…}`/`transition:{…}` configs from the live's JS
+    bundle (rg over the fetched bundle — the configs sit right next to the
+    class strings). The fix: measured `@theme --animate-*` keyframe tokens
+    (the D10 animate-scroll-dot pattern); loops pause under
+    prefers-reduced-motion via the global collapse (the D47 superset).
+29. **framer's inline transform REPLACES tailwind v3's translate
+    composition — match the rendered geometry, and remember v4's
+    `translate` property is separate** (Session 10): the live's under-glow
+    carries `-translate-x-1/2` but renders UNCENTERED (left edge at the
+    parent's center, bleeding past the card's right edge) because
+    framer's per-frame `transform: translateY(…)` overwrites v3's
+    `--tw-translate-x` composition. In v4, `-translate-x-1/2` emits the
+    SEPARATE `translate: -50%` property — which does NOT conflict with a
+    transform — so reproducing the live's rendering needs an explicit
+    `translate-none` pin. Pixel adjudication (brightness below the card
+    edge vs background) settles clipping questions the DOM cannot: both
+    the rect and the computed styles survive ancestor `overflow: hidden`,
+    only the rendered pixels tell the truth.
 
 ## §13. Pitfalls to Avoid
 

@@ -6,7 +6,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?logo=tailwindcss)
 ![Prisma](https://img.shields.io/badge/Prisma-6-2d3748?logo=prisma)
 ![SQLite](https://img.shields.io/badge/DB-SQLite-003b57?logo=sqlite)
-![Tests](https://img.shields.io/badge/tests-284_checks_passing-2ecc8a)
+![Tests](https://img.shields.io/badge/tests-299_checks_passing-2ecc8a)
 
 A production-grade, self-hosted clone of the reference dark-theme SaaS
 marketing site [`saas-company.base44.app`](https://saas-company.base44.app/)
@@ -25,7 +25,7 @@ verbatim copy) and then goes further: cookie-session auth, a workflow
 workspace with an AI composer (`z-ai-web-dev-sdk` with a deterministic
 fallback), newsletter + demo-request capture, sitemap/robots, a health
 probe, Lenis smooth scrolling, per-route SEO metadata with a working og-image + web app
-manifest, and 284 automated checks across three test layers.
+manifest, and 299 automated checks across three test layers.
 
 | Dashboard | Landing hero |
 |:---:|:---:|
@@ -45,8 +45,8 @@ manifest, and 284 automated checks across three test layers.
 | ⚡ **Workflow dashboard (superset)** | The reference's "Dashboard" demo link 404s — here it's real: stats cards, a workflow list with pause/resume/delete, a runs chart, and an AI composer that drafts workflows from one-line ideas (server-side SDK + deterministic fallback, sanitized before persistence) |
 | 📰 **Working capture forms** | Footer newsletter subscribe (idempotent upsert) and demo/contact requests persist to SQLite |
 | ❓ **Interactive FAQ + legal** | The reference's six-question accordion and four legal pages, copy captured verbatim |
-| 🧪 **284 automated checks** | 92 Vitest unit checks (pure domain seams incl. the SEO helpers + the motion engine), 150 Playwright browser checks (incl. the mobile-navigation, navbar scroll-behavior, per-tab features-card, login-theme, login alternate-states, brand-parity, section-parity, head-metadata, typography-parity, motion-parity, and palette-parity suites), 42 curl smoke checks against the production build (incl. the four security-header pins) |
-| 🛡️ **Production headers** | The reference's security posture — `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Strict-Transport-Security` — emitted via `next.config.ts` and pinned by the smoke suite |
+| 🧪 **299 automated checks** | 92 Vitest unit checks (pure domain seams incl. the SEO helpers + the motion engine), 164 Playwright browser checks (incl. the mobile-navigation, navbar scroll-behavior, per-tab features-card, login-theme, login alternate-states, brand-parity, section-parity, head-metadata, typography-parity, motion-parity, palette-parity, and mockup-motion-parity suites), 43 curl smoke checks against the production build (incl. the four security-header pins + the asset-caching pin) |
+| 🛡️ **Production headers** | The reference's security posture — `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Strict-Transport-Security` — emitted via `next.config.ts` and pinned by the smoke suite, plus the reference CDN's asset caching (`public, max-age=604800` on `public/` assets) |
 | 🔎 **Per-route SEO head parity** | The reference's per-route `<head>` pattern — "X | SAAS Company" og:titles, "X on SAAS Company. …" descriptions, per-route og:url/canonical, a web app manifest — plus a WORKING self-hosted og-image (the live's own URL 404s); assembled in `src/lib/seo.ts` (`routeMetadata`) and pinned by the head-metadata e2e suite |
 | 🌗 **Measured design system** | Tailwind v4 CSS-first tokens: #000 canvas, #8624FF primary, #0055FF accent, #D500FF violet, self-hosted **Google Fonts' "Vend Sans" variable font** (wght 300-700 — the exact gstatic bytes the reference serves; Session 5 font forensics replaced the Session-1 Wix Madefor misidentification), the reference's keyframes (organic-gradient, border-shimmer, logo petals, marquee) |
 
@@ -146,10 +146,10 @@ Open <http://localhost:3000>, then sign in to the dashboard at
 curl http://localhost:3000/api/health
 # {"ok":true,"data":{"status":"ok","app":"saas-company","ts":"…"}}
 
-# Full verification (284 checks across three layers)
+# Full verification (299 checks across three layers)
 npm run lint && npm run typecheck && npm run test   # 92 unit checks
-npm run build && ./scripts/smoke-test.sh            # 42 smoke checks
-npm run test:e2e                                    # 150 browser checks
+npm run build && ./scripts/smoke-test.sh            # 43 smoke checks
+npm run test:e2e                                    # 164 browser checks
 ```
 
 ### Production
@@ -220,8 +220,8 @@ inline); the login card and 404 page run the reference's light slate theme.
 
 ```bash
 npm run test              # unit — 92 checks on the pure domain seams
-npm run test:e2e          # Playwright — 150 browser checks (needs a build)
-./scripts/smoke-test.sh   # curl E2E — 42 checks against the production build
+npm run test:e2e          # Playwright — 164 browser checks (needs a build)
+./scripts/smoke-test.sh   # curl E2E — 43 checks against the production build
 ```
 
 The unit layer pins the pure logic: pricing math (plans, the 20% annual

@@ -3,12 +3,54 @@
 **Classification:** Internal Engineering Reference
 **Status:** DEFINITIVE, PRODUCTION-LOCKED BLUEPRINT
 **Companion Documents:** `README.md` (user-facing), `CLAUDE.md` (agent contract), `AGENTS.md` (operator notes)
-**Last Updated:** 2026-10-07
+**Last Updated:** 2026-10-08
 **Audience:** Senior Engineers, Tech Leads, DevOps, and Onboarding Engineers
 **Rule:** Every architectural decision in this document traces to a specific rationale. Nothing is here "because it's popular."
 
 #### Revision Block — v1.0
 
+- `[NOTE]` **Session 10 remediation (2026-10-08)** — a LOOPING-MOTION +
+  post-login-surface + reflow + asset-caching + dashboard-a11y audit (the
+  first full-page LOOP census — every element's computed transform/opacity
+  sampled across multiple rounds AFTER all entrances settle, classified
+  still-moving as loops, plus animate/transition config extraction from the
+  live's JS bundle — see `docs/remediation-plan-session10.md` F1–F6 →
+  R1–R6) found and fixed four clone-side gap groups: **the LOOPING-MOTION
+  layer** (the live runs TWELVE looping animations; the clone shipped four
+  — framer writes inline styles per frame, so a CSS-property census reads
+  `animation: none` on an element that is mid-loop: the Session-4 "the
+  mockup is completely STATIC" verdict was an artifact of that, now
+  falsified by value sampling and the bundle configs; reproduced as seven
+  measured `@theme` `--animate-*` keyframe tokens — the ambient
+  `-inset-32` glow `scale 1→1.15→1 opacity .3→.5→.3` 4s, the red chrome
+  dot `scale 1→1.2→1` 2s, the four list dots same with `delay:i*.1`, the
+  under-glow `y 0→−12→0 opacity .3→.5→.3` 3s, and the One-Platform
+  mini-dashboard's four skeleton opacity pairs at 3s with the measured
+  delays); **the under-glow restructure** (the live's glow is a SIBLING of
+  the mockup card — child of the max-w-4xl wrapper, UNCLIPPED — and
+  renders UNCENTERED: its framer transform replaces v3's
+  `--tw-translate-x` composition, so `-translate-x-1/2` is inert in effect
+  and the left edge sits at the wrapper's center, extending 149px past the
+  card's right edge; the clone had it clipped inside the card, centered,
+  static — now a sibling with `translate-none` pinning the rendered
+  geometry: x=720 right=1317 w=597, byte-identical to the live); **the
+  dashboard's axe violations** (the superset surface was never audited:
+  `text-white/40` muted lines at 3.6:1 → white/60 ≥7:1, and no `<h1>` —
+  the breadcrumb "Dashboard" span is now the page's single h1); and
+  **the public-asset cache headers** (`public/` shipped `max-age=0` — the
+  1.9MB hero video re-validated every load; now `public, max-age=604800`
+  like the live's CDN). ALSO DOCUMENTED: the live has NO authenticated
+  experience (login redirects to `/` with the navbar unchanged; every
+  plausible authed route 404s — the operator's dashboard reference image
+  is this repo's own superset design) and the pricing toggle's
+  `aria-pressed` joins the D55 a11y-superset family. The loop census
+  after remediation: **12 = 12, element-for-element**; VLM mockup +
+  One-Platform IDENTICAL; the mockup's pixel glow-bleed matches (both
+  sides bleed below/right of the card edge); zoom/reflow at 640/320 clean
+  both sides; word parity 1.0000 on all 8 routes; the mobile menu
+  re-verified byte-identical with the resize guard intact. Gate re-locked
+  at **299 checks** (92 unit + 164 e2e incl. the new mockup-motion-parity
+  suite + 43 smoke incl. the asset-caching pin).
 - `[NOTE]` **Session 9 remediation (2026-10-07)** — a RENDERED-PALETTE +
   interaction-state + browser-chrome + a11y-tree audit (the first systematic
   survey of the computed DEFAULT/HOVER/ACTIVE states of every interactive
@@ -737,6 +779,12 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D54 | HTTP security headers | `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Strict-Transport-Security: max-age=31536000` (Base44/Cloudflare) | the same four via `next.config.ts` `headers()`, pinned by four smoke checks (HSTS activates behind TLS; no CSP — the inline route styles and hydration scripts would need nonce tooling first) | Parity (Session 9) |
 | D55 | ARIA tree (first structured survey) | unnamed nav, unnamed logo link/svg, NO `<main>` landmark (its axe "103 landmark-less nodes"), every decorative icon exposed as unnamed `img` noise, no aria-pressed tabs, no route announcer | the named nav (`aria-label="Main navigation"`), the labeled logo (`aria-label="NovaAI home"` + `img "NovaAI"`), a `<main>` landmark, `aria-hidden` decorative icons, `aria-pressed` feature tabs, labeled newsletter controls, and the Next.js `<NEXT-ROUTE-ANNOUNCER>` — a D22/D38-class a11y superset family | **Superset** (Session 9, documented) |
 | D56 | Live-side observations (no clone change) | (a) its /login ships a `region "Notifications alt+T"` (the toast portal infra that also pointer-blocks its burger, D32); (b) its mobile menu does NOT close on Escape (the clone's Escape-close joins D21/D39/D32 as the intended-UX superset); (c) its login bundle defines `--ease-out: cubic-bezier(.16,1,.3,1)` (≠ v4's default) and px-spelled `--radius-*` — both INERT on the page (no consumer; the rem spellings render identical values); (d) v4's shadow composition emits two extra TRANSPARENT box-shadow slots (6 vs 4 computed — transparent paints nothing; D6-class); (e) its login css ships a full `::-webkit-scrollbar` ds suite that never renders (the login page never overflows) | all five documented as live-side/engine notes; no action | Live-side / engine (Session 9) |
+| D57 | The LOOPING-motion layer (hero mockup + One-Platform mini-dashboard) | framer loops, configs extracted from the bundle: the ambient `-inset-32` glow `scale:[1,1.15,1] opacity:[.3,.5,.3]` 4s easeInOut; the red chrome dot `scale:[1,1.2,1]` 2s; the four side-list dots same with `delay:i*.1` (0.1–0.4s); the One-Platform skeletons `opacity:[.5,1,.5]` / `[.3,.8,.3]` delay .5 / four tiles `[.4,1,.4]` delay `t*.2` (0.2–0.8s) / the wide box `[.3,.9,.3]` delay 1 — all 3s | the same loops as seven measured `@theme` `--animate-mockup-*`/`--animate-skel-*` CSS keyframe tokens (the D10 animate-scroll-dot pattern; the loops pause under `prefers-reduced-motion` via the global collapse — the D47-family a11y superset). The full-page loop census after the fix: **12 = 12 element-for-element**. Session 4's "the mockup is completely STATIC" census was falsified — framer's per-frame inline writes are invisible to a CSS-property read | Parity (Session 10) |
+| D58 | The hero mockup's under-glow | a SIBLING of the card (child of the `max-w-4xl` wrapper — unclipped), pulsing `y:[0,-12,0] opacity:[.3,.5,.3]` 3s, rendered UNCENTERED — its framer transform replaces v3's `--tw-translate-x` composition so `-translate-x-1/2` is inert in effect (left edge at the wrapper's center-x, extending 149px past the card's right edge) | the glow moved out of the card (the live's DOM: wrapper > [card, glow]) + `translate-none` (v4 emits the `translate` property from `-translate-x-1/2`, which would keep it centered — the pin reproduces the live's rendered geometry: x=720 right=1317 w=597, byte-identical) + `animate-mockup-glow` | Parity (Session 10) |
+| D59 | The dashboard's a11y floor (the superset surface — first axe audit) | n/a (the live has no dashboard — D1/D62) | the breadcrumb "Dashboard" span is the page's single `<h1>`; the four muted `text-white/40` lines (count badge, category tag, run stats, empty state) → `text-white/60` (≥7:1 on the dark cards; the axe-flagged 3.6:1 fixed) | **Superset quality** (Session 10) |
+| D60 | Public-asset caching | the live's CDN serves its static assets `Cache-Control: public, max-age=604800` | the same value on `/media/:path*`, `/favicon.svg`, `/og-image.png`, `/manifest.json` via `next.config.ts` (the `public/` folder shipped `max-age=0` — the 1.9MB hero video re-validated every load; the hashed `/_next/static/*` chunks keep Next's immutable headers) + a smoke pin | Parity (production; Session 10) |
+| D61 | The pricing-toggle pills | no aria state at all | `aria-pressed="true/false"` on the Monthly/Annual pills — a D55-class a11y superset (the two-state control communicates its state to AT) | **Superset** (Session 10, documented) |
+| D62 | The live's post-login surface | NO authenticated experience: logging in redirects to `/` with the navbar UNCHANGED (still "Log In" + "Get Started"); `/dashboard`, `/app`, `/home`, `/workflows`, `/workspace`, `/settings`, `/account` all render the SPA 404 even authenticated | no clone change — the definitive answer to the operator's standing dashboard question: the repo's `/dashboard` remains the D1 designed superset and the operator's reference image (`docs/saas-company-dashboard.png`) is this repo's own dashboard | Live-side (Session 10, documented) |
 
 ### 5.5 Tailwind v4 Trap Log (enforced here)
 
@@ -755,6 +803,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 13. **v4 RENAMED the small shadows** (Session 8): v3's `shadow-sm` became v4's `shadow-xs`, so a v3-era `shadow-sm` class renders one step bigger under v4 (the login Sign in button: `0 1px 3px 0.1` instead of `0 1px 2px 0.05`). `--shadow-sm` in `@theme` is the pin point; `shadow-lg`/`shadow-xl` are unchanged v3→v4.
 14. **The v3/v4 LINE-HEIGHT cascade inversion** (Session 8): in v3, a RESPONSIVE text-size utility (`sm:text-base`, `md:text-4xl` — emitted inside its media query, after all base utilities) beats a coexisting `leading-*` utility; in v4 the leading utilities set `--tw-leading`, which the text utilities consume via `var(--tw-leading, var(--text-*--line-height))` — leading ALWAYS wins. Affected pairs (responsive text + leading on one element) need an inline `--tw-leading: initial` pin to reproduce the v3 outcome; STATIC text+leading pairs (e.g. `text-sm leading-relaxed`) match both engines. Same audit class as the tracking-scale shift: survey the ENGINE, not just the class strings.
 15. **v4's DEFAULT PALETTE IS OKLCH-DEFINED — the oklch→sRGB roundtrip drifts from v3's hex** (Session 9): v4's `theme.css` carries oklch approximations of the v3 palette and the roundtrip renders up to 69 RGB units off (green-400 rgb(5,223,114) vs #4ade80; red-500 +12/−24/−14; purple-600 +5/−35/+16 — the avatar gradients; slate-700 rgb(49,65,88) vs #334155 — every login slate). Class strings, word parity, and even spelling-tolerant specs all hide this — only a RENDERED-VALUE survey (converted to sRGB and compared with the live's v3-era hex) finds it. The pin point is `@theme --color-<name>-<shade>: <v3 hex>` for every drifted, USED token (31 here; exact matches left on v4 defaults). Same-family corollary: **`ring-ring` reads `--color-ring`** — a shadcn-style legacy `--ring` variable alone makes the utility inert and the ring falls back to currentColor; and v4 emits `ring-ring` AFTER `ring-slate-400` in the compiled sheet, so elements carrying BOTH need a specificity nudge (`input:focus:focus-visible`) to keep the v3-era cascade outcome.
+16. **A JS animation engine is INVISIBLE to a CSS-property census — survey the LOOP layer by sampling VALUES over time** (Session 10): framer-motion writes inline `transform`/`opacity` per frame, so an element can be mid-loop while `getComputedStyle().animationName` reads `none`. Session 4's "the mockup is completely STATIC" verdict (a CSS-property census) shipped static for six sessions while the live pulsed its ambient glow, red chrome dot, list dots, under-glow, and mini-dashboard skeletons — found only by (a) sampling computed transform/opacity across multiple rounds AFTER entrances settle (still-changing = loop) and (b) extracting the `animate:{…}`/`transition:{…}` configs from the live's JS bundle. Related trap: **framer's inline transform REPLACES tailwind v3's `--tw-translate-*` composition** — the live's under-glow carries `-translate-x-1/2` but renders UNCENTERED (left edge at the parent's center); in v4 the `translate` property is SEPARATE from `transform`, so reproducing the live's rendered geometry needs an explicit `translate-none` pin, not just the same keyframes.
 
 ---
 
@@ -795,8 +844,8 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 9 + db-path | 92 | `src/lib/*.test.ts`, `tests/` | Vitest 5 (`npm run test`) |
-| Browser E2E | 13 specs | 150 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
-| Production HTTP smoke | 1 | 42 | `scripts/smoke-test.sh` | bash + curl + python3 |
+| Browser E2E | 14 specs | 164 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Production HTTP smoke | 1 | 43 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins
 
@@ -806,7 +855,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 
 ### 7.3 Coverage Thresholds
 
-- **Gate (mandatory before push):** `npm run lint` → `npm run typecheck` → `npm run test` (**92/92**) → `npm run build` → `./scripts/smoke-test.sh` (**42/42**) → `npm run test:e2e` (**150/150**). No hosted CI; the local gate is the only gate. The `typecheck` step is not optional: the build sets `ignoreBuildErrors`.
+- **Gate (mandatory before push):** `npm run lint` → `npm run typecheck` → `npm run test` (**92/92**) → `npm run build` → `./scripts/smoke-test.sh` (**43/43**) → `npm run test:e2e` (**164/164**). No hosted CI; the local gate is the only gate. The `typecheck` step is not optional: the build sets `ignoreBuildErrors`.
 - Line/branch coverage is not measured — the seam list is deliberately small and complete.
 
 ### 7.4 Conventions
@@ -930,8 +979,9 @@ TypeScript strict (with the template-era `noImplicitAny: false`); ESLint flat co
 | `src/lib/workflow.ts` | Status/category vocabularies, template + sanitizer (ADR-004) |
 | `src/lib/legal-content.ts` / `faq-content.ts` | Verbatim reference copy (content-as-code) |
 | `prisma/schema.prisma` / `prisma/seed.ts` | 4 models / idempotent demo workspace |
-| `scripts/smoke-test.sh` | 42-check production HTTP suite (pins its own `DATABASE_URL`; incl. the four security-header pins) |
+| `scripts/smoke-test.sh` | 43-check production HTTP suite (pins its own `DATABASE_URL`; incl. the four security-header pins + the asset-caching pin) |
 | `tests/e2e/mobile-navigation.spec.ts` | The chrome pins: burger dropdown rows, close-on-navigate, tablet pill, close-on-md resize |
+| `tests/e2e/mockup-motion-parity.spec.ts` | The Session-10 looping-motion pins: the seven measured `--animate-*` loops (names/durations/delays), the under-glow restructure (sibling, translate-none, the rendered geometry), and the dashboard a11y floor (the single h1 + the white/60 muted lines) |
 | `tests/e2e/palette-parity.spec.ts` | The Session-9 rendered-palette pins: the v3 hex values on every drifted default-palette surface, the Sign in's slate-950 ring, the inputs' slate-400 rings, the ::selection removal, the login overscroll/border pins |
 | `tests/e2e/typography-parity.spec.ts` | The Session-7 typography pins: the tracking scale (+ the login pin), wordmark fonts, H2 tracking, alt, star ARIA |
 | `tests/e2e/brand-parity.spec.ts` | The Session-3 token/copy/metadata pins: gradient stops (oklab-converted), font chain, straight quotes, titles, 404 pathname, Lenis, noscript |

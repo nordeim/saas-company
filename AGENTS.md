@@ -20,15 +20,15 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (92 checks) | `npm run test` |
-| Browser E2E (150 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (164 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
-| End-to-end smoke suite (42 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
+| End-to-end smoke suite (43 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (92/92) → `npm run build` → `./scripts/smoke-test.sh` (42/42)
-→ `npm run test:e2e` (150/150) — 284 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (92/92) → `npm run build` → `./scripts/smoke-test.sh` (43/43)
+→ `npm run test:e2e` (164/164) — 299 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -130,12 +130,24 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    the ⅔ viewport line) and the chrome swaps to black variants while the
    nav band overlaps `[data-nav-theme="light"]` sections (the white
    features section). Pinned by `tests/e2e/navbar-behavior.spec.ts`.
-15. **The dashboard mockup is STATIC on the reference** — zero running
-   animations, solid `bg-primary/80` list dots (never re-add the
+15. **The dashboard mockup LOOPS — never re-add the skeleton-wave shimmer,
+   and never trust a CSS-property census against a JS animation engine.**
+   The live pulses the ambient `-inset-32` glow (scale 1→1.15→1 + opacity
+   .3→.5→.3, 4s), the red chrome dot (scale 1→1.2→1, 2s), the four list
+   dots (same, staggered delay:i*.1), the under-glow (y 0→−12→0 + opacity
+   .3→.5→.3, 3s — a SIBLING of the card, unclipped, rendered UNCENTERED:
+   its framer transform kills the `-translate-x-1/2`, pinned via
+   `translate-none`), and the One-Platform mini-dashboard's skeleton
+   shapes (opacity pairs at 3s with delays) — reproduced as the measured
+   `animate-mockup-*`/`animate-skel-*` keyframes in globals.css. The list
+   dots keep their SOLID `bg-primary/80` fill (never re-add the
    `skeleton-wave` shimmer: as an UNLAYERED class it overrides the layered
-   `bg-primary/80` utility). The pricing toggle defaults to ANNUAL
-   (Pro $39/mo annual, $49/mo monthly — the $39 Session 1 read was the
-   annual price).
+   `bg-primary/80` utility). Session 4's "the mockup is completely
+   STATIC" census was an artifact: framer writes inline styles per frame,
+   so `animationName` reads `none` on an element that is mid-loop — survey
+   motion by sampling VALUES over time (see PAD §5.5 trap 16). The pricing
+   toggle defaults to ANNUAL (Pro $39/mo annual, $49/mo monthly — the $39
+   Session 1 read was the annual price).
 16. **Hover-state probes need REAL pointer events** (Session 6) — an
    agent-browser `mouse move` reported `:hover` matching while no hover
    utility applied (a false negative Playwright's real `page.mouse.move`
@@ -197,6 +209,18 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    layer. The live also ships NO `::selection` rule (ours was an
    invention, removed) and pins `/login` `html { overscroll-behavior-y:
    none }` + a light `--border` (both reproduced route-scoped).
+24. **A JS animation engine is INVISIBLE to a CSS-property census**
+   (Session 10): framer-motion writes inline `transform`/`opacity` per
+   frame, so an element can be mid-loop while `getComputedStyle()
+   .animationName` reads `none` — the Session-4 "static mockup" verdict
+   shipped static for six sessions while the live pulsed eight loop
+   groups. Survey the LOOP layer by sampling computed VALUES across
+   multiple rounds after entrances settle AND by extracting the
+   `animate:{…}`/`transition:{…}` configs from the live's JS bundle.
+   Related: framer's inline transform REPLACES v3's `--tw-translate-*`
+   composition (the live's under-glow renders un-centered) — v4's
+   `translate` property is SEPARATE from `transform`, so reproducing that
+   geometry needs an explicit `translate-none` (PAD §5.5 trap 16).
 
 ## Architecture invariants
 

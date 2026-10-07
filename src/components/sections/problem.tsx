@@ -127,16 +127,23 @@ export function Problem() {
                       <span className="ml-2 text-xs text-white/40 font-body">Dashboard</span>
                     </div>
                     <div className="p-4 min-h-[200px] space-y-3">
+                      {/* The live pulses these skeleton shapes (Session 10
+                          F1 — framer opacity loops at 3s with the delays
+                          below; the configs extracted from its bundle). */}
                       <div className="space-y-2">
-                        <div className="h-4 rounded bg-white/20 w-3/4" />
-                        <div className="h-3 rounded bg-violet/30 w-1/2" />
+                        <div className="h-4 rounded bg-white/20 w-3/4 animate-skel-line" />
+                        <div className="h-3 rounded bg-violet/30 w-1/2 animate-skel-violet [animation-delay:500ms]" />
                       </div>
                       <div className="grid grid-cols-2 gap-2">
-                        {[0, 1, 2, 3].map((i) => (
-                          <div key={i} className="h-12 rounded-lg bg-white/[0.15] border border-white/25" />
+                        {[1, 2, 3, 4].map((i) => (
+                          <div
+                            key={i}
+                            className="h-12 rounded-lg bg-white/[0.15] border border-white/25 animate-skel-tile"
+                            style={{ animationDelay: `${i * 0.2}s` }}
+                          />
                         ))}
                       </div>
-                      <div className="h-20 rounded-lg bg-white/[0.12] border border-white/25" />
+                      <div className="h-20 rounded-lg bg-white/[0.12] border border-white/25 animate-skel-wide [animation-delay:1s]" />
                     </div>
                   </div>
                 </a>

@@ -33,6 +33,26 @@ const nextConfig: NextConfig = {
           { key: "Strict-Transport-Security", value: "max-age=31536000" },
         ],
       },
+      {
+        // Public assets ship the live's CDN caching value (Session 10 F4:
+        // the 1.9MB hero video re-validated on every load at max-age=0;
+        // the live's static assets serve public, max-age=604800). The
+        // hashed /_next/static/* chunks keep Next's immutable headers.
+        source: "/media/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=604800" }],
+      },
+      {
+        source: "/favicon.svg",
+        headers: [{ key: "Cache-Control", value: "public, max-age=604800" }],
+      },
+      {
+        source: "/og-image.png",
+        headers: [{ key: "Cache-Control", value: "public, max-age=604800" }],
+      },
+      {
+        source: "/manifest.json",
+        headers: [{ key: "Cache-Control", value: "public, max-age=604800" }],
+      },
     ];
   },
 };

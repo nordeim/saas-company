@@ -179,6 +179,23 @@
      sets the var from its own content height on mount). */
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
+  /* The live's LOOPING animations (Session 10 F1 — extracted verbatim from
+     its framer configs in the JS bundle, cross-verified with multi-round
+     computed-value sampling; framer writes inline styles per frame so a
+     CSS-property census reads "none" — the Session-4 "static mockup"
+     verdict was an artifact of that). The hero mockup: the ambient
+     -inset-32 glow (scale 1→1.15→1 + opacity .3→.5→.3, 4s), the red
+     browser-chrome dot (scale 1→1.2→1, 2s), the four side-list dots
+     (same, staggered delay:i*.1), the under-glow (y 0→-12→0 + opacity
+     .3→.5→.3, 3s); the One-Platform mini-dashboard's skeleton shapes
+     (opacity pairs at 3s, the delays below). */
+  --animate-mockup-ambient: mockup-ambient 4s ease-in-out infinite;
+  --animate-mockup-dot: mockup-dot 2s ease-in-out infinite;
+  --animate-mockup-glow: mockup-glow 3s ease-in-out infinite;
+  --animate-skel-line: skel-line 3s ease-in-out infinite;
+  --animate-skel-violet: skel-violet 3s ease-in-out infinite;
+  --animate-skel-tile: skel-tile 3s ease-in-out infinite;
+  --animate-skel-wide: skel-wide 3s ease-in-out infinite;
 }
 
 /* v4's transition-colors utility carries NINE properties (it adds
@@ -497,6 +514,78 @@
 }
 .animate-scroll-dot {
   animation: scroll-dot 1.7s ease-in-out infinite;
+}
+
+/* The live's LOOPING framer animations (Session 10 F1/F2 — the configs
+   extracted from its bundle: scale/opacity/y keyframe arrays, durations,
+   and per-element delays; rendered value-sampling confirmed each runs).
+   ease-in-out per segment matches framer's default keyframe easing. */
+@keyframes mockup-ambient {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.5;
+  }
+}
+@keyframes mockup-dot {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+@keyframes mockup-glow {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-12px);
+    opacity: 0.5;
+  }
+}
+@keyframes skel-line {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes skel-violet {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+@keyframes skel-tile {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes skel-wide {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.9;
+  }
 }
 
 /* The "Get Started" pill's hover fill (measured gradient + keyframes). */
