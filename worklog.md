@@ -81,3 +81,17 @@ Stage Summary:
 - The clone is now a verified visual + functional superset of the live reference: every page at 1.0 word parity (FAQ accordion-DOM artifact aside), VLM >=95 on every compared surface, 152 green checks across three test layers.
 - Root causes fixed, never gate-weakened: one rejected downgrade (eslint-config-next), one restored downgrade (prisma), overrides for the rest.
 - Next: commit + push (Task 5).
+
+---
+Task ID: 5
+Agent: Super Z (main, session 2)
+Task: Final commit + SSH push of the remediated codebase
+
+Work Log:
+- Operator key materialized to a 0600 file in /tmp (never inside the repo); fingerprint verified (ssh-ed25519, SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — matches the Session 1 record).
+- Paramiko shim on PATH (workspace bin/ssh; no OpenSSH binary in this sandbox). Wrapper dry-run: auth OK, remote main @ 7a62618, fast-forward 7a62618..640807f accepted.
+- Real push via docs/ssh_git_wrapper_v3.py --remote git@github.com:nordeim/saas-company.git: wrapper verified remote refs/heads/main @ 640807f == local HEAD, tracking ref synced. Key shredded (both the wrapper's temp copy and the /tmp original); working tree clean.
+
+Stage Summary:
+- Commit 640807f pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 31 files changed, +1,583/-690: full parity remediation, deps hardened, 152-check gate green, docs + skill + 13 screenshots, remediation plan.
+- Task complete.
