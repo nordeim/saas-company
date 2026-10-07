@@ -451,3 +451,21 @@ Stage Summary:
 - The clone's production-readiness floor raised: every route now hydrates with ZERO page errors (the 404's React #418 fixed with the useSyncExternalStore + window.location.pathname pattern — the usePathname internal-route-id trap documented), the dashboard passes axe clean, and the API contract is consistent across create/update.
 - The gate itself is de-flaked (the ring pin) and de-fragilized (AUTH_RATE_LIMIT_MAX) — 307 checks, deterministic.
 - Next: final commit + SSH push (Task 24).
+
+---
+Task ID: 24
+Agent: Super Z (main, session 17)
+Task: Final commit + SSH push of the Session 11 remediation
+
+Work Log:
+- Final gate on the exact tree: lint ✓ typecheck ✓ Vitest 94/94 ✓ build ✓ smoke 46/46 ✓ Playwright 167/167 ✓ (307 checks).
+- Tree review: .env + db/custom.db ignored ✓, no keys staged ✓, 33 files changed (4 fix files, 4 test files + 1 new spec, 2 scripts/config, 10 docs, 17 screenshots, 2 new docs + worklog).
+- Commit 2f8b0eb on main (Conventional Commits + emoji per the contract).
+- Operator key materialized to a 0600 file in /tmp (never inside the repo); fingerprint verified: ssh-ed25519 SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — matches the Session 1-10 records.
+- Environment reset since Session 15: paramiko 5.0.0 reinstalled (python3 -m pip) and the paramiko ssh shim re-deployed from the runbook's Appendix A to the workspace bin/ (outside the checkout per runbook rule 5).
+- Wrapper dry-run (pointed at git@github.com:nordeim/saas-company.git — the wrapper's default is its legacy task-management remote): auth OK, remote main @ 49d8a7a, fast-forward 49d8a7a..2f8b0eb accepted.
+- Real push via docs/ssh_git_wrapper_v3.py --remote git@github.com:nordeim/saas-company.git: wrapper verified remote refs/heads/main @ 2f8b0eb == local HEAD, tracking ref synced. Operator key shredded (the wrapper's temp copy + the /tmp original); working tree clean.
+
+Stage Summary:
+- Commit 2f8b0eb pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 33 files changed (+807/−59): the 404 hydration fix (useSyncExternalStore mount gate + window.location.pathname — React #418 eliminated from every unknown route), the paused-card contrast fix (text-white/60 through the opacity-80), the PATCH name-contract fix (requiredString both paths), the de-flaked ring pin (tab-until-focused + poll-to-settled), the AUTH_RATE_LIMIT_MAX override (default 10; the e2e webServer pins 50), +8 checks (gate: 307 = 94 unit + 167 e2e incl. the hydration suite + 46 smoke incl. the name-contract pins), the remediation plan + session log, refreshed screenshots (the 404 quoting the real URL), docs + SKILL v2.10.0, .env.example with the new optional var.
+- Session 11 complete.
