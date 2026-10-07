@@ -271,3 +271,16 @@ Stage Summary:
 - Root causes documented for posterity: survey the TYPOGRAPHY layer (config-level scale overrides + inline font-families are invisible to class-string diffs and word parity); breakpoint-mounted chrome needs a resize guard; asset inventories catch dead-URL drift.
 - Next: final gate on the exact tree + commit + SSH push (Task 15).
 
+---
+Task ID: 15
+Agent: Super Z (main, session 9)
+Task: Final commit + SSH push of the Session 7 remediation
+
+Work Log:
+- Operator key materialized to a 0600 file in /tmp (never inside the repo); fingerprint verified (ssh-ed25519, SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — matches the Session 1-7 records).
+- Paramiko shim on PATH (workspace bin/ssh, outside the checkout per runbook rule 5). Wrapper dry-run: auth OK, remote main @ 248ab06, fast-forward 248ab06..4b7b480 accepted.
+- Real push via docs/ssh_git_wrapper_v3.py --remote git@github.com:nordeim/saas-company.git: wrapper verified remote refs/heads/main @ 4b7b480 == local HEAD, tracking ref synced. Operator key shredded; working tree clean.
+
+Stage Summary:
+- Commit 4b7b480 pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 30 files changed: the eight Session-7 parity fixes (the doubled tracking scale + login pin, the DM Serif Thrune wordmark, the Testimonials H2 tracking-tight, the Gasparyan alt, the valid star ARIA, the mobile-menu resize guard, the working apple-touch-icon), 12 new e2e checks (gate: 227 = 80 unit + 109 e2e + 38 smoke), the remediation plan + session log, refreshed screenshots, docs + SKILL v2.6.0.
+- Session 7 complete.
