@@ -1,13 +1,15 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.4.0 · **Last updated:** 2026-10-07 (Session 5 remediation)
+> **Version:** 2.5.0 · **Last updated:** 2026-10-07 (Session 6 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
 > `CLAUDE.md` (agent contract) · `Project_Architecture_Document.md` (source of
 > truth) · `docs/remediation-plan-session2.md` (Session 2) ·
 > `docs/remediation-plan-session3.md` (Session 3) ·
-> `docs/remediation-plan-session4.md` (Session 4 — this revision's audit).
+> `docs/remediation-plan-session4.md` (Session 4) ·
+> `docs/remediation-plan-session5.md` (Session 5) ·
+> `docs/remediation-plan-session6.md` (Session 6 — this revision's audit).
 
 ---
 
@@ -353,6 +355,25 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     for credentials that work — the form had actually submitted empty).
     Always drive forms with the browser tool's native `fill` (Playwright's
     value-tracker-aware path) when the page is a React app.
+20. **Diff the CLASS-STRING layer, not just computed styles** (Session 6)
+    — a full-DOM skeleton diff (tag + class + key attrs, both sides)
+    surfaced four RENDERED divergences five sessions of computed-style
+    spot probes had missed: the testimonial avatars (all rendered the
+    first person's gradient — the class was present, just identical on
+    every card), the Enterprise "Custom" price (the numeric-price markup
+    reused at the wrong size), the edge fades (direction-swapped classes
+    that still painted *a* gradient), and the AI-suggestion color (a
+    `/50` opacity variant). Computed-style probes only answer the
+    questions you thought to ask; the skeleton diff asks them all.
+21. **agent-browser's `mouse move` can report FALSE hover failures**
+    (Session 6) — the probe showed `:hover` matching on the element while
+    no hover utility applied; Playwright's real `page.mouse.move` + a
+    computed-style re-probe showed the Get Started pill's shimmer working
+    perfectly. Hover-state parity claims need REAL pointer events. Also:
+    v3 compiles `group-hover:translate-x-0.5` to `transform:
+    matrix(1,0,0,1,2,0)` while v4 emits `translate: 2px` — the same 2px
+    render through different PROPERTIES; compare geometry, not property
+    names.
 
 ## §13. Pitfalls to Avoid
 

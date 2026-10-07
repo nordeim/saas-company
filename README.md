@@ -6,7 +6,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?logo=tailwindcss)
 ![Prisma](https://img.shields.io/badge/Prisma-6-2d3748?logo=prisma)
 ![SQLite](https://img.shields.io/badge/DB-SQLite-003b57?logo=sqlite)
-![Tests](https://img.shields.io/badge/tests-192_checks_passing-2ecc8a)
+![Tests](https://img.shields.io/badge/tests-215_checks_passing-2ecc8a)
 
 A production-grade, self-hosted clone of the reference dark-theme SaaS
 marketing site [`saas-company.base44.app`](https://saas-company.base44.app/)
@@ -24,7 +24,8 @@ card. This clone reproduces all of it (measured tokens, self-hosted fonts,
 verbatim copy) and then goes further: cookie-session auth, a workflow
 workspace with an AI composer (`z-ai-web-dev-sdk` with a deterministic
 fallback), newsletter + demo-request capture, sitemap/robots, a health
-probe, Lenis smooth scrolling, and 192 automated checks across three test layers.
+probe, Lenis smooth scrolling, per-route SEO metadata with a working og-image + web app
+manifest, and 215 automated checks across three test layers.
 
 | Dashboard | Landing hero |
 |:---:|:---:|
@@ -44,7 +45,8 @@ probe, Lenis smooth scrolling, and 192 automated checks across three test layers
 | ⚡ **Workflow dashboard (superset)** | The reference's "Dashboard" demo link 404s — here it's real: stats cards, a workflow list with pause/resume/delete, a runs chart, and an AI composer that drafts workflows from one-line ideas (server-side SDK + deterministic fallback, sanitized before persistence) |
 | 📰 **Working capture forms** | Footer newsletter subscribe (idempotent upsert) and demo/contact requests persist to SQLite |
 | ❓ **Interactive FAQ + legal** | The reference's six-question accordion and four legal pages, copy captured verbatim |
-| 🧪 **192 automated checks** | 73 Vitest unit checks (pure domain seams), 81 Playwright browser checks (incl. the mobile-navigation, navbar scroll-behavior, per-tab features-card, login-theme, login alternate-states, and brand-parity suites), 38 curl smoke checks against the production build |
+| 🧪 **215 automated checks** | 80 Vitest unit checks (pure domain seams incl. the SEO helpers), 97 Playwright browser checks (incl. the mobile-navigation, navbar scroll-behavior, per-tab features-card, login-theme, login alternate-states, brand-parity, section-parity, and head-metadata suites), 38 curl smoke checks against the production build |
+| 🔎 **Per-route SEO head parity** | The reference's per-route `<head>` pattern — "X | SAAS Company" og:titles, "X on SAAS Company. …" descriptions, per-route og:url/canonical, a web app manifest — plus a WORKING self-hosted og-image (the live's own URL 404s); assembled in `src/lib/seo.ts` (`routeMetadata`) and pinned by the head-metadata e2e suite |
 | 🌗 **Measured design system** | Tailwind v4 CSS-first tokens: #000 canvas, #8624FF primary, #0055FF accent, #D500FF violet, self-hosted **Google Fonts' "Vend Sans" variable font** (wght 300-700 — the exact gstatic bytes the reference serves; Session 5 font forensics replaced the Session-1 Wix Madefor misidentification), the reference's keyframes (organic-gradient, border-shimmer, logo petals, marquee) |
 
 ## Tech Stack
@@ -143,10 +145,10 @@ Open <http://localhost:3000>, then sign in to the dashboard at
 curl http://localhost:3000/api/health
 # {"ok":true,"data":{"status":"ok","app":"saas-company","ts":"…"}}
 
-# Full verification (192 checks across three layers)
-npm run lint && npm run typecheck && npm run test   # 73 unit checks
+# Full verification (215 checks across three layers)
+npm run lint && npm run typecheck && npm run test   # 80 unit checks
 npm run build && ./scripts/smoke-test.sh            # 38 smoke checks
-npm run test:e2e                                    # 81 browser checks
+npm run test:e2e                                    # 97 browser checks
 ```
 
 ### Production
@@ -212,8 +214,8 @@ inline); the login card and 404 page run the reference's light slate theme.
 ## Testing
 
 ```bash
-npm run test              # unit — 73 checks on the pure domain seams
-npm run test:e2e          # Playwright — 81 browser checks (needs a build)
+npm run test              # unit — 80 checks on the pure domain seams
+npm run test:e2e          # Playwright — 97 browser checks (needs a build)
 ./scripts/smoke-test.sh   # curl E2E — 38 checks against the production build
 ```
 

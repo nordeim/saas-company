@@ -110,7 +110,6 @@ export function Problem() {
                   className="relative mx-auto max-w-xs rounded-2xl border border-violet/30 bg-white/[0.08] backdrop-blur-sm p-2 shadow-2xl shadow-violet/20 block hover:shadow-violet/40 transition-shadow duration-300"
                   href="/dashboard"
                 >
-                  <span className="absolute inset-0 rounded-2xl" aria-hidden="true" />
                   <div className="rounded-xl bg-gradient-to-br from-black via-black/90 to-black/85 overflow-hidden">
                     <div className="flex items-center gap-1 px-3 py-2 border-b border-white/10">
                       <div className="w-2 h-2 rounded-full bg-red-500" />
@@ -154,7 +153,10 @@ export function Problem() {
             </div>
 
             <Reveal className="mt-8 pt-8 border-t border-white/10" y={20}>
-              <p className="font-body leading-relaxed text-center max-w-lg mx-auto text-white/50">
+              {/* FULL white like the live's rendered truth (Session 6 F4): the
+                  live's own class carries a broken inert token
+                  (text-sl(var(--foreground))]) so the paragraph INHERITS white. */}
+              <p className="font-body leading-relaxed text-center max-w-lg mx-auto text-white">
                 NovaAI connects all your data sources, automates repetitive workflows, and
                 delivers real-time insights — cutting 15+ hours of manual work every week while
                 eliminating costly errors across your entire pipeline.

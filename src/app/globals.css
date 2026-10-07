@@ -123,7 +123,9 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-body);
-    -webkit-font-smoothing: antialiased;
+    /* No -webkit-font-smoothing override: the reference's body computes
+       `auto` (Session 6 F6) — its stylesheet never sets the antialiased
+       hint. */
   }
   h1,
   h2,

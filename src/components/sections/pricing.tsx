@@ -103,14 +103,17 @@ export function Pricing() {
                 </div>
 
                 <div className="mb-8">
-                  <div className="flex items-baseline gap-1">
-                    <span className="font-heading text-5xl font-bold text-white">
-                      {price === null ? "Custom" : `$${price}`}
-                    </span>
-                    {price !== null && (
+                  {/* The reference renders the Enterprise plan's "Custom" as a
+                      plain text-3xl DIV (30px/36px — measured Session 6 F2);
+                      numeric plans keep the baseline-aligned price + caption. */}
+                  {price === null ? (
+                    <div className="font-heading text-3xl font-bold text-white">Custom</div>
+                  ) : (
+                    <div className="flex items-baseline gap-1">
+                      <span className="font-heading text-5xl font-bold text-white">${price}</span>
                       <span className="text-white/50 text-sm">{periodCaption(period)}</span>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
 
                 <button

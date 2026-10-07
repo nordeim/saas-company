@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (38) | 73 unit + 81 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (38) | 80 unit + 97 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -145,15 +145,34 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 73/73 PASS
+- [ ] `npm run test` → 80/80 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 38/38 PASS
-- [ ] `npm run test:e2e` → 81/81 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 97/97 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 6 (2026-10-07) remediation** — see
+  `docs/remediation-plan-session6.md`: the first CLASS-STRING-LAYER audit
+  (a full-DOM skeleton diff — tag + class + key attrs — live vs clone)
+  plus a per-route `<head>` map and real-pointer hover probes found and
+  fixed seven clone-side gaps: the testimonial avatars now cycle the
+  live's FOUR per-person gradients (the pre-fix clone rendered all as
+  violet→purple-600); the Enterprise "Custom" price renders as the
+  live's plain 30px DIV (was a 48px text-5xl span); the testimonial
+  edge-fade directions un-swapped (black AT the edges); the AI-suggestion
+  paragraph matches the live's rendered FULL white (its own class is a
+  broken inert token); the per-route head pattern implemented through
+  `src/lib/seo.ts` (og:title/`"X on SAAS Company. …"`/og:url/canonical)
+  with a WORKING self-hosted `/og-image.png` (the live's 404s) and a
+  self-hosted `manifest.json`; the `<body>` stripped to the live's bare
+  element (no classes, `-webkit-font-smoothing: auto`); three invented
+  class extras removed. ALSO DOCUMENTED: the live's own mobile burger is
+  pointer-blocked by its empty toast portal — the clone keeps the working
+  burger (D32). Gate: 215 checks; VLM 99/99/98.
 
 - **Session 5 (2026-10-07) remediation** — see
   `docs/remediation-plan-session5.md`: the UI typeface corrected to

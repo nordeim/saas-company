@@ -154,14 +154,14 @@ export function Navbar() {
               className="get-started-shimmer absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"
               aria-hidden="true"
             />
-            <span className="relative z-10 text-black group-hover:text-black">Get Started</span>
+            <span className="relative z-10 text-black">Get Started</span>
             <ArrowRight className="relative z-10 w-3.5 h-3.5 text-black group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
 
         {/* Burger (below md) */}
         <button
-          className={`md:hidden transition-colors ${light ? "text-black/80 hover:text-black" : "text-white/80 hover:text-white"}`}
+          className={`md:hidden ${light ? "text-black/80 hover:text-black" : "text-white/80 hover:text-white"}`}
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="mobile-menu"

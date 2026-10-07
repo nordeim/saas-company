@@ -11,24 +11,30 @@ const TESTIMONIALS = [
     copy: "NovaAI replaced 6 different tools and 20 hours of weekly manual work. Our engineering team finally focuses on building, not babysitting scripts.",
     initials: "SC",
     name: "Sarah Chen",
+    // The live's per-person avatar gradients, measured in strip order
+    // (Session 6 F1): four DISTINCT combos keyed to the card.
+    gradient: "from-violet to-purple-600",
   },
   {
     quote: "ROI within the first week",
     copy: "We were skeptical about another AI tool, but the results spoke for themselves. 3x faster data processing and zero config needed from our side.",
     initials: "MR",
     name: "Marcus Rivera",
+    gradient: "from-electric-blue to-blue-600",
   },
   {
     quote: "The automation platform we always needed",
     copy: "Our team of 8 now operates with the efficiency of 30. NovaAI's workflow builder is intuitive, and the AI suggestions are genuinely useful.",
     initials: "EW",
     name: "Emily Watkins",
+    gradient: "from-purple-500 to-violet",
   },
   {
     quote: "Enterprise-grade, startup-fast",
     copy: "Security was our top concern. NovaAI's SOC 2 compliance and on-prem option made it an easy sell to our board. The speed was a bonus.",
     initials: "DP",
     name: "David Park",
+    gradient: "from-blue-500 to-electric-blue",
   },
 ];
 
@@ -51,8 +57,11 @@ export function Testimonials() {
       </div>
 
       <Reveal className="relative">
-        <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+        {/* Edge fades like the reference (Session 6 F3): the LEFT fade runs
+            TO THE RIGHT (black at the viewport's left edge, fading inward) and
+            the RIGHT fade TO THE LEFT — the pre-fix directions were swapped. */}
+        <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
         {/* Full-bleed strip like the reference — NO horizontal padding (the
             live's first card starts at x=0; px-6 here had inset it 24px and
             stretched scrollWidth by 48px — Session 5 finding). */}
@@ -72,7 +81,9 @@ export function Testimonials() {
               </p>
               <p className="text-sm text-white/50 font-body leading-relaxed mb-6">{t.copy}</p>
               <div className="flex items-center gap-3 pt-4 border-t border-white/5">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet to-purple-600 flex items-center justify-center text-xs font-bold text-white">
+                <div
+                  className={`w-10 h-10 rounded-full bg-gradient-to-br ${t.gradient} flex items-center justify-center text-xs font-bold text-white`}
+                >
                   {t.initials}
                 </div>
                 <div>

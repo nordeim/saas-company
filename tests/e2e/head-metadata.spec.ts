@@ -1,0 +1,85 @@
+import { expect, test } from "@playwright/test";
+
+/**
+ * Session 6 head-metadata parity pins (docs/remediation-plan-session6.md F5).
+ * The live's per-route head was mapped on 2026-10-07 (all 8 routes):
+ *
+ *   /                title "SAAS Company", DEFAULT description,
+ *                    og:url = canonical = the site root
+ *   /login           title "SAAS Company", DEFAULT description,
+ *                    og:url = canonical = …/login
+ *   /faq … /refund-… title "X | SAAS Company",
+ *                    description = "X on SAAS Company. {default}",
+ *                    og:title = the page title, og:url = canonical = the route
+ *
+ * plus og:image + twitter:image (the live's URLs are DEAD — the clone's
+ * self-hosted /og-image.png is the working superset) and a manifest link.
+ * The live ships NO theme-color meta and NO viewport-fit.
+ */
+
+const DEFAULT_DESC_PREFIX = "Your intelligent AI assistant that streamlines complex";
+
+const ROUTES: Array<{
+  route: string;
+  title: string;
+  descPrefix: string;
+  ogTitle: string;
+}> = [
+  { route: "/", title: "SAAS Company", descPrefix: DEFAULT_DESC_PREFIX, ogTitle: "SAAS Company" },
+  { route: "/login", title: "SAAS Company", descPrefix: DEFAULT_DESC_PREFIX, ogTitle: "SAAS Company" },
+  { route: "/faq", title: "FAQ | SAAS Company", descPrefix: "FAQ on SAAS Company. Your intelligent", ogTitle: "FAQ | SAAS Company" },
+  { route: "/privacy", title: "Privacy | SAAS Company", descPrefix: "Privacy on SAAS Company. Your intelligent", ogTitle: "Privacy | SAAS Company" },
+  { route: "/terms", title: "Terms | SAAS Company", descPrefix: "Terms on SAAS Company. Your intelligent", ogTitle: "Terms | SAAS Company" },
+  { route: "/accessibility", title: "Accessibility | SAAS Company", descPrefix: "Accessibility on SAAS Company. Your intellig", ogTitle: "Accessibility | SAAS Company" },
+  { route: "/refund-policy", title: "Refund Policy | SAAS Company", descPrefix: "Refund Policy on SAAS Company. Your intellig", ogTitle: "Refund Policy | SAAS Company" },
+];
+
+for (const r of ROUTES) {
+  test(`head parity on ${r.route}`, async ({ page }) => {
+    await page.goto(r.route);
+    await page.waitForTimeout(300);
+
+    const head = await page.evaluate(() => ({
+      title: document.title,
+      desc: document.querySelector('meta[name="description"]')?.getAttribute("content") ?? null,
+      ogTitle: document.querySelector('meta[property="og:title"]')?.getAttribute("content") ?? null,
+      ogDesc: document.querySelector('meta[property="og:description"]')?.getAttribute("content") ?? null,
+      twTitle: document.querySelector('meta[name="twitter:title"]')?.getAttribute("content") ?? null,
+      twDesc: document.querySelector('meta[name="twitter:description"]')?.getAttribute("content") ?? null,
+      ogUrl: document.querySelector('meta[property="og:url"]')?.getAttribute("content") ?? null,
+      canonical: document.querySelector('link[rel="canonical"]')?.getAttribute("href") ?? null,
+      ogImage: document.querySelector('meta[property="og:image"]')?.getAttribute("content") ?? null,
+      twImage: document.querySelector('meta[name="twitter:image"]')?.getAttribute("content") ?? null,
+      manifest: document.querySelector('link[rel="manifest"]')?.getAttribute("href") ?? null,
+      themeColor: document.querySelector('meta[name="theme-color"]')?.getAttribute("content") ?? null,
+      viewport: document.querySelector('meta[name="viewport"]')?.getAttribute("content") ?? null,
+    }));
+
+    expect(head.title).toBe(r.title);
+    expect(head.desc?.startsWith(r.descPrefix)).toBe(true);
+    expect(head.ogTitle).toBe(r.ogTitle);
+    expect(head.ogDesc).toBe(head.desc); // og mirrors the description
+    expect(head.twTitle).toBe(r.ogTitle);
+    expect(head.twDesc).toBe(head.desc);
+
+    // og:url + canonical resolve to THIS route against metadataBase (the
+    // canonical origin — NEXT_PUBLIC_SITE_URL; the prerendered pages bake
+    // it at build time, so assert the PATH structure + that they agree).
+    const routePath = r.route === "/" ? "/" : r.route;
+    expect(head.ogUrl).toBeTruthy();
+    expect(new URL(head.ogUrl!).pathname).toBe(routePath);
+    expect(head.canonical).toBe(head.ogUrl);
+
+    // The image pair: the live's own URLs 404 — the clone ships the working
+    // self-hosted superset; og + twitter share the same absolute URL.
+    expect(head.ogImage).toContain("/og-image.png");
+    expect(head.twImage).toBe(head.ogImage);
+
+    // The manifest link (the live's Base44 PWA — self-hosted here).
+    expect(head.manifest).toContain("/manifest.json");
+
+    // The live ships NEITHER of these two.
+    expect(head.themeColor).toBeNull();
+    expect(head.viewport).not.toContain("viewport-fit");
+  });
+}

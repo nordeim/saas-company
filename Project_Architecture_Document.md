@@ -9,6 +9,37 @@
 
 #### Revision Block — v1.0
 
+- `[NOTE]` **Session 6 remediation (2026-10-07)** — a class-string-layer +
+  head-metadata audit (the first full-DOM class-string skeleton diff of the
+  landing page — tag + class + key attrs, live vs clone — plus a per-route
+  `<head>` map of all 8 live routes and REAL-POINTER hover probes) found
+  and fixed seven clone-side gaps (see
+  `docs/remediation-plan-session6.md` F1–F7 → R1–R8): the testimonial
+  avatars were ALL violet→purple-600 while the live cycles FOUR per-person
+  gradients (violet→purple-600 / electric-blue→blue-600 /
+  purple-500→violet / blue-500→electric-blue); the Enterprise "Custom"
+  price rendered at 48px in the numeric-price markup (the live: a plain
+  30px DIV); the testimonial strip's edge fades were direction-SWAPPED
+  (no darkening at the actual edges); the One-Platform AI-suggestion
+  paragraph rendered 50% white (the live's own class is a broken inert
+  token — it INHERITS full white); the per-route `<head>` pattern
+  ("X | SAAS Company" og:title + "X on SAAS Company. …" description +
+  per-route og:url/canonical) was missing, plus a WORKING self-hosted
+  og:image (the live's URL 404s) and a self-hosted web app manifest; the
+  `<body>` carried invented classes + `-webkit-font-smoothing:
+  antialiased` (the live: bare body, `auto`); three invented/dead class
+  extras removed (the nav pill's `group-hover:text-black`, the burger's
+  `transition-colors`, the mockup link's dead overlay span). ALSO FOUND
+  (live-side, kept as supersets): the live's own mobile burger is
+  POINTER-BLOCKED by its empty toast portal (z-100, 390×32,
+  pointer-events auto) — the live's menu is unopenable by a real tap at
+  390; the clone keeps the working burger (D32). Gate re-locked at
+  **215 checks** (80 unit incl. the new seo suite + 97 e2e incl. the new
+  section-parity/head-metadata suites + 38 smoke); VLM 99/99/98 (all
+  remaining flags dismissed with DOM evidence — the D20 randomization
+  class and animation-phase misreads); word parity 1.0000 on all 8
+  routes.
+
 - `[NOTE]` **Session 5 remediation (2026-10-07)** — a font-forensics +
   interactive-state audit (the login card's alternate modes driven natively
   on the live — sign-up / forgot / wrong-password / mismatch / reset-success
@@ -546,6 +577,13 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D23 | Forgot-password reset | sends a real email via Base44 | no mail transport in the self-hosted clone — the live's unconditional "Check your email" success view is mirrored verbatim (the live itself never enumerates) | Parity (view) + **Deviation** (no email sent; Session 5) |
 | D24 | Register payload | (Base44-internal) | `name` optional on `/api/auth/register` (falls back to the email local-part) — the reference's sign-up card has no name field | Superset-friendly (Session 5) |
 | D25 | Testimonials strip | full-bleed (`scrollWidth` 2408 = 8×280 + 7×24, zero padding) | matched (the old px-6 pb-4 had inset the cards 24px and stretched scrollWidth +48px) | Parity (Session 5) |
+| D26 | Testimonial avatar gradients | FOUR per-person combos cycling in card order: violet→purple-600, electric-blue→blue-600, purple-500→violet, blue-500→electric-blue (cards 5–8 repeat) | matched — per-testimonial `gradient` field (the pre-fix clone rendered ALL as violet→purple-600) | Parity (Session 6) |
+| D27 | Enterprise "Custom" price | a plain `div.font-heading.text-3xl` "Custom" (30px/36px, direct child of the mb-8 block) | matched — the null-price branch renders the live's structure (the pre-fix clone reused the numeric text-5xl span at 48px) | Parity (Session 6) |
+| D28 | Testimonial edge fades | LEFT fade `bg-gradient-to-r from-black` (black AT the left edge), RIGHT `to-l` | matched — the pre-fix directions were swapped (no darkening at the edges, a hard cut 64–128px inside) | Parity (Session 6) |
+| D29 | AI-suggestion paragraph | the live's class carries a BROKEN inert token (`text-sl(var(--foreground))]`) — the paragraph INHERITS full white | matched to the RENDERED truth (`text-white`); the pre-fix clone shipped text-white/50 | Parity (rendered truth; Session 6) |
+| D30 | Per-route `<head>` | per-route og:title/`"X on SAAS Company. …"` description/og:url/canonical; a manifest; og:image + twitter:image (the live's image URL **404s**) | full per-route pattern via `src/lib/seo.ts` (`routeMetadata`); self-hosted WORKING `/og-image.png` (1200×630) + `/manifest.json`; NO theme-color, NO viewport-fit (the live ships neither). `twitter:url` is not expressible through Next's metadata API — accepted engine deviation (og:url carries it) | Parity + **Superset** (working image; Session 6) |
+| D31 | `<body>` | NO class attribute; `body{}` stylesheet rule paints it; `-webkit-font-smoothing: auto` | matched — bare `<body>`, the base-layer rule paints it, the invented antialiased declaration deleted | Parity (Session 6) |
+| D32 | Mobile burger clickability | the live's burger is POINTER-BLOCKED by its own empty toast portal (fixed top-0 z-[100], 390×32, pointer-events auto) — the live's menu is UNOPENABLE by a real tap at 390 (a JS `.click()` still opens it; the panel itself is byte-identical: 0,56 390×397, 7 rows @44px) | the clone's burger WORKS (real-tap opens the byte-identical panel) — the intended UX | **Superset** (Session 6, intentional — D21-class) |
 
 ### 5.5 Tailwind v4 Trap Log (enforced here)
 
@@ -598,19 +636,19 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
-| Unit (pure seams) | 7 + db-path | 73 | `src/lib/*.test.ts`, `tests/` | Vitest 5 (`npm run test`) |
-| Browser E2E | 6 specs | 54 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Unit (pure seams) | 8 + db-path | 80 | `src/lib/*.test.ts`, `tests/` | Vitest 5 (`npm run test`) |
+| Browser E2E | 10 specs | 97 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 38 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins
 
-- **Unit:** pricing math (plan prices, the 20% annual discount, captions incl. Custom-with-no-suffix), the fixed-window limiter (limit boundary, window reset, eviction, retry-after, key isolation, IP extraction), validation (email/password/string bounds), the workflow template + sanitizer (category inference, clamps, rejection paths), auth crypto (hash/verify round-trip, salt uniqueness, token round-trip, tamper/garbage rejection), content integrity (6 FAQ items, 4 legal pages with sections), and the SQLite URL resolution (anchors, absolute passthrough, standalone repair).
-- **Playwright:** the landing structure (hero, all nine sections, footer columns, anchor scroll, 404, health envelope), **the mobile navigation suite** — the highest-regression-risk chrome: fixed nav geometry, burger→X swap, the dropdown's measured rows (44px, exact hrefs, order), close-on-navigate, Escape, the 768 tablet pill — the auth round-trip (three login states, wrong-password rejection, registration→dashboard→sign-out, session-gated redirect), the dashboard superset (seeded stats, composer end-to-end with cleanup, pause/resume, 401 envelope), the FAQ accordion, the pricing toggle, all four legal pages, and the newsletter API pair.
+- **Unit:** pricing math (plan prices, the 20% annual discount, captions incl. Custom-with-no-suffix), the fixed-window limiter (limit boundary, window reset, eviction, retry-after, key isolation, IP extraction), validation (email/password/string bounds), the workflow template + sanitizer (category inference, clamps, rejection paths), auth crypto (hash/verify round-trip, salt uniqueness, token round-trip, tamper/garbage rejection), content integrity (6 FAQ items, 4 legal pages with sections), the SEO helpers (the per-route description/og:title templates + the routeMetadata assembly — Session 6), and the SQLite URL resolution (anchors, absolute passthrough, standalone repair).
+- **Playwright:** the landing structure (hero, all nine sections, footer columns, anchor scroll, 404, health envelope), **the mobile navigation suite** — the highest-regression-risk chrome: fixed nav geometry, burger→X swap, the dropdown's measured rows (44px, exact hrefs, order), close-on-navigate, Escape, the 768 tablet pill — the auth round-trip (three login states, wrong-password rejection, registration→dashboard→sign-out, session-gated redirect), the dashboard superset (seeded stats, composer end-to-end with cleanup, pause/resume, 401 envelope), the FAQ accordion, the pricing toggle, all four legal pages, the newsletter API pair, **the section-parity suite** (the per-person avatar gradients with an inert-class guard, the Custom-price structure, the edge-fade directions, the AI-suggestion color, body parity, the F7 class strings — Session 6), and **the head-metadata suite** (per-route title/description/og:*/canonical/image/manifest across seven routes, the absence of theme-color/viewport-fit — Session 6).
 - **Smoke:** boots the standalone production server on :3200 with its own `db/smoke.db` (schema-pushed + seeded), then asserts: health envelope, login (valid/wrong/short/duplicate), session me (authed/anon/post-logout), workflow CRUD + invalid-status rejection, newsletter + demo endpoints, all eight pages (incl. the 307/200 dashboard pair), landing content markers, the 404 guard, and the sitemap.
 
 ### 7.3 Coverage Thresholds
 
-- **Gate (mandatory before push):** `npm run lint` → `npm run typecheck` → `npm run test` (**73/73**) → `npm run build` → `./scripts/smoke-test.sh` (**38/38**) → `npm run test:e2e` (**41/41**). No hosted CI; the local gate is the only gate. The `typecheck` step is not optional: the build sets `ignoreBuildErrors`.
+- **Gate (mandatory before push):** `npm run lint` → `npm run typecheck` → `npm run test` (**80/80**) → `npm run build` → `./scripts/smoke-test.sh` (**38/38**) → `npm run test:e2e` (**97/97**). No hosted CI; the local gate is the only gate. The `typecheck` step is not optional: the build sets `ignoreBuildErrors`.
 - Line/branch coverage is not measured — the seam list is deliberately small and complete.
 
 ### 7.4 Conventions
@@ -678,7 +716,7 @@ Demo login: `demo@novaai.app` / `Demo1234!`. Full verification: the §7.3 gate.
 | `npm run lint` / `npm run typecheck` | ESLint / `tsc --noEmit` (the real type gate) |
 | `npx prisma generate` | Regenerate the client after schema edits |
 | `npm run db:push` / `npm run db:seed` | Apply schema / reset to demo data |
-| `npm run test` / `npm run test:e2e` | 73 unit / 81 browser checks |
+| `npm run test` / `npm run test:e2e` | 80 unit / 97 browser checks |
 | `./scripts/smoke-test.sh` | 38-check suite against the production build |
 | `npx playwright test tests/e2e/mobile-navigation.spec.ts` | Re-run the chrome suite alone |
 
@@ -725,6 +763,7 @@ TypeScript strict (with the template-era `noImplicitAny: false`); ESLint flat co
 | `src/app/login/page.tsx` | The reference auth card — sign-in / sign-up / forgot states, `?from_url` |
 | `src/app/api/workflows/generate/route.ts` | The AI composer with the deterministic fallback (ADR-004) |
 | `src/lib/auth.ts` | scrypt hashing, HMAC session tokens, cookie lifecycle (ADR-003) |
+| `src/lib/seo.ts` | The reference's per-route head pattern: `pageDescription` / `pageTitle` / `routeMetadata` (Session 6; unit-tested) |
 | `src/lib/db-path.ts` + `tests/db-path.test.ts` | The SQLite URL-resolution seam + its contract (Pattern B) |
 | `src/lib/rate-limit.ts` | Pure fixed-window limiter (ADR-008) |
 | `src/lib/pricing.ts` | Plans, periods, the 20% annual discount (unit-tested) |

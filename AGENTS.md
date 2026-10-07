@@ -19,16 +19,16 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (73 checks) | `npm run test` |
-| Browser E2E (81 checks; needs a build) | `npm run test:e2e` |
+| Unit tests (80 checks) | `npm run test` |
+| Browser E2E (97 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
 | End-to-end smoke suite (38 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (73/73) → `npm run build` → `./scripts/smoke-test.sh` (38/38)
-→ `npm run test:e2e` (81/81) — 192 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (80/80) → `npm run build` → `./scripts/smoke-test.sh` (38/38)
+→ `npm run test:e2e` (97/97) — 215 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -136,6 +136,23 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    `bg-primary/80` utility). The pricing toggle defaults to ANNUAL
    (Pro $39/mo annual, $49/mo monthly — the $39 Session 1 read was the
    annual price).
+16. **Hover-state probes need REAL pointer events** (Session 6) — an
+   agent-browser `mouse move` reported `:hover` matching while no hover
+   utility applied (a false negative Playwright's real `page.mouse.move`
+   disproved — the Get Started pill's shimmer was working all along).
+   Related: the live's arrow slide renders v3 `transform: matrix(1,0,0,1,2,0)`
+   while v4 emits `translate: 2px` — compare RENDERED geometry, not the
+   property name.
+17. **The reference's `<head>` is per-route** (Session 6): content routes
+   ship og:title = the page title, description = "X on SAAS Company. …",
+   and og:url = canonical = the route (implemented here through
+   `src/lib/seo.ts` + per-page `routeMetadata` exports; `/og-image.png`
+   is the WORKING replacement for the live's dead og:image URL). Do NOT
+   re-add `theme-color` or `viewport-fit` — the live ships neither.
+18. **The live's mobile burger is pointer-blocked by its own empty toast
+   portal** (fixed top-0 z-[100], 390×32, pointer-events auto — a JS
+   click opens the live's menu, a real tap cannot; D32). The clone keeps
+   the WORKING burger; never "fix" it toward the live's broken state.
 
 ## Architecture invariants
 
