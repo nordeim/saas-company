@@ -11,6 +11,20 @@
 
 - `[NOTE]` **Full rebuild against the CURRENT reference (2026-10-06/07 survey).** The live app at `saas-company.base44.app` was redeployed as the dark-theme "NovaAI" SaaS marketing site; this repository's previous cycle (the ORBITAL PM-workspace clone, v2.x with 115 e2e checks) targeted the OLD deployment and was retired wholesale — its specs, seed, and chrome were replaced. Parity was re-established with a fresh paired survey (agent-browser computed styles at 1440/768/390 + VLM side-by-side comparisons: hero ≈ 90% → fixed → full-page ≈ 96%), and the clone ships a functional superset (real auth, workflow dashboard, capture forms) where the reference has dead links (`/checkout` 404s on the live).
 - `[NOTE]` **Gate status at lock:** lint ✓ · typecheck ✓ · Vitest 69/69 ✓ · build ✓ · smoke 38/38 ✓ · Playwright 36/36 ✓.
+- `[NOTE]` **Session 2 remediation (2026-10-07)** — parity re-audit against the
+  (unchanged) live reference found and fixed five clone-side gaps (see
+  `docs/remediation-plan-session2.md`): the accessibility page's two reference
+  lists + the no-caption rule; the login page's extra back-link (bare-card
+  parity); the hero indicator's motion profile (`animate-scroll-dot`); the
+  features card rebuilt per tab from the live DOM (12-bar chart with exact
+  gradients/heights, stat chips, numbered builder steps, per-tab check icons);
+  and the dependency chain hardened (vitest 3.2.7→5.0.3 resolving the critical
+  tinypool/@vitest/mocker advisories; `overrides` for
+  braces/micromatch/fast-glob/deepmerge-ts — the residual braces advisory has
+  no patched release upstream and is lint-toolchain-only, documented as F10).
+  Gate at re-lock: lint ✓ · typecheck ✓ · Vitest 73/73 ✓ · build ✓ · smoke
+  38/38 ✓ · Playwright 41/41 ✓ (152 checks). VLM parity: full-page 98, mobile
+  menu 98, features 95, hero 95.
 
 ## Table of Contents
 
@@ -430,6 +444,10 @@ No component library — the chrome is bespoke against measured values: the fixe
 
 ### 5.4 Deviations & SuperSet Ledger (the honest table)
 
+_Session 2 additions (post-remediation state):_ D9 and D10 document the two
+  parity restorations; the login page and the features cards are now byte-for
+  DOM-structure parity with the reference.
+
 | # | Surface | Reference | Clone | Class |
 |---|---------|-----------|-------|-------|
 | D1 | "Dashboard" demo link | `/checkout` → 404 | `/dashboard` — real session-gated workspace | **Superset** |
@@ -439,7 +457,9 @@ No component library — the chrome is bespoke against measured values: the fixe
 | D5 | "Built on Base44" footer | yes | kept verbatim (parity copy) | Parity |
 | D6 | `bg-white/10`-style computed colors | rgba strings | Tailwind v4 serializes through `oklab()` — rendering-identical | **Deviation** (engine artifact; tests accept either) |
 | D7 | Hero video | Base44 CDN | self-hosted `public/media/hero-ai-loop.mp4` (same encode) | Parity (asset relocation) |
-| D8 | Legal/FAQ copy | Wix templates | captured verbatim into `src/lib/*-content.ts` | Parity |
+| D8 | Legal/FAQ copy | Wix templates | captured verbatim into `src/lib/*-content.ts` (Session 2 completed the accessibility page's lists + no-caption rule) | Parity |
+| D9 | Login page | a bare dead-end auth card (no nav/footer/anchors) | back-link removed; zero-anchor pin in the e2e suite | Parity (Session 2) |
+| D10 | Features card + hero motion | per-tab DOM (chart/steps) + rAF-driven indicator | rebuilt from the live DOM (ANALYTICS_BARS, stat chips, builder steps, per-tab icons); `animate-scroll-dot` matches the sampled motion | Parity (Session 2) |
 
 ### 5.5 Tailwind v4 Trap Log (enforced here)
 
@@ -487,8 +507,8 @@ No component library — the chrome is bespoke against measured values: the fixe
 
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
-| Unit (pure seams) | 7 + db-path | 69 | `src/lib/*.test.ts`, `tests/` | Vitest 3 (`npm run test`) |
-| Browser E2E | 5 specs | 36 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Unit (pure seams) | 7 + db-path | 73 | `src/lib/*.test.ts`, `tests/` | Vitest 5 (`npm run test`) |
+| Browser E2E | 5 specs | 41 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 38 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins
@@ -499,7 +519,7 @@ No component library — the chrome is bespoke against measured values: the fixe
 
 ### 7.3 Coverage Thresholds
 
-- **Gate (mandatory before push):** `npm run lint` → `npm run typecheck` → `npm run test` (**69/69**) → `npm run build` → `./scripts/smoke-test.sh` (**38/38**) → `npm run test:e2e` (**36/36**). No hosted CI; the local gate is the only gate. The `typecheck` step is not optional: the build sets `ignoreBuildErrors`.
+- **Gate (mandatory before push):** `npm run lint` → `npm run typecheck` → `npm run test` (**73/73**) → `npm run build` → `./scripts/smoke-test.sh` (**38/38**) → `npm run test:e2e` (**41/41**). No hosted CI; the local gate is the only gate. The `typecheck` step is not optional: the build sets `ignoreBuildErrors`.
 - Line/branch coverage is not measured — the seam list is deliberately small and complete.
 
 ### 7.4 Conventions
@@ -596,6 +616,7 @@ TypeScript strict (with the template-era `noImplicitAny: false`); ESLint flat co
 | INFO | "Continue with Google" renders but degrades to a notice | No OAuth credentials in a self-hosted clone | By design (deviation D4); wire a provider if needed |
 | INFO | `AUTH_SECRET` dev fallback constant | Insecure sessions if deployed unset | By design; README + §8.2 warn loudly |
 | INFO | Reference is a moving target | A future redeploy of the live app shifts parity | Mitigated by ADR-009 (re-survey before chrome work) |
+| LOW | `braces` GHSA-vfj7-8cjw-p6xm (stack-exhaustion DoS) — no patched version exists upstream (vulnerable ≤ 3.0.3, the latest published) | Lint toolchain only; no attacker-controlled input reaches braces in this repo | Accepted (F10); `npm audit fix --force` rejected — it would downgrade eslint-config-next 16→14; monitor for an upstream patch |
 
 ---
 

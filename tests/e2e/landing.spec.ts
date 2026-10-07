@@ -11,6 +11,11 @@ test.describe("landing page", () => {
     await expect(page.getByRole("link", { name: /Book a Demo/ })).toBeVisible();
     // The looping hero video is present.
     await expect(page.locator("section video").first()).toHaveAttribute("src", "/media/hero-ai-loop.mp4");
+    // The scroll indicator travels down the pill like the reference (rAF-sampled
+    // on the live: translateY 0→~8px, ≈1.7s period) — animate-bounce bounced in place.
+    const dot = page.locator("section .absolute.bottom-8 .w-1.h-2");
+    await expect(dot).toBeVisible();
+    await expect(dot).toHaveClass(/animate-scroll-dot/);
   });
 
   test("desktop nav carries the reference link map", async ({ page }) => {

@@ -55,23 +55,100 @@ test.describe("pricing section", () => {
   });
 });
 
+test.describe("features section (reference card parity)", () => {
+  test("AI tab: right-aligned caption, no SOC2/Alerts badges (reference parity)", async ({ page }) => {
+    await page.goto("/#features");
+    await expect(page.getByRole("heading", { name: "Smart Automation That Learns" })).toBeVisible();
+    await expect(page.getByText("Optimization score: 78%")).toBeVisible();
+    await expect(page.getByText("SOC 2 compliant")).toHaveCount(0);
+    await expect(page.getByText("Alerts on")).toHaveCount(0);
+    // The reference caption sits right-aligned under the progress bar.
+    const caption = page.getByText("Optimization score: 78%");
+    await expect(caption).toHaveClass(/text-right/);
+  });
+
+  test("Analytics tab: 12-bar chart + the reference stat chips", async ({ page }) => {
+    await page.goto("/#features");
+    await page.getByRole("button", { name: /Real-time Analytics/ }).click();
+    await expect(page.getByRole("heading", { name: "Insights the Moment They Matter" })).toBeVisible();
+    // The bar chart renders its 12 gradient bars.
+    const chart = page.locator("section#features .h-32");
+    await expect(chart).toBeVisible();
+    await expect(chart.locator(".flex-1")).toHaveCount(12);
+    // The three reference stat chips.
+    await expect(page.getByText("2,847")).toBeVisible();
+    await expect(page.getByText("Active Users")).toBeVisible();
+    await expect(page.getByText("12.4%")).toBeVisible();
+    await expect(page.getByText("Conversion")).toBeVisible();
+    await expect(page.getByText("$84.2K")).toBeVisible();
+    await expect(page.getByText("Revenue", { exact: true })).toBeVisible();
+    // No progress bar / badges on this card (reference has neither).
+    await expect(page.getByText("Uptime: 99.99%")).toHaveCount(0);
+    await expect(page.getByText("SOC 2 compliant")).toHaveCount(0);
+  });
+
+  test("Builder tab: numbered steps + Pipeline Active footer (reference parity)", async ({ page }) => {
+    await page.goto("/#features");
+    await page.getByRole("button", { name: /Workflow Builder/ }).click();
+    await expect(page.getByRole("heading", { name: "Compose Workflows Visually" })).toBeVisible();
+    for (const step of ["Connect CRM", "Filter Leads", "Enrich Data", "Send to Slack"]) {
+      await expect(page.getByText(step, { exact: true })).toBeVisible();
+    }
+    await expect(page.getByText("Pipeline Active")).toBeVisible();
+    await expect(page.getByText("Optimization score: 78%")).toHaveCount(0);
+  });
+});
+
 test.describe("legal pages", () => {
-  for (const [path, title] of [
-    ["/privacy", "Privacy Policy"],
-    ["/terms", "Terms & Conditions"],
-    ["/accessibility", "Accessibility Statement"],
-    ["/refund-policy", "Refund Policy"],
+  for (const [path, title, hasCaption] of [
+    ["/privacy", "Privacy Policy", true],
+    ["/terms", "Terms & Conditions", true],
+    ["/accessibility", "Accessibility Statement", false],
+    ["/refund-policy", "Refund Policy", true],
   ] as const) {
     test(`${path} renders the ${title}`, async ({ page }) => {
       await page.goto(path);
       await expect(page.getByRole("heading", { name: title, level: 1 })).toBeVisible();
-      await expect(page.getByText("A legal disclaimer")).toBeVisible();
+      // The reference shows the "A legal disclaimer" caption on every legal
+      // page EXCEPT accessibility (verified against the live DOM).
+      const caption = page.getByText("A legal disclaimer");
+      if (hasCaption) {
+        await expect(caption).toBeVisible();
+      } else {
+        await expect(caption).toHaveCount(0);
+      }
       // Body sections render.
       await expect(page.locator("main section").first()).toBeVisible();
       // The footer still carries the legal nav.
       await expect(page.locator("footer").getByRole("link", { name: "Privacy", exact: true })).toBeVisible();
     });
   }
+
+  test("accessibility page carries the reference's two lists (parity)", async ({ page }) => {
+    await page.goto("/accessibility");
+    // The 8-item commitment list (list-disc list-inside mt-4 space-y-2).
+    const commitments = page.locator("main ul.list-disc");
+    await expect(commitments).toBeVisible();
+    await expect(commitments.locator("li")).toHaveCount(8);
+    await expect(commitments.getByText("Used the Accessibility Wizard to find and fix potential accessibility issues")).toBeVisible();
+    await expect(commitments.getByText("Ensured all videos, audio, and files on the site are accessible")).toBeVisible();
+    // The 4-item coordinator contact list (list-none mt-4 space-y-1).
+    const coordinators = page.locator("main ul.list-none");
+    await expect(coordinators).toBeVisible();
+    await expect(coordinators.locator("li")).toHaveCount(4);
+    await expect(coordinators.getByText("[Name of the accessibility coordinator]")).toBeVisible();
+    await expect(coordinators.getByText("[Enter any additional contact details if relevant / available]")).toBeVisible();
+  });
+});
+
+test.describe("login page (reference bare-card parity)", () => {
+  test("renders no anchors — the reference auth card is a dead-end card", async ({ page }) => {
+    await page.goto("/login");
+    await expect(page.getByRole("heading", { name: "Welcome to SAAS Company", level: 1 })).toBeVisible();
+    await expect(page.locator("a")).toHaveCount(0);
+    await expect(page.locator("nav")).toHaveCount(0);
+    await expect(page.locator("footer")).toHaveCount(0);
+  });
 });
 
 test.describe("newsletter (footer superset)", () => {

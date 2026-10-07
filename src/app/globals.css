@@ -64,6 +64,11 @@
   --animate-gradient-shift: gradientShift 6s ease-in-out infinite;
   --animate-organic-gradient: organic-gradient 14s ease-in-out infinite;
   --animate-organic-gradient-fast: organic-gradient 6s ease-in-out infinite;
+  /* The hero scroll-indicator dot: the reference drives it with a JS
+     oscillation (rAF-sampled: translateY 0→~8px, ≈1.7s period, smooth
+     ease). Tailwind's animate-bounce bounces in place — this travels
+     down the pill like the live site. */
+  --animate-scroll-dot: scroll-dot 1.7s ease-in-out infinite;
 }
 
 /* Serif accents (client wordmarks) — inline so the next/font variable
@@ -299,6 +304,21 @@
 }
 .animate-pulse-glow {
   animation: pulse-glow 2.4s ease-in-out infinite;
+}
+
+/* The hero scroll-indicator dot (rAF-sampled on the reference: the dot
+   travels ~8px down the pill and back, ≈1.7s period). */
+@keyframes scroll-dot {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+.animate-scroll-dot {
+  animation: scroll-dot 1.7s ease-in-out infinite;
 }
 
 /* The "Get Started" pill's hover fill (measured gradient + keyframes). */

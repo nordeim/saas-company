@@ -6,7 +6,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?logo=tailwindcss)
 ![Prisma](https://img.shields.io/badge/Prisma-6-2d3748?logo=prisma)
 ![SQLite](https://img.shields.io/badge/DB-SQLite-003b57?logo=sqlite)
-![Tests](https://img.shields.io/badge/tests-143_checks_passing-2ecc8a)
+![Tests](https://img.shields.io/badge/tests-152_checks_passing-2ecc8a)
 
 A production-grade, self-hosted clone of the reference dark-theme SaaS
 marketing site [`saas-company.base44.app`](https://saas-company.base44.app/)
@@ -24,7 +24,7 @@ card. This clone reproduces all of it (measured tokens, self-hosted fonts,
 verbatim copy) and then goes further: cookie-session auth, a workflow
 workspace with an AI composer (`z-ai-web-dev-sdk` with a deterministic
 fallback), newsletter + demo-request capture, sitemap/robots, a health
-probe, and 143 automated checks across three test layers.
+probe, and 152 automated checks across three test layers.
 
 | Dashboard | Landing hero |
 |:---:|:---:|
@@ -44,7 +44,7 @@ probe, and 143 automated checks across three test layers.
 | ⚡ **Workflow dashboard (superset)** | The reference's "Dashboard" demo link 404s — here it's real: stats cards, a workflow list with pause/resume/delete, a runs chart, and an AI composer that drafts workflows from one-line ideas (server-side SDK + deterministic fallback, sanitized before persistence) |
 | 📰 **Working capture forms** | Footer newsletter subscribe (idempotent upsert) and demo/contact requests persist to SQLite |
 | ❓ **Interactive FAQ + legal** | The reference's six-question accordion and four legal pages, copy captured verbatim |
-| 🧪 **143 automated checks** | 69 Vitest unit checks (pure domain seams), 36 Playwright browser checks (incl. the mobile-navigation suite), 38 curl smoke checks against the production build |
+| 🧪 **152 automated checks** | 73 Vitest unit checks (pure domain seams), 41 Playwright browser checks (incl. the mobile-navigation + per-tab features-card suites), 38 curl smoke checks against the production build |
 | 🌗 **Measured design system** | Tailwind v4 CSS-first tokens: #000 canvas, #D500FF primary, #008CFF accent, self-hosted "Vend Sans" (Wix Madefor), the reference's keyframes (organic-gradient, border-shimmer, logo petals, marquee) |
 
 ## Tech Stack
@@ -62,7 +62,7 @@ probe, and 143 automated checks across three test layers.
 | AI | z-ai-web-dev-sdk | 0.0.x | Server-side workflow composition (degrades to a template) |
 | Icons | lucide-react | 0.5.x | Icon set |
 | Fonts | Self-hosted Wix Madefor ("Vend Sans") + next/font Google (Playfair/DM Serif) | — | Reference typography |
-| Unit tests | Vitest | 3 | Pure domain seams |
+| Unit tests | Vitest | 5 | Pure domain seams |
 | E2E tests | Playwright | 1.63 | Browser suite (Chromium) |
 | Smoke | bash + curl | — | 38 checks against the production build |
 
@@ -142,10 +142,10 @@ Open <http://localhost:3000>, then sign in to the dashboard at
 curl http://localhost:3000/api/health
 # {"ok":true,"data":{"status":"ok","app":"saas-company","ts":"…"}}
 
-# Full verification (143 checks across three layers)
-npm run lint && npm run typecheck && npm run test   # 69 unit checks
+# Full verification (152 checks across three layers)
+npm run lint && npm run typecheck && npm run test   # 73 unit checks
 npm run build && ./scripts/smoke-test.sh            # 38 smoke checks
-npm run test:e2e                                    # 36 browser checks
+npm run test:e2e                                    # 41 browser checks
 ```
 
 ### Production
@@ -201,28 +201,34 @@ Custom classes in `globals.css`: `.workflows-gradient-text` (the animated
 hero heading fill), `.animated-gradient-text`, `.border-shimmer-*` (the beta
 badge's traveling stroke), `.anim-logo-*` (the four-petal logo choreography),
 `.get-started-shimmer`, `.skeleton-wave`, `.accordion-panel`, plus the
-marquee/float/pulse-glow keyframes. Type details: `h1`–`h6` carry the
+marquee/float/pulse-glow keyframes, plus the hero's `scroll-dot` — the
+reference's rAF-sampled indicator motion (translateY 0→8px, ≈1.7 s). Type
+details: `h1`–`h6` carry the
 reference's base `letter-spacing: .02em` (the hero overrides to `-0.02em`
 inline); the login card and 404 page run the reference's light slate theme.
 
 ## Testing
 
 ```bash
-npm run test              # unit — 69 checks on the pure domain seams
-npm run test:e2e          # Playwright — 36 browser checks (needs a build)
+npm run test              # unit — 73 checks on the pure domain seams
+npm run test:e2e          # Playwright — 41 browser checks (needs a build)
 ./scripts/smoke-test.sh   # curl E2E — 38 checks against the production build
 ```
 
 The unit layer pins the pure logic: pricing math (plans, the 20% annual
 discount, captions), the fixed-window rate limiter, input validation, the
 workflow template/sanitizer, scrypt + HMAC auth, content integrity (FAQ +
-legal), and the SQLite URL resolution (incl. the standalone-server `chdir`
+legal — including the accessibility page's two reference lists and its
+no-caption rule), and the SQLite URL resolution (incl. the standalone-server
+`chdir`
 trap). The Playwright layer drives the real UI in Chromium: the landing
 structure, the **mobile navigation suite** (the highest-regression-risk
 chrome — burger dropdown rows at the measured 44px, close-on-navigate, the
 768 pill), the auth round-trip, the dashboard superset (composer
-end-to-end, pause/resume), the FAQ accordion, the pricing toggle, and all
-four legal pages. The smoke suite boots the production standalone server on
+end-to-end, pause/resume), the FAQ accordion, the pricing toggle, all four
+legal pages, the **per-tab features-card parity suite** (AI caption, analytics
+chart + stats, builder steps), the **login bare-card pin** (zero anchors — the
+reference's dead-end auth card), and the newsletter API pair. The smoke suite boots the production standalone server on
 :3200 with its own scratch database (`db/smoke.db`) — it never touches dev
 data.
 
@@ -236,6 +242,7 @@ data.
 | "Continue with Google" shows a notice instead of signing in | Expected — the self-hosted clone carries no OAuth credentials (documented deviation) | Use email sign-in |
 | Fonts differ from the reference | The UI font is self-hosted Wix Madefor ("Vend Sans") from `src/fonts/` | Keep the `@font-face` blocks in `globals.css` intact |
 | `oklab(...)` colors in computed styles | Tailwind v4 serializes alpha colors through oklab — rendering-identical to rgba | Expected; assertions accept either spelling |
+| Hero indicator dot travels instead of bouncing | The reference drives it with a JS oscillation; this repo ships the measured `animate-scroll-dot` keyframe | Intended parity (rAF-sampled); `prefers-reduced-motion` collapses it |
 
 ## License
 

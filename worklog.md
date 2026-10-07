@@ -60,3 +60,24 @@ Stage Summary:
 - Commit 8a9582b ":art: feat: rebuild as the NovaAI marketing-site clone + functional superset" pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 116 files changed, +14,600/−5,285.
 - Complete deliverable set in the pushed tree: full app source, Prisma schema+seed, 69 unit + 36 e2e + 38 smoke checks, AGENTS.md/CLAUDE.md/README.md/PAD, DEPLOYMENT.md, 12 screenshots + docs/saas-company-dashboard.png, Tailwind v4 trap report.
 - Task complete.
+
+---
+Task ID: 4
+Agent: Super Z (main, session 2)
+Task: Audit the remediated codebase against the live reference; remediate all parity + dependency gaps; re-verify; document; push
+
+Work Log:
+- Internalized the operator's coding-specialist contract (plan->implement->verify, root-cause fixes, evidence labels, never weaken gates); refreshed the workspace with git pull (brought in docs/session_1.md, docs/ssh.py, worklog.md @ 7a62618).
+- Validated AGENTS/CLAUDE/README/PAD against the codebase: structure, configs (skills/ excluded from all four toolchains), .env DATABASE_URL="file:../db/custom.db" with db/ at repo root, .env.example tracked, 143-check gate all green on the inherited tree.
+- Re-surveyed the live reference: UNCHANGED since Session 1 (headings 22/22, links 22/22 identical; /dashboard + /checkout still SPA-404; mobile menu geometry byte-identical: panel class/rect 0,56,390x397, 7 rows 44px). All findings were clone-side gaps.
+- Parity audit (DOM difflib + VLM): accessibility page 0.9072 (missing the 8-item commitment list + 4-item coordinator list; extra caption), login 0.9153 (extra back-link; live has zero anchors), privacy/terms/refund 1.0, FAQ answers verified. VLM: full-page 98, mobile menu 95->98, hero 95. Found mid-remediation (VLM re-runs + live DOM): features card diverged per tab (extra SOC2/Alerts badges vs the reference's right-aligned caption; generic template instead of the 12-bar chart + stat chips; instead of the numbered builder steps) + blanket CheckCircle2 icons vs the reference's per-tab lucide icons.
+- Dependency audit: npm audit 11 vulns (2 critical). Fixed: vitest 3.2.7->5.0.3 (tinypool/@vitest/mocker chain resolved); prisma restored to 6.19.3 after npm audit fix wrongly downgraded to 6.12.0; overrides added for braces/micromatch/fast-glob/deepmerge-ts. Residual: braces GHSA-vfj7-8cjw-p6xm (no patched version exists upstream; lint-only) — accepted + documented (F10); npm audit fix --force REJECTED (would downgrade eslint-config-next 16->14).
+- Remediation (all TDD, RED observed first): R1 accessibility content (content.test.ts pins first, then legal-content.ts + legal-page-view.tsx: lists + disclaimer:null rule); R2 login back-link removed (e2e zero-anchors pin first; live DOM check saved the &nbsp; spacer from wrongful deletion); R3 scroll-dot motion (e2e class pin; globals.css @theme token + keyframe; animate-bounce replaced); R4-R6 dependencies as above; R11 features card rebuilt per tab from the live DOM (ANALYTICS_BARS with exact heights 30-95% + per-bar violet gradients; stat chips 2,847/12.4%/$84.2K; numbered builder steps + pulsing Pipeline Active; per-tab check icons zap+shield / chart-column+clock / workflow+zap).
+- Re-verification: page parity -> accessibility 1.0, login 1.0 (both perfect); VLM full-page 98, mobile menu 98, features 95, hero 95. Gate re-locked: lint + typecheck + Vitest 73/73 + build + smoke 38/38 + Playwright 41/41 = 152 checks. npm audit: only the accepted braces advisory.
+- Docs: remediation plan saved (docs/remediation-plan-session2.md, findings F1-F10 + R1-R11); README badges/counts/troubleshooting; AGENTS commands + new gotcha #9 (dependency overrides); CLAUDE stack + Session 2 note; PAD revision (D9/D10 ledger rows, 152-check gate, braces known-issue); saas-company_SKILL.md created at the repo root per the distill skills; 13 screenshots refreshed in docs/screenshots/ (incl. new 13-accessibility; dashboard + mobile dashboard recaptured after a scripted-login fix).
+- .env.example verified in sync (no new env vars introduced); included in the commit.
+
+Stage Summary:
+- The clone is now a verified visual + functional superset of the live reference: every page at 1.0 word parity (FAQ accordion-DOM artifact aside), VLM >=95 on every compared surface, 152 green checks across three test layers.
+- Root causes fixed, never gate-weakened: one rejected downgrade (eslint-config-next), one restored downgrade (prisma), overrides for the rest.
+- Next: commit + push (Task 5).

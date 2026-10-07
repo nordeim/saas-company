@@ -19,16 +19,16 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (69 checks) | `npm run test` |
-| Browser E2E (36 checks; needs a build) | `npm run test:e2e` |
+| Unit tests (73 checks) | `npm run test` |
+| Browser E2E (41 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
 | End-to-end smoke suite (38 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` → `npm run build` → `./scripts/smoke-test.sh` (all must pass)
-→ `npm run test:e2e` (boots the standalone server on :3100 against its own
+`npm run test` (73/73) → `npm run build` → `./scripts/smoke-test.sh` (38/38)
+→ `npm run test:e2e` (41/41) — 152 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -75,7 +75,14 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    attempts/IP/15 min (in-memory `src/lib/rate-limit.ts`). E2E specs sign in
    through the UI sparingly; per-test logins would trip the limiter
    mid-suite.
-8. **`/dashboard` is session-gated** (`redirect("/login?from_url=/dashboard")`)
+9. **Dependency overrides are load-bearing.** `package.json` pins
+   `overrides` for `braces`/`micromatch`/`fast-glob`/`deepmerge-ts` — the
+   patched transitive versions for advisories whose parents haven't shipped
+   fixes (the residual `braces` GHSA-vfj7-8cjw-p6xm covers every published
+   version; lint-toolchain-only — see the remediation plan F10). Never run
+   `npm audit fix --force` here: it would downgrade `eslint-config-next`
+   16→14 to silence a dev-time advisory.
+10. **`/dashboard` is session-gated** (`redirect("/login?from_url=/dashboard")`)
    — expect 307 for anonymous requests; the smoke suite pins both the 307
    and the cookie'd 200.
 

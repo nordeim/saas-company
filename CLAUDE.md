@@ -32,7 +32,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest (unit) + Playwright (E2E) + bash/curl smoke | |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (38) | 73 unit + 41 browser checks |
 
 ## Foundational Principles
 
@@ -140,15 +140,23 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 69/69 PASS
+- [ ] `npm run test` → 73/73 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 38/38 PASS
-- [ ] `npm run test:e2e` → 36/36 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 41/41 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 2 (2026-10-07) remediation** — see
+  `docs/remediation-plan-session2.md`: accessibility-page content restored
+  (two reference lists + the no-caption rule), the login page's back-link
+  removed (bare-card parity), the hero indicator's motion matched
+  (`animate-scroll-dot`), the features card rebuilt per tab from the live DOM
+  (incl. per-tab check icons), and the dependency chain hardened
+  (vitest 5.0.3; overrides for the unpatched-upstream advisories).
 
 - **The live reference changes over time** (it was previously a PM-workspace
   app; the current deployment is the NovaAI marketing site). Parity claims

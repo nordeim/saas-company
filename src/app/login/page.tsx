@@ -1,7 +1,6 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Lock, Mail } from "lucide-react";
 
@@ -263,12 +262,6 @@ function LoginCard() {
         <div className="mt-8 text-center text-xs text-slate-400 sm:hidden">
           <p>&nbsp;</p>
         </div>
-
-        <p className="mt-6 text-center text-xs text-slate-400">
-          <Link href="/" className="hover:text-slate-600 transition-colors">
-            ← Back to SAAS Company
-          </Link>
-        </p>
       </div>
     </main>
   );

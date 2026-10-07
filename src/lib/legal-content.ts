@@ -6,11 +6,20 @@
 export interface LegalSection {
   h2: string | null;
   paras: string[];
+  /** Optional reference list rendered after the paragraphs (accessibility
+   *  page parity): "disc" → list-disc list-inside mt-4 space-y-2,
+   *  "none" → list-none mt-4 space-y-1 (the reference's exact classes). */
+  list?: {
+    style: "disc" | "none";
+    items: string[];
+  };
 }
 
 export interface LegalPage {
   title: string;
-  disclaimer: string;
+  /** Rendered under the H1 — null omits the caption (accessibility parity:
+   *  the reference shows it on privacy/terms/refund-policy but not there). */
+  disclaimer: string | null;
   sections: LegalSection[];
 }
 
@@ -69,7 +78,7 @@ export const TERMS: LegalPage = {
 
 export const ACCESSIBILITY: LegalPage = {
   title: "Accessibility Statement",
-  disclaimer: "A legal disclaimer",
+  disclaimer: null,
   sections: [
     {
       h2: null,
@@ -97,6 +106,19 @@ export const ACCESSIBILITY: LegalPage = {
       paras: [
         "We have adapted this site in accordance with WCAG [2.0 / 2.1 / 2.2 - select relevant option] guidelines, and have made the site accessible to the level of [A / AA / AAA - select relevant option]. This site's contents have been adapted to work with assistive technologies, such as screen readers and keyboard use. As part of this effort, we have also [remove irrelevant information]:",
       ],
+      list: {
+        style: "disc",
+        items: [
+          "Used the Accessibility Wizard to find and fix potential accessibility issues",
+          "Set the language of the site",
+          "Set the content order of the site's pages",
+          "Defined clear heading structures on all of the site's pages",
+          "Added alternative text to images",
+          "Implemented color combinations that meet the required color contrast",
+          "Reduced the use of motion on the site",
+          "Ensured all videos, audio, and files on the site are accessible",
+        ],
+      },
     },
     {
       h2: "Declaration of Partial Compliance With the Standard Due to Third-Party Content [only add if relevant]",
@@ -115,6 +137,15 @@ export const ACCESSIBILITY: LegalPage = {
       paras: [
         "If you find an accessibility issue on the site, or if you require further assistance, you are welcome to contact us through the organization's accessibility coordinator:",
       ],
+      list: {
+        style: "none",
+        items: [
+          "[Name of the accessibility coordinator]",
+          "[Telephone number of the accessibility coordinator]",
+          "[Email address of the accessibility coordinator]",
+          "[Enter any additional contact details if relevant / available]",
+        ],
+      },
     },
   ],
 };

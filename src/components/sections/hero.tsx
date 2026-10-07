@@ -124,10 +124,11 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Scroll indicator (decorative). */}
+      {/* Scroll indicator (decorative) — the dot travels down the pill like
+          the reference (rAF-sampled there: translateY 0→~8px, ≈1.7s). */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 pointer-events-none" aria-hidden="true">
         <div className="w-6 h-10 rounded-full border-2 border-white/20 flex justify-center pt-2">
-          <div className="w-1 h-2 rounded-full bg-white/40 animate-bounce" />
+          <div className="w-1 h-2 rounded-full bg-white/40 animate-scroll-dot" />
         </div>
       </div>
     </section>
