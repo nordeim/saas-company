@@ -310,3 +310,17 @@ Stage Summary:
 - Gate re-locked at 266 checks (92 unit + 136 e2e + 38 smoke); VLM hero/CTA IDENTICAL; word parity 1.0000 everywhere.
 - Root causes documented for posterity: survey the MOTION layer (the engine that drives entrance animation, not just the transition classes — a CSS approximation of an rAF engine breaks on cascade conflicts); an element's computed .color can lie about its rendering (the live's logo swaps path fill attributes); v4's engine shifts come in families (tracking scale → shadow rename → property lists → cascade inversions — audit the whole utility engine once one is found).
 - Next: final gate on the exact tree + commit + SSH push (Task 17).
+
+---
+Task ID: 17
+Agent: Super Z (main, session 11)
+Task: Final commit + SSH push of the Session 8 remediation
+
+Work Log:
+- Operator key materialized to a 0600 file in /tmp (never inside the repo); fingerprint verified (ssh-ed25519, SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — matches the Session 1-7 records).
+- Paramiko shim on PATH (workspace bin/ssh, outside the checkout per runbook rule 5). Wrapper dry-run: auth OK, fast-forward 04c69ed..01072c6 accepted.
+- Real push via docs/ssh_git_wrapper_v3.py --remote git@github.com:nordeim/saas-company.git: wrapper verified remote refs/heads/main @ 01072c6 == local HEAD, tracking ref synced. Operator key shredded; working tree clean; remote main re-confirmed at 01072c6 via an independent ls-remote.
+
+Stage Summary:
+- Commit 01072c6 pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 43 files changed (+551/−143): the rAF entrance-system rebuild (src/lib/motion.ts + the Reveal rewrite + the per-element parameter table + the entrance additions/removals), the three v4 engine-shift pins (shadow-sm, transition-colors list, the line-height cascade), the login focus chrome, the logo path-fill swap re-mechanization, the chevron/float/flogo/petal fixes, the per-plan CTA utilities, 39 new checks (gate: 266 = 92 unit + 136 e2e + 38 smoke), the remediation plan + session log, 17 refreshed screenshots, docs + SKILL v2.7.0.
+- Session 8 complete.
