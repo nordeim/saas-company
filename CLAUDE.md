@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (38) | 80 unit + 109 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (38) | 92 unit + 136 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -145,15 +145,39 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 80/80 PASS
+- [ ] `npm run test` → 92/92 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 38/38 PASS
-- [ ] `npm run test:e2e` → 109/109 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 136/136 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 8 (2026-10-07) remediation** — see
+  `docs/remediation-plan-session8.md`: the first MOTION-LAYER survey
+  (computed transition/animation values of every animated element, live vs
+  clone, plus MutationObserver entrance traces and live-bundle config
+  extraction) found the clone's entire entrance system broken three ways
+  and rebuilt it **rAF-driven** (`src/lib/motion.ts` — framer-motion
+  parity: easeOut cubic-bezier(0,0,0.58,1), per-element y/duration/stagger,
+  settled `opacity: 1; transform: none;`) — adding the missing entrances
+  (testimonial cards, mockup, hero trio, legal pages, /faq items) and
+  removing the invented ones (logo-cloud container, One-Platform chips,
+  whole-CTA). Three v4 engine shifts pinned: **shadow-sm** (v4 renamed the
+  scale — `--shadow-sm` restores v3's value), **transition-colors** (v4
+  carries 9 properties vs v3's 6 — a utilities-layer override), and the
+  **line-height cascade inversion** (v3's responsive text utilities beat
+  leading-*; three elements pinned with `--tw-leading: initial`). The
+  login focus chrome matched (`--ring: 240 10% 3.9%`, focus-visible:ring-ring,
+  the violet outline rule neutralized route-scoped, the Google-icon wrapper
+  DIV); the FAQ chevron's muted-foreground matched; the float keyframes
+  corrected (−15px/4s); the navbar logo's light swap re-mechanized as the
+  live's React-driven PATH FILL (the anchor stays bare — the Session-4
+  spec pin corrected to read the rendered fill); per-plan CTA disabled:*
+  utilities matched. Gate: 266 checks; VLM hero/CTA IDENTICAL; word parity
+  1.0000 on all 8 routes.
 
 - **Session 7 (2026-10-07) remediation** — see
   `docs/remediation-plan-session7.md`: the first TYPOGRAPHY-LAYER survey

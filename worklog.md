@@ -284,3 +284,29 @@ Work Log:
 Stage Summary:
 - Commit 4b7b480 pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 30 files changed: the eight Session-7 parity fixes (the doubled tracking scale + login pin, the DM Serif Thrune wordmark, the Testimonials H2 tracking-tight, the Gasparyan alt, the valid star ARIA, the mobile-menu resize guard, the working apple-touch-icon), 12 new e2e checks (gate: 227 = 80 unit + 109 e2e + 38 smoke), the remediation plan + session log, refreshed screenshots, docs + SKILL v2.6.0.
 - Session 7 complete.
+
+---
+Task ID: 16
+Agent: Super Z (main, session 11)
+Task: Session 8 parity audit + remediation (the motion layer, line-height cascade, shadow/focus tokens, login focus chrome, class cleanups)
+
+Work Log:
+- Workspace refreshed (git pull 8a9e043..04c69ed — the operator's session_10.md transcript note); root + session docs reviewed; the shell's exported absolute DATABASE_URL neutralized for every command (the AGENTS.md trap was live in this shell).
+- Baseline gate ALL GREEN (227 = 80 unit + 109 e2e + 38 smoke) — the codebase matched the documented Session-7 state exactly.
+- Drift check: reference UNCHANGED — word parity 1.0000 on all 8 routes.
+- NEW audit surface #1 — THE MOTION LAYER (computed transition/animation of every animated element, live vs clone + MutationObserver entrance traces + per-frame opacity sampling + live-bundle config extraction + bezier fitting): (F1) the live's entrances are framer-motion rAF (per-frame inline opacity/transform, easeOut cubic-bezier(0,0,0.58,1) — fit MAE 0.014, per-element y/duration/stagger, settled "opacity: 1; transform: none;"); the clone's CSS-transition Reveal SNAPPED entrances on transition-colors children (the property-list cascade) and corrupted every card's hover to 0.7s + stagger delays + will-change residue; (F1-MISS) the testimonial cards, mockup, hero mount trio, legal pages, /faq items were never animated; (F1-EXTRA) the logo-cloud container, One-Platform chips, whole-CTA block were invented animations.
+- NEW surface #2 — the line-height cascade (140 text elements): the v3/v4 INVERSION (v3's responsive text-* beats leading-* through media-query rule order; v4's --tw-leading always wins) — three rendered diffs (hero subtitle 24→26px, features H3 40→45px, CTA span 60→75px); static text+leading pairs verified matching.
+- NEW surface #3 — the shadow scale: v4 renamed the small shadows (v3 shadow-sm → v4 shadow-xs) — the Sign in button rendered one step bigger.
+- NEW surface #4 — the login focus chrome: the global violet outline rule doesn't exist in the live's login bundle; the buttons/inputs lack focus-visible:ring-ring (--ring 240 10% 3.9%); the Google-icon wrapper is a SPAN vs the live's DIV.
+- NEW surface #5 — geometry 640/1024 + pseudo-elements: IDENTICAL / none both sides.
+- The LOGO surprise (pixel evidence mid-remediation): the live's nav logo swaps a REACT-DRIVEN PATH FILL attribute (white→black) over the white features section while its anchor stays bare with color: white — the Session-4 spec had pinned the wrong property (svg .color); also the floating chevron is framer-driven (y:[0,-15,0], 4s — was 6s/-12px) and the pricing CTA disabled:* utilities are PER-PLAN (Free+Pro yes, Enterprise no).
+- TDD remediation (12 unit + 21 e2e pins observed RED, then GREEN): R1 src/lib/motion.ts + the rAF-driven Reveal rewrite + the parameter table + entrance additions/removals; R2 --shadow-sm; R3 the .transition-colors property-list override; R4 the three --tw-leading:initial pins; R5 the login --ring + outline neutralization + ring-ring classes + wrapper DIV; R6 the chevron muted-foreground (#a3a3a3); R7 the logo anchor/pill class cleanups + the path-fill swap + per-plan CTA utilities; R8 the float keyframes + anim-flogo-* names.
+- Re-verified: word parity 1.0000 all 8 routes; the motion diff 78→17 (all remaining = documented classes or the KEEP-v4 transition-transform engine note); the clone's entrance ramp 412→1024ms vs the live's 415→1034ms; VLM hero/CTA IDENTICAL, features clean after the logo fix (one scroll-spy capture-timing flag dismissed with the suite pins); 17 screenshots refreshed.
+- Docs: remediation plan (docs/remediation-plan-session8.md), PAD (revision, ledger D41–D48, §5.3, traps 13–14, counts, key files), AGENTS (gotchas 21–22), CLAUDE (session-8 context), README (266 badge), SKILL v2.7.0 (lessons 24–25), session log (docs/session_11.md), .env.example re-verified.
+
+Stage Summary:
+- The clone's entrance system now reproduces the reference's framer-motion engine dependency-free (rAF per-frame inline writes, the measured easing, the per-element parameter table) — entrances animate where the live animates, stay static where the live is static, and every card keeps its own clean hover timing.
+- Three v4 engine shifts pinned to v3 values (shadow-sm, the transition-colors list, the line-height cascade), the login focus chrome matched, the logo's light-mode swap re-mechanized to the live's path-fill truth, and the class-string cleanups landed (bare logo anchor, verbatim Log In order, per-plan CTA utilities, flogo petal names).
+- Gate re-locked at 266 checks (92 unit + 136 e2e + 38 smoke); VLM hero/CTA IDENTICAL; word parity 1.0000 everywhere.
+- Root causes documented for posterity: survey the MOTION layer (the engine that drives entrance animation, not just the transition classes — a CSS approximation of an rAF engine breaks on cascade conflicts); an element's computed .color can lie about its rendering (the live's logo swaps path fill attributes); v4's engine shifts come in families (tracking scale → shadow rename → property lists → cascade inversions — audit the whole utility engine once one is found).
+- Next: final gate on the exact tree + commit + SSH push (Task 17).

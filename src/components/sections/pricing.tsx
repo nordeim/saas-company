@@ -25,7 +25,7 @@ export function Pricing() {
   return (
     <section id="pricing" className="relative py-16 md:py-28">
       <div className="max-w-7xl mx-auto px-6">
-        <Reveal className="text-center mb-16" y={20}>
+        <Reveal className="text-center mb-16" y={20} duration={600}>
           <span className="text-xs tracking-widest uppercase text-violet font-body mb-4 block">
             Pricing
           </span>
@@ -73,8 +73,9 @@ export function Pricing() {
             return (
               <Reveal
                 key={plan.id}
-                delay={i * 120}
+                delay={i * 150}
                 y={30}
+                duration={600}
                 className={
                   plan.popular
                     ? // The live's markup carries `scale-[1.02] md:scale-105`
@@ -117,7 +118,16 @@ export function Pricing() {
                 </div>
 
                 <button
-                  className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-full text-sm font-semibold transition-all duration-300 tracking-wide mb-8 group disabled:opacity-50 disabled:cursor-not-allowed ${
+                  /* Per-plan verbatim (Session 8 F7 re-measure): the live's
+                     Free + Pro CTAs carry disabled:opacity-50
+                     disabled:cursor-not-allowed (between group and the
+                     variant classes); ONLY the Enterprise "Contact Sales"
+                     button omits them. */
+                  className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-full text-sm font-semibold transition-all duration-300 tracking-wide mb-8 group ${
+                    plan.id === "enterprise"
+                      ? ""
+                      : "disabled:opacity-50 disabled:cursor-not-allowed "
+                  }${
                     plan.popular
                       ? "bg-white text-black hover:bg-white/90 shadow-lg shadow-white/10"
                       : "border border-white/15 text-white/80 hover:bg-white/5 hover:text-white"

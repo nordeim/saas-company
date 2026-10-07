@@ -43,19 +43,20 @@ function AlertBanner({ tone, children }: { tone: "red" | "green"; children: Reac
    - signin: text-base, h-11 sm:h-12, placeholder:text-slate-600
    - signup: px-3 py-2 (no text-base), h-10 sm:h-11, placeholder:text-slate-400, text-sm sm:text-base
    - forgot: text-base, h-10 sm:h-11, placeholder:text-slate-400
-   (The live also carries inert focus-visible:ring-ring / file:text-foreground
-   utilities — kept verbatim for DOM parity; the rendered ring comes from
-   focus:ring-slate-400, measured identical both sides.) */
+   (focus-visible:ring-ring is INERT on the inputs — their focus:ring-slate-400
+   wins the cascade, measured identical both sides — but ACTIVE on the two
+   submit buttons: the live's login bundle defines --ring: 240 10% 3.9%, so
+   the keyboard-focused Sign in renders a slate-950 ring. Session 8 F5.) */
 const SHARED_INPUT =
-  "ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-10";
+  "ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-10";
 const INPUT_SIGNIN = `flex w-full border px-3 py-2 text-base ${SHARED_INPUT} h-11 sm:h-12 bg-slate-50/50 border-slate-200 focus:border-slate-400 focus:ring-slate-400 rounded-xl placeholder:text-slate-600`;
 const INPUT_SIGNUP = `flex w-full border px-3 py-2 ${SHARED_INPUT} h-10 sm:h-11 bg-slate-50/50 border-slate-200 focus:border-slate-400 focus:ring-slate-400 rounded-xl placeholder:text-slate-400 text-sm sm:text-base`;
 const INPUT_FORGOT = `flex w-full border px-3 py-2 text-base ${SHARED_INPUT} h-10 sm:h-11 bg-slate-50/50 border-slate-200 focus:border-slate-400 focus:ring-slate-400 rounded-xl placeholder:text-slate-400`;
 const LABEL = "peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sm font-medium text-slate-700";
 const SUBMIT_SIGNIN =
-  "inline-flex items-center justify-center gap-1 whitespace-nowrap text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 px-3 py-2 w-full h-11 sm:h-12 bg-slate-900 hover:bg-slate-800 text-white font-medium shadow-sm rounded-xl transition-all duration-200";
+  "inline-flex items-center justify-center gap-1 whitespace-nowrap text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 px-3 py-2 w-full h-11 sm:h-12 bg-slate-900 hover:bg-slate-800 text-white font-medium shadow-sm rounded-xl transition-all duration-200";
 const SUBMIT_COMPACT =
-  "inline-flex items-center justify-center gap-1 whitespace-nowrap text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 px-3 py-2 w-full h-10 sm:h-11 bg-slate-900 hover:bg-slate-800 text-white font-medium shadow-sm rounded-xl transition-all duration-200";
+  "inline-flex items-center justify-center gap-1 whitespace-nowrap text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 px-3 py-2 w-full h-10 sm:h-11 bg-slate-900 hover:bg-slate-800 text-white font-medium shadow-sm rounded-xl transition-all duration-200";
 const BACK_TOP =
   "flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 font-medium transition-colors -mb-2";
 const BACK_FULL =
@@ -148,6 +149,18 @@ function LoginCard() {
              rule covers everything the route renders. */
           --tracking-wider: 0.05em;
         }
+        /* The reference's login bundle defines --ring: 240 10% 3.9%
+           (slate-950) on :root — the keyboard-focused Sign in button
+           renders a slate-950 ring through its focus-visible:ring-ring
+           class (emitted in the live's login css; Session 8 F5). */
+        :root { --ring: 240 10% 3.9%; }
+        /* The SPA bundle's universal base rule tints every outline violet
+           (Session 5 F3) — but the reference's LOGIN bundle ships no such
+           rule: its login outlines render the UA currentColor (the Sign in
+           button's outline computes WHITE there vs violet/50 here).
+           Neutralize the inherited global on this route only (revert =
+           the UA value), matching the live's login chrome. */
+        * { outline-color: revert; }
         /* The dark routes' base layer sets h1-h6 to var(--font-heading)
            (Vend Sans). The reference's login bundle has no such rule —
            its login h1 renders the SYSTEM stack like the body (measured:
@@ -254,9 +267,9 @@ function LoginCard() {
                         onClick={onGoogle}
                         className="w-full flex items-center justify-center gap-3 bg-white text-slate-700 px-5 py-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 hover:border-slate-300 hover:shadow-sm transition-all duration-200 font-medium text-[16px] group"
                       >
-                        <span className="transition-transform duration-200 -ml-4">
+                        <div className="transition-transform duration-200 -ml-4">
                           <GoogleIcon />
-                        </span>
+                        </div>
                         <span>Continue with Google</span>
                       </button>
                     </div>

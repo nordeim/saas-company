@@ -13,13 +13,17 @@
  * The bar heights are a measured snapshot of the live (which randomizes
  * them slightly per load, e.g. 45.93% vs 45%).
  */
+import { Reveal } from "@/components/site/reveal";
+
 const BAR_HEIGHTS = [42, 64, 45, 80, 55, 70, 90, 60, 75, 85, 50, 95];
 
 export function DashboardPreview() {
   return (
     <section className="relative py-12 md:py-20 px-4 md:px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="relative w-full max-w-4xl mx-auto">
+        {/* The live's mockup container is a motion element (y=60 /
+            800ms — measured pre-reveal style translateY(60px)). */}
+        <Reveal className="relative w-full max-w-4xl mx-auto" y={60} duration={800}>
           <div className="relative rounded-2xl md:rounded-3xl border border-white/15 bg-black/40 backdrop-blur-xl p-1 shadow-2xl shadow-black/50 aspect-square md:aspect-[16/9] overflow-hidden group">
             {/* Ambient brand glow */}
             <div className="absolute -inset-32 bg-gradient-to-r from-primary/20 via-accent/15 to-primary/20 blur-3xl pointer-events-none" />
@@ -84,7 +88,7 @@ export function DashboardPreview() {
             {/* Under-glow reflection */}
             <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 w-2/3 h-28 bg-gradient-to-t from-primary/20 via-accent/10 to-transparent blur-3xl rounded-full pointer-events-none" />
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

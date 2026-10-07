@@ -1,4 +1,6 @@
+import type { CSSProperties } from "react";
 import { ArrowRight } from "lucide-react";
+import { Reveal } from "@/components/site/reveal";
 
 /**
  * Full-viewport hero — the reference's looping AI video under a left-to-right
@@ -25,7 +27,9 @@ export function Hero() {
 
       <div className="relative z-10 w-full h-full max-w-7xl mx-auto px-6 flex flex-col items-center justify-center text-center">
         <div className="flex flex-col items-center gap-2">
-          <div>
+          {/* The live's mount-motion wrapper for the badge (an unclassed
+              motion div, y=20 / 600ms — Session 8 R1). */}
+          <Reveal y={20} duration={600} mode="mount">
             {/* Beta badge with the traveling border shimmer (SVG stroke). */}
             <div className="relative flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-sm mb-8 w-fit">
               <svg
@@ -99,20 +103,41 @@ export function Hero() {
                 Now in Public Beta — Free for 14 Days
               </span>
             </div>
-          </div>
-          <h1
+          </Reveal>
+          {/* The H1 is the live's motion element itself (y=40 / 800ms /
+              delay 400 — its inline style grows to carry the motion state
+              alongside the letterSpacing/mix-blend/filter props). */}
+          <Reveal
+            as="h1"
             className="font-heading text-[44px] sm:text-[61px] md:text-[66px] lg:text-[79px] font-semibold leading-[1.05] workflows-gradient-text pb-2 sm:pb-4"
             style={{ letterSpacing: "-0.02em", mixBlendMode: "screen", filter: "brightness(1.1)" }}
+            y={40}
+            duration={800}
+            delay={400}
+            mode="mount"
           >
             Automated Workflows,
             <br />
             Powered by AI
-          </h1>
+          </Reveal>
         </div>
-        <p className="font-body text-sm sm:text-base text-white/80 mb-6 sm:mb-10 mt-3 sm:mt-4 leading-relaxed max-w-lg font-medium">
+        {/* The subtitle: y=30 / 800ms / delay 600 on the live. The
+            --tw-leading pin reproduces the reference's v3 cascade (its
+            sm:text-base line-height 24px BEATS the coexisting
+            leading-relaxed 1.625 — v4's --tw-leading mechanism inverts
+            that; "initial" forces the var() fallback, Session 8 F4). */}
+        <Reveal
+          as="p"
+          className="font-body text-sm sm:text-base text-white/80 mb-6 sm:mb-10 mt-3 sm:mt-4 leading-relaxed max-w-lg font-medium"
+          style={{ "--tw-leading": "initial" } as CSSProperties}
+          y={30}
+          duration={800}
+          delay={600}
+          mode="mount"
+        >
           Automate your workflows. Ship faster. <br className="md:hidden" />
           Make fewer mistakes.
-        </p>
+        </Reveal>
         <div>
           <a
             href="#pricing"

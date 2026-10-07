@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { Reveal } from "@/components/site/reveal";
 import { Navbar } from "@/components/site/navbar";
 import { Footer } from "@/components/site/footer";
 import { FAQ_ITEMS } from "@/lib/faq-content";
@@ -47,7 +48,9 @@ export function FaqView() {
       <main>
         <section className="relative py-28 pt-40">
           <div className="max-w-3xl mx-auto px-6">
-            <div className="text-center mb-16">
+            {/* The live's heading block is a motion element (y=20 /
+                600ms — its settled inline carries the framer state). */}
+            <Reveal className="text-center mb-16" y={20} duration={600}>
               <span className="text-xs tracking-widest uppercase text-violet font-body mb-4 block">
                 FAQ
               </span>
@@ -57,15 +60,17 @@ export function FaqView() {
               <p className="text-white/40 font-body text-lg">
                 Everything you need to know about getting started with NovaAI.
               </p>
-            </div>
+            </Reveal>
 
             <div className="space-y-3" data-orientation="vertical">
               {FAQ_ITEMS.map((item, i) => {
                 const isOpen = open === i;
                 const mounted = isOpen || closing === i;
                 return (
+                  /* The live wraps each item in an UNCLASSED motion div
+                     (y=15, delay i*80ms, 400ms — measured). */
+                  <Reveal key={item.q} y={15} delay={i * 80} duration={400}>
                   <div
-                    key={item.q}
                     data-state={isOpen ? "open" : "closed"}
                     className="border border-white/15 rounded-xl bg-white/[0.02] px-6 data-[state=open]:border-violet/40 transition-colors"
                   >
@@ -80,7 +85,9 @@ export function FaqView() {
                         className="flex flex-1 items-center justify-between transition-all hover:underline [&[data-state=open]>svg]:rotate-180 text-left font-heading text-base font-medium text-white hover:text-white/90 py-5 [&[data-state=open]>svg]:text-violet"
                       >
                         {item.q}
-                        <ChevronDown className="h-4 w-4 shrink-0 text-white/50 transition-transform duration-200" />
+                        {/* The live's chevron color: text-muted-foreground → rgb(163,163,163)
+              (its --muted-foreground: 0 0% 64%) — not white/50. Session 8 F6. */}
+                        <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
                       </button>
                     </h3>
                     {mounted && (
@@ -105,6 +112,7 @@ export function FaqView() {
                       </div>
                     )}
                   </div>
+                  </Reveal>
                 );
               })}
             </div>

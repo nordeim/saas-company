@@ -1,3 +1,4 @@
+import { Reveal } from "@/components/site/reveal";
 import { Navbar } from "@/components/site/navbar";
 import { Footer } from "@/components/site/footer";
 import type { LegalPage } from "@/lib/legal-content";
@@ -13,7 +14,9 @@ export function LegalPageView({ page }: { page: LegalPage }) {
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
       <Navbar />
       <main className="pt-32 pb-20 px-6">
-        <div className="max-w-3xl mx-auto">
+        {/* The live's legal content block mounts with y=20 / 600ms
+            (framer `animate`, not whileInView — Session 8 F1-MISS). */}
+        <Reveal as="div" className="max-w-3xl mx-auto" y={20} duration={600} mode="mount">
           <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4">{page.title}</h1>
           {page.disclaimer ? (
             <p className="text-white/60 text-sm mb-16 font-body">{page.disclaimer}</p>
@@ -47,7 +50,7 @@ export function LegalPageView({ page }: { page: LegalPage }) {
               </section>
             ))}
           </div>
-        </div>
+        </Reveal>
       </main>
       <Footer />
     </div>

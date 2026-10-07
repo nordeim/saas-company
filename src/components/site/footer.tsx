@@ -47,7 +47,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8 md:gap-32 mb-12 flex-1">
           <div className="flex flex-col flex-shrink-0 md:w-[280px]">
             <div className="mb-3">
-              <LogoWordmark className="text-white" />
+              <LogoWordmark className="text-white" petals="flogo" fill="white" />
             </div>
             <p className="text-sm text-white/50 font-body">
               Automate your workflows with intelligent AI.

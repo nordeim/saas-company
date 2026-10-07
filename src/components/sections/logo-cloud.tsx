@@ -10,7 +10,7 @@ export function LogoCloud() {
   return (
     <section className="relative py-16 border-y border-white/5">
       <div className="max-w-7xl mx-auto px-6">
-        <Reveal className="text-center mb-10" y={20}>
+        <Reveal className="text-center mb-10" y={20} duration={600}>
           <p className="text-sm text-white/50 tracking-widest uppercase font-body mb-3">
             Trusted by 5,000+ teams worldwide
           </p>
@@ -22,7 +22,10 @@ export function LogoCloud() {
           </div>
         </Reveal>
 
-        <Reveal className="flex flex-wrap justify-center items-center gap-3 md:gap-x-10 md:gap-y-8">
+        {/* The live's wordmark cloud is NOT a motion element (its settled
+            style is null — Session 8 F1-EXTRA): only the eyebrow block
+            above animates. */}
+        <div className="flex flex-wrap justify-center items-center gap-3 md:gap-x-10 md:gap-y-8">
           {/* Zphlix — serif wordmark. The live's three serif wordmarks carry
               INLINE font-family styles (Session 7 F3): Zphlix/Melpyx
               "Playfair Display", Thrune "DM Serif Display" — measured on
@@ -84,7 +87,7 @@ export function LogoCloud() {
               className="h-6 w-auto brightness-0 invert opacity-60 hover:opacity-90 transition-opacity duration-500"
             />
           </div>
-        </Reveal>
+        </div>
       </div>
     </section>
   );

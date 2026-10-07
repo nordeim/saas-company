@@ -10,7 +10,7 @@ export function Problem() {
   return (
     <section className="relative py-16 md:py-28 overflow-hidden">
       <div className="relative z-10 max-w-7xl mx-auto px-6">
-        <Reveal className="text-center mb-16" y={20}>
+        <Reveal className="text-center mb-16" y={20} duration={600}>
           <span className="tracking-widest uppercase text-violet font-body mb-4 block text-sm">
             THE PROBLEM
           </span>
@@ -44,7 +44,8 @@ export function Problem() {
               key={card.title}
               className="p-6 rounded-2xl border border-white/[0.10] bg-white/[0.02] backdrop-blur-sm hover:border-red-500/20 transition-colors group"
               y={30}
-              delay={i * 120}
+              delay={i * 150}
+              duration={600}
             >
               <div className="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center mb-4 group-hover:bg-red-500/15 transition-colors">
                 <card.icon className="w-5 h-5 text-red-400/80" />
@@ -55,11 +56,15 @@ export function Problem() {
           ))}
         </div>
 
-        <Reveal className="flex justify-center mb-20">
+        {/* The live's chevron wrapper (flex justify-center mb-20) has NO
+            entrance motion — only the circle itself oscillates (framer
+            y:[0,-15,0], 4s repeat — reproduced as the animate-float
+            keyframes in globals.css, Session 8). */}
+        <div className="flex justify-center mb-20">
           <div className="w-16 h-16 rounded-full bg-gradient-to-br from-violet/20 to-electric-blue/20 border border-white/20 flex items-center justify-center animate-float">
             <ArrowRight className="w-6 h-6 text-violet rotate-90" />
           </div>
-        </Reveal>
+        </div>
 
         {/* The platform showcase */}
         <div className="relative">
@@ -69,18 +74,21 @@ export function Problem() {
           <Reveal
             className="relative p-8 md:p-12 rounded-3xl border border-violet/40 bg-gradient-to-br from-violet/[0.15] to-electric-blue/[0.10] overflow-hidden"
             y={30}
+            duration={800}
           >
             <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-violet/15 to-transparent pointer-events-none" />
             <div className="relative z-10 grid md:grid-cols-3 gap-8 items-start">
-              {/* Left: overview card + orange app icon */}
+              {/* Left: overview card + orange app icon — NO own motion on
+                  the live (the showcase animates as ONE element; the old
+                  inner y=0 Reveals double-faded them — Session 8 F1-EXTRA). */}
               <div className="md:col-span-1 space-y-4">
-                <Reveal className="p-3 rounded-2xl bg-violet/20 border border-violet/30" y={0}>
+                <div className="p-3 rounded-2xl bg-violet/20 border border-violet/30">
                   <p className="text-sm text-white font-body leading-relaxed">
                     A comprehensive overview of your tasks, deadlines, and priorities, all in one
                     place.
                   </p>
-                </Reveal>
-                <Reveal className="w-12 h-12 rounded-lg bg-orange-500/80 flex items-center justify-center" y={0}>
+                </div>
+                <div className="w-12 h-12 rounded-lg bg-orange-500/80 flex items-center justify-center">
                   <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path
                       d="M15.2891 2.66058C18.7885 -0.886861 24.4554 -0.886861 27.955 2.66058C31.4545 6.20803 31.4545 11.9526 27.955 15.5L15.2891 2.66058Z"
@@ -99,13 +107,14 @@ export function Problem() {
                       fill="white"
                     />
                   </svg>
-                </Reveal>
+                </div>
               </div>
 
               {/* Center: mini dashboard in a browser frame — links to the
                   live app's dashboard route (its /checkout target 404s on
-                  the reference; the clone serves a REAL workspace). */}
-              <Reveal className="md:col-span-1" y={0}>
+                  the reference; the clone serves a REAL workspace). NO own
+                  motion (the showcase animates as ONE — Session 8). */}
+              <div className="md:col-span-1">
                 <a
                   className="relative mx-auto max-w-xs rounded-2xl border border-violet/30 bg-white/[0.08] backdrop-blur-sm p-2 shadow-2xl shadow-violet/20 block hover:shadow-violet/40 transition-shadow duration-300"
                   href="/dashboard"
@@ -131,28 +140,30 @@ export function Problem() {
                     </div>
                   </div>
                 </a>
-              </Reveal>
+              </div>
 
-              {/* Right: collaboration card + avatar stack */}
+              {/* Right: collaboration card + avatar stack — no own motion */}
               <div className="md:col-span-1 space-y-4">
-                <Reveal className="p-5 rounded-2xl bg-electric-blue/20 border border-electric-blue/30" y={0}>
+                <div className="p-5 rounded-2xl bg-electric-blue/20 border border-electric-blue/30">
                   <p className="text-sm text-white font-body leading-relaxed">
                     Real-time collaboration and instant team communication in one seamless
                     interface.
                   </p>
-                </Reveal>
-                <Reveal className="flex gap-2" y={0}>
+                </div>
+                <div className="flex gap-2">
                   {[0, 1, 2, 3].map((i) => (
                     <div
                       key={i}
                       className="w-10 h-10 rounded-full bg-gradient-to-br from-violet/40 to-electric-blue/40 border border-white/10"
                     />
                   ))}
-                </Reveal>
+                </div>
               </div>
             </div>
 
-            <Reveal className="mt-8 pt-8 border-t border-white/10" y={20}>
+            {/* The live's note: y=20, delay 400ms, 300ms (the default
+                duration when framer's transition carries only a delay). */}
+            <Reveal className="mt-8 pt-8 border-t border-white/10" y={20} delay={400} duration={300}>
               {/* FULL white like the live's rendered truth (Session 6 F4): the
                   live's own class carries a broken inert token
                   (text-sl(var(--foreground))]) so the paragraph INHERITS white. */}

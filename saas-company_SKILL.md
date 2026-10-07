@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.6.0 · **Last updated:** 2026-10-07 (Session 7 remediation)
+> **Version:** 2.7.0 · **Last updated:** 2026-10-07 (Session 8 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–7)
+## §12. Lessons Learnt (Sessions 1–8)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -399,6 +399,37 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     mobile-navigation testing taxonomy). Related: the body scroll-lock
     itself is a documented SUPERSET — the live locks nothing when its
     menu is open (verified via JS-click).
+24. **Survey the MOTION layer — the ENGINE, not just the timings** (Session
+    8): the first systematic computed-`transition-*`/`animation-*` diff
+    found the clone's entire entrance system broken — a CSS-transition
+    approximation of the live's framer-motion rAF engine SNAPS on children
+    whose own `transition-colors` wins the property-list cascade, and its
+    `duration-700`/`ease-out`/stagger classes permanently corrupt every
+    card's hover timing. The live's engine: per-frame inline
+    `opacity`/`transform` writes (MutationObserver-visible), easing
+    `cubic-bezier(0, 0, 0.58, 1)` (fit from sampled frames), per-element
+    y/duration/stagger (extractable from the SPA bundle's
+    `initial/whileInView/transition` configs), settled inline exactly
+    `opacity: 1; transform: none;`. Class strings cannot see ANY of this —
+    both sides carried byte-identical classes while rendering different
+    motion. Also: an element's "color" can LIE about its rendering — the
+    live's navbar logo swaps a React-driven PATH FILL attribute
+    (white→black) while its anchor's color stays white; pixel sampling +
+    the path's computed fill were needed to see the truth a computed
+    `.color` read hid.
+25. **v4's engine shifts come in FAMILIES** (Sessions 7–8): the tracking
+    scale (config-doubled steps), the shadow-scale rename (v3 shadow-sm →
+    v4 shadow-xs), the transition-colors property list (9 vs 6
+    properties), and the line-height cascade inversion (v3's responsive
+    `text-*` beats `leading-*` because media-query rules sort after base
+    utilities; v4's `--tw-leading` var mechanism always lets leading win).
+    Each hid from class-string parity for 6+ sessions. The fix points
+    differ per shift — `@theme` vars where v4 consumes them
+    (`--tracking-*`, `--shadow-sm`), a same-layer utility override where
+    the value is hardcoded (`.transition-colors`), and per-element inline
+    pins where the CASCADE order itself is the divergence
+    (`--tw-leading: initial`). When one config-level shift is found, audit
+    the whole utility engine for its siblings.
 
 ## §13. Pitfalls to Avoid
 

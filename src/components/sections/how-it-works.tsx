@@ -30,7 +30,7 @@ export function HowItWorks() {
   return (
     <section id="how-it-works" className="relative py-16 md:py-28">
       <div className="max-w-7xl mx-auto px-6">
-        <Reveal className="text-center mb-20" y={20}>
+        <Reveal className="text-center mb-20" y={20} duration={600}>
           <span className="text-xs tracking-widest uppercase text-violet font-body mb-4 block">
             How It Works
           </span>
@@ -52,7 +52,8 @@ export function HowItWorks() {
                 key={step.n}
                 className="text-center relative group"
                 y={40}
-                delay={i * 140}
+                delay={i * 200}
+                duration={600}
               >
                 <div className="relative w-20 h-20 mx-auto mb-8">
                   <div className="absolute inset-0 rounded-full bg-gradient-to-br from-violet/20 to-electric-blue/10 border border-violet/50 group-hover:border-violet/80 transition-colors" />

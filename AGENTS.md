@@ -19,16 +19,16 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (80 checks) | `npm run test` |
-| Browser E2E (109 checks; needs a build) | `npm run test:e2e` |
+| Unit tests (92 checks) | `npm run test` |
+| Browser E2E (136 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
 | End-to-end smoke suite (38 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (80/80) → `npm run build` → `./scripts/smoke-test.sh` (38/38)
-→ `npm run test:e2e` (109/109) — 227 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (92/92) → `npm run build` → `./scripts/smoke-test.sh` (38/38)
+→ `npm run test:e2e` (136/136) — 266 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -165,6 +165,23 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    the body scroll-lock) alive when the viewport crossed 768 — the
    `matchMedia("(min-width: 768px)")` close-on-match listener in
    `navbar.tsx` is load-bearing for resize/rotate flows.
+21. **The scroll entrances are rAF-driven, NOT CSS transitions** (Session 8):
+   the reference uses framer-motion (per-frame inline opacity/transform
+   writes, easeOut cubic-bezier(0,0,0.58,1), per-element params); the
+   `Reveal` component re-implements it via `src/lib/motion.ts`. Never add
+   `transition-*` classes to entrance wrappers — on children that carry
+   their own `transition-colors` the cascade SNAPS the entrance and
+   corrupts the child's hover timing (the Session-8 F1 bug). The
+   per-element parameter table lives in `docs/remediation-plan-session8.md`.
+22. **v4 ships THREE more engine shifts beyond oklab** (Sessions 7–8): the
+   tracking scale (the live's config doubles the two widest steps —
+   `@theme --tracking-*`), the shadow-scale rename (v3 shadow-sm → v4
+   shadow-xs — pinned via `--shadow-sm`), and the line-height cascade
+   (v3's responsive `text-*` beats `leading-*`; v4's `--tw-leading` always
+   wins — pinned per-element via `--tw-leading: initial`). Survey the
+   ENGINE layer (computed values + the emitted rules), not just class
+   strings — every one of these hid from class-string parity for 6+
+   sessions.
 
 ## Architecture invariants
 

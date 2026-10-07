@@ -76,7 +76,9 @@
   --color-card: #0f0f0f; /* hsl(0 0% 6%) */
   --color-card-foreground: #ffffff;
   --color-muted: #161616;
-  --color-muted-foreground: #a1a1aa;
+  /* The reference's SPA token: hsl(0 0% 64%) = #a3a3a3 (neutral-400,
+     measured on its FAQ chevron — Session 8 F6; was #a1a1aa zinc-400). */
+  --color-muted-foreground: #a3a3a3;
   --color-border: #242424; /* hsl(0 0% 14%) */
   --color-input: #242424;
   --color-destructive: #ef4444;
@@ -100,9 +102,15 @@
   --tracking-wider: 0.1em;
   --tracking-widest: 0.2em;
 
+  /* Tailwind v4 renamed the small shadows: v3's shadow-sm became v4's
+     shadow-xs, so a v3-era `shadow-sm` class renders ONE STEP BIGGER under
+     v4 (the login Sign in button: v3 0 1px 2px 0.05 vs v4 0 1px 3px 0.1 —
+     Session 8 F2). Pin v3's value; shadow-lg/xl are unchanged v3->v4. */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
   /* Animations (measured keyframe names from the reference bundle) */
   --animate-marquee: marquee 40s linear infinite;
-  --animate-float: float 6s ease-in-out infinite;
+  --animate-float: float 4s ease-in-out infinite;
   --animate-pulse-glow: pulse-glow 2.4s ease-in-out infinite;
   --animate-gradient-shift: gradientShift 6s ease-in-out infinite;
   --animate-organic-gradient: organic-gradient 14s ease-in-out infinite;
@@ -117,6 +125,19 @@
      sets the var from its own content height on mount). */
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
+}
+
+/* v4's transition-colors utility carries NINE properties (it adds
+   outline-color + the three --tw-gradient-* vars); the reference's v3
+   bundle emits SIX (measured on every transition-colors element — Session
+   8 F3). The property list is HARDCODED in v4's utility (no theme key),
+   so the fix is a same-layer override that wins the cascade by order.
+   Rendered effect: focus outline-color snaps instead of fading, and
+   gradient-var changes never animate — exactly the live's behavior. */
+@layer utilities {
+  .transition-colors {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  }
 }
 
 /* Serif accents (client wordmarks) — inline so the next/font variable
@@ -337,17 +358,49 @@
   animation-play-state: paused;
 }
 
+/* The reference's FOOTER logo petals use DIFFERENT class names than its
+   navbar petals (anim-flogo-* vs anim-logo-* — both live in its css with
+   byte-identical keyframes; Session 8 F8). These aliases give the footer
+   instance the live's verbatim class strings. */
+/* Byte-identical choreography to the logo-* set (the live's css carries
+   both under different names — same translate values, same 3s timing,
+   same per-petal delays). */
+@keyframes flogo-ns {
+  0%, 40%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(3px, -3px); }
+}
+@keyframes flogo-sn {
+  0%, 40%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-3px, 3px); }
+}
+@keyframes flogo-ew {
+  0%, 40%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(3px, 3px); }
+}
+@keyframes flogo-we {
+  0%, 40%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-3px, -3px); }
+}
+.anim-flogo-ns { animation: flogo-ns 3s ease-in-out infinite; }
+.anim-flogo-sn { animation: flogo-sn 3s ease-in-out infinite; }
+.anim-flogo-ew { animation: flogo-ew 3s ease-in-out infinite 3s; }
+.anim-flogo-we { animation: flogo-we 3s ease-in-out infinite 3s; }
+
+/* The reference's floating chevron: framer y:[0,-15,0], duration 4s,
+   repeat infinity, easeInOut (measured mid-oscillation at -14.7px;
+   Session 8) — the old 6s/-12px keyframes were off on both axes. The
+   per-segment ease-in-out matches framer's per-keyframe easing. */
 @keyframes float {
   0%,
   100% {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-12px);
+    transform: translateY(-15px);
   }
 }
 .animate-float {
-  animation: float 6s ease-in-out infinite;
+  animation: float 4s ease-in-out infinite;
 }
 
 @keyframes pulse-glow {

@@ -12,8 +12,9 @@ import { expect, test } from "@playwright/test";
  *     (bg-white/30 dark mode, bg-black/15 light mode) + solid text; the
  *     inactive links stay 60%.
  *  3. Adaptive light/dark: while the nav band (0–72px) overlaps the white
- *     features section, the logo fill, link text, Log In button and the
- *     center pill swap to black variants; the Get Started pill stays
+ *     features section, the logo (a React-driven path fill attribute),
+ *     link text, Log In button and the center pill swap to black
+ *     variants; the Get Started pill stays
  *     white/black.
  */
 
@@ -72,7 +73,7 @@ test.describe("navbar scroll behavior (Session 4)", () => {
     await page.waitForTimeout(450);
     const light = await page.evaluate(() => {
       const nav = document.querySelector("nav")!;
-      const logo = nav.querySelector("a svg")!;
+      const logo = nav.querySelector("a svg path")!;
       const links = [...nav.querySelectorAll('a[href^="#"]')];
       const active = links.find((a) => a.textContent!.trim().startsWith("Features"))!;
       const inactive = links.find((a) => a.textContent!.trim().startsWith("Pricing"))!;
@@ -82,7 +83,7 @@ test.describe("navbar scroll behavior (Session 4)", () => {
         b.textContent!.trim() === "Log In"
       )!;
       return {
-        logoColor: getComputedStyle(logo).color,
+        logoColor: getComputedStyle(logo).fill,
         activeColor: getComputedStyle(active).color,
         activeBg: getComputedStyle(active).backgroundColor,
         inactiveColor: getComputedStyle(inactive).color,
@@ -92,6 +93,11 @@ test.describe("navbar scroll behavior (Session 4)", () => {
     });
     // Light mode: black logo/login, black/10 pill; the ACTIVE link is solid
     // black on a black/15 pill, the inactive ones sit at black/60.
+    // Session 8 logo re-audit: the live's swap is a REACT-DRIVEN PATH FILL
+    // attribute (fill="white" dark / fill="black" light) — the anchor stays
+    // bare and its color stays white; the SVG's .color read the old spec
+    // used diverges from the live's mechanism. The pin now reads the first
+    // PATH's computed fill (the rendered truth, pixel-verified).
     expect(light.logoColor).toBe("rgb(0, 0, 0)");
     expect(light.activeColor).toBe("rgb(0, 0, 0)");
     expectAlphaColor(light.activeBg, "black", 0.15);

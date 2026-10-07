@@ -10,6 +10,7 @@ import {
   Workflow,
   Zap,
 } from "lucide-react";
+import type { CSSProperties } from "react";
 import { Reveal } from "@/components/site/reveal";
 
 /**
@@ -78,7 +79,7 @@ export function Features() {
       className="relative py-16 md:py-28 bg-gradient-to-b from-white via-gray-50 to-white"
     >
       <div className="max-w-7xl mx-auto px-6">
-        <Reveal className="text-center mb-16" y={20}>
+        <Reveal className="text-center mb-16" y={20} duration={600}>
           <span className="text-xs tracking-widest uppercase text-violet font-body mb-4 block">
             Features
           </span>
@@ -119,7 +120,13 @@ export function Features() {
               <Zap className="w-3 h-3 text-violet" />
               <span className="text-xs text-violet font-medium tracking-wider">{tab.badge}</span>
             </div>
-            <h3 className="font-heading text-2xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
+            <h3
+              className="font-heading text-2xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight"
+              /* The --tw-leading pin reproduces the reference's v3 cascade
+                 (md:text-4xl's 40px line-height beats the coexisting
+                 leading-tight — v4 inverts it; Session 8 F4). */
+              style={{ "--tw-leading": "initial" } as CSSProperties}
+            >
               {tab.heading}
             </h3>
             <p className="text-gray-700 font-body leading-relaxed mb-8">{tab.copy}</p>

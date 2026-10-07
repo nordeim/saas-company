@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import type { CSSProperties } from "react";
 import { Reveal } from "@/components/site/reveal";
 
 /**
@@ -9,17 +10,26 @@ export function CtaSection() {
   return (
     <section className="relative py-16 md:py-28 overflow-hidden">
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-        <Reveal y={30}>
+        {/* The live animates ONLY the badge (y=30 / 800ms) — the H2, the
+            copy and the buttons render statically (Session 8 F1-EXTRA). */}
+        <Reveal y={30} duration={800}>
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-violet/20 bg-violet/5 mb-8">
             <div className="w-2 h-2 rounded-full bg-violet animate-pulse" />
             <span className="text-xs text-violet tracking-wider font-body uppercase">
               Ready to Transform Your Workflow?
             </span>
           </div>
-          <h2 className="font-heading text-4xl md:text-6xl font-bold text-white tracking-normal mb-6 leading-tight">
-            Stop Managing. <br />
-            <span className="animated-gradient-text">Start Automating.</span>
-          </h2>
+        </Reveal>
+        <h2
+          className="font-heading text-4xl md:text-6xl font-bold text-white tracking-normal mb-6 leading-tight"
+          /* The --tw-leading pin reproduces the reference's v3 cascade
+             (md:text-6xl's 60px line-height beats the coexisting
+             leading-tight — v4 inverts it; Session 8 F4). */
+          style={{ "--tw-leading": "initial" } as CSSProperties}
+        >
+          Stop Managing. <br />
+          <span className="animated-gradient-text">Start Automating.</span>
+        </h2>
           <p className="text-base text-white/50 font-body max-w-xl mx-auto mb-10">
             Your competitors are already automating. Save 15+ hours weekly. Start free now—no
             credit card needed.
@@ -33,7 +43,6 @@ export function CtaSection() {
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
           </div>
-        </Reveal>
       </div>
     </section>
   );

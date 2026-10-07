@@ -116,10 +116,13 @@ export function Navbar() {
       <div className="px-6 py-4 flex items-center justify-between relative">
         <Link
           href="/"
-          className={`flex items-center transition-colors duration-300 ${light ? "text-black" : "text-white"}`}
+          /* The live's logo anchor is bare "flex items-center" — no
+             transition classes, no text color (it inherits; the light-mode
+             swap rides on the SVG's text-current instead). Session 8 F7. */
+          className="flex items-center"
           aria-label="NovaAI home"
         >
-          <LogoWordmark className="text-current" />
+          <LogoWordmark className="text-current" fill={light ? "black" : "white"} />
         </Link>
 
         {/* Center pill nav (md+) — bg-white/10 dark / bg-black/10 light */}
@@ -156,9 +159,7 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-3">
           <button
             onClick={goToLogin}
-            className={`px-5 py-2.5 transition-colors text-sm font-medium tracking-wide bg-transparent border-none cursor-pointer ${
-              light ? "text-black/80 hover:text-black" : "text-white/80 hover:text-white"
-            }`}
+            className={`px-5 py-2.5 ${light ? "text-black/80 hover:text-black" : "text-white/80 hover:text-white"} transition-colors text-sm font-medium tracking-wide bg-transparent border-none cursor-pointer`}
           >
             Log In
           </button>

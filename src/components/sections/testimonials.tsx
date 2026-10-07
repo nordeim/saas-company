@@ -43,7 +43,7 @@ export function Testimonials() {
   return (
     <section id="testimonials" className="relative py-16 md:py-28 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 mb-16">
-        <Reveal className="text-center" y={20}>
+        <Reveal className="text-center" y={20} duration={600}>
           <span className="text-xs tracking-widest uppercase text-violet font-body mb-4 block">
             Testimonials
           </span>
@@ -69,9 +69,12 @@ export function Testimonials() {
             stretched scrollWidth by 48px — Session 5 finding). */}
         <div className="flex gap-6 overflow-x-auto overflow-y-hidden scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] cursor-grab">
           {cards.map((t, i) => (
-            <div
+            <Reveal
               key={`${t.name}-${i}`}
               className="flex-shrink-0 w-[280px] md:w-[380px] p-6 rounded-2xl border border-violet/40 bg-transparent hover:border-violet/60 transition-colors duration-500"
+              y={40}
+              delay={(i % 8) * 100}
+              duration={600}
             >
               {/* Star rating — role="img" makes the aria-label VALID ARIA
                   (axe: aria-label is prohibited on role-less non-interactive
@@ -96,7 +99,7 @@ export function Testimonials() {
                   <div className="text-sm font-medium text-white">{t.name}</div>
                 </div>
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </Reveal>
