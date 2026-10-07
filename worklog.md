@@ -229,3 +229,17 @@ Stage Summary:
 - Gate re-locked at 215 checks (80 unit + 97 e2e + 38 smoke); VLM 99/99/98; word parity 1.0000 everywhere.
 - Root causes documented for posterity: diff the class-string layer (computed-style spot probes only answer the questions you thought to ask); hover parity claims need real pointer events (agent-browser mouse move can report false negatives); v3 transform:matrix vs v4 translate render the same 2px through different properties.
 - Next: commit + SSH push (Task 13).
+
+---
+Task ID: 13
+Agent: Super Z (main, session 7)
+Task: Final commit + SSH push of the Session 6 remediation
+
+Work Log:
+- Operator key materialized to a 0600 file in /tmp (never inside the repo); fingerprint verified (ssh-ed25519, SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — matches the Session 1/2/3/4/5 records).
+- Paramiko shim on PATH (workspace bin/ssh, outside the checkout per runbook rule 5). Wrapper dry-run: auth OK, remote main @ 0503ad9 (the operator's session-log commit), fast-forward 0503ad9..bb8d38f accepted.
+- Real push via docs/ssh_git_wrapper_v3.py --remote git@github.com:nordeim/saas-company.git: wrapper verified remote refs/heads/main @ bb8d38f == local HEAD, tracking ref synced. Operator key shredded; working tree clean.
+
+Stage Summary:
+- Commit bb8d38f pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 40 files changed, +994/-57: the seven Session-6 parity fixes (the four per-person avatar gradients, the Enterprise Custom 30px DIV, the un-swapped edge fades, the full-white AI-suggestion paragraph, the per-route head pattern + working og-image + manifest, the bare body, the three class-string cleanups), 23 new checks (gate: 215 = 80 unit + 97 e2e + 38 smoke), the remediation plan + session log, 17 refreshed screenshots, docs + SKILL v2.5.0.
+- Session 6 complete.
