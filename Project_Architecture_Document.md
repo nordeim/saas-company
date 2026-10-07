@@ -9,6 +9,33 @@
 
 #### Revision Block — v1.0
 
+- `[NOTE]` **Session 4 remediation (2026-10-07)** — a behavior-level re-audit
+  (deep computed-style probes of 13 previously-unprobed surface groups + the
+  first scroll-state navbar survey — Sessions 1–3 only ever inspected the
+  nav at scrollY 0) found and fixed six clone-side gaps (see
+  `docs/remediation-plan-session4.md` F1–F6 → R1–R8): the login route now
+  swaps the body theme exactly like the reference's own /login css bundle
+  (white bg, zinc-950 text, system font — typed input text had rendered
+  near-invisible WHITE on the light slate inputs through the dark theme's
+  inherited `--color-card-foreground`); the pricing model corrected to the
+  reference's truth (**the toggle defaults to ANNUAL** — Pro $49/mo monthly,
+  $39/mo annual; Session 1 had read the $39 annual price without checking
+  which pill was active; the caption is plain `/month` in both states); the
+  navbar rebuilt as **section-aware** (always `bg-transparent` — the
+  scrolled-glass bar was an invention that survived three sessions because
+  full-page screenshots only draw the nav over the dark hero; scroll-spy
+  pills; light-mode chrome swap over the white features section); the
+  dashboard mockup made **static** like the reference (zero animations;
+  solid purple list dots — the unlayered `.skeleton-wave` class had
+  OVERRIDDEN the layered `bg-primary/80` utility); the FAQ accordion now
+  animates with the reference's Radix keyframes (0.2s ease-out height)
+  and **unmounts closed panels** — closing the long-standing FAQ
+  word-parity 0.6052 DOM artifact (word parity is now **1.0000 on every
+  page**); and `apple-mobile-web-app-status-bar-style: black` emitted.
+  Also logged: the colon-spelled arbitrary aspect ratio build break (use
+  the slash form) and the turbopack CSS-transform cache that masked the
+  fix. Gate re-locked at **179 checks** (73 unit + 68 e2e incl. the new
+  navbar-behavior/login-theme/mockup/accordion suites + 38 smoke).
 - `[NOTE]` **Session 3 remediation (2026-10-07)** — a token-level re-measurement
   against the live's compiled CSS (`/assets/index-*.css`) found the brand
   tokens had been read from the reference's UNMOUNTED `.dark` block in
@@ -483,6 +510,12 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D12 | Body typeface | "Vend Sans" (the Display cut) for EVERY element | `--font-body` now resolves the Display cut first, like the live (the Text cut stays as fallback) | Parity (Session 3) |
 | D13 | Scroll feel | Lenis 1.3.23, defaults, `html.lenis` | lenis 1.3.x client wrapper (`src/components/site/smooth-scroll.tsx`), reduced-motion guarded | Parity (Session 3) |
 | D14 | Page titles / 404 / quotes / noscript | `X \| SAAS Company` titles; 404 quotes the pathname; straight quotes; login-only noscript + apple-web-app-title | all matched (Session 3, pinned by `tests/e2e/brand-parity.spec.ts`) | Parity (Session 3) |
+| D15 | Login route body theme | /login loads its OWN css bundle: body white + zinc-950 + the system font stack; light `:root` vars | route-scoped `<style>` swaps the body theme (+ restores the reference's v3-style space-y gap inside forms — v4's margin-bottom is lost on inline labels); unmounts with the page | Parity (Session 4) |
+| D16 | Pricing model | toggle DEFAULTS TO ANNUAL; Pro $49/mo monthly, $39/mo annual; caption `/month` in both states | corrected domain (`pricing.ts` monthlyPrice 49) + component default `annual` + no-whitespace Annual pill (161px like the live) | Parity (Session 4) |
+| D17 | Navbar scroll behavior | `bg-transparent` at every depth; scroll-spy pills (white/30 dark, black/15 light); light-mode chrome over white sections | section-aware navbar (scroll-spy at the ⅔ viewport line, `[data-nav-theme="light"]` overlap detection); the scrolled-glass bar removed as an invention | Parity (Session 4) |
+| D18 | FAQ accordion DOM | Radix: `data-[state=*]:animate-accordion-*` keyframes; closed panels UNMOUNTED | measured keyframes in `@theme` + unmount-after-close — closes the old 0.6052 word-parity artifact | Parity (Session 4) |
+| D19 | Pro-card micro-spacing | card 540px at 1440 (features rows 20px) | card ~567px (rows 21-22px) — self-hosted font-cut sub-pixel accumulation; same font first-face, line-heights, and colors (D6-class engine artifact) | **Deviation** (accepted, Session 4) |
+| D20 | Mockup bar heights | randomized per load (e.g. 45.93%) | deterministic measured snapshot (42…95%) | Parity (Session 4, documented) |
 
 ### 5.5 Tailwind v4 Trap Log (enforced here)
 
@@ -491,6 +524,9 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 3. **`@theme` var() chains can drop** — the serif token is declared in `@theme inline` so the next/font variable survives.
 4. **Alpha colors serialize through `oklab()`** — computed strings differ from v3-era rgba; rendering does not (D6).
 5. **Auto content detection ignores nothing here** (single app, `src/**` scanned) — no `@source` directives needed.
+6. **Arbitrary aspect ratios use the SLASH form** — the colon spelling of the ratio inside `aspect-[…]` emits the invalid `aspect-ratio: 16:9` and postcss fails the whole build with an opaque `Missed semicolon` at a flattened column; turbopack then CACHES the broken transform (Session 4 — `rm -rf .next` if the error outlives the fix), and Tailwind's scanner reads candidates from MARKDOWN too (docs/ is `@source not`-ed in globals.css).
+7. **Unlayered custom CSS beats layered utilities** — the old unlayered `.skeleton-wave` background overrode the layered `bg-primary/80` on the mockup dots (Session 4 F4); keep custom classes out of the utility cascade or scope them tightly.
+8. **v4 `space-y-*` puts margin on the PRECEDING sibling** (`:not(:last-child)` margin-bottom) — vertical margins are lost on INLINE children (the login form's labels); the reference's compiled v3-style puts it on the following sibling. The login route style restores the measured pattern inside forms.
 
 ---
 

@@ -32,7 +32,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (38) | 73 unit + 54 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (38) | 73 unit + 68 browser checks |
 
 ## Foundational Principles
 
@@ -146,12 +146,28 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run test` → 73/73 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 38/38 PASS
-- [ ] `npm run test:e2e` → 41/41 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 68/68 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 4 (2026-10-07) remediation** — see
+  `docs/remediation-plan-session4.md`: the login route now swaps the body
+  theme like the reference's own login css bundle (white bg, zinc-950 text,
+  system font — typed input text is dark and visible again, and the
+  reference's v3-style space-y gap is restored inside the form); the pricing
+  model corrected to the reference's truth (toggle defaults to ANNUAL; Pro
+  $49/mo monthly, $39/mo annual; the caption is plain "/month" in both
+  states); the navbar rebuilt as section-aware (always transparent,
+  scroll-spy pills, light-mode swap over the white features section — the
+  scrolled-glass bar was an invention); the dashboard mockup made static
+  like the reference (solid purple dots — the unlayered `.skeleton-wave`
+  had overridden `bg-primary/80`); the FAQ accordion animates with the
+  reference's Radix keyframes and unmounts closed panels (word parity
+  1.0000 on every page now); `apple-mobile-web-app-status-bar-style: black`.
+  Gate: 179 checks.
 
 - **Session 3 (2026-10-07) remediation** — see
   `docs/remediation-plan-session3.md`: the brand tokens restored to the

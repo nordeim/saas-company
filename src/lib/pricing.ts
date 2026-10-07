@@ -35,7 +35,9 @@ export const PLANS: Plan[] = [
     id: "pro",
     name: "Pro",
     tagline: "For growing teams that need powerful automation.",
-    monthlyPrice: 39,
+    // The live's MONTHLY list price (Session 4 audit: the toggle defaults
+    // to Annual — $39 is the annual price, 49 * 0.8 = 39.2 → 39).
+    monthlyPrice: 49,
     features: [
       "Unlimited workflows",
       "25,000 AI operations/mo",
@@ -86,6 +88,8 @@ export function priceCaptionFor(plan: Plan, period: BillingPeriod): string {
   return `$${price}`;
 }
 
-export function periodCaption(period: BillingPeriod): string {
-  return period === "annual" ? "/month, billed annually" : "/month";
+/** What the checkout line says under each period — the live renders
+ * plain "/month" in BOTH states (no "billed annually" suffix anywhere). */
+export function periodCaption(_period: BillingPeriod): string {
+  return "/month";
 }

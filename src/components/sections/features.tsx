@@ -74,6 +74,7 @@ export function Features() {
   return (
     <section
       id="features"
+      data-nav-theme="light"
       className="relative py-16 md:py-28 bg-gradient-to-b from-white via-gray-50 to-white"
     >
       <div className="max-w-7xl mx-auto px-6">

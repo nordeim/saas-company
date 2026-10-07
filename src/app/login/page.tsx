@@ -82,6 +82,33 @@ function LoginCard() {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
+      {/* The reference's login route swaps the BODY theme: its /login loads
+          its own css bundle (static/index-*.css) whose :root is the LIGHT
+          theme — body bg white, text zinc-950 (hsl 240 10% 3.9%)), font the
+          Tailwind default system stack (measured on the live; every dark
+          route keeps the global dark body). This route-scoped <style> mirrors
+          that swap — including the light --color-* vars the card inherits
+          through (text-card-foreground → zinc-950, so typed input text is
+          dark and visible) — and unmounts with the page, restoring the dark
+          theme on navigation. */}
+      <style>{`
+        body {
+          background-color: #fff;
+          color: #09090b;
+          font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+          --color-background: #ffffff;
+          --color-foreground: #09090b;
+          --color-card-foreground: #09090b;
+        }
+        /* The reference's compiled space-y puts the gap on the FOLLOWING
+           sibling (v3-style margin-top). Tailwind v4's margin-bottom on the
+           preceding sibling is lost on the form's INLINE labels (vertical
+           margins don't apply to inline boxes), tightening each label→input
+           gap by ~4px. Restore the measured pattern inside this route's
+           forms (block children render identically either way). */
+        form .space-y-1\\.5 > :not(:last-child) { margin-bottom: 0; }
+        form .space-y-1\\.5 > :not(:first-child) { margin-top: 0.375rem; }
+      `}</style>
       {/* The reference's login shell carries the Vite noscript fallback as a
           direct body child (the only route that does — Session 3 measurement).
           Invisible with JS enabled; closes the /login word-parity gap. */}

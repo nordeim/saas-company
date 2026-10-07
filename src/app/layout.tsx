@@ -33,6 +33,8 @@ export const metadata: Metadata = {
   description: DESCRIPTION,
   appleWebApp: {
     title: SITE_NAME,
+    // The reference emits the black status-bar style (Session 4 head audit).
+    statusBarStyle: "black",
   },
   openGraph: {
     title: SITE_NAME,

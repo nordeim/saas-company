@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Navbar } from "@/components/site/navbar";
 import { Footer } from "@/components/site/footer";
@@ -11,9 +11,35 @@ import { FAQ_ITEMS } from "@/lib/faq-content";
  * open, chevron that rotates) over the same py-28/pt-40 section frame.
  * Client view for /faq (the page itself is a server component so it can
  * export the reference's `FAQ | SAAS Company` title).
+ *
+ * Session 4 parity audit: the live uses the Radix/shadcn pattern — the
+ * panel carries data-state + `data-[state=open]:animate-accordion-down` /
+ * `data-[state=closed]:animate-accordion-up` (0.2s ease-out height
+ * keyframes against --radix-accordion-content-height), and CLOSED panels
+ * are UNMOUNTED (absent from the DOM — Radix unmounts closed content,
+ * which is why the live's collapsed answers never appear in its HTML).
  */
 export function FaqView() {
   const [open, setOpen] = useState<number | null>(null);
+  const [closing, setClosing] = useState<number | null>(null);
+  const timers = useRef<Array<ReturnType<typeof setTimeout>>>([]);
+
+  useEffect(() => () => timers.current.forEach(clearTimeout), []);
+
+  function toggle(i: number) {
+    if (open === i) {
+      // Keep the panel mounted with data-state=closed so the accordion-up
+      // animation runs, then unmount it like Radix does.
+      setClosing(i);
+      setOpen(null);
+      timers.current.push(
+        setTimeout(() => setClosing((c) => (c === i ? null : c)), 220)
+      );
+    } else {
+      setOpen(i);
+      setClosing(null);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
@@ -36,36 +62,48 @@ export function FaqView() {
             <div className="space-y-3" data-orientation="vertical">
               {FAQ_ITEMS.map((item, i) => {
                 const isOpen = open === i;
+                const mounted = isOpen || closing === i;
                 return (
                   <div
                     key={item.q}
                     data-state={isOpen ? "open" : "closed"}
-                    className={`border rounded-xl bg-white/[0.02] px-6 transition-colors ${
-                      isOpen ? "border-violet/40" : "border-white/15"
-                    }`}
+                    className="border border-white/15 rounded-xl bg-white/[0.02] px-6 data-[state=open]:border-violet/40 transition-colors"
                   >
                     <h3 className="flex">
                       <button
                         type="button"
+                        data-state={isOpen ? "open" : "closed"}
                         aria-expanded={isOpen}
                         aria-controls={`faq-panel-${i}`}
                         id={`faq-trigger-${i}`}
-                        onClick={() => setOpen(isOpen ? null : i)}
-                        className={`flex flex-1 items-center justify-between transition-all hover:underline text-left font-heading text-base font-medium text-white hover:text-white/90 py-5 [&[aria-expanded=true]>svg]:text-violet [&[aria-expanded=true]>svg]:rotate-180`}
+                        onClick={() => toggle(i)}
+                        className="flex flex-1 items-center justify-between transition-all hover:underline [&[data-state=open]>svg]:rotate-180 text-left font-heading text-base font-medium text-white hover:text-white/90 py-5 [&[data-state=open]>svg]:text-violet"
                       >
                         {item.q}
                         <ChevronDown className="h-4 w-4 shrink-0 text-white/50 transition-transform duration-200" />
                       </button>
                     </h3>
-                    <div
-                      id={`faq-panel-${i}`}
-                      role="region"
-                      aria-labelledby={`faq-trigger-${i}`}
-                      hidden={!isOpen}
-                      className="overflow-hidden text-sm"
-                    >
-                      <p className="pb-5 text-white/60 font-body leading-relaxed">{item.a}</p>
-                    </div>
+                    {mounted && (
+                      <div
+                        id={`faq-panel-${i}`}
+                        role="region"
+                        aria-labelledby={`faq-trigger-${i}`}
+                        data-state={isOpen ? "open" : "closed"}
+                        ref={(el) => {
+                          // Radix sets this var to the content height — the
+                          // keyframes animate against it.
+                          if (el) {
+                            el.style.setProperty(
+                              "--radix-accordion-content-height",
+                              `${el.scrollHeight}px`
+                            );
+                          }
+                        }}
+                        className="overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
+                      >
+                        <p className="pb-5 text-white/60 font-body leading-relaxed">{item.a}</p>
+                      </div>
+                    )}
                   </div>
                 );
               })}

@@ -1,12 +1,13 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.2.0 · **Last updated:** 2026-10-07 (Session 3 remediation)
+> **Version:** 2.3.0 · **Last updated:** 2026-10-07 (Session 4 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
 > `CLAUDE.md` (agent contract) · `Project_Architecture_Document.md` (source of
 > truth) · `docs/remediation-plan-session2.md` (Session 2) ·
-> `docs/remediation-plan-session3.md` (Session 3 — this revision's audit).
+> `docs/remediation-plan-session3.md` (Session 3) ·
+> `docs/remediation-plan-session4.md` (Session 4 — this revision's audit).
 
 ---
 
@@ -48,7 +49,7 @@ PAD's §5.4 ledger instead of silently picking a side.
 | Auth | Node `crypto` (scrypt + HMAC-SHA256) | Zero external auth services; timing-safe comparisons |
 | AI | z-ai-web-dev-sdk 0.0.x (server-only) | `src/lib/workflow.ts` fallback keeps the feature alive without it |
 | Fonts | Self-hosted Wix Madefor ("Vend Sans") + next/font (Playfair, DM Serif Display) | Byte-identical type rendering with the reference |
-| Tests | Vitest 5 (73) · Playwright 1.63 (54) · bash/curl smoke (38) | 165 checks; the local gate is the only gate (no hosted CI) |
+| Tests | Vitest 5 (73) · Playwright 1.63 (68) · bash/curl smoke (38) | 179 checks; the local gate is the only gate (no hosted CI) |
 | Smooth scroll | lenis 1.3.x | The reference's momentum scrolling (`window.lenis`); wrapper in `src/components/site/smooth-scroll.tsx` |
 
 Dependency policy: `package.json` carries `overrides` for
@@ -143,17 +144,24 @@ Load-bearing patterns:
 
 Chrome components (`src/components/site/`): `navbar.tsx` (fixed nav, glass
 pill at md+, the measured mobile burger dropdown — the highest-regression
-chrome, pinned by `tests/e2e/mobile-navigation.spec.ts`), `footer.tsx`
-(working newsletter form), `logo.tsx` (exact SVG wordmark + animated petals),
-`reveal.tsx` (IntersectionObserver entrances), `legal-page-view.tsx` (shared
-template: optional caption, per-section lists).
+chrome, pinned by `tests/e2e/mobile-navigation.spec.ts`; **section-aware**
+like the reference: scroll-spy pills + light-mode swap over
+`[data-nav-theme="light"]` sections, always `bg-transparent` — pinned by
+`tests/e2e/navbar-behavior.spec.ts`), `footer.tsx` (working newsletter
+form), `logo.tsx` (exact SVG wordmark + animated petals, `currentColor`
+fill so the light-mode swap is a class change), `reveal.tsx`
+(IntersectionObserver entrances), `legal-page-view.tsx` (shared template:
+optional caption, per-section lists), `faq-view.tsx` (the reference's Radix
+accordion pattern: measured keyframes + unmounted closed panels).
 
 Landing sections (`src/components/sections/`): hero (video + shimmer badge +
 gradient H1 + the scroll indicator), dashboard-preview (browser-chrome
-skeleton), logo-cloud (8 measured wordmarks incl. serif fonts + Gasparyan
+skeleton — STATIC like the reference, solid purple dots, no shimmer/grow
+animations), logo-cloud (8 measured wordmarks incl. serif fonts + Gasparyan
 svg), problem, features (three-tab card — per-tab content measured from the
-live DOM in Session 2), how-it-works, pricing (Monthly/Annual toggle, 20%
-discount), testimonials, cta.
+live DOM in Session 2), how-it-works, pricing (Monthly/Annual toggle —
+defaults to ANNUAL like the reference; Pro $49/mo monthly, $39/mo annual),
+testimonials, cta.
 
 ## §6. Domain Modules (the "hooks" of this codebase)
 
@@ -232,7 +240,7 @@ npm run typecheck     # tsc --noEmit         — exit 0
 npm run test          # 73/73
 env -u DATABASE_URL npm run build
 ./scripts/smoke-test.sh   # 38/38 (boots prod on :3200, own db/smoke.db)
-npm run test:e2e      # 54/54 (boots prod on :3100, own db/e2e.db)
+npm run test:e2e      # 68/68 (boots prod on :3100, own db/e2e.db)
 npm audit             # expect only the accepted braces advisory
 git status            # no .env, *.key, db/*.db, dev.log staged
 ```
@@ -241,7 +249,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–2)
+## §12. Lessons Learnt (Sessions 1–4)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -286,6 +294,38 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     matched the "Sign in to continue" subtitle (never the button) and
     silently no-opped the scripted login; role-based clicks
     (`find role button click --name "Sign in"`) are the reliable form.
+12. **Survey interactive chrome in its INTERACTIVE states, not just at
+    rest** (Session 4) — the navbar's scrolled-glass bar survived three
+    sessions of audits because full-page screenshots only ever draw the
+    nav at scrollY 0 over the dark hero. Scroll the page and re-probe
+    computed styles at multiple depths before calling chrome done; the
+    reference's nav turned out to be section-aware (scroll-spy + a
+    light-mode swap over the white features section) with NO scrolled
+    background at all.
+13. **Read the state that's ACTIVE, not the one that's visible** (Session
+    4) — the pricing toggle defaults to ANNUAL on the live; Session 1 read
+    "$39" off the page without checking which pill was active and shipped
+    the wrong monthly price for three sessions. When a control has state,
+    drive it through every state and record which one is the default.
+14. **Unlayered custom CSS beats layered utilities** (Session 4) — the
+    unlayered `.skeleton-wave` background silently overrode the layered
+    `bg-primary/80` utility on the mockup dots, rendering them as faint
+    white waves instead of solid purple. When a class's computed style
+    contradicts its utility list, check the layer cascade.
+15. **Arbitrary aspect ratios use the SLASH form** (Session 4) — the colon
+    spelling of the ratio emits the invalid `aspect-ratio: 16:9` and
+    postcss fails the whole build with an opaque `Missed semicolon` at a
+    flattened column. Two aggravators: turbopack CACHES the broken CSS
+    transform (`rm -rf .next` when a CSS error outlives its fix), and
+    Tailwind's scanner reads class candidates from MARKDOWN — documenting
+    the colon spelling in a .md breaks the build exactly like using it in
+    a component (docs/ is `@source not`-ed in globals.css).
+16. **v4 `space-y-*` margins vanish on inline children** (Session 4) — v4
+    puts the gap on the PRECEDING sibling (`:not(:last-child)`
+    margin-bottom), and vertical margins don't apply to inline boxes: the
+    login form's inline labels lost ~4px of gap per field. The reference's
+    compiled v3-style (margin-top on the following sibling) renders
+    correctly — restored via a scoped rule in the login route style.
 
 ## §13. Pitfalls to Avoid
 
@@ -414,12 +454,14 @@ type BillingPeriod = "monthly" | "annual";
 ## §21. Appendices
 
 - **Audit history:** Session 2's full findings/fixes ledger —
-  `docs/remediation-plan-session2.md` (F1–F10, R1–R11).
+  `docs/remediation-plan-session2.md` (F1–F10, R1–R11); Session 3 —
+  `docs/remediation-plan-session3.md` (F1–F11, R1–R10); Session 4 —
+  `docs/remediation-plan-session4.md` (F1–F6, R1–R8).
 - **Push runbook:** `docs/how-to-git-push-using-ssh-wrapper_SKILL.md` (the
   paramiko ssh shim lives at `docs/ssh.py` for sandboxes without OpenSSH).
 - **Tailwind v4 traps:** `docs/Tailwind-V4-Validation-Report.md` + PAD §5.5.
 - **Deployment:** `docs/DEPLOYMENT.md`.
-- **Evidence base:** Session 2 parity artifacts under
-  `/home/z/my-project/session2-ref/` (outside the repo).
+- **Evidence base:** Session 2/3/4 parity artifacts under
+  `/home/z/my-project/session{2,3,4}-ref/` (outside the repo).
 - **Quick reference:** demo login `demo@novaai.app` / `Demo1234!`; ports —
   dev 3000, smoke 3200, e2e 3100; the gate order is §11.

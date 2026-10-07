@@ -193,3 +193,77 @@ test.describe("html parity extras (Session 3)", () => {
     await expect(meta).toHaveAttribute("content", "SAAS Company");
   });
 });
+
+test.describe("login route theme + head parity (Session 4)", () => {
+  // The live's /login loads its OWN css bundle (static/index-*.css) whose
+  // :root is the LIGHT theme: --background 0 0% 100%, --foreground
+  // 240 10% 3.9% (zinc-950), and its body renders the Tailwind default
+  // system font stack — measured on the live: bg rgb(255,255,255), color
+  // rgb(9,9,11), font "ui-sans-serif, system-ui, …". The clone's /login
+  // must swap the body theme the same way (dark theme stays on every
+  // other route).
+  test("login swaps the body to the reference's light theme + system font", async ({ page }) => {
+    await page.goto("/login");
+    await expect
+      .poll(() => page.evaluate(() => getComputedStyle(document.body).backgroundColor))
+      .toBe("rgb(255, 255, 255)");
+    await expect
+      .poll(() => page.evaluate(() => getComputedStyle(document.body).color))
+      .toBe("rgb(9, 9, 11)");
+    const loginFont = await page.evaluate(() => getComputedStyle(document.body).fontFamily);
+    // The first face is what renders — the live resolves the system stack
+    // on /login (NOT Vend Sans; that's the landing's font).
+    expect(loginFont.split(",")[0].trim().replace(/["']/g, "")).toBe("ui-sans-serif");
+  });
+
+  test("login input text is dark (visible) like the reference", async ({ page }) => {
+    // The reference's inputs inherit zinc-950 through the card — on the
+    // clone they used to inherit the dark theme's white through
+    // --color-card-foreground, rendering typed text near-invisible on the
+    // light slate inputs.
+    await page.goto("/login");
+    const inputColor = await page.evaluate(
+      () => getComputedStyle(document.querySelector('input[type="email"]')!).color
+    );
+    expect(inputColor).toBe("rgb(9, 9, 11)");
+  });
+
+  test("login card spacing matches the reference (inline-label space-y)", async ({ page }) => {
+    // The live's compiled space-y-1.5 puts the gap on the FOLLOWING sibling
+    // (v3-style margin-top) — measured label→input gap 10px, card 746px at
+    // 1440×900. v4's margin-bottom-on-preceding is lost on inline labels,
+    // which had tightened the card by 12px (the route style restores it).
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/login");
+    const m = await page.evaluate(() => {
+      const label = document.querySelector('label[for="email"]')!;
+      const input = document.querySelector('input[type="email"]')!;
+      const card = document.querySelector("main > div > div")!;
+      const lr = label.getBoundingClientRect();
+      const ir = input.getBoundingClientRect();
+      return {
+        gap: ir.top - (lr.top + lr.height),
+        cardH: card.getBoundingClientRect().height,
+      };
+    });
+    expect(Math.round(m.gap)).toBe(10);
+    expect(Math.round(m.cardH)).toBeGreaterThanOrEqual(742);
+    expect(Math.round(m.cardH)).toBeLessThanOrEqual(750);
+  });
+
+  test("the dark routes keep the dark body theme (regression guard)", async ({ page }) => {
+    for (const path of ["/", "/faq"]) {
+      await page.goto(path);
+      const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+      expect(bg).toBe("rgb(0, 0, 0)");
+      const font = await page.evaluate(() => getComputedStyle(document.body).fontFamily);
+      expect(font.split(",")[0].trim().replace(/["']/g, "")).toBe("Vend Sans");
+    }
+  });
+
+  test("emits the reference's apple-mobile-web-app-status-bar-style", async ({ page }) => {
+    await page.goto("/");
+    const meta = page.locator('meta[name="apple-mobile-web-app-status-bar-style"]');
+    await expect(meta).toHaveAttribute("content", "black");
+  });
+});

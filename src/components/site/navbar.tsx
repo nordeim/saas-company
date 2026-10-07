@@ -1,16 +1,27 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Menu, X } from "lucide-react";
 import { LogoWordmark } from "./logo";
 
 /**
- * Fixed site navigation — mirrors the reference: transparent over the hero,
- * glass pill center nav on md+, LOG IN text button + white Get Started pill,
- * and a burger dropdown (bg-black/95 backdrop-blur, 44px rows) below md.
- * The pill gains the glass background once the page scrolls past 24px.
+ * Fixed site navigation — mirrors the reference (Session 4 scroll audit):
+ * transparent over the hero, glass pill center nav on md+, LOG IN text
+ * button + white Get Started pill, and a burger dropdown (bg-black/95
+ * backdrop-blur, 44px rows) below md.
+ *
+ * Section-aware chrome, measured on the live across scrollY 0→6000:
+ * - The nav NEVER gains a background (bg-transparent at every depth — the
+ *   old scrolled-glass bar was an invention).
+ * - Scroll-spy: the link of the current section gets a pill (bg-white/30
+ *   dark / bg-black/15 light) + solid text — the last section whose top
+ *   passed the ~2/3 viewport line (sections without a link keep the
+ *   previous highlight).
+ * - Light mode while the nav band (top 72px) overlaps a
+ *   [data-nav-theme="light"] section (the white features section): logo,
+ *   links, Log In and the pill swap to black variants.
  */
 
 export const NAV_LINKS: Array<{ label: string; href: string }> = [
@@ -21,16 +32,46 @@ export const NAV_LINKS: Array<{ label: string; href: string }> = [
   { label: "FAQ", href: "/faq" },
 ];
 
+const SPY_SECTION_IDS = ["features", "how-it-works", "pricing", "testimonials"];
+
 export function Navbar() {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [light, setLight] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const y = window.scrollY;
+      // Scroll-spy: last section whose top passed the ~2/3 viewport line.
+      const line = y + window.innerHeight * (2 / 3);
+      let current: string | null = null;
+      for (const id of SPY_SECTION_IDS) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top + y <= line) current = id;
+      }
+      setActiveId(current);
+      // Light mode while the nav band overlaps a light-themed section.
+      let isLight = false;
+      for (const el of document.querySelectorAll<HTMLElement>("[data-nav-theme='light']")) {
+        const r = el.getBoundingClientRect();
+        if (r.top < 72 && r.bottom > 0) isLight = true;
+      }
+      setLight(isLight);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, []);
 
   // Close the mobile menu on Escape and lock body scroll while open.
@@ -53,34 +94,55 @@ export function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "bg-black/80 backdrop-blur-xl border-b border-white/5" : "bg-transparent"
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-transparent"
       aria-label="Main navigation"
     >
       <div className="px-6 py-4 flex items-center justify-between relative">
-        <Link href="/" className="flex items-center" aria-label="NovaAI home">
-          <LogoWordmark className="text-white" />
+        <Link
+          href="/"
+          className={`flex items-center transition-colors duration-300 ${light ? "text-black" : "text-white"}`}
+          aria-label="NovaAI home"
+        >
+          <LogoWordmark className="text-current" />
         </Link>
 
-        {/* Center pill nav (md+) */}
-        <div className="hidden md:flex items-center gap-1 px-1 py-1 rounded-full backdrop-blur-md absolute left-1/2 -translate-x-1/2 transition-colors duration-300 bg-white/10">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className="px-4 py-2 text-sm transition-colors duration-300 rounded-full tracking-wide font-body text-white/60 hover:text-white hover:bg-white/5"
-            >
-              {link.label}
-            </Link>
-          ))}
+        {/* Center pill nav (md+) — bg-white/10 dark / bg-black/10 light */}
+        <div
+          className={`hidden md:flex items-center gap-1 px-1 py-1 rounded-full backdrop-blur-md absolute left-1/2 -translate-x-1/2 transition-colors duration-300 ${
+            light ? "bg-black/10" : "bg-white/10"
+          }`}
+        >
+          {NAV_LINKS.map((link) => {
+            const active = link.href === `#${activeId}`;
+            const base =
+              "px-4 py-2 text-sm transition-colors duration-300 rounded-full tracking-wide font-body";
+            const tone = light
+              ? active
+                ? "text-black bg-black/15"
+                : "text-black/60 hover:text-black hover:bg-black/5"
+              : active
+                ? "text-white bg-white/30"
+                : "text-white/60 hover:text-white hover:bg-white/5";
+            return (
+              <Link
+                key={link.label}
+                href={link.href}
+                className={`${base} ${tone}`}
+                aria-current={active ? "true" : undefined}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </div>
 
         {/* Right actions (md+) */}
         <div className="hidden md:flex items-center gap-3">
           <button
             onClick={goToLogin}
-            className="px-5 py-2.5 text-white/80 hover:text-white transition-colors text-sm font-medium tracking-wide bg-transparent border-none cursor-pointer"
+            className={`px-5 py-2.5 transition-colors text-sm font-medium tracking-wide bg-transparent border-none cursor-pointer ${
+              light ? "text-black/80 hover:text-black" : "text-white/80 hover:text-white"
+            }`}
           >
             Log In
           </button>
@@ -99,7 +161,7 @@ export function Navbar() {
 
         {/* Burger (below md) */}
         <button
-          className="md:hidden text-white/80 hover:text-white"
+          className={`md:hidden transition-colors ${light ? "text-black/80 hover:text-black" : "text-white/80 hover:text-white"}`}
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="mobile-menu"

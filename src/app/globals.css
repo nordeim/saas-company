@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+/* Tailwind's auto content detection scans EVERY non-gitignored file —
+   including markdown. Doc prose that MENTIONS a class-like token (e.g.
+   documenting an invalid arbitrary-value spelling) would generate that
+   utility and can break the whole build (Session 4: the colon-spelled
+   aspect ratio documented in AGENTS.md re-broke the build after the
+   component itself was fixed). Documentation is never a class source —
+   exclude it explicitly. */
+@source not "../../docs/**";
+@source not "../../skills/**";
+@source not "../../tests/**";
+@source not "../../scripts/**";
+@source not "../../**/*.md";
+
 /* ---------------------------------------------------------------------------
    SAAS Company / NovaAI design system — Tailwind CSS v4 (CSS-first).
    Tokens measured from the reference app's compiled stylesheet:
@@ -79,6 +92,11 @@
      ease). Tailwind's animate-bounce bounces in place — this travels
      down the pill like the live site. */
   --animate-scroll-dot: scroll-dot 1.7s ease-in-out infinite;
+  /* FAQ accordion — the live's Radix/shadcn keyframes (0.2s ease-out
+     height animation against --radix-accordion-content-height; the panel
+     sets the var from its own content height on mount). */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
 }
 
 /* Serif accents (client wordmarks) — inline so the next/font variable
@@ -345,35 +363,23 @@
   animation: gradientShift 6s ease-in-out infinite;
 }
 
-/* Animated skeleton shimmer for the dashboard mockup tiles. */
-@keyframes wave-flow {
-  0% {
-    background-position: 200% 0;
+/* FAQ accordion — the reference's measured keyframes (extracted verbatim
+   from the live's compiled CSS: accordion-down/up against the
+   --radix-accordion-content-height var the panel sets on mount). Used via
+   the data-[state=open]/[closed] variants on the panel element. */
+@keyframes accordion-down {
+  from {
+    height: 0;
   }
-  100% {
-    background-position: -200% 0;
+  to {
+    height: var(--radix-accordion-content-height);
   }
 }
-.skeleton-wave {
-  background: linear-gradient(
-    90deg,
-    rgb(255 255 255 / 0.04) 25%,
-    rgb(255 255 255 / 0.12) 50%,
-    rgb(255 255 255 / 0.04) 75%
-  );
-  background-size: 200% 100%;
-  animation: wave-flow 2.4s linear infinite;
-}
-
-/* FAQ accordion (grid-rows transition — no JS height math). */
-.accordion-panel {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 300ms ease;
-}
-.accordion-panel[data-open="true"] {
-  grid-template-rows: 1fr;
-}
-.accordion-panel > div {
-  overflow: hidden;
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
 }

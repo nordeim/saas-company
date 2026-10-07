@@ -12,12 +12,15 @@ import {
 } from "@/lib/pricing";
 
 /**
- * "Simple, Transparent Pricing" — the Monthly/Annual toggle (annual shows
- * the measured 20% Save badge and per-month discount) over the three plan
- * cards; Pro carries the violet ring + Most Popular badge.
+ * "Simple, Transparent Pricing" — the Monthly/Annual toggle over the
+ * three plan cards; Pro carries the violet ring + Most Popular badge.
+ * The toggle DEFAULTS TO ANNUAL like the reference (Session 4 audit — the
+ * "Annual / Save 20%" pill is active on fresh load; Pro renders $39/mo
+ * annual, $49/mo monthly), and the price caption stays "/month" in both
+ * states (the live never renders a "billed annually" suffix).
  */
 export function Pricing() {
-  const [period, setPeriod] = useState<BillingPeriod>("monthly");
+  const [period, setPeriod] = useState<BillingPeriod>("annual");
 
   return (
     <section id="pricing" className="relative py-16 md:py-28">
@@ -53,7 +56,10 @@ export function Pricing() {
                   : "text-white/50 hover:text-white/80"
               }`}
             >
-              Annual
+              {/* No whitespace node before the badge — the live's DOM is
+                  `Annual<span…>` (161px pill); a JSX newline would add a
+                  trailing space to the text run (+4px). */}
+              {"Annual"}
               <span className="text-xs px-2 py-0.5 rounded-full bg-violet text-white">
                 {`Save ${Math.round(ANNUAL_DISCOUNT * 100)}%`}
               </span>

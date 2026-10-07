@@ -78,3 +78,75 @@ test.describe("landing page", () => {
     expect(payload.data.app).toBe("saas-company");
   });
 });
+
+test.describe("dashboard mockup (Session 4 static parity)", () => {
+  // The live's mockup is completely STATIC (animation census: zero running
+  // animations) — solid purple list dots (bg-primary/80 → rgba(134,36,255,.8)),
+  // static tiles at full opacity, chart bars at fixed percentages. The old
+  // clone ran a skeleton-wave shimmer (which also OVERRAN the dot's purple
+  // background — unlayered CSS beats layered utilities) and a grow-in
+  // stagger the live doesn't have.
+
+  test("mockup list dots render solid primary purple (not the white wave)", async ({ page }) => {
+    await page.goto("/");
+    await page.evaluate(() => document.querySelectorAll("section")[1].scrollIntoView());
+    await page.waitForTimeout(400);
+    const dots = page.locator("section:nth-of-type(2) .w-2.h-2.rounded-full.bg-primary\\/80");
+    await expect(dots).toHaveCount(4);
+    const rgb = await dots.first().evaluate((el) => {
+      const bg = getComputedStyle(el).backgroundColor;
+      const rgbM = bg.match(/rgba?\(([\d.]+), ([\d.]+), ([\d.]+)/);
+      if (rgbM) return [+rgbM[1], +rgbM[2], +rgbM[3]];
+      const labM = bg.match(/oklab\(([-\d.]+) ([-\d.]+) ([-\d.]+)/);
+      if (!labM) return null;
+      const [L, a, b] = [+labM[1], +labM[2], +labM[3]];
+      const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+      const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+      const s_ = L - 0.0894841775 * a - 1.291485548 * b;
+      const l = l_ ** 3, m = m_ ** 3, s = s_ ** 3;
+      const lin = [
+        4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+        -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+        -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s,
+      ];
+      return lin.map((c) => {
+        const v = c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055;
+        return Math.round(Math.min(1, Math.max(0, v)) * 255);
+      });
+    });
+    expect(rgb, "dot color resolved to rgb").not.toBeNull();
+    for (let i = 0; i < 3; i++) {
+      expect(Math.abs((rgb as number[])[i] - [134, 36, 255][i]), `channel ${i}`).toBeLessThanOrEqual(2);
+    }
+  });
+
+  test("the mockup runs zero animations (the live is static)", async ({ page }) => {
+    await page.goto("/");
+    await page.evaluate(() => document.querySelectorAll("section")[1].scrollIntoView());
+    await page.waitForTimeout(400);
+    const animated = await page.evaluate(() => {
+      const sec = document.querySelectorAll("section")[1];
+      return [...sec.querySelectorAll("*")]
+        .filter((el) => getComputedStyle(el).animationName !== "none")
+        .map((el) => (el as HTMLElement).className?.toString().slice(0, 60));
+    });
+    expect(animated).toEqual([]);
+  });
+
+  test("chart bars sit at the reference percentages", async ({ page }) => {
+    await page.goto("/");
+    await page.evaluate(() => document.querySelectorAll("section")[1].scrollIntoView());
+    await page.waitForTimeout(400);
+    const heights = await page.evaluate(() => {
+      const sec = document.querySelectorAll("section")[1];
+      const bars = [...sec.querySelectorAll("div")].filter(
+        (el) => el.className.toString().includes("flex-1") && el.className.toString().includes("rounded-t")
+      );
+      return bars.map((el) => (el as HTMLElement).style.height);
+    });
+    expect(heights).toEqual([
+      "42%", "64%", "45%", "80%", "55%", "70%",
+      "90%", "60%", "75%", "85%", "50%", "95%",
+    ]);
+  });
+});

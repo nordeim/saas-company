@@ -6,7 +6,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?logo=tailwindcss)
 ![Prisma](https://img.shields.io/badge/Prisma-6-2d3748?logo=prisma)
 ![SQLite](https://img.shields.io/badge/DB-SQLite-003b57?logo=sqlite)
-![Tests](https://img.shields.io/badge/tests-165_checks_passing-2ecc8a)
+![Tests](https://img.shields.io/badge/tests-179_checks_passing-2ecc8a)
 
 A production-grade, self-hosted clone of the reference dark-theme SaaS
 marketing site [`saas-company.base44.app`](https://saas-company.base44.app/)
@@ -24,7 +24,7 @@ card. This clone reproduces all of it (measured tokens, self-hosted fonts,
 verbatim copy) and then goes further: cookie-session auth, a workflow
 workspace with an AI composer (`z-ai-web-dev-sdk` with a deterministic
 fallback), newsletter + demo-request capture, sitemap/robots, a health
-probe, Lenis smooth scrolling, and 165 automated checks across three test layers.
+probe, Lenis smooth scrolling, and 179 automated checks across three test layers.
 
 | Dashboard | Landing hero |
 |:---:|:---:|
@@ -38,13 +38,13 @@ probe, Lenis smooth scrolling, and 165 automated checks across three test layers
 
 | Feature | Description |
 |---------|-------------|
-| 🎬 **Faithful landing page** | Looping AI-video hero with the shimmer-bordered beta badge and animated gradient heading, dashboard mockup with the browser-chrome skeleton, trusted-by logo cloud (serif wordmarks), problem cards, "One Platform" showcase, white features tabs, how-it-works steps, pricing (Monthly/Annual, 20% annual discount), testimonial drag-strip, CTA, and the four-column footer |
-| 🧭 **Reference chrome** | Fixed transparent→glass nav with the center pill (md+), LOG IN + white Get Started pill, and the measured mobile burger dropdown (black/95 blur panel, 44px rows) — plus the slate login card and light 404 |
+| 🎬 **Faithful landing page** | Looping AI-video hero with the shimmer-bordered beta badge and animated gradient heading, dashboard mockup with the browser-chrome skeleton, trusted-by logo cloud (serif wordmarks), problem cards, "One Platform" showcase, white features tabs, how-it-works steps, pricing (Monthly/Annual — **defaults to Annual like the reference**: Pro $39/mo annual, $49/mo monthly, "Save 20%"), testimonial drag-strip, CTA, and the four-column footer |
+| 🧭 **Reference chrome** | Fixed transparent nav with the center pill (md+), LOG IN + white Get Started pill, and the measured mobile burger dropdown (black/95 blur panel, 44px rows) — the nav is **section-aware** like the reference: scroll-spy highlights the section in view (white/30 pill on dark, black/15 on light) and the chrome swaps to black variants over the white features section; plus the slate login card (light body theme + system font, exactly as the reference's login bundle) and light 404 |
 | 🔐 **Cookie-session auth** | scrypt password hashing + HMAC-signed sessions, per-IP rate limiting on auth endpoints (10/15 min), register/login/logout/me — sign-up lands straight in the workspace |
 | ⚡ **Workflow dashboard (superset)** | The reference's "Dashboard" demo link 404s — here it's real: stats cards, a workflow list with pause/resume/delete, a runs chart, and an AI composer that drafts workflows from one-line ideas (server-side SDK + deterministic fallback, sanitized before persistence) |
 | 📰 **Working capture forms** | Footer newsletter subscribe (idempotent upsert) and demo/contact requests persist to SQLite |
 | ❓ **Interactive FAQ + legal** | The reference's six-question accordion and four legal pages, copy captured verbatim |
-| 🧪 **165 automated checks** | 73 Vitest unit checks (pure domain seams), 54 Playwright browser checks (incl. the mobile-navigation, per-tab features-card, and Session-3 brand-parity suites), 38 curl smoke checks against the production build |
+| 🧪 **179 automated checks** | 73 Vitest unit checks (pure domain seams), 68 Playwright browser checks (incl. the mobile-navigation, navbar scroll-behavior, per-tab features-card, login-theme, and brand-parity suites), 38 curl smoke checks against the production build |
 | 🌗 **Measured design system** | Tailwind v4 CSS-first tokens: #000 canvas, #8624FF primary, #0055FF accent, #D500FF violet, self-hosted "Vend Sans" (Wix Madefor — the Display cut for headings AND body, like the reference), the reference's keyframes (organic-gradient, border-shimmer, logo petals, marquee) |
 
 ## Tech Stack
@@ -143,10 +143,10 @@ Open <http://localhost:3000>, then sign in to the dashboard at
 curl http://localhost:3000/api/health
 # {"ok":true,"data":{"status":"ok","app":"saas-company","ts":"…"}}
 
-# Full verification (165 checks across three layers)
+# Full verification (179 checks across three layers)
 npm run lint && npm run typecheck && npm run test   # 73 unit checks
 npm run build && ./scripts/smoke-test.sh            # 38 smoke checks
-npm run test:e2e                                    # 54 browser checks
+npm run test:e2e                                    # 68 browser checks
 ```
 
 ### Production
@@ -213,7 +213,7 @@ inline); the login card and 404 page run the reference's light slate theme.
 
 ```bash
 npm run test              # unit — 73 checks on the pure domain seams
-npm run test:e2e          # Playwright — 54 browser checks (needs a build)
+npm run test:e2e          # Playwright — 68 browser checks (needs a build)
 ./scripts/smoke-test.sh   # curl E2E — 38 checks against the production build
 ```
 

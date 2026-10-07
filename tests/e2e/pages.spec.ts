@@ -25,33 +25,90 @@ test.describe("FAQ page", () => {
     await expect(page.getByText(/SOC 2 Type II certified/)).toBeHidden();
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
   });
+
+  // Session 4: the reference's accordion is the Radix/shadcn pattern — the
+  // panel carries data-state + the measured accordion keyframes (0.2s
+  // ease-out height animation), and CLOSED panels are UNMOUNTED (absent
+  // from the DOM — the root cause of the old FAQ word-parity 0.6052
+  // artifact where the clone kept hidden answers in the DOM).
+  test("open panels carry the reference's animation classes", async ({ page }) => {
+    await page.goto("/faq");
+    const trigger = page.getByRole("button", { name: "Is my data secure with NovaAI?" });
+    await trigger.click();
+    const panel = page.locator("#faq-panel-0");
+    await expect(panel).toHaveAttribute("data-state", "open");
+    await expect(panel).toHaveClass(/data-\[state=open\]:animate-accordion-down/);
+    // The keyframes rule exists in the served stylesheet.
+    const hasKeyframes = await page.evaluate(async () => {
+      for (const sheet of document.styleSheets) {
+        try {
+          for (const rule of sheet.cssRules) {
+            if (
+              rule instanceof CSSKeyframesRule &&
+              rule.name.startsWith("accordion-")
+            ) {
+              return true;
+            }
+          }
+        } catch {
+          /* cross-origin sheet — skip */
+        }
+      }
+      return false;
+    });
+    expect(hasKeyframes).toBe(true);
+  });
+
+  test("closed answers are unmounted from the DOM (live parity)", async ({ page }) => {
+    await page.goto("/faq");
+    // Nothing is open on load — every answer is absent from the DOM, like
+    // the live (Radix unmounts closed content).
+    await expect(page.getByText(/SOC 2 Type II certified/)).toHaveCount(0);
+    await expect(page.getByText(/200\+ tools/)).toHaveCount(0);
+    // Open, then close — the answer animates out and unmounts again.
+    const trigger = page.getByRole("button", { name: "Is my data secure with NovaAI?" });
+    await trigger.click();
+    await expect(page.getByText(/SOC 2 Type II certified/)).toBeVisible();
+    await trigger.click();
+    await expect(page.getByText(/SOC 2 Type II certified/)).toHaveCount(0);
+  });
 });
 
 test.describe("pricing section", () => {
-  test("renders the three plans with the reference prices", async ({ page }) => {
+  // Session 4 audit: the live's toggle DEFAULTS TO ANNUAL — the "Annual /
+  // Save 20%" pill is the active one on fresh load, Pro shows $39 (the
+  // annual price); switching to Monthly shows $49 (the list price).
+  test("defaults to Annual with the reference prices", async ({ page }) => {
     await page.goto("/#pricing");
     await expect(page.getByRole("heading", { name: "Simple, Transparent Pricing" })).toBeVisible();
     await expect(page.getByText("$0").first()).toBeVisible();
     await expect(page.getByText("$39").first()).toBeVisible();
     await expect(page.getByText("Custom").first()).toBeVisible();
     await expect(page.getByText("Most Popular")).toBeVisible();
+    // The Annual pill is active on load (bg-white), Monthly is not.
+    const annual = page.getByRole("button", { name: /Annual/ });
+    await expect(annual).toHaveClass(/bg-white/);
+    const monthly = page.getByRole("button", { name: "Monthly", exact: true });
+    await expect(monthly).not.toHaveClass(/bg-white/);
+    // The live never renders a "billed annually" suffix in either state.
+    await expect(page.getByText(/billed annually/)).toHaveCount(0);
   });
 
-  test("the annual toggle applies the 20% discount", async ({ page }) => {
+  test("switching to Monthly shows the $49 list price", async ({ page }) => {
     await page.goto("/#pricing");
-    await page.getByRole("button", { name: /Annual/ }).click();
-    await expect(page.getByText("$31").first()).toBeVisible();
+    await page.getByRole("button", { name: "Monthly", exact: true }).click();
+    await expect(page.getByText("$49").first()).toBeVisible();
     await expect(page.getByText("Save 20%")).toBeVisible();
+  });
+
+  test("switching back to Annual restores $39", async ({ page }) => {
+    await page.goto("/#pricing");
+    await page.getByRole("button", { name: "Monthly", exact: true }).click();
+    await page.getByRole("button", { name: /Annual/ }).click();
+    await expect(page.getByText("$39").first()).toBeVisible();
     // Custom stays Custom — no /month suffix next to it.
     const custom = page.getByText("Custom", { exact: true }).first();
     await expect(custom).toBeVisible();
-  });
-
-  test("switching back to monthly restores the list price", async ({ page }) => {
-    await page.goto("/#pricing");
-    await page.getByRole("button", { name: /Annual/ }).click();
-    await page.getByRole("button", { name: "Monthly", exact: true }).click();
-    await expect(page.getByText("$39").first()).toBeVisible();
   });
 });
 

@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (73 checks) | `npm run test` |
-| Browser E2E (54 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (68 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (73/73) → `npm run build` → `./scripts/smoke-test.sh` (38/38)
-→ `npm run test:e2e` (54/54) — 165 checks across three layers (boots the standalone server on :3100 against its own
+→ `npm run test:e2e` (68/68) — 179 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -92,6 +92,33 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    read the `.dark` block and shipped the wrong primary/accent for two
    sessions — the Session-3 audit fixed it (see
    `docs/remediation-plan-session3.md` F1/F2).
+12. **Arbitrary aspect ratios use the SLASH (`aspect-[16/9]`), never the
+   colon spelling** — writing the ratio with a colon inside the brackets
+   emits the invalid `aspect-ratio: 16:9` into the compiled CSS and postcss
+   fails the whole build with an opaque `CssSyntaxError … Missed semicolon`
+   at a flattened column. Worse: Tailwind's scanner reads class candidates
+   from MARKDOWN too — documenting the colon spelling in a .md file breaks
+   the build just like using it in a component (docs/ is `@source not`-ed
+   in globals.css for exactly this reason; Session 4 hit both).
+13. **The reference's /login loads its OWN css bundle** (light `:root`, body
+   white + zinc-950 + the system font stack) — the login route swaps the
+   body theme via a route-scoped `<style>` in `login/page.tsx`; every other
+   route keeps the dark theme. Also: the reference's compiled `space-y-*`
+   puts the gap on the FOLLOWING sibling (v3-style) — v4's
+   margin-bottom-on-preceding is lost on inline labels (the login form),
+   so the route style restores that pattern inside forms.
+14. **The navbar is section-aware and never gains a background.** It is
+   `bg-transparent` at every scroll depth (no scrolled-glass bar); a
+   scroll-spy highlights the section in view (last section whose top passed
+   the ⅔ viewport line) and the chrome swaps to black variants while the
+   nav band overlaps `[data-nav-theme="light"]` sections (the white
+   features section). Pinned by `tests/e2e/navbar-behavior.spec.ts`.
+15. **The dashboard mockup is STATIC on the reference** — zero running
+   animations, solid `bg-primary/80` list dots (never re-add the
+   `skeleton-wave` shimmer: as an UNLAYERED class it overrides the layered
+   `bg-primary/80` utility). The pricing toggle defaults to ANNUAL
+   (Pro $39/mo annual, $49/mo monthly — the $39 Session 1 read was the
+   annual price).
 
 ## Architecture invariants
 
