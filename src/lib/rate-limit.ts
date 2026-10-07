@@ -49,9 +49,19 @@ export function checkRate(
 
 const buckets: RateBuckets = new Map();
 
-/** Auth-endpoint limiter: 10 attempts per IP per 15 minutes. */
+/** Auth-endpoint limiter: 10 attempts per IP per 15 minutes.
+ *
+ * The limit is overridable via AUTH_RATE_LIMIT_MAX (default 10) —
+ * deployments behind shared egress IPs raise it; the Playwright webServer
+ * sets a high value because the e2e suite's own sign-ins share one IP and
+ * one process with the limiter (Session 11: the suite's ~10 UI sign-ins
+ * sat at exactly the default budget — any new signed-in spec tripped a
+ * mysterious mid-suite 429).
+ */
 export function authRateLimit(ip: string): RateDecision {
-  return checkRate(buckets, `auth:${ip}`, 10, 15 * 60 * 1000);
+  const raw = Number.parseInt(process.env.AUTH_RATE_LIMIT_MAX ?? "", 10);
+  const limit = Number.isFinite(raw) && raw >= 1 ? raw : 10;
+  return checkRate(buckets, `auth:${ip}`, limit, 15 * 60 * 1000);
 }
 
 /** Newsletter limiter: 5 subscribes per IP per 10 minutes. */

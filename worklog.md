@@ -410,3 +410,44 @@ Work Log:
 Stage Summary:
 - Commit 05d08f0 pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 29 files changed (+1040/−65): the seven measured --animate-* loop tokens + keyframes (the ambient glow, red chrome dot, staggered list dots, under-glow, and mini-dashboard skeletons — the live's eight missing loop groups), the under-glow restructure (sibling + translate-none + animate-mockup-glow — rendered geometry byte-identical), the dashboard a11y floor (the single h1 + white/60 muted lines), the asset-caching headers, 15 new checks (gate: 299 = 92 unit + 164 e2e incl. the mockup-motion-parity suite + 43 smoke incl. the asset-caching pin), the remediation plan + session log, refreshed screenshots, docs + SKILL v2.9.0.
 - Session 10 complete.
+
+---
+Task ID: 22
+Agent: Super Z (main, session 17)
+Task: Session 11 audit — the hydration/console layer, the cross-route axe sweep, the API contract, and the gate's own flaky pin
+
+Work Log:
+- Fresh clone (workspace reset); .env re-created from .env.example (AUTH_SECRET generated; DATABASE_URL="file:../db/custom.db"), db/custom.db pushed + seeded at the repo root; the exported-DATABASE_URL shell trap neutralized per-command (env -u DATABASE_URL) all session.
+- Baseline gate: lint/typecheck/92 unit/build/43 smoke green; e2e 163/164 — the palette-parity keyboard-ring pin flaky at ~30-40% in isolation (the Session-10 tail observation, now diagnosed).
+- Drift check: word parity 1.0000 on all 8 routes — the reference UNCHANGED since Session 10.
+- NEW surface #1 — the console/pageerror sweep (every route): exactly ONE page error app-wide, React #418 on EVERY 404 load. Root cause: the not-found page is a statically-prerendered CLIENT component — the prerendered HTML ships the internal route id "_not-found" in the pathname span while the hydration render carries the real URL (a text mismatch by construction; React discards the server tree and re-renders client-side). The live's SPA 404 has a clean console.
+- NEW surface #2 — the first cross-route axe sweep (clone, 9 routes) + live-side adjudication (/, /faq, 404): the clone's violations on the parity routes ship IDENTICALLY on the live (beta-badge contrast, testimonial scrollable-region, FAQ white/40 + heading structure, 404 landmarks) — parity, NOT bugs (ledgered D63). The dashboard's paused-card description flagged at 3.61:1 (the superset surface — real).
+- NEW surface #3 — the pixel-level contrast adjudication + controlled compositing experiment: the paused/draft articles' opacity-80 compounds the description's text-white/50 to EFFECTIVE white/40 (glyph interiors sampled at exactly 103,103,103 over #020202 — 4x device scale); the control (rgba vs oklab vs color-mix over the same bg, all #818181) proved the v4 engine INNOCENT — the ancestor opacity is the whole story.
+- NEW surface #4 — the API edge-case probe: invalid UUIDs -> clean 404 envelopes, invalid enums -> 400, oversized ideas -> 400, cookie Secure/HttpOnly/SameSite=lax — but PATCH silently TRUNCATES a 300-char name while POST rejects it (an inconsistent contract).
+- NEW surface #5 — the mobile-nav paired re-verification (the standing operator ask, real-touch contexts): clone burger taps open the byte-identical panel (0,56 390x397, seven 44px rows, same classes); scroll-lock/Escape/navigate/resize-guard all working; the live's burger remains pointer-blocked (D32). NO Tailwind v4 bug in the clone's mobile nav — all documented v4 traps pinned by the passing suites.
+- VLM spot checks (hero/mockup/mobile-menu/testimonials IDENTICAL); the pricing composite's "logo differs" claim disproven by pixels (0.0% mark / 0.2% wordmark diffs — the mark rotates, mid-phase shapes mislead a VLM); section heights match exactly (pricing 1026=1026, testimonials 697=697).
+- The remediation plan written and validated against the codebase (docs/remediation-plan-session11.md F1-F8), then executed TDD-first.
+
+Stage Summary:
+- Four clone-side defects found, each with mechanism-level evidence: the 404 hydration error (React #418 every unknown route), the paused-card effective white/40 (3.61:1), the PATCH/POST name-contract split, and the gate's own flaky ring pin (two root causes: mid-transition sampling + blind-Tab focus misses).
+- The axe-parity adjudication settles the a11y posture: the clone's remaining marketing-route violations are the live's own design (D63); the clone beats the live on every violation the live alone ships (D55 family).
+
+---
+Task ID: 23
+Agent: Super Z (main, session 17)
+Task: Session 11 remediation + verification + docs + push
+
+Work Log:
+- R1 (de-flake, TDD-RED = the captured 3/6 failures): tab-until-the-Sign-in-is-focused (bounded) + expect.poll to the settled 4px ring matching both serializations (rgb(9,9,11) / rgba(9,9,11,1)) — 10/10 isolated + 8/8 full-spec consecutive greens.
+- R2 (the 404 hydration fix): RED first (tests/e2e/hydration.spec.ts — zero pageerrors, the quoted path, the static-HTML placeholder contract; the #418 pin failed pre-fix as expected). Fix: useSyncExternalStore mount gate (server snapshot false) reading window.location.pathname — NOT usePathname(), which settles to the internal /_not-found route id post-router (found the hard way: the first fix cut used usePathname and quoted "_not-found"). Verified: empty quotes pre-hydration, the real URL one commit later, STABLE over 4s.
+- R3 (the paused-card contrast): RED first (the effective-alpha contrast pin failing at 3.61:1); fix text-white/50 -> text-white/60 on the description (active >=7:1, paused >=5.1:1).
+- R4 (the PATCH name contract): RED first (two smoke pins — the 300-char PATCH must 400 VALIDATION; pre-fix it returned 200 with a truncated name); fix: the requiredString validator POST uses.
+- R4b (F10, found live during the full-suite run): one extra signed-in spec tripped a mid-suite 429 that broke an UNRELATED Session-10 pin — the suite's ~10 UI sign-ins sat at EXACTLY the limiter default. Fix: AUTH_RATE_LIMIT_MAX (default 10, production unchanged; the Playwright webServer pins 50) + two unit tests (default + override) + .env.example. The R3 pin piggybacks on the seeded-workspace test's sign-in.
+- Full gate: ALL GREEN — 307 checks (94 unit = 92+2 rate-limit; 167 e2e = 164+3 hydration; 46 smoke = 43+3 name-contract).
+- Re-verification: word parity 1.0000 on ALL 8 routes (the 404 restored after a zombie next-server process on :3000 served a stale build mid-verification — killed by port, re-verified; the playwright/smoke suites were never affected, they boot their own servers); axe /dashboard ZERO violations; the 404 console ZERO pageerrors; the mobile nav re-probed byte-identical; 17 screenshots refreshed (the 404 verified quoting the real URL; the mobile-menu verified open).
+- Docs: PAD (revision block, ledger D63-D66, traps 17-18, section 7 counts/conventions, section 8.2 env table, section 11 key files), AGENTS (gate counts, gotcha 8 rewritten, gotcha 25), CLAUDE (session-11 context + counts), README (307 badge, new rows, AUTH_RATE_LIMIT_MAX, troubleshooting), SKILL v2.10.0 (lessons 30-31), remediation plan (F10/R4b appended), session log (docs/session_17.md), .env.example updated.
+
+Stage Summary:
+- The clone's production-readiness floor raised: every route now hydrates with ZERO page errors (the 404's React #418 fixed with the useSyncExternalStore + window.location.pathname pattern — the usePathname internal-route-id trap documented), the dashboard passes axe clean, and the API contract is consistent across create/update.
+- The gate itself is de-flaked (the ring pin) and de-fragilized (AUTH_RATE_LIMIT_MAX) — 307 checks, deterministic.
+- Next: final commit + SSH push (Task 24).

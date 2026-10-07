@@ -142,17 +142,38 @@ test.describe("landing palette (Session-9 F1)", () => {
 test.describe("login focus + route chrome (Session-9 F2/F4/F5)", () => {
   test("the keyboard-focused Sign in renders the live's slate-950 ring", async ({ page }) => {
     await page.goto("/login");
-    // Tab: Google → email → password → Sign in
-    for (let i = 0; i < 4; i++) await page.keyboard.press("Tab");
-    await page.waitForTimeout(200);
-    const shadow = await page.evaluate(() => {
-      const el = document.activeElement;
-      return el ? getComputedStyle(el).boxShadow : "NO ACTIVE ELEMENT";
-    });
-    expect(
-      shadow.includes("rgb(9, 9, 11) 0px 0px 0px 4px"),
-      `the slate-950 ring (hsl(240 10% 3.9%) — the live's --ring) to render; got: ${shadow}`,
-    ).toBe(true);
+    // Session 11 F1 — TWO flake sources fixed:
+    // (a) the tab ORDER shifts with hydration timing: a blind Tab×4
+    //     sometimes lands on an input, whose slate-400 focus ring is a
+    //     DIFFERENT pin — tab until the ACTIVE element is the Sign in
+    //     button (bounded);
+    // (b) the ring's box-shadow TRANSITIONS in (observed 3.98466px /
+    //     alpha .996 frames), and Chromium serializes the settled value
+    //     as either rgb(9, 9, 11) or rgba(9, 9, 11, 1) — poll the shadow
+    //     to its settled 4px form, matching either spelling, instead of
+    //     string-matching at a fixed 200ms offset.
+    for (let i = 0; i < 10; i++) {
+      const focused = await page.evaluate(() => {
+        const el = document.activeElement;
+        return el instanceof HTMLButtonElement && (el.innerText || "").trim() === "Sign in";
+      });
+      if (focused) break;
+      await page.keyboard.press("Tab");
+    }
+    await expect
+      .poll(
+        async () => {
+          const shadow = await page.evaluate(() => {
+            const el = document.activeElement;
+            return el instanceof HTMLButtonElement && (el.innerText || "").trim() === "Sign in"
+              ? getComputedStyle(el).boxShadow
+              : "NOT FOCUSED ON SIGN IN";
+          });
+          return shadow;
+        },
+        { timeout: 10_000 },
+      )
+      .toMatch(/rgba?\(9, 9, 11(, 1)?\) 0px 0px 0px 4px/);
   });
 
   test("the focused email input's ring renders the live's slate-400 (#94a3b8)", async ({ page }) => {

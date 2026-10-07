@@ -9,6 +9,50 @@
 
 #### Revision Block — v1.0
 
+- `[NOTE]` **Session 11 remediation (2026-10-08)** — a HYDRATION-HEALTH +
+  cross-route axe + API-contract + flaky-gate audit (the first console/
+  pageerror sweep of every route, the first clone-side axe sweep of all 9
+  routes with live-side adjudication of every violation, an API
+  edge-case probe, and a 6× reproduction of the gate's own flaky pin —
+  see `docs/remediation-plan-session11.md` F1–F10 → R1–R5) found and
+  fixed four clone-side defects: **the 404 hydration error** (every
+  unknown route tripped React #418 — the statically-prerendered client
+  component rendered `usePathname()` into the span while the server HTML
+  shipped the internal route id `"_not-found"`, so the hydration text
+  mismatched and React re-rendered the page client-side with a console
+  pageerror; AND `usePathname()` settles to `/_not-found` post-router —
+  fixed with a `useSyncExternalStore` mount gate reading
+  `window.location.pathname`: server and hydration renders agree (empty
+  quotes), the real URL fills one post-hydration commit and stays; pinned
+  by the new hydration suite); **the paused-card contrast compounding**
+  (the dashboard's non-active workflow articles carry `opacity-80`, so
+  the description's `text-white/50` composited to EFFECTIVE white/40 —
+  0.5 × 0.8 = 0.4 → #676767 over #020202, 3.61:1, glyph-interior pixel
+  verified; a controlled experiment PROVED the oklab/color-mix engine
+  composites identically to rgba — the ancestor opacity is the whole
+  story; fixed white/50 → white/60, ≥ 5.1:1 everywhere); **the
+  PATCH/POST name-contract split** (POST rejected >120-char names,
+  PATCH silently truncated them — the update path now uses the same
+  `requiredString` validator); and **the gate's own flaky pin** (the
+  Session-9 keyboard-ring test sampled the ring's box-shadow
+  MID-TRANSITION at a fixed 200ms — observed 3.98466px/alpha-.996 frames
+  — and its blind Tab×4 landed on inputs when hydration timing shifted
+  the tab order, sampling the WRONG element's slate-400 ring; now
+  tab-until-focused + poll-to-settled, 10/10 + 8/8 consecutive greens).
+  ALSO: the e2e suite's UI sign-ins sat at EXACTLY the auth limiter's
+  default budget (10 POSTs/15 min — one extra signed-in spec tripped a
+  mysterious mid-suite 429; `AUTH_RATE_LIMIT_MAX` now overrides the
+  limit, default 10, the Playwright webServer sets 50); the clone's
+  remaining axe violations on `/`, `/faq`, and the 404 were adjudicated
+  LIVE-PARITY (the live ships the same beta-badge contrast, the same
+  testimonial-strip scrollable-region, the same FAQ heading structure —
+  ledgered D63, not fixed: parity law); and the mobile nav re-verified
+  byte-identical with the working burger (the live's remains
+  pointer-blocked, D32). Gate re-locked at **307 checks** (94 unit + 167
+  e2e incl. the hydration suite + 46 smoke); word parity 1.0000 on all 8
+  routes; axe on /dashboard: ZERO violations; the 404 console: zero
+  pageerrors.
+
 - `[NOTE]` **Session 10 remediation (2026-10-08)** — a LOOPING-MOTION +
   post-login-surface + reflow + asset-caching + dashboard-a11y audit (the
   first full-page LOOP census — every element's computed transform/opacity
@@ -785,6 +829,10 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D60 | Public-asset caching | the live's CDN serves its static assets `Cache-Control: public, max-age=604800` | the same value on `/media/:path*`, `/favicon.svg`, `/og-image.png`, `/manifest.json` via `next.config.ts` (the `public/` folder shipped `max-age=0` — the 1.9MB hero video re-validated every load; the hashed `/_next/static/*` chunks keep Next's immutable headers) + a smoke pin | Parity (production; Session 10) |
 | D61 | The pricing-toggle pills | no aria state at all | `aria-pressed="true/false"` on the Monthly/Annual pills — a D55-class a11y superset (the two-state control communicates its state to AT) | **Superset** (Session 10, documented) |
 | D62 | The live's post-login surface | NO authenticated experience: logging in redirects to `/` with the navbar UNCHANGED (still "Log In" + "Get Started"); `/dashboard`, `/app`, `/home`, `/workflows`, `/workspace`, `/settings`, `/account` all render the SPA 404 even authenticated | no clone change — the definitive answer to the operator's standing dashboard question: the repo's `/dashboard` remains the D1 designed superset and the operator's reference image (`docs/saas-company-dashboard.png`) is this repo's own dashboard | Live-side (Session 10, documented) |
+| D63 | The shared axe violations (first cross-route sweep + live adjudication) | `/`: the beta badge's color-contrast (`.border-violet/20` at ~3:1) + the testimonial strip's `scrollable-region-focusable`; `/faq`: the `text-white/40` muted line + `page-has-heading-one` (starts at H2 "Questions? We've Got Answers"); `/404`: the slate-300 h1 contrast + `landmark-one-main` + 2 `region` nodes — the live ships ALL of these identically (paired axe runs) | NOT FIXED — parity law (fixing would break visual parity with the reference's own design). The live's own additional violations (its unnamed burger — `button-name` CRITICAL; its unnamed logo link; its 103 landmark-less region nodes) remain beaten by the clone's D55 a11y-superset family | Parity (Session 11, adjudicated — shared defects) |
+| D64 | The 404 pathname-quoting mechanism | the SPA's 404 is client-rendered only — no hydration surface, the URL is trivially available | the mount-gated `window.location.pathname` span (`useSyncExternalStore`, server snapshot false): the static prerender ships empty quotes, the hydration render agrees, the real URL fills one post-hydration commit. Two engine traps documented: `usePathname()` reads the INTERNAL route id `/_not-found` once the App Router settles (the real URL exists only during the hydration render), and rendering route state directly in a prerendered client component is a hydration mismatch by construction (React #418). Pinned by the hydration suite (zero pageerrors + the quoted path) | Parity + superset quality (Session 11) |
+| D65 | The dashboard's opacity-compounded contrast | n/a (the live has no dashboard — D1/D62) | the non-active workflow articles' `opacity-80` compounds with the description's text alpha: white/50 rendered EFFECTIVE white/40 (3.61:1, pixel-verified glyph interiors at #676767) — the line is `text-white/60` (≥ 5.1:1 through the opacity). The controlled experiment (rgba vs oklab vs color-mix over the same bg — all render #818181) is the template for separating engine shifts from design choices | **Superset quality** (Session 11) |
+| D66 | The auth-rate-limit budget | n/a | `AUTH_RATE_LIMIT_MAX` (default 10, per-IP 15-min window; login + register share one bucket) — overridable for deployments behind shared egress IPs; the Playwright webServer pins 50 because the e2e suite's own ~10 UI sign-ins share one IP and one process with the in-memory limiter (Session 11: the budget sat at EXACTLY 10 — one extra signed-in spec tripped a mid-suite 429 that broke an unrelated Session-10 pin) | Superset (operational knob; Session 11) |
 
 ### 5.5 Tailwind v4 Trap Log (enforced here)
 
@@ -804,6 +852,8 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 14. **The v3/v4 LINE-HEIGHT cascade inversion** (Session 8): in v3, a RESPONSIVE text-size utility (`sm:text-base`, `md:text-4xl` — emitted inside its media query, after all base utilities) beats a coexisting `leading-*` utility; in v4 the leading utilities set `--tw-leading`, which the text utilities consume via `var(--tw-leading, var(--text-*--line-height))` — leading ALWAYS wins. Affected pairs (responsive text + leading on one element) need an inline `--tw-leading: initial` pin to reproduce the v3 outcome; STATIC text+leading pairs (e.g. `text-sm leading-relaxed`) match both engines. Same audit class as the tracking-scale shift: survey the ENGINE, not just the class strings.
 15. **v4's DEFAULT PALETTE IS OKLCH-DEFINED — the oklch→sRGB roundtrip drifts from v3's hex** (Session 9): v4's `theme.css` carries oklch approximations of the v3 palette and the roundtrip renders up to 69 RGB units off (green-400 rgb(5,223,114) vs #4ade80; red-500 +12/−24/−14; purple-600 +5/−35/+16 — the avatar gradients; slate-700 rgb(49,65,88) vs #334155 — every login slate). Class strings, word parity, and even spelling-tolerant specs all hide this — only a RENDERED-VALUE survey (converted to sRGB and compared with the live's v3-era hex) finds it. The pin point is `@theme --color-<name>-<shade>: <v3 hex>` for every drifted, USED token (31 here; exact matches left on v4 defaults). Same-family corollary: **`ring-ring` reads `--color-ring`** — a shadcn-style legacy `--ring` variable alone makes the utility inert and the ring falls back to currentColor; and v4 emits `ring-ring` AFTER `ring-slate-400` in the compiled sheet, so elements carrying BOTH need a specificity nudge (`input:focus:focus-visible`) to keep the v3-era cascade outcome.
 16. **A JS animation engine is INVISIBLE to a CSS-property census — survey the LOOP layer by sampling VALUES over time** (Session 10): framer-motion writes inline `transform`/`opacity` per frame, so an element can be mid-loop while `getComputedStyle().animationName` reads `none`. Session 4's "the mockup is completely STATIC" verdict (a CSS-property census) shipped static for six sessions while the live pulsed its ambient glow, red chrome dot, list dots, under-glow, and mini-dashboard skeletons — found only by (a) sampling computed transform/opacity across multiple rounds AFTER entrances settle (still-changing = loop) and (b) extracting the `animate:{…}`/`transition:{…}` configs from the live's JS bundle. Related trap: **framer's inline transform REPLACES tailwind v3's `--tw-translate-*` composition** — the live's under-glow carries `-translate-x-1/2` but renders UNCENTERED (left edge at the parent's center); in v4 the `translate` property is SEPARATE from `transform`, so reproducing the live's rendered geometry needs an explicit `translate-none` pin, not just the same keyframes.
+17. **Alpha composites through ANCESTOR opacity — audit the EFFECTIVE alpha, not the utility class** (Session 11): the dashboard's paused/draft articles carry `opacity-80`, so a `text-white/50` description rendered at effective 0.4 (#676767, 3.61:1) while every class-string and computed-color read said "50%". The axe report was RIGHT and the hand math was wrong because the ancestor opacity compounds. The controlled experiment that settled it (rgba vs oklab vs color-mix over the same bg — all render #818181) doubles as the template for separating a v4 ENGINE shift from a DESIGN choice before pinning anything.
+18. **A statically-prerendered CLIENT component cannot render route state at SSR — and `usePathname()` settles to the INTERNAL route id on 404s** (Session 11): the not-found page's `usePathname()` span shipped `"_not-found"` in the prerendered HTML while the hydration render carried the real URL → React #418 on EVERY unknown route; and once the App Router settles, `usePathname()` returns `/_not-found` (the internal route), NOT the browser URL. The robust pattern: a `useSyncExternalStore` mount gate (server snapshot false) reading `window.location.pathname` — server/hydration renders agree, the real URL fills one post-hydration commit and stays. Same audit class as trap 16: a CLEAN RENDER can still ship a broken hydration — sweep the CONSOLE layer (pageerror) on every route, not just the pixels.
 
 ---
 
@@ -843,26 +893,28 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
-| Unit (pure seams) | 9 + db-path | 92 | `src/lib/*.test.ts`, `tests/` | Vitest 5 (`npm run test`) |
-| Browser E2E | 14 specs | 164 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
-| Production HTTP smoke | 1 | 43 | `scripts/smoke-test.sh` | bash + curl + python3 |
+| Unit (pure seams) | 9 files | 94 | `src/lib/*.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
+| Browser E2E | 15 specs | 167 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Production HTTP smoke | 1 | 46 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins
 
 - **Unit:** pricing math (plan prices, the 20% annual discount, captions incl. Custom-with-no-suffix), the fixed-window limiter (limit boundary, window reset, eviction, retry-after, key isolation, IP extraction), validation (email/password/string bounds), the workflow template + sanitizer (category inference, clamps, rejection paths), auth crypto (hash/verify round-trip, salt uniqueness, token round-trip, tamper/garbage rejection), content integrity (6 FAQ items, 4 legal pages with sections), the SEO helpers (the per-route description/og:title templates + the routeMetadata assembly — Session 6), the motion engine (the easeOut bezier values fit to the live's entrance ramp, the delay/duration timeline, the per-frame opacity/translateY state — Session 8), and the SQLite URL resolution (anchors, absolute passthrough, standalone repair).
-- **Playwright:** the landing structure (hero, all nine sections, footer columns, anchor scroll, 404, health envelope), **the mobile navigation suite** — the highest-regression-risk chrome: fixed nav geometry, burger→X swap, the dropdown's measured rows (44px, exact hrefs, order), close-on-navigate, Escape, the 768 tablet pill — the auth round-trip (three login states, wrong-password rejection, registration→dashboard→sign-out, session-gated redirect), the dashboard superset (seeded stats, composer end-to-end with cleanup, pause/resume, 401 envelope), the FAQ accordion, the pricing toggle, all four legal pages, the newsletter API pair, **the section-parity suite** (the per-person avatar gradients with an inert-class guard, the Custom-price structure, the edge-fade directions, the AI-suggestion color, body parity, the F7 class strings — Session 6), and **the head-metadata suite** (per-route title/description/og:*/canonical/image/manifest across seven routes, the absence of theme-color/viewport-fit — Session 6), and **the typography-parity suite** (the doubled SPA tracking scale incl. the login route's standard pin, the wordmark inline font-families, the Testimonials H2 tracking, the Gasparyan alt, the star-rating ARIA — Session 7), and **the motion-parity suite** (the rAF entrance behavior incl. the settled `opacity: 1; transform: none;` byte-exact state and the cards' own hover transitions, the per-element entrance parameters, the token pins: shadow-sm/transition-colors/line-height cascade, the login focus chrome, the per-plan CTA classes, the FAQ chevron color, the logo anchor/petals — Session 8).
-- **Smoke:** boots the standalone production server on :3200 with its own `db/smoke.db` (schema-pushed + seeded), then asserts: health envelope, login (valid/wrong/short/duplicate), session me (authed/anon/post-logout), workflow CRUD + invalid-status rejection, newsletter + demo endpoints, all eight pages (incl. the 307/200 dashboard pair), landing content markers, the 404 guard, and the sitemap.
+- **Playwright:** the landing structure (hero, all nine sections, footer columns, anchor scroll, 404, health envelope), **the mobile navigation suite** — the highest-regression-risk chrome: fixed nav geometry, burger→X swap, the dropdown's measured rows (44px, exact hrefs, order), close-on-navigate, Escape, the 768 tablet pill — the auth round-trip (three login states, wrong-password rejection, registration→dashboard→sign-out, session-gated redirect), the dashboard superset (seeded stats, composer end-to-end with cleanup, pause/resume, 401 envelope), the FAQ accordion, the pricing toggle, all four legal pages, the newsletter API pair, **the section-parity suite** (the per-person avatar gradients with an inert-class guard, the Custom-price structure, the edge-fade directions, the AI-suggestion color, body parity, the F7 class strings — Session 6), and **the head-metadata suite** (per-route title/description/og:*/canonical/image/manifest across seven routes, the absence of theme-color/viewport-fit — Session 6), and **the typography-parity suite** (the doubled SPA tracking scale incl. the login route's standard pin, the wordmark inline font-families, the Testimonials H2 tracking, the Gasparyan alt, the star-rating ARIA — Session 7), and **the motion-parity suite** (the rAF entrance behavior incl. the settled `opacity: 1; transform: none;` byte-exact state and the cards' own hover transitions, the per-element entrance parameters, the token pins: shadow-sm/transition-colors/line-height cascade, the login focus chrome, the per-plan CTA classes, the FAQ chevron color, the logo anchor/petals — Session 8), and **the hydration suite** (every route renders with ZERO pageerrors — the 404's React #418 fixed by the mount-gated pathname; the static prerender ships the empty-quote placeholder — Session 11), and the **mockup-motion-parity suite** (the looping-motion + dashboard a11y pins — Session 10).
+- **Smoke:** boots the standalone production server on :3200 with its own `db/smoke.db` (schema-pushed + seeded), then asserts: health envelope, login (valid/wrong/short/duplicate), session me (authed/anon/post-logout), workflow CRUD + invalid-status rejection + the PATCH name-contract pins (oversize rejected 400 VALIDATION, valid rename ok — Session 11), newsletter + demo endpoints, all eight pages (incl. the 307/200 dashboard pair), landing content markers, the 404 guard, and the sitemap.
 
 ### 7.3 Coverage Thresholds
 
-- **Gate (mandatory before push):** `npm run lint` → `npm run typecheck` → `npm run test` (**92/92**) → `npm run build` → `./scripts/smoke-test.sh` (**43/43**) → `npm run test:e2e` (**164/164**). No hosted CI; the local gate is the only gate. The `typecheck` step is not optional: the build sets `ignoreBuildErrors`.
+- **Gate (mandatory before push):** `npm run lint` → `npm run typecheck` → `npm run test` (**94/94**) → `npm run build` → `./scripts/smoke-test.sh` (**46/46**) → `npm run test:e2e` (**167/167**). No hosted CI; the local gate is the only gate. The `typecheck` step is not optional: the build sets `ignoreBuildErrors`.
 - Line/branch coverage is not measured — the seam list is deliberately small and complete.
 
 ### 7.4 Conventions
 
 - E2E runs single-worker against one seeded `db/e2e.db`; mutating specs clean up after themselves (the composer spec deletes its row).
-- Auth specs keep real login attempts well under the rate-limiter budget (the limiter trap the previous cycle documented).
+- Auth POSTs across the suite stay under the limiter budget — and since Session 11 the Playwright webServer PINS `AUTH_RATE_LIMIT_MAX=50` (the suite's own UI sign-ins share one IP and one process with the in-memory limiter; the default-10 budget sat at exactly the suite's count, and one extra signed-in spec tripped a mid-suite 429 — D66).
 - Computed-color assertions accept both rgba and oklab spellings (D6) — never "fix" the CSS to chase a byte-parity that rendering already achieves.
+- Transitioning properties are sampled to SETTLED (poll), never string-matched at a fixed offset — the Session-11 de-flake lesson (the ring's box-shadow was sampled mid-flight at 200ms, and the settled value itself serializes two ways: `rgb(9,9,11)` / `rgba(9,9,11,1)`).
+- **The hydration suite** (`tests/e2e/hydration.spec.ts`) holds every route to a zero-pageerror contract — a clean render can still ship a broken hydration (React #418 on the 404, Session 11).
 
 ---
 
@@ -887,6 +939,7 @@ The standalone tree carries the traced `node_modules`, the static chunks, and `p
 | `DATABASE_URL` | Yes | SQLite file. Relative `file:` URLs resolve against `prisma/schema.prisma` — for the CLI **and** the runtime (`src/lib/db-path.ts`). | `file:../db/custom.db` |
 | `AUTH_SECRET` | Production | HMAC secret for session tokens (`openssl rand -hex 32`). Unset ⇒ insecure dev-only constant (loudly documented). | — |
 | `NEXT_PUBLIC_SITE_URL` | Recommended | Canonical origin for metadata, `sitemap.xml`, `robots.txt`. | `http://localhost:3000` |
+| `AUTH_RATE_LIMIT_MAX` | Optional | Auth-endpoint attempts per IP per 15-min window (login + register share one bucket). Raise behind shared egress IPs. | `10` |
 
 **The exported-variable trap:** a shell-exported absolute `DATABASE_URL` overrides `.env` for the Prisma CLI and the Next runtime alike — the server silently opens a foreign file. Every script that boots a server or runs Prisma (`smoke-test.sh`, `playwright.config.ts` webServer, `global-setup.ts`) pins its own value; keep that discipline (it is the historical 12/30 smoke failure mode).
 
@@ -974,13 +1027,14 @@ TypeScript strict (with the template-era `noImplicitAny: false`); ESLint flat co
 | `src/lib/auth.ts` | scrypt hashing, HMAC session tokens, cookie lifecycle (ADR-003) |
 | `src/lib/seo.ts` | The reference's per-route head pattern: `pageDescription` / `pageTitle` / `routeMetadata` (Session 6; unit-tested) |
 | `src/lib/db-path.ts` + `tests/db-path.test.ts` | The SQLite URL-resolution seam + its contract (Pattern B) |
-| `src/lib/rate-limit.ts` | Pure fixed-window limiter (ADR-008) |
+| `src/lib/rate-limit.ts` | Pure fixed-window limiter (ADR-008) — the `AUTH_RATE_LIMIT_MAX` override (D66) |
 | `src/lib/pricing.ts` | Plans, periods, the 20% annual discount (unit-tested) |
 | `src/lib/workflow.ts` | Status/category vocabularies, template + sanitizer (ADR-004) |
 | `src/lib/legal-content.ts` / `faq-content.ts` | Verbatim reference copy (content-as-code) |
 | `prisma/schema.prisma` / `prisma/seed.ts` | 4 models / idempotent demo workspace |
-| `scripts/smoke-test.sh` | 43-check production HTTP suite (pins its own `DATABASE_URL`; incl. the four security-header pins + the asset-caching pin) |
+| `scripts/smoke-test.sh` | 46-check production HTTP suite (pins its own `DATABASE_URL`; incl. the four security-header pins + the asset-caching pin + the PATCH name-contract pins) |
 | `tests/e2e/mobile-navigation.spec.ts` | The chrome pins: burger dropdown rows, close-on-navigate, tablet pill, close-on-md resize |
+| `tests/e2e/hydration.spec.ts` | The Session-11 zero-pageerror contract: every route hydrates clean; the 404 quotes the real URL post-mount while the static prerender ships the empty placeholder |
 | `tests/e2e/mockup-motion-parity.spec.ts` | The Session-10 looping-motion pins: the seven measured `--animate-*` loops (names/durations/delays), the under-glow restructure (sibling, translate-none, the rendered geometry), and the dashboard a11y floor (the single h1 + the white/60 muted lines) |
 | `tests/e2e/palette-parity.spec.ts` | The Session-9 rendered-palette pins: the v3 hex values on every drifted default-palette surface, the Sign in's slate-950 ring, the inputs' slate-400 rings, the ::selection removal, the login overscroll/border pins |
 | `tests/e2e/typography-parity.spec.ts` | The Session-7 typography pins: the tracking scale (+ the login pin), wordmark fonts, H2 tracking, alt, star ARIA |

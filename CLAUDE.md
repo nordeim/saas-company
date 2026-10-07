@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (43) | 92 unit + 164 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (46) | 94 unit + 167 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -145,15 +145,44 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 92/92 PASS
+- [ ] `npm run test` → 94/94 PASS
 - [ ] `npm run build` compiles clean
-- [ ] `./scripts/smoke-test.sh` → 43/43 PASS
-- [ ] `npm run test:e2e` → 164/164 PASS (needs the build first)
+- [ ] `./scripts/smoke-test.sh` → 46/46 PASS
+- [ ] `npm run test:e2e` → 167/167 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 11 (2026-10-08) remediation** — see
+  `docs/remediation-plan-session11.md`: the first HYDRATION-HEALTH survey
+  (a console/pageerror sweep of every route) plus the first cross-route
+  axe sweep (clone AND live, adjudicated) and an API edge-case probe
+  found and fixed four defects: **the 404 hydration error** (every unknown
+  route tripped React #418 — the statically-prerendered client component
+  rendered `usePathname()` while the prerendered HTML shipped the internal
+  route id; AND `usePathname()` settles to `/_not-found` post-router —
+  fixed with a `useSyncExternalStore` mount gate reading
+  `window.location.pathname`, pinned by the new hydration suite);
+  **the paused-card contrast compounding** (the dashboard's `opacity-80`
+  articles turned `text-white/50` into EFFECTIVE white/40 — 3.61:1,
+  glyph-pixel-verified; a controlled experiment proved oklab/color-mix
+  composites identically to rgba, isolating the ancestor opacity as the
+  cause; fixed white/60); **the PATCH/POST name-contract split** (POST
+  rejected >120 chars, PATCH silently truncated — now both reject via
+  `requiredString`); and **the gate's own flaky ring pin** (fixed-200ms
+  mid-transition samples + blind-Tab×4 landing on inputs when hydration
+  shifted the tab order — now tab-until-focused + poll-to-settled,
+  10/10 + 8/8 consecutive greens). ALSO: `AUTH_RATE_LIMIT_MAX` (default
+  10) de-fragilized the e2e suite (its UI sign-ins sat at exactly the
+  default budget — one extra spec tripped a mid-suite 429); the
+  clone-only axe violations on `/`, `/faq`, and the 404 were adjudicated
+  LIVE-PARITY (ledgered D63 — the live ships them too; parity law);
+  the mobile nav re-verified byte-identical (the live's burger remains
+  pointer-blocked, D32). Gate: **307 checks** (94 + 167 e2e incl. the
+  hydration suite + 46 smoke); axe /dashboard ZERO violations; word
+  parity 1.0000 on all 8 routes.
 
 - **Session 10 (2026-10-08) remediation** — see
   `docs/remediation-plan-session10.md`: the first LOOPING-MOTION survey (a

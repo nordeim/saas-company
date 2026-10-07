@@ -54,6 +54,11 @@ export default defineConfig({
       NODE_ENV: "production",
       DATABASE_URL: E2E_DATABASE_URL,
       AUTH_SECRET: "playwright-e2e-session-secret",
+      // Session 11: the suite's own UI sign-ins (auth + dashboard +
+      // mockup-motion-parity + login-states ≈ 10 POSTs) share one IP and
+      // one process with the in-memory auth limiter — raise the budget so
+      // the razor-edge default (exactly 10) can't 429 mid-suite.
+      AUTH_RATE_LIMIT_MAX: "50",
     } as Record<string, string>,
   },
 });

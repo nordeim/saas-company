@@ -19,17 +19,17 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (92 checks) | `npm run test` |
-| Browser E2E (164 checks; needs a build) | `npm run test:e2e` |
+| Unit tests (94 checks) | `npm run test` |
+| Browser E2E (167 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
-| End-to-end smoke suite (43 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
+| End-to-end smoke suite (46 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (92/92) → `npm run build` → `./scripts/smoke-test.sh` (43/43)
-→ `npm run test:e2e` (164/164) — 299 checks across three layers (boots the standalone server on :3100 against its own
-`db/e2e.db`). There is no hosted CI; the local gate is the only gate.
+`npm run test` (94/94) → `npm run build` → `./scripts/smoke-test.sh` (46/46)
+→ `npm run test:e2e` (167/167) — 307 checks across three layers (boots the standalone server on :3100 against its own
+`db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
 
@@ -81,9 +81,12 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    (dark NovaAI marketing site); the measurements live in
    `Project_Architecture_Document.md` §5 and the e2e pins.
 8. **Rate limits are per-process.** Auth endpoints throttle 10
-   attempts/IP/15 min (in-memory `src/lib/rate-limit.ts`). E2E specs sign in
-   through the UI sparingly; per-test logins would trip the limiter
-   mid-suite.
+   attempts/IP/15 min (in-memory `src/lib/rate-limit.ts`; override with
+   `AUTH_RATE_LIMIT_MAX` — the Playwright webServer pins 50 because the
+   suite's own ~10 UI sign-ins share one IP and one process with the
+   limiter; at the default they sat at EXACTLY the budget — Session 11
+   saw one extra signed-in spec trip a mid-suite 429 that broke an
+   unrelated pin).
 9. **Dependency overrides are load-bearing.** `package.json` pins
    `overrides` for `braces`/`micromatch`/`fast-glob`/`deepmerge-ts` — the
    patched transitive versions for advisories whose parents haven't shipped
@@ -221,6 +224,24 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    composition (the live's under-glow renders un-centered) — v4's
    `translate` property is SEPARATE from `transform`, so reproducing that
    geometry needs an explicit `translate-none` (PAD §5.5 trap 16).
+25. **A statically-prerendered CLIENT component cannot render route state
+   at SSR — and `usePathname()` settles to the INTERNAL route id on
+   404s** (Session 11): the not-found page shipped React #418 on EVERY
+   unknown route (the prerendered HTML quoted `"_not-found"` while the
+   hydration render carried the real URL — a text mismatch by
+   construction), and post-settle `usePathname()` returns `/_not-found`,
+   not the browser URL. The pattern: a `useSyncExternalStore` mount gate
+   (server snapshot false) reading `window.location.pathname` — pinned
+   by `tests/e2e/hydration.spec.ts`. Sweep the CONSOLE layer (pageerror)
+   on every route — a clean render can still ship a broken hydration.
+   Related Session-11 lessons: sample TRANSITIONING properties to
+   settled (the ring pin's fixed-200ms mid-flight samples + its
+   blind-Tab×4 focus misses made the gate itself flaky — poll, and
+   tab-until-focused), and alpha composites through ANCESTOR opacity
+   (the paused cards' `opacity-80` turned `text-white/50` into effective
+   white/40 — audit the EFFECTIVE alpha, not the class; the clone-only
+   axe violations on `/`, `/faq`, and the 404 are LIVE-PARITY — D63,
+   not bugs to fix).
 
 ## Architecture invariants
 

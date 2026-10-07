@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { checkRate, clientIpOf, type RateBuckets } from "./rate-limit";
+import { authRateLimit, checkRate, clientIpOf, type RateBuckets } from "./rate-limit";
 
 function freshBuckets(): RateBuckets {
   return new Map();
@@ -65,5 +65,37 @@ describe("clientIpOf", () => {
   it("falls back to x-real-ip then unknown", () => {
     expect(clientIpOf(new Headers({ "x-real-ip": "9.9.9.9" }))).toBe("9.9.9.9");
     expect(clientIpOf(new Headers())).toBe("unknown");
+  });
+});
+
+describe("authRateLimit (Session-11: the AUTH_RATE_LIMIT_MAX override)", () => {
+  it("defaults to 10 attempts per IP when the env is unset or invalid", () => {
+    const prior = process.env.AUTH_RATE_LIMIT_MAX;
+    delete process.env.AUTH_RATE_LIMIT_MAX;
+    try {
+      // a distinct IP per run keeps the shared in-memory buckets isolated
+      const ip = `10.0.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}`;
+      for (let i = 0; i < 10; i++) {
+        expect(authRateLimit(ip).allowed).toBe(true);
+      }
+      expect(authRateLimit(ip).allowed).toBe(false); // the 11th trips
+    } finally {
+      if (prior !== undefined) process.env.AUTH_RATE_LIMIT_MAX = prior;
+    }
+  });
+
+  it("honors AUTH_RATE_LIMIT_MAX (the e2e webServer's 50)", () => {
+    const prior = process.env.AUTH_RATE_LIMIT_MAX;
+    process.env.AUTH_RATE_LIMIT_MAX = "3";
+    try {
+      const ip = `10.1.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}`;
+      for (let i = 0; i < 3; i++) {
+        expect(authRateLimit(ip).allowed).toBe(true);
+      }
+      expect(authRateLimit(ip).allowed).toBe(false); // the 4th trips at the override
+    } finally {
+      if (prior !== undefined) process.env.AUTH_RATE_LIMIT_MAX = prior;
+      else delete process.env.AUTH_RATE_LIMIT_MAX;
+    }
   });
 });

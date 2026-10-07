@@ -114,6 +114,19 @@ PAUSED=$(curl -s -b /tmp/smoke-cookies.txt -X PATCH "$BASE/api/workflows/$WF_ID"
   -H "Content-Type: application/json" -d '{"status":"paused"}')
 check "workflow pause ok" "paused" "$(echo "$PAUSED" | field "['data']['status']")"
 
+# Session 11 F4: PATCH must enforce the same name contract as POST — a
+# >120-char name is REJECTED (400 VALIDATION), not silently truncated to
+# 120 (the pre-fix PATCH returned 200 with a cut name).
+OVERSIZE=$(curl -s -o /dev/null -w '%{http_code}' -b /tmp/smoke-cookies.txt -X PATCH "$BASE/api/workflows/$WF_ID" \
+  -H "Content-Type: application/json" -d "{\"name\":\"$(printf 'x%.0s' $(seq 1 300))\"}")
+check "patch oversized name rejected (400)" "400" "$OVERSIZE"
+OVERSIZE_BODY=$(curl -s -b /tmp/smoke-cookies.txt -X PATCH "$BASE/api/workflows/$WF_ID" \
+  -H "Content-Type: application/json" -d "{\"name\":\"$(printf 'x%.0s' $(seq 1 300))\"}")
+check "patch oversized name error code" "VALIDATION" "$(echo "$OVERSIZE_BODY" | field "['error']['code']")"
+RENAMED=$(curl -s -b /tmp/smoke-cookies.txt -X PATCH "$BASE/api/workflows/$WF_ID" \
+  -H "Content-Type: application/json" -d '{"name":"Smoke workflow renamed"}')
+check "patch valid name ok" "True" "$(echo "$RENAMED" | field "['ok']")"
+
 DELETED=$(curl -s -b /tmp/smoke-cookies.txt -X DELETE "$BASE/api/workflows/$WF_ID")
 check "workflow delete ok" "True" "$(echo "$DELETED" | field "['ok']")"
 

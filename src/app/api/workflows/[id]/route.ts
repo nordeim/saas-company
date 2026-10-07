@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { ok, fail } from "@/lib/api";
 import { requireSession } from "@/lib/api";
-import { cleanString } from "@/lib/validation";
+import { cleanString, requiredString } from "@/lib/validation";
 import { isWorkflowStatus } from "@/lib/workflow";
 
 type Params = { params: Promise<{ id: string }> };
@@ -41,9 +41,12 @@ export async function PATCH(request: Request, { params }: Params) {
 
   const patch: Record<string, string> = {};
   if ("name" in data) {
-    const name = typeof data.name === "string" ? data.name.trim().slice(0, 120) : "";
-    if (!name) return fail("VALIDATION", "Name cannot be empty.", 400);
-    patch.name = name;
+    // Session 11 F4: the SAME contract as POST (requiredString rejects
+    // empty AND >120) — the pre-fix silent .slice(0, 120) truncation made
+    // create-reject / update-truncate inconsistent for one field.
+    const name = requiredString(data.name, 120, "Name");
+    if (!name.ok) return fail("VALIDATION", name.error, 400);
+    patch.name = name.value;
   }
   if ("description" in data) patch.description = cleanString(data.description, 500) ?? "";
   if ("category" in data) patch.category = cleanString(data.category, 40) ?? "";

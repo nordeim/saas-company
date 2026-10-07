@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.9.0 · **Last updated:** 2026-10-08 (Session 10 remediation)
+> **Version:** 2.10.0 · **Last updated:** 2026-10-08 (Session 11 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–10)
+## §12. Lessons Learnt (Sessions 1–11)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -483,6 +483,37 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     edge vs background) settles clipping questions the DOM cannot: both
     the rect and the computed styles survive ancestor `overflow: hidden`,
     only the rendered pixels tell the truth.
+30. **Survey the CONSOLE layer — a clean render can still ship a broken
+    hydration** (Session 11): the 404 page looked perfect in every
+    screenshot, passed word parity, and quoted the right path — while
+    tripping React #418 on EVERY load (the statically-prerendered client
+    component rendered `usePathname()` while the prerendered HTML shipped
+    the internal route id `"_not-found"`; React discarded the server tree
+    and re-rendered client-side). A `pageerror` listener per route is a
+    five-line survey that catches the whole class. The companion trap:
+    `usePathname()` settles to the INTERNAL route id (`/_not-found`) once
+    the App Router settles — the real URL exists only during the
+    hydration render — so a 404 that quotes its URL must read
+    `window.location.pathname` behind a `useSyncExternalStore` mount gate
+    (server snapshot false: server and hydration renders agree, the URL
+    fills one post-hydration commit and stays).
+31. **Alpha composites through ANCESTOR opacity — audit the EFFECTIVE
+    alpha, not the utility class; and separate engine shifts from design
+    choices with a CONTROL before pinning** (Session 11): the dashboard's
+    paused/draft articles carry `opacity-80`, so a `text-white/50`
+    description rendered at effective white/40 (3.61:1) — the axe report
+    was right and every class-string read was wrong. The glyph-interior
+    pixel sample (4× device scale; the uniform ink color IS the rendered
+    truth) localized it, and the controlled experiment — rgba vs oklab
+    vs `color-mix(in oklab, … , transparent)` over the same background,
+    all rendering the identical #818181 — proved the v4 color engine was
+    INNOCENT before anything got pinned. The same discipline applies to
+    flaky assertions: a transitioning property sampled at a fixed offset
+    (the ring pin's 200ms) reads mid-flight values (`3.98466px`, alpha
+    .996) AND the settled value serializes two ways (`rgb(9,9,11)` /
+    `rgba(9,9,11,1)`) — poll to settled and match both spellings; and a
+    blind Tab×N walk lands on different elements when hydration shifts
+    the tab order — tab-until-focused, then read.
 
 ## §13. Pitfalls to Avoid
 

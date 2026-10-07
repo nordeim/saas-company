@@ -286,7 +286,7 @@ export function DashboardApp({
                         )}
                       </div>
                       {w.description && (
-                        <p className="text-sm text-white/50 font-body mt-1.5 leading-relaxed line-clamp-2">
+                        <p className="text-sm text-white/60 font-body mt-1.5 leading-relaxed line-clamp-2">
                           {w.description}
                         </p>
                       )}
