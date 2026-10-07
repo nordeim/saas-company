@@ -9,6 +9,49 @@
 
 #### Revision Block — v1.0
 
+- `[NOTE]` **Session 9 remediation (2026-10-07)** — a RENDERED-PALETTE +
+  interaction-state + browser-chrome + a11y-tree audit (the first systematic
+  survey of the computed DEFAULT/HOVER/ACTIVE states of every interactive
+  element plus a keyboard focus walk, the rendered values of every
+  default-palette color this app uses, the ::selection/scrollbar/cursor/
+  overscroll chrome layer, the form-control & media attribute inventory,
+  the ARIA snapshot tree, the `:root` custom-property inventory, and the
+  HTTP response headers — see `docs/remediation-plan-session9.md` F1–F8 →
+  R1–R7) found and fixed six clone-side gap groups: **the v4 OKLCH
+  PALETTE ROUNDTRIP** (v4's default palette is oklch-defined; the
+  oklch→sRGB roundtrip renders up to 69 RGB units off the v3 hex the
+  live's compiled css carries — green-400 rgb(5,223,114) vs #4ade80,
+  red-500, red-700, purple-600/blue-600 (the avatar gradient endpoints),
+  yellow-400 (the stars), amber/orange, and every drifted slate/gray —
+  31 tokens pinned to the v3 hex in `@theme`); **the login Sign in ring**
+  (Session 8's `--ring` variable fix was incomplete — v4's `ring-ring`
+  utility reads `--color-ring`, which was never in `@theme`, so the
+  utility never emitted and the keyboard ring fell back to currentColor
+  WHITE instead of the live's slate-950; the token is now pinned and a
+  utilities-layer `input:focus:focus-visible` rule restores the live's
+  cascade where the inputs' `focus:ring-slate-400` must beat
+  `focus-visible:ring-ring` — v4 emits ring-ring last, flipping the
+  live's order); **the violet ::selection rule removed** (an eight-session
+  invention — the live ships no ::selection rule in either bundle);
+  **the login route's `html { overscroll-behavior-y: none }`** (the live's
+  login bundle pins it; the landing stays auto); **the login route's light
+  `--color-border`** (the live's login bundle ships gray-200 — inert,
+  width-0 borders, pinned for the computed matrix); and **four security
+  headers** (the live ships `X-Content-Type-Options: nosniff`,
+  `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`,
+  `Strict-Transport-Security: max-age=31536000` — now emitted via
+  `next.config.ts` `headers()` and pinned by four new smoke checks).
+  ALSO DOCUMENTED: the a11y-superset family measured by the first ARIA
+  tree survey (the named nav, the labeled logo link/svg, the `<main>`
+  landmark, aria-hidden decorative icons, the aria-pressed feature tabs,
+  the newsletter labels, the Next.js route announcer) and the live-side
+  noise (its "Notifications alt+T" toast region, its mobile menu not
+  closing on Escape, its inert `--ease-out`/px-radius login vars, the v4
+  transparent shadow-slot count, its dead ds scrollbar suite). Gate
+  re-locked at **284 checks** (92 unit + 150 e2e incl. the new
+  palette-parity suite + 42 smoke); word parity 1.0000 on all 8 routes;
+  VLM problem/testimonials/login IDENTICAL; the mobile menu re-verified
+  byte-identical with the resize guard intact.
 - `[NOTE]` **Session 8 remediation (2026-10-07)** — a MOTION-LAYER +
   line-height-cascade + focus/shadow-token audit (the first systematic
   computed-`transition-*`/`animation-*` survey of every animated element,
@@ -401,7 +444,7 @@ Layer 3: Pages & components — presentation. Server pages resolve
 │       ├── hero-ai-loop.mp4       ← the reference's looping hero video (1.9MB)
 │       └── gasparyan-logo.svg     ← the image-based client logo
 ├── scripts/
-│   └── smoke-test.sh              ← 38-check suite; boots prod on :3200,
+│   └── smoke-test.sh              ← 42-check suite; boots prod on :3200,
 │                                    pins its own DATABASE_URL (the env trap)
 ├── src/
 │   ├── app/
@@ -686,6 +729,14 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D46 | Navbar logo light-mode swap | a React-driven PATH FILL attribute (`fill="white"` dark / `fill="black"` light) — the anchor stays bare `flex items-center`, its color never changes (white-on-white is never rendered: the paths flip) | the same path-fill swap (`<LogoWordmark fill={light ? "black" : "white"">`); the anchor stripped of the invented transition/color classes | Parity (Session 8; the Session-4 spec pin corrected to read the rendered fill) |
 | D47 | Entrances under `prefers-reduced-motion` | the live's framer entrances RUN under RM (measured identical curves RM vs normal) | the clone settles instantly — the intentional a11y superset | **Superset** (Session 8, documented) |
 | D48 | FAQ closed panels in the hydrated DOM | the live mounts all six panels `data-state="closed"` (height 0, the accordion-up animation applied — invisible) | the clone unmounts closed panels — rendered-equivalent (nothing visible either way); kept for the cleaner React lifecycle | Deviation (Session 8, documented — rendered-equivalent) |
+| D49 | Default palette (slate/gray/red/green/yellow/amber/orange/blue/purple) | Tailwind v3 HEX values in its compiled css (e.g. red-500 renders rgb(239,68,68); slate-700 rgb(51,65,85) — measured on the Google button) | 31 tokens pinned to the v3 hex in `@theme` — v4's oklch-defined defaults roundtrip to sRGB values up to 69 units off (green-400 rgb(5,223,114) vs #4ade80; the stars, problem reds, features grays/greens, avatar gradient endpoints, every login slate); slate-200 pinned for byte-stable serialization (value was already identical) | Parity (Session 9) |
+| D50 | The login Sign in keyboard ring | slate-950 — `--ring: 240 10% 3.9%` consumed by `focus-visible:ring-ring` (ring-offset white 2px + ring slate-950 2px + shadow-sm) | `--color-ring: hsl(240 10% 3.9%)` in `@theme` (v4's emission path — Session 8 had pinned only the legacy `--ring` variable, leaving the utility un-emitted and the ring at currentColor WHITE for a session); the inputs keep slate-400 rings via a utilities-layer `input:focus:focus-visible` rule (v4 emits ring-ring after ring-slate-400, flipping the live's cascade — the rule restores it) | Parity (Session 9; corrects D45's mechanism) |
+| D51 | Text selection | NO ::selection rule in either bundle (the login bundle ships only unused `.selection:*` variants) — the platform default renders | the invented violet `::selection` rule REMOVED (it shipped for eight sessions); the selection now renders the platform default like the live | Parity (Session 9) |
+| D52 | `/login` overscroll | `html { overscroll-behavior-y: none }` (login-scoped — the landing computes auto) | the same pin in the login route's `<style>` (suppresses pull-to-refresh/bounce chaining on the auth route) | Parity (Session 9) |
+| D53 | `/login` implicit border color | the login bundle's `--border: 220 13% 91%` (gray-200) — borderless elements compute rgb(229,231,235) | `body { --color-border: #e5e7eb }` in the route style — INERT (every affected element has border-width 0) but the computed matrix matches | Parity (Session 9, inert) |
+| D54 | HTTP security headers | `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Strict-Transport-Security: max-age=31536000` (Base44/Cloudflare) | the same four via `next.config.ts` `headers()`, pinned by four smoke checks (HSTS activates behind TLS; no CSP — the inline route styles and hydration scripts would need nonce tooling first) | Parity (Session 9) |
+| D55 | ARIA tree (first structured survey) | unnamed nav, unnamed logo link/svg, NO `<main>` landmark (its axe "103 landmark-less nodes"), every decorative icon exposed as unnamed `img` noise, no aria-pressed tabs, no route announcer | the named nav (`aria-label="Main navigation"`), the labeled logo (`aria-label="NovaAI home"` + `img "NovaAI"`), a `<main>` landmark, `aria-hidden` decorative icons, `aria-pressed` feature tabs, labeled newsletter controls, and the Next.js `<NEXT-ROUTE-ANNOUNCER>` — a D22/D38-class a11y superset family | **Superset** (Session 9, documented) |
+| D56 | Live-side observations (no clone change) | (a) its /login ships a `region "Notifications alt+T"` (the toast portal infra that also pointer-blocks its burger, D32); (b) its mobile menu does NOT close on Escape (the clone's Escape-close joins D21/D39/D32 as the intended-UX superset); (c) its login bundle defines `--ease-out: cubic-bezier(.16,1,.3,1)` (≠ v4's default) and px-spelled `--radius-*` — both INERT on the page (no consumer; the rem spellings render identical values); (d) v4's shadow composition emits two extra TRANSPARENT box-shadow slots (6 vs 4 computed — transparent paints nothing; D6-class); (e) its login css ships a full `::-webkit-scrollbar` ds suite that never renders (the login page never overflows) | all five documented as live-side/engine notes; no action | Live-side / engine (Session 9) |
 
 ### 5.5 Tailwind v4 Trap Log (enforced here)
 
@@ -703,6 +754,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 12. **Resize-while-open is a real failure class for breakpoint-mounted chrome** (Session 7): a menu mounted below md and hidden by `md:hidden` above it keeps its state (and any body scroll-lock) alive across the boundary — a `matchMedia` close-on-md listener is the standard guard (see the mobile-navigation testing taxonomy).
 13. **v4 RENAMED the small shadows** (Session 8): v3's `shadow-sm` became v4's `shadow-xs`, so a v3-era `shadow-sm` class renders one step bigger under v4 (the login Sign in button: `0 1px 3px 0.1` instead of `0 1px 2px 0.05`). `--shadow-sm` in `@theme` is the pin point; `shadow-lg`/`shadow-xl` are unchanged v3→v4.
 14. **The v3/v4 LINE-HEIGHT cascade inversion** (Session 8): in v3, a RESPONSIVE text-size utility (`sm:text-base`, `md:text-4xl` — emitted inside its media query, after all base utilities) beats a coexisting `leading-*` utility; in v4 the leading utilities set `--tw-leading`, which the text utilities consume via `var(--tw-leading, var(--text-*--line-height))` — leading ALWAYS wins. Affected pairs (responsive text + leading on one element) need an inline `--tw-leading: initial` pin to reproduce the v3 outcome; STATIC text+leading pairs (e.g. `text-sm leading-relaxed`) match both engines. Same audit class as the tracking-scale shift: survey the ENGINE, not just the class strings.
+15. **v4's DEFAULT PALETTE IS OKLCH-DEFINED — the oklch→sRGB roundtrip drifts from v3's hex** (Session 9): v4's `theme.css` carries oklch approximations of the v3 palette and the roundtrip renders up to 69 RGB units off (green-400 rgb(5,223,114) vs #4ade80; red-500 +12/−24/−14; purple-600 +5/−35/+16 — the avatar gradients; slate-700 rgb(49,65,88) vs #334155 — every login slate). Class strings, word parity, and even spelling-tolerant specs all hide this — only a RENDERED-VALUE survey (converted to sRGB and compared with the live's v3-era hex) finds it. The pin point is `@theme --color-<name>-<shade>: <v3 hex>` for every drifted, USED token (31 here; exact matches left on v4 defaults). Same-family corollary: **`ring-ring` reads `--color-ring`** — a shadcn-style legacy `--ring` variable alone makes the utility inert and the ring falls back to currentColor; and v4 emits `ring-ring` AFTER `ring-slate-400` in the compiled sheet, so elements carrying BOTH need a specificity nudge (`input:focus:focus-visible`) to keep the v3-era cascade outcome.
 
 ---
 
@@ -743,8 +795,8 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 9 + db-path | 92 | `src/lib/*.test.ts`, `tests/` | Vitest 5 (`npm run test`) |
-| Browser E2E | 12 specs | 136 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
-| Production HTTP smoke | 1 | 38 | `scripts/smoke-test.sh` | bash + curl + python3 |
+| Browser E2E | 13 specs | 150 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Production HTTP smoke | 1 | 42 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins
 
@@ -754,7 +806,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 
 ### 7.3 Coverage Thresholds
 
-- **Gate (mandatory before push):** `npm run lint` → `npm run typecheck` → `npm run test` (**92/92**) → `npm run build` → `./scripts/smoke-test.sh` (**38/38**) → `npm run test:e2e` (**136/136**). No hosted CI; the local gate is the only gate. The `typecheck` step is not optional: the build sets `ignoreBuildErrors`.
+- **Gate (mandatory before push):** `npm run lint` → `npm run typecheck` → `npm run test` (**92/92**) → `npm run build` → `./scripts/smoke-test.sh` (**42/42**) → `npm run test:e2e` (**150/150**). No hosted CI; the local gate is the only gate. The `typecheck` step is not optional: the build sets `ignoreBuildErrors`.
 - Line/branch coverage is not measured — the seam list is deliberately small and complete.
 
 ### 7.4 Conventions
@@ -823,7 +875,7 @@ Demo login: `demo@novaai.app` / `Demo1234!`. Full verification: the §7.3 gate.
 | `npx prisma generate` | Regenerate the client after schema edits |
 | `npm run db:push` / `npm run db:seed` | Apply schema / reset to demo data |
 | `npm run test` / `npm run test:e2e` | 80 unit / 109 browser checks |
-| `./scripts/smoke-test.sh` | 38-check suite against the production build |
+| `./scripts/smoke-test.sh` | 42-check suite against the production build |
 | `npx playwright test tests/e2e/mobile-navigation.spec.ts` | Re-run the chrome suite alone |
 
 ### 9.3 Code Style
@@ -878,8 +930,9 @@ TypeScript strict (with the template-era `noImplicitAny: false`); ESLint flat co
 | `src/lib/workflow.ts` | Status/category vocabularies, template + sanitizer (ADR-004) |
 | `src/lib/legal-content.ts` / `faq-content.ts` | Verbatim reference copy (content-as-code) |
 | `prisma/schema.prisma` / `prisma/seed.ts` | 4 models / idempotent demo workspace |
-| `scripts/smoke-test.sh` | 38-check production HTTP suite (pins its own `DATABASE_URL`) |
+| `scripts/smoke-test.sh` | 42-check production HTTP suite (pins its own `DATABASE_URL`; incl. the four security-header pins) |
 | `tests/e2e/mobile-navigation.spec.ts` | The chrome pins: burger dropdown rows, close-on-navigate, tablet pill, close-on-md resize |
+| `tests/e2e/palette-parity.spec.ts` | The Session-9 rendered-palette pins: the v3 hex values on every drifted default-palette surface, the Sign in's slate-950 ring, the inputs' slate-400 rings, the ::selection removal, the login overscroll/border pins |
 | `tests/e2e/typography-parity.spec.ts` | The Session-7 typography pins: the tracking scale (+ the login pin), wordmark fonts, H2 tracking, alt, star ARIA |
 | `tests/e2e/brand-parity.spec.ts` | The Session-3 token/copy/metadata pins: gradient stops (oklab-converted), font chain, straight quotes, titles, 404 pathname, Lenis, noscript |
 | `docs/Tailwind-V4-Validation-Report.md` | The v4 trap log this codebase enforces |
@@ -900,4 +953,4 @@ TypeScript strict (with the template-era `noImplicitAny: false`); ESLint flat co
 | **The env trap** | A shell-exported `DATABASE_URL` overriding `.env`, silently pointing every tool at a foreign database file |
 | **The glass pill** | The nav's centered `bg-white/10 backdrop-blur-md` link container (md+) |
 | **Paired survey** | The parity method: same-viewport computed styles + VLM side-by-side comparison of live vs clone |
-| **Smoke suite** | `scripts/smoke-test.sh` — the 38-check production-server verification gate |
+| **Smoke suite** | `scripts/smoke-test.sh` — the 42-check production-server verification gate |

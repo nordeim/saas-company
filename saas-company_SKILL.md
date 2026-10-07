@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.7.0 · **Last updated:** 2026-10-07 (Session 8 remediation)
+> **Version:** 2.8.0 · **Last updated:** 2026-10-07 (Session 9 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–8)
+## §12. Lessons Learnt (Sessions 1–9)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -430,6 +430,30 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     pins where the CASCADE order itself is the divergence
     (`--tw-leading: initial`). When one config-level shift is found, audit
     the whole utility engine for its siblings.
+26. **Survey the RENDERED PALETTE, not the class strings** (Session 9):
+    v4's default palette is OKLCH-DEFINED and the oklch→sRGB roundtrip
+    renders up to 69 RGB units off the v3 hex the reference's compiled css
+    carries (green-400 rgb(5,223,114) vs #4ade80; red-500, purple-600,
+    yellow-400 — the stars, the problem reds, the avatar gradient
+    endpoints, every login slate). Class strings match, word parity is
+    1.0000, and even spelling-tolerant color specs stay green while the
+    pixels drift. The survey that finds it: convert every used
+    default-palette computed value to sRGB and compare against the live's
+    measured rgb. The fix: `@theme --color-<family>-<shade>: <v3 hex>`
+    (31 tokens). Corollary: computed lab()/oklab() SPELLINGS with equal
+    values are D6-class noise (slate-200) — compare values, not strings.
+27. **A utility that references a missing @theme token never emits — pin
+    the RENDERED effect, not the variable** (Session 9): v4's `ring-ring`
+    reads `--color-ring`, so a shadcn-style legacy `--ring` HSL variable
+    (even correctly defined and asserted by a spec!) leaves the utility
+    un-emitted and the ring falls back to currentColor — the Sign in's
+    keyboard ring rendered WHITE for a session while the spec passed on
+    the class string + the variable value. The Session-4 logo lesson,
+    generalized: specs must pin what RENDERS (the boxShadow string), not
+    the mechanism's inputs. Same family: v4 emits `ring-ring` AFTER
+    `ring-slate-400` in the compiled sheet — when an element carries both
+    (the login inputs), the v3-era outcome needs a specificity nudge
+    (`input:focus:focus-visible { --tw-ring-color: var(--color-slate-400) }`)
 
 ## §13. Pitfalls to Avoid
 
@@ -561,7 +585,9 @@ type BillingPeriod = "monthly" | "annual";
   `docs/remediation-plan-session2.md` (F1–F10, R1–R11); Session 3 —
   `docs/remediation-plan-session3.md` (F1–F11, R1–R10); Session 4 —
   `docs/remediation-plan-session4.md` (F1–F6, R1–R8); Session 5 —
-  `docs/remediation-plan-session5.md` (F1–F5, R1–R4).
+  `docs/remediation-plan-session5.md` (F1–F5, R1–R4); Sessions 6–9 —
+  `docs/remediation-plan-session{6,7,8,9}.md` (the class-string/head,
+  typography, motion, and rendered-palette surveys).
 - **Push runbook:** `docs/how-to-git-push-using-ssh-wrapper_SKILL.md` (the
   paramiko ssh shim lives at `docs/ssh.py` for sandboxes without OpenSSH).
 - **Tailwind v4 traps:** `docs/Tailwind-V4-Validation-Report.md` + PAD §5.5.

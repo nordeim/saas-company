@@ -147,6 +147,15 @@ done
 NOTFOUND=$(curl -s -o /dev/null -w '%{http_code}' "$BASE/definitely-not-a-route")
 check "unknown path 404s" "404" "$NOTFOUND"
 
+# Security headers (Session 9 F6): the live (Base44/Cloudflare) ships this
+# exact set; the standalone server must match — production parity + hardening.
+# (HSTS is a no-op over plain http locally; it activates behind TLS.)
+HEADERS=$(curl -sI "$BASE/")
+if echo "$HEADERS" | grep -qi "x-content-type-options: nosniff"; then say_pass "header X-Content-Type-Options: nosniff"; else say_fail "header X-Content-Type-Options: nosniff"; fi
+if echo "$HEADERS" | grep -qi "x-frame-options: DENY"; then say_pass "header X-Frame-Options: DENY"; else say_fail "header X-Frame-Options: DENY"; fi
+if echo "$HEADERS" | grep -qi "referrer-policy: strict-origin-when-cross-origin"; then say_pass "header Referrer-Policy: strict-origin-when-cross-origin"; else say_fail "header Referrer-Policy: strict-origin-when-cross-origin"; fi
+if echo "$HEADERS" | grep -qi "strict-transport-security: max-age=31536000"; then say_pass "header Strict-Transport-Security: max-age=31536000"; else say_fail "header Strict-Transport-Security: max-age=31536000"; fi
+
 SITEMAP=$(curl -s "$BASE/sitemap.xml")
 if echo "$SITEMAP" | grep -q "/faq"; then say_pass "sitemap lists /faq"; else say_fail "sitemap lists /faq"; fi
 

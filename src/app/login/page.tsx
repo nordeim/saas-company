@@ -152,8 +152,24 @@ function LoginCard() {
         /* The reference's login bundle defines --ring: 240 10% 3.9%
            (slate-950) on :root — the keyboard-focused Sign in button
            renders a slate-950 ring through its focus-visible:ring-ring
-           class (emitted in the live's login css; Session 8 F5). */
+           class (emitted in the live's login css; Session 8 F5). The v4
+           emission path is the @theme --color-ring token (globals.css,
+           Session 9 F2) — this legacy variable stays for the live's
+           variable parity. */
         :root { --ring: 240 10% 3.9%; }
+        /* The reference's login bundle also sets a LIGHT --border
+           (220 13% 91% = gray-200): its borderless elements (Sign in /
+           Forgot password? / Need an account?) compute rgb(229,231,235)
+           while this app's dark --color-border (#242424) showed through
+           here. INERT (every affected element has border-width 0) but
+           pinned for the computed-parity matrix (Session 9 F5). */
+        body { --color-border: #e5e7eb; }
+        /* The reference's login bundle pins html overscroll-behavior-y:
+           none (measured: the live's /login html computes none while
+           its landing computes auto — a login-scoped rule, not app-wide).
+           Suppresses pull-to-refresh / scroll-bounce chaining on the auth
+           route (Session 9 F4). */
+        html { overscroll-behavior-y: none; }
         /* The SPA bundle's universal base rule tints every outline violet
            (Session 5 F3) — but the reference's LOGIN bundle ships no such
            rule: its login outlines render the UA currentColor (the Sign in

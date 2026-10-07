@@ -83,6 +83,60 @@
   --color-input: #242424;
   --color-destructive: #ef4444;
 
+  /* The ring token the live's LOGIN bundle ships as `--ring: 240 10% 3.9%`
+     (slate-950 = rgb(9,9,11)) — consumed there by its own
+     `focus-visible:ring-ring` utility. v4's `ring-ring` utility emits
+     `--tw-ring-color: var(--color-ring)` — WITHOUT this @theme token the
+     utility is never emitted and `ring-2` falls back to currentColor
+     (the Session-9 F2 finding: the Sign in's keyboard ring rendered WHITE
+     for a session because only the legacy `--ring` variable was pinned).
+     The only `ring-ring` consumer is the login route; the route style
+     keeps the legacy `--ring` variable for the live's variable parity. */
+  --color-ring: hsl(240 10% 3.9%);
+
+  /* Default-palette pins — THE v4 OKLCH ROUNDTRAP (Session 9 F1). The
+     live's compiled css carries Tailwind v3's HEX palette; v4's theme.css
+     carries OKLCH approximations whose roundtrip to sRGB renders up to 69
+     RGB units off (green-400: rgb(5,223,114) vs #4ade80 rgb(74,222,128);
+     red-500 rgb(251,44,54) vs #ef4444; purple-600 rgb(152,16,250) vs
+     #9333ea — the avatar gradient endpoints; slate-700 rgb(49,65,88) vs
+     #334155 — live-verified on the login Google button). Pin every
+     DRIFTED token this app uses to the v3 hex (the live's own rendered
+     values). Exact matches (slate-50/100/200, gray-100/200, red-50,
+     green-50) are left on v4 defaults. The full drift table lives in
+     docs/remediation-plan-session9.md. */
+  --color-slate-300: #cbd5e1;
+  --color-slate-200: #e2e8f0; /* value-identical under v4's oklch default — pinned so the computed serialization is byte-stable (the login Google border renders the live's rgb string, not a lab() spelling) */
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-gray-300: #d1d5db;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  --color-red-200: #fecaca;
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+  --color-red-700: #b91c1c;
+  --color-green-200: #bbf7d0;
+  --color-green-400: #4ade80;
+  --color-green-500: #22c55e;
+  --color-green-600: #16a34a;
+  --color-green-700: #15803d;
+  --color-yellow-400: #facc15;
+  --color-yellow-500: #eab308;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-orange-500: #f97316;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-purple-500: #a855f7;
+  --color-purple-600: #9333ea;
+
   /* Fonts — the reference's :root ships exactly:
      --font-heading: "Vend Sans", sans-serif; --font-body: "Vend Sans",
      sans-serif — ONE family, ONE fallback, no Text cut, no system stack.
@@ -138,6 +192,17 @@
   .transition-colors {
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
   }
+  /* The live's login bundle orders .focus:ring-slate-400 AFTER
+     .focus-visible:ring-ring — on keyboard focus (both match) the inputs'
+     ring renders slate-400, while the Sign in (no focus:ring-slate-400)
+     renders ring-ring's slate-950. v4 emits ring-ring LAST, flipping the
+     inputs to slate-950 once --color-ring made the utility real
+     (Session 9 F2 follow-up). This rule restores the live's resolution:
+     two pseudo-classes + the element beat either single-pseudo utility,
+     and it only fires where BOTH :focus and :focus-visible match. */
+  input:focus:focus-visible {
+    --tw-ring-color: var(--color-slate-400);
+  }
 }
 
 /* Serif accents (client wordmarks) — inline so the next/font variable
@@ -188,10 +253,11 @@
     border-color: var(--color-border);
     outline-color: rgb(213 0 255 / 0.5);
   }
-  ::selection {
-    background: rgb(213 0 255 / 0.35);
-    color: #fff;
-  }
+  /* NO ::selection rule: the reference ships NONE in either bundle (the
+     Session-9 F3 CSSOM survey — its landing has zero ::selection rules;
+     its login bundle ships only unused `.selection:*` variant utilities).
+     A violet ::selection shipped here for eight sessions as an invention;
+     removed — the selection renders the platform default like the live. */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

@@ -324,3 +324,32 @@ Work Log:
 Stage Summary:
 - Commit 01072c6 pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 43 files changed (+551/−143): the rAF entrance-system rebuild (src/lib/motion.ts + the Reveal rewrite + the per-element parameter table + the entrance additions/removals), the three v4 engine-shift pins (shadow-sm, transition-colors list, the line-height cascade), the login focus chrome, the logo path-fill swap re-mechanization, the chevron/float/flogo/petal fixes, the per-plan CTA utilities, 39 new checks (gate: 266 = 92 unit + 136 e2e + 38 smoke), the remediation plan + session log, 17 refreshed screenshots, docs + SKILL v2.7.0.
 - Session 8 complete.
+
+---
+Task ID: 18
+Agent: Super Z (main, session 13)
+Task: Session 9 parity audit + remediation (the rendered palette, the ring emission path, browser-chrome layer, ARIA tree, HTTP headers)
+
+Work Log:
+- Workspace refreshed (git pull fbbec41..e598a51 — the operator's session_12.md transcript note); root + session docs reviewed; the shell's exported absolute DATABASE_URL neutralized for every command (the AGENTS.md trap was live in this shell).
+- Baseline gate ALL GREEN (266 = 92 unit + 136 e2e + 38 smoke) — the codebase matched the documented Session-8 state exactly.
+- Drift check: reference UNCHANGED — word parity 1.0000 on all 8 routes.
+- NEW audit surface #1 — THE INTERACTIVE-STATE MATRIX (default/hover/active of every visible interactive element + a keyboard focus walk, real pointer events): landing clean except the palette values; the login walk exposed the ring divergence.
+- NEW surface #2 — THE RENDERED PALETTE (the headline): v4's default palette is OKLCH-DEFINED (theme.css) and the oklch→sRGB roundtrip renders up to 69 RGB units off the v3 hex the live's compiled css carries (green-400 rgb(5,223,114) vs #4ade80; red-500/700, purple-600/blue-600 avatar endpoints, yellow-400 stars, 7 slates, 5 grays, amber/orange/greens) — 30 used tokens drift, 7 exact. Conversion math cross-verified against the live's measured rgb (slate-700 predicted + measured rgb(49,65,88) on the clone vs the live's rgb(51,65,85)).
+- NEW surface #3 — THE RING EMISSION PATH: the live's keyboard-focused Sign in renders white offset + slate-950 ring; the clone rendered white (currentColor) — Session 8's --ring variable left v4's ring-ring utility un-emitted (--color-ring never in @theme); the motion-parity spec had pinned the class + the variable, not the rendered ring.
+- NEW surface #4 — THE BROWSER-CHROME LAYER: the clone's violet ::selection rule is an INVENTION (the live ships none); the live's /login pins html overscroll-behavior-y none; scrollbars/cursors/color-scheme/tap-highlight all matched.
+- NEW surface #5 — form/media attributes: video/form/button attributes identical; the clone's aria-labels are supersets.
+- NEW surface #6 — THE ARIA SNAPSHOT TREE (first structured survey): the clone's superset family measured (named nav, labeled logo, main landmark, aria-hidden icons, aria-pressed tabs, newsletter labels, the Next route announcer) and the live's noise (its "Notifications alt+T" toast region; its mobile menu does NOT close on Escape).
+- NEW surface #7 — the :root var inventory: 0 value diffs on /; login-only inert/spelling entries (the live's --ease-out has no consumer; px- vs rem-spelled radius render identical).
+- NEW surface #8 — HTTP headers: the live ships four security headers the standalone server lacked.
+- Mobile nav paired re-verification (the standing ask): the panel byte-identical (0,56 390×396, six rows @44px, same hrefs), the burger identical with NO transition classes on either side (no v4 trap), the resize guard closes across 768, real-tap opens the clone (the live's tap stays blocked, D32).
+- TDD remediation (13 e2e + 4 smoke pins observed RED, then GREEN): R1 the 31 @theme palette pins + the palette-parity suite; R2 --color-ring + the input:focus:focus-visible cascade nudge (v4 emits ring-ring after ring-slate-400, flipping the live's order on the inputs); R3 the ::selection removal; R4 the login overscroll pin; R5 the login --color-border pin (inert); R6 the four security headers via next.config.ts + 4 smoke checks. Build lesson re-learned: backticks inside the login route's template-literal <style> comment break the JSX parse.
+- Re-verified: word parity 1.0000 all 8 routes; the previously-drifted values now byte-match (reds/greens/grays/stars/login slates); VLM problem/testimonials/login IDENTICAL; the mobile-menu shot verified open; 17 screenshots refreshed.
+- Docs: remediation plan (docs/remediation-plan-session9.md), PAD (revision, ledger D49–D56, §5.5 trap 15, counts, key files), AGENTS (gotcha 23, counts), CLAUDE (session-9 context), README (284 badge, new rows), SKILL v2.8.0 (lessons 26–27), session log (docs/session_13.md), .env.example re-verified.
+
+Stage Summary:
+- The clone's default palette now renders the live's exact v3 hex everywhere (31 @theme pins) — the largest visual-drift family found since the font forensics, invisible to class strings, word parity, and spelling-tolerant specs.
+- The login Sign in's keyboard ring now renders the live's slate-950 (the --color-ring emission path + the inputs' cascade nudge), the invented ::selection is gone, the login route pins the live's overscroll + light border, and the production server ships the live's four security headers.
+- Gate re-locked at 284 checks (92 unit + 150 e2e incl. the palette-parity suite + 42 smoke incl. the header pins); VLM problem/testimonials/login IDENTICAL; word parity 1.0000 everywhere.
+- Root causes documented for posterity: survey the RENDERED PALETTE (v4's oklch defaults are approximations — convert to sRGB and compare VALUES, not spellings); a utility referencing a missing @theme token never emits (pin the RENDERED effect, not the mechanism's variables); v4's compiled rule order can flip v3-era cascade outcomes (specificity nudges for elements carrying conflicting utilities).
+- Next: final gate on the exact tree + commit + SSH push (Task 19).

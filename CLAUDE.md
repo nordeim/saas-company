@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (38) | 92 unit + 136 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (42) | 92 unit + 150 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -147,13 +147,36 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run typecheck` exits 0
 - [ ] `npm run test` → 92/92 PASS
 - [ ] `npm run build` compiles clean
-- [ ] `./scripts/smoke-test.sh` → 38/38 PASS
-- [ ] `npm run test:e2e` → 136/136 PASS (needs the build first)
+- [ ] `./scripts/smoke-test.sh` → 42/42 PASS
+- [ ] `npm run test:e2e` → 150/150 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 9 (2026-10-07) remediation** — see
+  `docs/remediation-plan-session9.md`: the first RENDERED-PALETTE survey
+  (every default-palette color this app uses, converted to sRGB and compared
+  with the live's v3-era hex) plus the interactive-state matrix, the
+  browser-chrome layer (::selection/scrollbars/cursors/overscroll), the
+  form/media attribute inventory, the ARIA snapshot tree, the `:root` var
+  inventory, the mobile-nav paired re-verification, and the HTTP header
+  inventory. Found and fixed six gap groups: **the v4 OKLCH PALETTE
+  ROUNDTRIP** (31 tokens pinned to v3 hex — up to 69 RGB units off: the
+  stars, the problem reds, the features grays/greens, the avatar gradient
+  endpoints, every login slate); **the Sign in's keyboard ring** (Session
+  8's `--ring` variable alone left v4's `ring-ring` utility un-emitted —
+  the ring rendered currentColor WHITE; now `--color-ring` in `@theme` +
+  an `input:focus:focus-visible` cascade nudge keeps the inputs' slate-400
+  where the live's order puts it); **the invented violet ::selection
+  removed** (the live ships none); **the login overscroll pin**
+  (`html { overscroll-behavior-y: none }` route-scoped); **the login's
+  light `--color-border`** (inert, computed parity); and **four security
+  headers** via `next.config.ts` (the live's exact set). Gate: 284 checks
+  (92 + 150 e2e incl. the palette-parity suite + 42 smoke); VLM
+  problem/testimonials/login IDENTICAL; word parity 1.0000 on all 8
+  routes.
 
 - **Session 8 (2026-10-07) remediation** — see
   `docs/remediation-plan-session8.md`: the first MOTION-LAYER survey

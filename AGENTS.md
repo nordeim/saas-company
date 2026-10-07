@@ -20,15 +20,15 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (92 checks) | `npm run test` |
-| Browser E2E (136 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (150 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
-| End-to-end smoke suite (38 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
+| End-to-end smoke suite (42 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (92/92) → `npm run build` → `./scripts/smoke-test.sh` (38/38)
-→ `npm run test:e2e` (136/136) — 266 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (92/92) → `npm run build` → `./scripts/smoke-test.sh` (42/42)
+→ `npm run test:e2e` (150/150) — 284 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -182,6 +182,21 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    ENGINE layer (computed values + the emitted rules), not just class
    strings — every one of these hid from class-string parity for 6+
    sessions.
+23. **v4's default palette is OKLCH-DEFINED — the roundtrip drifts from
+   v3's hex** (Session 9): up to 69 RGB units off (green-400; the stars'
+   yellow-400, the problem cards' reds, the avatar gradient endpoints,
+   every login slate drifted). The pins live in `globals.css` `@theme`
+   (`--color-<family>-<shade>: <v3 hex>` — 31 tokens). Never "simplify"
+   them back to v4 defaults, and never trust a color assertion that
+   accepts both spellings without comparing VALUES. Related v4
+   token-emission trap: `ring-ring` reads `--color-ring` (a legacy
+   `--ring` HSL variable is NOT the emission path — without the @theme
+   token the utility never emits and the ring falls back to currentColor),
+   and v4 emits ring-ring AFTER ring-slate-400, so elements carrying both
+   need the `input:focus:focus-visible` cascade nudge in the utilities
+   layer. The live also ships NO `::selection` rule (ours was an
+   invention, removed) and pins `/login` `html { overscroll-behavior-y:
+   none }` + a light `--border` (both reproduced route-scoped).
 
 ## Architecture invariants
 
