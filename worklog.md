@@ -153,3 +153,17 @@ Stage Summary:
 - Root causes documented for posterity: survey interactive chrome in its interactive states; read the ACTIVE toggle state; unlayered CSS beats layered utilities; arbitrary aspect ratios use the SLASH form; rm -rf .next when a CSS error outlives its fix.
 - FINAL root cause of the recurring CSS build break: Tailwind v4's scanner reads class candidates from MARKDOWN — writing the colon-spelled aspect ratio into AGENTS.md/PAD/SKILL re-broke the build even after the component was fixed. Fixed BOTH ways: docs reworded to avoid the literal token + globals.css now @source not-excludes docs/, skills/, tests/, scripts/ and all *.md (never class sources).
 - Next: commit + SSH push (Task 9).
+
+---
+Task ID: 9
+Agent: Super Z (main, session 4)
+Task: Final commit + SSH push of the Session 4 remediation
+
+Work Log:
+- Operator key materialized to a 0600 file in /tmp (never inside the repo); fingerprint verified (ssh-ed25519, SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — matches the Session 1/2/3 records).
+- Paramiko shim on PATH (workspace bin/ssh). Wrapper dry-run: auth OK, remote main @ 612424e, fast-forward 612424e..5f4293f accepted.
+- Real push via docs/ssh_git_wrapper_v3.py --remote git@github.com:nordeim/saas-company.git: wrapper verified remote refs/heads/main @ 5f4293f == local HEAD, tracking ref synced. Operator key shredded; working tree clean.
+
+Stage Summary:
+- Commit 5f4293f pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 29 files changed, +1070/-159: the six Session-4 behavior-parity fixes (login light theme, pricing truth, section-aware navbar, static mockup, animated accordion, status-bar-style), 14 new e2e checks (gate: 179 = 73 unit + 68 e2e + 38 smoke), the @source-not scanner guard, remediation plan, refreshed screenshots, docs + SKILL v2.3.0.
+- Session 4 complete.
