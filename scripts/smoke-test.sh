@@ -65,6 +65,9 @@ echo "== smoke: health =="
 HEALTH=$(json "$BASE/api/health")
 check "health ok envelope" "True" "$(echo "$HEALTH" | field "['ok']")"
 check "health app name" "saas-company" "$(echo "$HEALTH" | field "['data']['app']")"
+# Session 18 F1: the probe must SEE the database — the db field reports
+# SQLite reachability (up when the smoke scratch DB answers SELECT 1).
+check "health db probe" "up" "$(echo "$HEALTH" | field "['data']['db']")"
 
 echo "== smoke: auth =="
 LOGIN=$(curl -s -c /tmp/smoke-cookies.txt -X POST "$BASE/api/auth/login" \

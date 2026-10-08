@@ -30,6 +30,23 @@ Behind a reverse proxy, forward `X-Forwarded-Proto` so cookie attributes
 derive the right scheme, and `X-Forwarded-For` so the auth rate limiter sees
 real client IPs.
 
+**The inverse warning (Session 18 F4):** `clientIpOf()` trusts the FIRST
+`X-Forwarded-For` hop verbatim (single trusted proxy assumed). A deployment
+exposed to the internet **without** such a proxy accepts client-SUPPLIED
+`X-Forwarded-For` values — a script rotating the header mints a fresh
+`auth:<ip>` bucket per request and the auth rate limit never engages. Front
+every public deployment with a proxy that **OVERWRITES** `X-Forwarded-For`
+(Cloudflare, nginx, Traefik all do); the limiter's trust model is a
+deployment requirement, not a code default.
+
+**The standalone directory carries your `.env` (Session 18 discovery):**
+`next build` copies the repo's `.env` into `.next/standalone/` — a
+standalone-directory deployment ships whatever the build-time `.env` held
+(including `AUTH_SECRET` and `NEXT_PUBLIC_SITE_URL`). That is convenient
+for single-machine deploys and exactly why the Docker path
+(`.dockerignore` excludes `.env`) injects the secret at runtime instead.
+Audit `.next/standalone/.env` before copying the directory anywhere.
+
 ## 3. Environment variables
 
 | Variable | Required | Purpose |
@@ -125,16 +142,23 @@ traced standalone `node_modules` incl. the Prisma query engine, a
 docker build -t saas-company .
 
 # Run with a persistent database volume + a real secret
+# (Session 18 R3: the image ships a schema-initialized EMPTY database —
+#  a fresh NAMED volume seeds itself from it on first mount. ZERO init
+#  commands needed; the container is useful on first boot.)
 docker run -d -p 3000:3000 -v saas-db:/app/db \
   -e AUTH_SECRET="$(openssl rand -hex 32)" \
   -e NEXT_PUBLIC_SITE_URL="https://your-domain.example" \
-  -e ALLOW_REGISTRATION=false \
   saas-company
 
-# Initialize the database inside the volume (first boot only — one-off)
-docker run --rm -v saas-db:/app/db \
-  -e DATABASE_URL="file:/app/db/custom.db" \
-  --entrypoint npx saas-company prisma db push
+# First boot creates no users — register the operator account via the
+# sign-up card (or the API) BEFORE tightening the deployment:
+#   -e ALLOW_REGISTRATION=false   # only AFTER the first account exists
+# (An empty database with closed registration can never be signed into.)
+
+# Bind mounts (NOT named volumes) shadow the image's database directory —
+# initialize those from a checkout instead:
+#   DATABASE_URL="file:/host/path/custom.db" npx prisma db push
+#   DATABASE_URL="file:/host/path/custom.db" npm run db:seed   # demo workspace
 ```
 
 Notes:
@@ -142,16 +166,31 @@ Notes:
 - The image's default `DATABASE_URL` is the **absolute**
   `file:/app/db/custom.db` (§4 form 2 — the production recommendation); the
   volume keeps the workspace across container replacement.
-- `AUTH_SECRET` is injected at **runtime** — never baked into the image.
+- `AUTH_SECRET` is injected at **runtime** — never baked into the image
+  (`.dockerignore` excludes `.env`). If it is missing, the boot now WARNS
+  loudly on stderr (Session 18 F2 — the instrumentation hook writes
+  directly to fd 2; route-module console output is captured by the Next
+  runtime and never reaches the log).
+- The health endpoint's envelope carries a `db` field (`"up"`/`"down"`,
+  Session 18 F1) — a `SELECT 1` raced against a 1.5s timeout. The STATUS
+  stays 200 in both states by design (a broken volume DB is not repaired
+  by a restart — fail the Docker healthcheck and you only manufacture
+  restart loops); inspect the field for alerting:
+  `docker exec <c> node -e "fetch('http://127.0.0.1:3000/api/health').then(r=>r.text()).then(console.log)"`.
 - Closing registration for a public deployment is one env var:
-  `-e ALLOW_REGISTRATION=false` (§3).
+  `-e ALLOW_REGISTRATION=false` (§3) — but only AFTER the first account
+  exists (see above).
 - **Honest labeling:** the Dockerfile follows the standalone-artifact
   pattern this repo's gate has verified end-to-end (build → standalone
   server → health envelope), but the image itself was **not build-tested
   in the authoring environment** (no Docker daemon available there). The
-  local quality gate (`lint → typecheck → test → build → smoke → e2e`)
-  remains the only gate; treat the first `docker build` on your infra as
-  the image's own verification step and report deviations upstream.
+  Session-18 static review caught and repaired the first-run story (the
+  pre-R3 runbook's one-off init command could not work: the runner ships
+  neither the prisma CLI nor `prisma/schema.prisma`); the recipe remains
+  daemon-untested — the local quality gate (`lint → typecheck → test →
+  build → smoke → e2e`) remains the only gate; treat the first
+  `docker build` on your infra as the image's own verification step and
+  report deviations upstream.
 
 ## 9. Pushing the repository
 

@@ -15,6 +15,10 @@ const SESSION_COOKIE = "novaai_session";
 const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 // Dev-only fallback — loudly documented; production MUST set AUTH_SECRET.
+// The loud RUNTIME warning lives in src/instrumentation.ts (Next's official
+// boot hook): route-module console output is captured by the Next.js 16
+// production server and never reaches the log — the boot hook writes to
+// stderr directly (Session 18 F2).
 const DEV_SECRET = "novaai-insecure-dev-secret-change-me";
 
 function secret(): string {

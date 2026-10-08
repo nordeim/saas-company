@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.16.0 · **Last updated:** 2026-10-08 (Session 17 remediation)
+> **Version:** 2.17.0 · **Last updated:** 2026-10-08 (Session 18 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–17)
+## §12. Lessons Learnt (Sessions 1–18)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -721,6 +721,43 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     until the auxiliary server moved to its own port). Boot-and-kill
     blocks go at a block's END or in a trap, and every auxiliary server
     gets its OWN PORT.
+44. **The Next.js 16 production runtime swallows your logs — a boot
+    diagnostic must write to fd 2 DIRECTLY** (Session 18): three output
+    channels failed silently before the fourth worked. A module-init
+    `console.error` in a route module EXECUTED (the login route kept
+    answering) and never reached the log — the production server
+    captures console methods into its internal pipeline. The
+    instrumentation hook's `process.stderr.write` RAN (proved by a
+    side-effect `appendFileSync` marker) and never reached the log —
+    the stream object itself is wrapped. And the `await
+    import("node:fs")` inside `register()` compiled to the TURBOPACK
+    CHUNK LOADER promise, which RACED at boot — hung on one boot
+    (silent no-write), resolved on the next — so even a correct
+    writeSync after it is non-deterministic. What works: the STATIC
+    `import { writeSync } from "node:fs"` at module top (the bundler
+    resolves the builtin synchronously — no loader, no race) +
+    `writeSync(2, message)` — the raw file descriptor, below every
+    object the runtime can replace (verified: 206 bytes, the warning in
+    the standalone boot log). Boot-time diagnostics live in
+    `src/instrumentation.ts`, never in route modules.
+45. **`next build` COPIES `.env` INTO `.next/standalone/` — and your
+    env-probe may be testing the wrong thing** (Session 18): a full
+    forensic loop (module-init warning → hook warning → direct-write
+    warning, each "still silent!") ended at the discovery that the
+    AUTH_SECRET under test was NEVER unset — the build had copied the
+    repo's `.env` (with its dev secret) into the standalone directory,
+    and the server's env loading sets it from the FILE regardless of
+    the shell. Two rules fall out: (1) when probing env-dependent boot
+    behavior of the standalone server, inspect `.next/standalone/.env`
+    FIRST (the Docker path differs — `.dockerignore` excludes `.env`,
+    so containers rely on runtime injection; a standalone-DIRECTORY
+    deployment ships the build-time env — audit it before copying the
+    directory anywhere); (2) `kill $PID; wait $PID` is UNRELIABLE in
+    this sandbox (the :3030/:3033/:3044 zombies each outlived their
+    kill) — every boot-and-probe cycle should take a FRESH PORT, and a
+    parity battery that collapses to 0.0000 with CONCATENATED words
+    ("FeaturesHow") is the zombie's gotcha-26 signature (old-build HTML
+    hydrated against regenerated chunks), not a real regression.
 
 ## §13. Pitfalls to Avoid
 

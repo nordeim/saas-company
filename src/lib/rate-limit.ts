@@ -85,7 +85,15 @@ export function generateRateLimit(userId: string): RateDecision {
   return checkRate(buckets, `gen:${userId}`, limit, 15 * 60 * 1000);
 }
 
-/** Best-effort client IP (single trusted proxy assumed). */
+/** Best-effort client IP (single trusted proxy assumed).
+ *
+ * Session 18 F4 (the trust model, stated honestly): the FIRST
+ * x-forwarded-for hop is trusted VERBATIM. Correct behind one proxy that
+ * overwrites the header (Cloudflare/nginx/Traefik); a DIRECTLY exposed
+ * deployment accepts client-supplied values — a header-rotating script
+ * mints a fresh auth bucket per request and the limit never engages.
+ * Front public deployments with such a proxy (docs/DEPLOYMENT.md §2).
+ */
 export function clientIpOf(headers: Headers): string {
   const fwd = headers.get("x-forwarded-for");
   if (fwd) return fwd.split(",")[0]!.trim();

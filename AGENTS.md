@@ -19,16 +19,16 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (126 checks) | `npm run test` |
+| Unit tests (132 checks) | `npm run test` |
 | Browser E2E (197 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
-| End-to-end smoke suite (65 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
+| End-to-end smoke suite (66 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (126/126) → `npm run build` → `./scripts/smoke-test.sh` (65/65)
-→ `npm run test:e2e` (197/197) — 388 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (132/132) → `npm run build` → `./scripts/smoke-test.sh` (66/66)
+→ `npm run test:e2e` (197/197) — 395 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`, `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -379,6 +379,25 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    moved to :3220). Boot-and-kill server blocks belong at the END of a
    script block or in a trap — and give every auxiliary server its own
    port.
+32. **The Next.js 16 production runtime captures route-module console
+   output — and `process.stderr.write` too (Session 18).** A boot-time
+   diagnostic (the AUTH_SECRET warning) survived THREE channels' worth of
+   silence: a module-init `console.error` executed with the login route
+   answering and the log stayed empty; the instrumentation hook's
+   `process.stderr.write` ran (proved by a diagnostic `appendFileSync`)
+   and the log stayed empty; only `fs.writeSync(2, …)` from a STATIC
+   `import { writeSync } from "node:fs"` reliably lands (a dynamic
+   `await import("node:fs")` compiles to the turbopack chunk loader,
+   which RACES at boot — hung on one boot, resolved on the next). Boot
+   diagnostics belong in `src/instrumentation.ts` writing to fd 2
+   directly. Related discoveries the same session: **`next build` COPIES
+   the repo `.env` into `.next/standalone/`** (an unset-in-shell
+   AUTH_SECRET is still SET from the copied file — probe the standalone's
+   OWN `.env` when testing env-dependent boot behavior), and the
+   `kill $PID; wait $PID` pattern proved UNRELIABLE in this sandbox (the
+   :3030/:3033/:3044 zombies) — the parity battery's collapse to 0.0000
+   with concatenated words is the zombie's gotcha-26 signature; prefer
+   FRESH PORTS per boot-and-probe cycle.
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +

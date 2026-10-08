@@ -105,3 +105,4 @@ describe("session tokens (HMAC)", () => {
     expect(parseSessionToken(createSessionToken("u2"))).toBe("u2");
   });
 });
+

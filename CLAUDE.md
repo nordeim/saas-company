@@ -145,15 +145,49 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 126/126 PASS
+- [ ] `npm run test` → 132/132 PASS
 - [ ] `npm run build` compiles clean
-- [ ] `./scripts/smoke-test.sh` → 65/65 PASS
+- [ ] `./scripts/smoke-test.sh` → 66/66 PASS
 - [ ] `npm run test:e2e` → 197/197 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 18 (2026-10-08) remediation** — see
+  `docs/remediation-plan-session18.md`: a deployment-honesty audit (the
+  first survey of what the DEPLOYMENT's own signals can see: the health
+  probe, the boot warning, the Docker first-run, and the rate limiter's
+  IP trust model) found and fixed four defects: **the DB-blind health
+  probe** (a server with an unwritable DATABASE_URL answered
+  `/api/health` 200 ok while login returned a bare 500 — the Docker
+  HEALTHCHECK inherited the blindness; now the envelope carries
+  `db: "up"/"down"` from a SELECT 1 raced against 1.5s, the status
+  deliberately stays 200 — D87), **the silent AUTH_SECRET fallback**
+  (production boots without the var signed sessions with the PUBLIC
+  repo constant with zero runtime signal; now `src/instrumentation.ts`
+  writes the FORGEABLE warning DIRECTLY to fd 2 — the Next-16 runtime
+  captures BOTH console.* AND process.stderr.write from bundled code,
+  and a dynamic import("node:fs") races the turbopack chunk loader at
+  boot; only the static import + fs.writeSync(2, …) reliably lands —
+  D88), **the broken Docker first-run** (the S17 runbook's one-off init
+  could not work — the runner ships neither the prisma CLI nor the
+  schema; now the build stage pushes the schema into /app/db/custom.db
+  and the runner COPYs it — a fresh NAMED volume seeds itself with zero
+  init commands; bind mounts document the checkout path; the
+  first-account-before-closing-registration note — D89), and **the
+  half-documented IP trust model** (clientIpOf trusts the first
+  X-Forwarded-For hop verbatim — direct exposure mints a fresh auth
+  bucket per header-rotated request; DEPLOYMENT.md §2 + README now
+  state the proxy requirement — D90). ALSO: `next build` COPIES the
+  repo `.env` into `.next/standalone/` (a standalone-directory deploy
+  ships the build-time env incl. AUTH_SECRET); one zombie-server
+  recurrence caught by the parity battery itself (the fresh-port
+  discipline — the kill+wait pattern is unreliable in this sandbox).
+  Gate: **395 checks** (132 unit incl. the 6 instrumentation pins +
+  197 e2e unchanged + 66 smoke incl. the health-db pin); 20
+  screenshots refreshed (VLM-verified ×5).
 
 - **Session 17 (2026-10-08) remediation** — see
   `docs/remediation-plan-session17.md`: an account-enumeration-timing +
