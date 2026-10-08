@@ -145,15 +145,59 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 114/114 PASS
+- [ ] `npm run test` → 126/126 PASS
 - [ ] `npm run build` compiles clean
-- [ ] `./scripts/smoke-test.sh` → 60/60 PASS
+- [ ] `./scripts/smoke-test.sh` → 65/65 PASS
 - [ ] `npm run test:e2e` → 197/197 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 17 (2026-10-08) remediation** — see
+  `docs/remediation-plan-session17.md`: an account-enumeration-timing +
+  registration-concurrency + registration-access-control +
+  deployment-artifact audit (four layers no prior session surveyed:
+  the TIMING side of an identical envelope — a 401 that always says
+  "Invalid email or password" can still leak WHICH emails exist through
+  latency (CWE-208); the RACE class on the write paths — the
+  findUnique→create TOCTOU window; the PAD §10 open-registration
+  MEDIUM, the ledger's oldest open item; and the §10 no-Dockerfile
+  LOW) found and fixed four defects: **the login timing side-channel**
+  (the unknown-email path skipped scrypt — 3.5ms vs 34.1ms medians, a
+  9.8x delta behind a byte-identical 401; now `dummyPasswordHash()` in
+  `src/lib/auth.ts`: a module-init salt:hash decoy burned
+  unconditionally so the timing profile is flat — post-fix probe ratio
+  1.0x, pinned by the suite's first timing pin, 7+7 curl medians under
+  2.5x — D83); **the register TOCTOU race** (10 truly-parallel
+  independent-socket POSTs → {"201":1,"409":8,"500":1} — the loser's
+  unhandled P2002 was a BARE 500 with an EMPTY body and no
+  content-type; now `isUniqueConstraintError()` in `src/lib/db-errors.ts`
+  + the create catch → the exact sequential-duplicate 409 EMAIL_TAKEN,
+  every other error rethrows — D84; survey fact: undici's fetch pool
+  serializes on one socket, true wire-level concurrency needs
+  independent sockets); **the open registration** (the PAD §10 MEDIUM
+  since the ledger began; now `registrationOpen()` + the register-route
+  gate: only the exact `ALLOW_REGISTRATION="false"` closes with 403
+  REGISTRATION_CLOSED — default OPEN preserves every existing contract;
+  login stays open on a closed deployment; the login card surfaces the
+  message verbatim with zero client changes — D85); and **the missing
+  Dockerfile** (the §10 LOW; now the multi-stage standalone-artifact
+  `Dockerfile` + `.dockerignore` + DEPLOYMENT.md §8 — honestly labeled
+  NOT build-tested in the authoring environment, no Docker daemon —
+  D86). ALSO: word parity 1.0000 on all 8 routes (reference UNCHANGED),
+  the mobile nav byte-identical with real-touch contexts (no Tailwind
+  v4 bug; the live's burger remains pointer-blocked, D32); the
+  Subscriber upsert + DemoRequest model adjudicated CLEAN (no other
+  P2002 exposure); ONE zombie-server twist — a syntax-error crash
+  mid-script orphaned the smoke script's closed-gate server (the
+  abort happens AFTER the boot lines but BEFORE the kill; the orphan
+  later answered a fresh boot's health check on the same port — the
+  closed-gate server moved to :3220). Gate: **388 checks** (126 unit
+  incl. the dummy-hash + registration-gate + db-errors pins + 197 e2e
+  unchanged + 65 smoke incl. the timing-parity, race-envelope, and
+  closed-gate pins); 20 screenshots refreshed (VLM-verified).
 
 - **Session 16 (2026-10-08) remediation** — see
   `docs/remediation-plan-session16.md`: an authenticated-endpoint-abuse +

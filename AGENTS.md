@@ -19,16 +19,16 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (114 checks) | `npm run test` |
+| Unit tests (126 checks) | `npm run test` |
 | Browser E2E (197 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
-| End-to-end smoke suite (60 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
+| End-to-end smoke suite (65 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (114/114) → `npm run build` → `./scripts/smoke-test.sh` (60/60)
-→ `npm run test:e2e` (197/197) — 371 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (126/126) → `npm run build` → `./scripts/smoke-test.sh` (65/65)
+→ `npm run test:e2e` (197/197) — 388 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`, `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -357,6 +357,28 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    survey depends on the canonical workspace (e2e/smoke are immune —
    they boot fresh DBs).
 
+31. **Identical envelopes can still leak through LATENCY — and a crashed
+   script orphans its servers (Session 17).** The login 401 was
+   byte-identical for unknown-email and wrong-password, but the unknown
+   path SKIPPED scrypt: ~3.5ms vs ~34ms — a 9.8x median delta that
+   enumerates registered addresses at 1,440 candidates/day/IP even under
+   the rate limit (CWE-208). The fix pattern: burn a fixed-cost dummy
+   hash (`dummyPasswordHash()`) whenever the lookup misses — the response
+   never changes, only the timing floor flattens (pinned by the suite's
+   first timing pin: 7+7 curl medians, ratio < 2.5x). The same session's
+   RACE class: undici's fetch pool serializes on ONE socket — probing a
+   TOCTOU window (findUnique→create) needs TRUE wire-level concurrency
+   (independent sockets: parallel curl processes or http.request with
+   keepAlive: false); the loser's unhandled P2002 was a bare 500 with an
+   EMPTY body. And the zombie-server family gained a new member: a
+   SYNTAX ERROR mid-script aborts bash AFTER the server-boot lines but
+   BEFORE the kill — the orphan then answers a later run's fresh boot on
+   the same port (the EADDRINUSE is silently swallowed; the health check
+   sees the STALE process serving the OLD build — the S17 closed-gate
+   smoke pins read "409 EMAIL_TAKEN" instead of 403 until the port
+   moved to :3220). Boot-and-kill server blocks belong at the END of a
+   script block or in a trap — and give every auxiliary server its own
+   port.
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +

@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.15.0 · **Last updated:** 2026-10-08 (Session 16 remediation)
+> **Version:** 2.16.0 · **Last updated:** 2026-10-08 (Session 17 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–15)
+## §12. Lessons Learnt (Sessions 1–17)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -676,6 +676,51 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     resilience screenshot's Pause-button locator found nothing) —
     `npm run db:push && npm run db:seed` restores the canonical
     workspace (the e2e/smoke suites are immune: they boot fresh DBs).
+
+42. **An identical envelope can still leak through LATENCY — survey the
+    timing side of every auth response** (Session 17): the login 401 was
+    byte-identical for unknown-email and wrong-password, but the unknown
+    path SKIPPED scrypt entirely (~3.5ms vs ~34ms — a 9.8x median delta).
+    That is a complete registered-address census at 1,440
+    candidates/day/IP even under the 10/15min rate limit (rotating IPs
+    are unlimited). The audit question: "do the FAILURE paths of this
+    endpoint cost the same?" The fix pattern — a module-init dummy hash
+    (`dummyPasswordHash()`: random salt + scrypt of random bytes, the
+    SAME cost as a real stored hash, a stable per-process constant)
+    burned unconditionally: `storedHash = user?.passwordHash ??
+    dummyPasswordHash()` → verifyPassword always runs → the timing floor
+    flattens to 1.0x while the response NEVER changes. Pin it with a
+    timing assertion that has structural margins (7+7 curl-sampled
+    MEDIANS, ratio < 2.5x — both paths scrypt-dominated post-fix, so a
+    false failure needs an implausible sustained asymmetry).
+
+43. **Probing a race needs TRUE wire-level concurrency — and a crashed
+    script orphans its servers** (Session 17): undici's fetch pool
+    serializes every request on ONE socket — a Promise.all of 10 fetches
+    to the same origin is effectively SEQUENTIAL at the server, and a
+    TOCTOU window (findUnique→create) never interleaves (the first
+    probe round returned {"201":1,"409":9} and looked clean). To race
+    for real: independent sockets — parallel curl processes, or
+    node:http with `agent: new http.Agent({ keepAlive: false })` per
+    request — which produced {"201":1,"409":8,"500":1} on the first
+    try: the loser's unhandled P2002 was a BARE 500 with an EMPTY body
+    and no content-type (the envelope contract's worst violation — the
+    client's `payload?.error?.message` contract dead-ends into null).
+    The fix: classify the Prisma error by CLASS AND CODE
+    (`isUniqueConstraintError`: instanceof
+    PrismaClientKnownRequestError + code === "P2002" — a duck-typed
+    plain `{code:"P2002"}` object from JSON.parse must NOT trip it) and
+    convert it to the exact sequential-duplicate envelope; every other
+    error rethrows. And the zombie-server family's new member: a bash
+    SYNTAX ERROR mid-script aborts AFTER the server-boot lines execute
+    but BEFORE the kill runs (bash parses incrementally) — the orphan
+    later answers a fresh boot's health check on the same port (the
+    EADDRINUSE from the new boot is silently swallowed into the log;
+    the checks ran against the STALE OLD-BUILD process — the S17
+    closed-gate pins read "409 EMAIL_TAKEN" where 403 was expected
+    until the auxiliary server moved to its own port). Boot-and-kill
+    blocks go at a block's END or in a trap, and every auxiliary server
+    gets its OWN PORT.
 
 ## §13. Pitfalls to Avoid
 

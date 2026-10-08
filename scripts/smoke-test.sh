@@ -45,7 +45,11 @@ echo "== smoke: boot production server on :$PORT =="
 # GENERATE_RATE_LIMIT_MAX=2 (Session 16 F1): the smoke server pins the LLM
 # composer's per-user ceiling LOW so the generate-limiter trip below is
 # exactly deterministic (nothing else in smoke calls /api/workflows/generate).
-DATABASE_URL="$SMOKE_DB_URL" AUTH_SECRET="smoke-secret" GENERATE_RATE_LIMIT_MAX=2 PORT=$PORT NODE_ENV=production \
+# AUTH_RATE_LIMIT_MAX=50 (Session 17): the e2e webServer's own insurance
+# pattern — the new login-timing pins (14 POSTs) + the parallel race pin
+# (10 POSTs) lift the suite's auth-POST count to ~30; no auth-429 pin exists
+# in smoke (the newsletter + generate buckets own those trips).
+DATABASE_URL="$SMOKE_DB_URL" AUTH_SECRET="smoke-secret" AUTH_RATE_LIMIT_MAX=50 GENERATE_RATE_LIMIT_MAX=2 PORT=$PORT NODE_ENV=production \
   node .next/standalone/server.js >/tmp/smoke-server.log 2>&1 &
 SERVER_PID=$!
 
@@ -90,6 +94,89 @@ check "duplicate email rejected (409)" "409" "$DUP"
 SHORT=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BASE/api/auth/register" -H "Content-Type: application/json" \
   -d '{"name":"X","email":"short@example.com","password":"short"}')
 check "short password rejected (400)" "400" "$SHORT"
+
+# Session 17 F1 (CWE-208): constant-time login — the unknown-email path must
+# burn the same scrypt cost as the wrong-password path. 7+7 curl-sampled
+# medians; the pre-fix delta was ~9.8x (the unknown path skipped scrypt);
+# post-fix both medians sit ~30-35ms and the ratio stays under 2.5x. A false
+# failure needs a sustained 2.5x asymmetry between two scrypt-dominated
+# paths — implausible by construction.
+login_sample() { # login_sample <email> -> prints %{time_total}
+  curl -s -o /dev/null -w '%{time_total}\n' -X POST "$BASE/api/auth/login" \
+    -H "Content-Type: application/json" -d "{\"email\":\"$1\",\"password\":\"wrong-password-1\"}"
+}
+UNKNOWN_TIMES=$(for i in 1 2 3 4 5 6 7; do login_sample "enumeration-probe-$i@example.com"; done | sort -g | sed -n '4p')
+WRONGPW_TIMES=$(for i in 1 2 3 4 5 6 7; do login_sample "demo@novaai.app"; done | sort -g | sed -n '4p')
+TIMING_RATIO=$(awk -v u="$UNKNOWN_TIMES" -v w="$WRONGPW_TIMES" 'BEGIN { if (u <= 0.001) { print "99" } else { printf "%.2f", w / u } }')
+TIMING_OK=$(awk -v r="$TIMING_RATIO" 'BEGIN { print (r < 2.5) ? "yes" : "no" }')
+if [ "$TIMING_OK" = "yes" ]; then
+  say_pass "login timing parity (unknown ${UNKNOWN_TIMES}s vs wrong-pw ${WRONGPW_TIMES}s, ratio ${TIMING_RATIO}x < 2.5x)"
+else
+  say_fail "login timing parity (ratio ${TIMING_RATIO}x — unknown ${UNKNOWN_TIMES}s vs wrong-pw ${WRONGPW_TIMES}s; the enumeration side-channel is open)"
+fi
+
+# Session 17 F2: the register TOCTOU race — 10 truly-parallel duplicate POSTs
+# (10 background curl processes = 10 independent sockets; undici/fetch on one
+# socket SERIALIZES and never interleaves the findUnique→create gap). Every
+# response must be an envelope: status ∈ {201, 409} AND the body carries the
+# "ok": marker. Pre-fix the interleaved loser returned a bare 500 with an
+# EMPTY body and no content-type; post-fix the P2002 catch guarantees the 409.
+RACE_EMAIL="race-s17@example.com"
+RACE_DIR=$(mktemp -d)
+RACE_PIDS=""
+for i in 1 2 3 4 5 6 7 8 9 10; do
+  curl -s -o "$RACE_DIR/r$i" -w '%{http_code}' -X POST "$BASE/api/auth/register" \
+    -H "Content-Type: application/json" \
+    -d "{\"name\":\"Race $i\",\"email\":\"$RACE_EMAIL\",\"password\":\"RacePass123!\"}" > "$RACE_DIR/c$i" &
+  RACE_PIDS="$RACE_PIDS $!"
+done
+# Wait ONLY for the race curls (a bare `wait` would block on the smoke
+# server itself — it never exits).
+for p in $RACE_PIDS; do wait "$p"; done
+RACE_BAD=$(for i in 1 2 3 4 5 6 7 8 9 10; do
+  code=$(cat "$RACE_DIR/c$i")
+  if [ "$code" != "201" ] && [ "$code" != "409" ]; then echo "bad:$code"; fi
+  if ! grep -q '"ok":' "$RACE_DIR/r$i"; then echo "bad-body:$i"; fi
+done | head -3)
+rm -rf "$RACE_DIR"
+if [ -z "$RACE_BAD" ]; then
+  say_pass "concurrent duplicate register: all 10 responses are envelopes (201/409 + ok marker)"
+else
+  say_fail "concurrent duplicate register: $RACE_BAD (the P2002 loser broke the envelope contract)"
+fi
+
+# Session 17 F3: the closed-registration deployment gate. A SECOND mini-server
+# boots with ALLOW_REGISTRATION=false on :3210 (same scratch DB — a closed
+# server never writes): register must 403 with the REGISTRATION_CLOSED code;
+# login must still sign the demo user in (closing registration never locks out
+# existing users).
+echo "== smoke: closed-registration gate (second server on :3220) =="
+CLOSED_PORT=3220
+CLOSED_BASE="http://localhost:$CLOSED_PORT"
+DATABASE_URL="$SMOKE_DB_URL" AUTH_SECRET="smoke-secret" ALLOW_REGISTRATION=false \
+  PORT=$CLOSED_PORT NODE_ENV=production \
+  node .next/standalone/server.js >/tmp/smoke-closed-server.log 2>&1 &
+CLOSED_PID=$!
+CLOSED_UP=no
+for i in $(seq 1 40); do
+  if curl -sf "$CLOSED_BASE/api/health" >/dev/null 2>&1; then CLOSED_UP=yes; break; fi
+  sleep 0.5
+done
+if [ "$CLOSED_UP" = "yes" ]; then
+  CLOSED_REG=$(curl -s -X POST "$CLOSED_BASE/api/auth/register" -H "Content-Type: application/json" \
+    -d '{"name":"Closed Test","email":"closed-s17@example.com","password":"Closed123!"}')
+  CLOSED_CODE=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$CLOSED_BASE/api/auth/register" -H "Content-Type: application/json" \
+    -d '{"name":"Closed Test","email":"closed-s17@example.com","password":"Closed123!"}')
+  check "closed registration returns 403" "403" "$CLOSED_CODE"
+  check "closed registration code" "REGISTRATION_CLOSED" "$(echo "$CLOSED_REG" | field "['error']['code']")"
+  CLOSED_LOGIN=$(curl -s -X POST "$CLOSED_BASE/api/auth/login" -H "Content-Type: application/json" \
+    -d '{"email":"demo@novaai.app","password":"Demo1234!"}')
+  check "closed gate: existing user still signs in" "True" "$(echo "$CLOSED_LOGIN" | field "['ok']")"
+else
+  say_fail "closed-registration server booted on :$CLOSED_PORT"
+fi
+kill "$CLOSED_PID" 2>/dev/null
+wait "$CLOSED_PID" 2>/dev/null
 
 echo "== smoke: protected reads =="
 for ENDPOINT in workflows; do

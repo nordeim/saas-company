@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { ok, fail } from "@/lib/api";
-import { setSessionCookie, verifyPassword } from "@/lib/auth";
+import { setSessionCookie, verifyPassword, dummyPasswordHash } from "@/lib/auth";
 import { authRateLimit, clientIpOf } from "@/lib/rate-limit";
 import { isValidEmail } from "@/lib/validation";
 
@@ -29,7 +29,15 @@ export async function POST(request: Request) {
   }
 
   const user = await db.user.findUnique({ where: { email: data.email.trim().toLowerCase() } });
-  if (!user || !verifyPassword(data.password, user.passwordHash)) {
+  // Session 17 F1 (CWE-208): burn the same scrypt cost on the unknown-email
+  // path — the dummy hash keeps verifyPassword unconditional so response
+  // latency cannot enumerate which addresses hold accounts (pre-fix the
+  // unknown path short-circuited ~9.8x faster than the wrong-password path
+  // behind an otherwise identical 401 envelope). The result never changes:
+  // an unknown user can never match, a wrong password can never pass.
+  const storedHash = user?.passwordHash ?? dummyPasswordHash();
+  const passwordOk = verifyPassword(data.password, storedHash);
+  if (!user || !passwordOk) {
     return fail("INVALID_CREDENTIALS", "Invalid email or password", 401);
   }
 

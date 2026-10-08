@@ -37,6 +37,9 @@ real client IPs.
 | `DATABASE_URL` | Yes | SQLite connection string. See §4. |
 | `AUTH_SECRET` | **Yes in production** | HMAC secret for session cookies. Generate with `openssl rand -hex 32`. An insecure dev constant is used when unset — never ship that. |
 | `NEXT_PUBLIC_SITE_URL` | Recommended | Canonical public origin, used for metadata URLs and `sitemap.xml` (e.g. `https://novaai.example.com`). |
+| `ALLOW_REGISTRATION` | Optional | Set to the exact string `false` to close registration (Session 17 F3): `POST /api/auth/register` returns `403 REGISTRATION_CLOSED` and the login card shows "Registration is currently closed." Every other value (or unset) keeps registration OPEN — the default preserves the demo workspace story. Login stays open on a closed deployment — closing registration never locks out existing users. |
+| `AUTH_RATE_LIMIT_MAX` | Optional | Auth attempts (login + register) per IP per 15 minutes. Default 10; raise behind shared egress IPs. |
+| `GENERATE_RATE_LIMIT_MAX` | Optional | AI-composer generations per user per 15 minutes. Default 10. |
 
 ## 4. Database location
 
@@ -105,7 +108,52 @@ npm run build
 Sessions survive restarts as long as `AUTH_SECRET` is stable — rotating it
 invalidates every session cookie by design.
 
-## 8. Pushing the repository
+## 8. Docker deployment
+
+The repo ships a production `Dockerfile` (Session 17 F4) — a multi-stage
+build over the Next.js **standalone artifact**: a `deps` stage (full install,
+dev deps included — `prisma generate` needs them), a `build` stage (`next
+build` with a throwaway `DATABASE_URL` — the client imports eagerly but no
+query runs at build time), and a `runner` stage (non-root `node` user, the
+traced standalone `node_modules` incl. the Prisma query engine, a
+`/app/db` **volume** for SQLite, and a `HEALTHCHECK` against
+`/api/health`). The `.dockerignore` keeps the build context lean — the
+`skills/` tree, screenshots, and test artifacts never enter the image.
+
+```bash
+# Build the image
+docker build -t saas-company .
+
+# Run with a persistent database volume + a real secret
+docker run -d -p 3000:3000 -v saas-db:/app/db \
+  -e AUTH_SECRET="$(openssl rand -hex 32)" \
+  -e NEXT_PUBLIC_SITE_URL="https://your-domain.example" \
+  -e ALLOW_REGISTRATION=false \
+  saas-company
+
+# Initialize the database inside the volume (first boot only — one-off)
+docker run --rm -v saas-db:/app/db \
+  -e DATABASE_URL="file:/app/db/custom.db" \
+  --entrypoint npx saas-company prisma db push
+```
+
+Notes:
+
+- The image's default `DATABASE_URL` is the **absolute**
+  `file:/app/db/custom.db` (§4 form 2 — the production recommendation); the
+  volume keeps the workspace across container replacement.
+- `AUTH_SECRET` is injected at **runtime** — never baked into the image.
+- Closing registration for a public deployment is one env var:
+  `-e ALLOW_REGISTRATION=false` (§3).
+- **Honest labeling:** the Dockerfile follows the standalone-artifact
+  pattern this repo's gate has verified end-to-end (build → standalone
+  server → health envelope), but the image itself was **not build-tested
+  in the authoring environment** (no Docker daemon available there). The
+  local quality gate (`lint → typecheck → test → build → smoke → e2e`)
+  remains the only gate; treat the first `docker build` on your infra as
+  the image's own verification step and report deviations upstream.
+
+## 9. Pushing the repository
 
 Commits go to `main` over SSH with an externally supplied deploy key via the
 wrapper runbook: see

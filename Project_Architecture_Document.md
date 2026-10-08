@@ -9,6 +9,60 @@
 
 #### Revision Block — v1.0
 
+- `[NOTE]` **Session 17 remediation (2026-10-08)** — an account-enumeration-
+  timing + registration-concurrency + registration-access-control +
+  deployment-artifact audit (the first survey of the TIMING side of the
+  auth envelope — an identical 401 can still leak existence through
+  latency (CWE-208); the first survey of the RACE class on the write
+  paths — a TOCTOU window between findUnique and create; the PAD §10
+  open registration item, the ledger's oldest MEDIUM; and the §10
+  Dockerfile item — see `docs/remediation-plan-session17.md` F1–F4 →
+  R1–R5) found and fixed four defects: **the login timing side-channel**
+  (probed: the unknown-email path answered in ~3.5ms while the
+  wrong-password path burned ~34ms of scrypt — a 9.8x median delta
+  behind an otherwise byte-identical 401 INVALID_CREDENTIALS envelope;
+  now `dummyPasswordHash()` in `src/lib/auth.ts` — a module-init
+  salt:hash decoy whose fixed scrypt cost the login route burns
+  unconditionally (`storedHash = user?.passwordHash ?? dummyPasswordHash()`)
+  so the timing profile is flat — post-fix probe ratio 1.0x, pinned by
+  the suite's first timing pin: 7+7 curl medians under 2.5x — D83);
+  **the register TOCTOU race** (probed with 10 truly-parallel
+  independent-socket POSTs — undici's single-socket pool SERIALIZES and
+  never interleaves: {"201":1,"409":8,"500":1} — the loser hit the
+  User.email unique constraint and the unhandled P2002 surfaced as a
+  BARE 500 with an empty body and no content-type, the envelope
+  contract's worst violation; now `isUniqueConstraintError()` in
+  `src/lib/db-errors.ts` + the create catch converting P2002 to the
+  exact sequential-duplicate 409 EMAIL_TAKEN — every other error
+  rethrows; pinned by the 10-parallel-curl smoke pin — D84); **the
+  open registration** (the PAD §10 MEDIUM item since the ledger began —
+  any visitor could mint an account; now `registrationOpen()` in
+  `src/lib/auth.ts` + the register-route gate: only the exact
+  `ALLOW_REGISTRATION="false"` closes the route with 403
+  REGISTRATION_CLOSED — default OPEN preserves every existing contract
+  (the e2e register specs, the smoke checks, the demo workspace story);
+  login stays open on a closed deployment; the login card surfaces the
+  message verbatim with ZERO client changes — pinned by the smoke
+  second-server boot — D85); and **the missing Dockerfile** (the §10
+  LOW item — the standalone artifact was Docker-ready but shipped no
+  image recipe; now a multi-stage `Dockerfile` (deps → build → runner)
+  + `.dockerignore` + the DEPLOYMENT.md §8 runbook: non-root user, the
+  /app/db volume, runtime AUTH_SECRET, the /api/health HEALTHCHECK —
+  honestly labeled NOT build-tested in the authoring environment, no
+  Docker daemon there — D86). ALSO: the standing battery re-verified —
+  word parity 1.0000 on all 8 routes (reference UNCHANGED), the mobile
+  nav byte-identical with real-touch contexts (no Tailwind v4 bug; the
+  live's burger remains pointer-blocked, D32); the Subscriber upsert +
+  DemoRequest model adjudicated CLEAN (no other P2002 exposure); one
+  new survey-tooling lesson — a syntax-error crash mid-script can
+  ORPHAN a boot-and-kill server block (the zombie then answers a later
+  run's fresh boot on the same port — the EADDRINUSE is silently
+  swallowed and the health check sees the STALE process; the smoke
+  closed-gate server moved to its own :3220). Gate: **388 checks**
+  (126 unit incl. the dummy-hash + registration-gate + db-errors pins +
+  197 e2e unchanged + 65 smoke incl. the timing-parity + race-envelope +
+  closed-gate pins); 20 screenshots refreshed (VLM-verified).
+
 - `[NOTE]` **Session 16 remediation (2026-10-08)** — an
   authenticated-endpoint-abuse + response-cache-directive +
   framework-banner audit (the first survey of COST CONTROL on the LLM
@@ -1078,6 +1132,10 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D80 | The LLM endpoint's abuse ceiling | n/a (the live has no AI composer — D62) | the most expensive endpoint per call carries its own rate limit (Session 16 F1): `generateRateLimit` in `src/lib/rate-limit.ts` keys **per-USER** (`gen:${userId}` — the route is authenticated, so the user is the honest unit), 10 generations/15min default, `GENERATE_RATE_LIMIT_MAX` override, 429 + `Retry-After` (the D79 contract). Pre-fix: the ONLY unlimited sensitive endpoint — the probe drove 15/15 rapid authenticated POSTs all 200 in 8.1s (each a real SDK completion). The CLIENT contract unchanged by design: compose()'s degrade turns a 429 into the client-side template draft, so the feature never hard-fails — the limiter only caps the LLM spend (pinned by the e2e route-fulfilled-429 row + the deterministic smoke trip at GENERATE_RATE_LIMIT_MAX=2) | **Superset quality** (cost control; Session 16) |
 | D81 | The envelope's cache directive | n/a (the live's API surface is a different shape — no envelope) | every envelope API response carries `Cache-Control: private, no-store` (Session 16 F2 — RFC 9111): emitted at the single `ok()`/`fail()` seam (the 429 sites' Retry-After merges in). Pre-fix: Next.js protects its dynamic PAGES with no-store but NOT route-handler JSON — authenticated data (the workflow list, the session user) transited caches with no explicit directive, and RFC 9111 permits heuristic storage of unmarked 200s by any cache. Pinned by smoke on the happy path, the anonymous 401, and the authenticated 200 | **Superset quality** (API hardening; Session 16) |
 | D82 | The framework banner | the live ships NO X-Powered-By (`server: cloudflare`, `x-render-origin-server: uvicorn`) | `poweredByHeader: false` (Session 16 F3): the page responses no longer advertise `X-Powered-By: Next.js` — the API responses never carried it. Fingerprinting the framework on every page response was pure downside and a header the reference doesn't ship. Pinned by smoke absence checks on both layers | **Superset quality** (hardening/parity; Session 16) |
+| D83 | The login timing profile | n/a (the live has no real auth — D62) | constant-time login (Session 17 F1 — CWE-208): `dummyPasswordHash()` in `src/lib/auth.ts` — a module-init `salt:hash` decoy (16-byte random salt + scrypt of random bytes, 64-byte key — the SAME cost as a real stored hash, a stable per-process constant) burned unconditionally on the unknown-email path (`storedHash = user?.passwordHash ?? dummyPasswordHash()` → verifyPassword always runs). Pre-fix: the unknown-email path short-circuited ~9.8x faster (3.5ms vs 34.1ms medians) behind a byte-identical 401 — a latency census of registered addresses (the 10/15min rate limit slows but does not stop it: rotating IPs are unlimited). Post-fix probe ratio: 1.0x. Pinned by the suite's first timing pin (7+7 curl-sampled medians, ratio < 2.5x — both paths scrypt-dominated post-fix, margins huge both ways) + 4 unit pins on the seam (shape, stability, never-validates, non-derivable) | **Superset quality** (anti-enumeration; Session 17) |
+| D84 | The register race contract | n/a (the live has no real auth — D62) | the concurrent duplicate registration returns the SAME envelope as the sequential one (Session 17 F2): `isUniqueConstraintError()` in `src/lib/db-errors.ts` (instanceof PrismaClientKnownRequestError + code P2002 — a duck-typed plain object does NOT trip it) + the register route's create catch → 409 EMAIL_TAKEN; every other error rethrows (the route must not swallow what it cannot classify). Pre-fix: the findUnique→create TOCTOU window under 10 truly-parallel independent-socket POSTs produced {"201":1,"409":8,"500":1} — the loser's unhandled P2002 surfaced as a BARE 500 with an EMPTY body and NO content-type (the client's payload?.error?.message contract dead-ends into null). Survey-tooling fact: undici's fetch pool serializes on one socket — the interleave needs true wire-level concurrency. Pinned by the 10-parallel-curl smoke pin (all responses are envelopes) + 5 unit pins on the classifier | **Superset quality** (envelope contract; Session 17) |
+| D85 | The registration deployment gate | n/a (the live's auth is a stub — D62) | `ALLOW_REGISTRATION="false"` closes POST /api/auth/register with 403 REGISTRATION_CLOSED (Session 17 F3 — the PAD §10 MEDIUM item, closed): `registrationOpen()` in `src/lib/auth.ts` (only the exact string "false" closes — unset/"true"/"0"/"no" stay OPEN; operators opt INTO closure; the e2e register specs + smoke checks + demo workspace story keep their contracts unchanged). Login stays open on a closed deployment — closing registration never locks out existing users. The login card surfaces the message verbatim (payload?.error?.message) with zero client changes. Pinned by the smoke second-server boot (:3220, ALLOW_REGISTRATION=false: register 403 + the code + the demo user still signs in) + 3 unit pins on the gate | **Superset quality** (access control; Session 17) |
+| D86 | The deployment artifact | n/a (the reference is Base44-hosted) | a production `Dockerfile` + `.dockerignore` + the DEPLOYMENT.md §8 runbook (Session 17 F4 — the PAD §10 LOW item, closed): multi-stage on node:22-alpine (deps: npm ci with dev deps for prisma generate → build: next build with a throwaway DATABASE_URL → runner: non-root node user, the traced standalone node_modules incl. the Prisma query engine, the /app/db VOLUME with the absolute file:/app/db/custom.db default — §8.2 form 2, runtime-injected AUTH_SECRET, the /api/health HEALTHCHECK). The .dockerignore keeps the skills/ tree, screenshots, and test artifacts out of the build context. HONEST LABEL: the image recipe follows the standalone-artifact pattern the gate verifies end-to-end but was NOT build-tested in the authoring environment (no Docker daemon) — the local gate remains the only gate; the first docker build on real infra is the image's own verification step | **Superset** (deployment; Session 17) |
 
 ### 5.5 Tailwind v4 Trap Log (enforced here)
 
@@ -1138,19 +1196,19 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
-| Unit (pure seams) | 9 files | 114 | `src/lib/*.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
+| Unit (pure seams) | 10 files | 126 | `src/lib/*.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
 | Browser E2E | 22 specs | 197 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
-| Production HTTP smoke | 1 | 60 | `scripts/smoke-test.sh` | bash + curl + python3 |
+| Production HTTP smoke | 1 | 65 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins
 
-- **Unit:** pricing math (plan prices, the 20% annual discount, captions incl. Custom-with-no-suffix), the fixed-window limiter (limit boundary, window reset, eviction, retry-after, key isolation, IP extraction), validation (email/password/string bounds + **the safeRedirectPath redirect-target guard — 12 vectors incl. protocol-relative, backslash, and scheme-prefixed rejects — Session 15**), the workflow template + sanitizer (category inference, clamps, rejection paths) + **the withTimeout hang seam (fake-timer pins: fast pass-through, timer fallback, rejection propagation, timer clearing — Session 15**), **the generateRateLimit per-user LLM ceiling (default 10 + the GENERATE_RATE_LIMIT_MAX override + per-user key isolation — Session 16)**, auth crypto (hash/verify round-trip, salt uniqueness, token round-trip, tamper/garbage rejection), content integrity (6 FAQ items, 4 legal pages with sections), the SEO helpers (the per-route description/og:title templates + the routeMetadata assembly — Session 6), the motion engine (the easeOut bezier values fit to the live's entrance ramp, the delay/duration timeline, the per-frame opacity/translateY state — Session 8), and the SQLite URL resolution (anchors, absolute passthrough, standalone repair).
+- **Unit:** pricing math (plan prices, the 20% annual discount, captions incl. Custom-with-no-suffix), the fixed-window limiter (limit boundary, window reset, eviction, retry-after, key isolation, IP extraction), validation (email/password/string bounds + **the safeRedirectPath redirect-target guard — 12 vectors incl. protocol-relative, backslash, and scheme-prefixed rejects — Session 15**), the workflow template + sanitizer (category inference, clamps, rejection paths) + **the withTimeout hang seam (fake-timer pins: fast pass-through, timer fallback, rejection propagation, timer clearing — Session 15**), **the generateRateLimit per-user LLM ceiling (default 10 + the GENERATE_RATE_LIMIT_MAX override + per-user key isolation — Session 16)**, auth crypto (hash/verify round-trip, salt uniqueness, token round-trip, tamper/garbage rejection) + **the constant-time login seam (the dummyPasswordHash decoy: salt:hash shape, per-process stability, never-validates, non-derivable — Session 17) + the registration gate (registrationOpen: unset-open, exact-false-closed, every-other-value-open — Session 17) + the P2002 classifier (isUniqueConstraintError: real Prisma known-request error, other codes, plain Errors, duck-typed objects, null — Session 17)**, content integrity (6 FAQ items, 4 legal pages with sections), the SEO helpers (the per-route description/og:title templates + the routeMetadata assembly — Session 6), the motion engine (the easeOut bezier values fit to the live's entrance ramp, the delay/duration timeline, the per-frame opacity/translateY state — Session 8), and the SQLite URL resolution (anchors, absolute passthrough, standalone repair).
 - **Playwright:** the landing structure (hero, all nine sections, footer columns, anchor scroll, 404, health envelope), **the mobile navigation suite** — the highest-regression-risk chrome: fixed nav geometry, burger→X swap, the dropdown's measured rows (44px, exact hrefs, order), close-on-navigate, Escape, the 768 tablet pill — the auth round-trip (three login states, wrong-password rejection, registration→dashboard→sign-out, session-gated redirect), the dashboard superset (seeded stats, composer end-to-end with cleanup, pause/resume, 401 envelope), the FAQ accordion, the pricing toggle, all four legal pages, the newsletter API pair, **the section-parity suite** (the per-person avatar gradients with an inert-class guard, the Custom-price structure, the edge-fade directions, the AI-suggestion color, body parity, the F7 class strings — Session 6), and **the head-metadata suite** (per-route title/description/og:*/canonical/image/manifest across seven routes, the absence of theme-color/viewport-fit — Session 6), and **the typography-parity suite** (the doubled SPA tracking scale incl. the login route's standard pin, the wordmark inline font-families, the Testimonials H2 tracking, the Gasparyan alt, the star-rating ARIA — Session 7), and **the motion-parity suite** (the rAF entrance behavior incl. the settled `opacity: 1; transform: none;` byte-exact state and the cards' own hover transitions, the per-element entrance parameters, the token pins: shadow-sm/transition-colors/line-height cascade, the login focus chrome, the per-plan CTA classes, the FAQ chevron color, the logo anchor/petals — Session 8; the FAQ pre-reveal contract pinned through the STATIC HTML + the settled state polled — Session 12), and **the hydration suite** (every route renders with ZERO pageerrors — the 404's React #418 fixed by the mount-gated pathname; the static prerender ships the empty-quote placeholder — Session 11), and the **mockup-motion-parity suite** (the looping-motion + dashboard a11y pins — Session 10), and **the resource-hygiene suite** (the RSC-prefetch injects NO gasparyan preload into /faq + no console warning; the lazy img still loads on scroll — Session 12), and **the resilience suite** (route-aborted faults on the dashboard's mutation handlers: zero pageerrors + the visible role=alert banners; the compose regression pin — Session 12), and **the session-lifecycle suite** (cookie-expired Pause/Delete/Compose each redirect to `/login?from_url=/dashboard` — no lying banner; the abort-vs-401 distinction pinned pairwise — Session 13), and **the error-boundary suite** (a contract-violating API row crashes the render into the BRANDED dark recovery card — never the Next.js default; Try again restores the segment — Session 13), and **the demo suite** (the reachable demo-request surface: render + site chrome, client-side required-field validation, the happy path's polite role=status confirmation, the API-rejection banner, the network-fault banner with zero pageerrors, the sitemap listing — Session 14), and **the reduced-motion suite** (below-fold content visible WITHOUT scrolling — the settle() early-return contract; the loop clamp — its computed value serializes as "1e-05s", compared numerically — Session 14; the /demo form visibility row — Session 15), and **the redirect-target suite** (the from_url open-redirect guard: absolute/protocol-relative targets fall back to /dashboard with ZERO external requests, the legit internal round-trip preserved — Session 15), and the dashboard suite's **composer 429-degrade row** (a route-fulfilled RATE_LIMITED on /generate → the client template draft stands, the row is created + announced, zero pageerrors — Session 16).
-- **Smoke:** boots the standalone production server on :3200 with its own `db/smoke.db` (schema-pushed + seeded), then asserts: health envelope, login (valid/wrong/short/duplicate), session me (authed/anon/post-logout), workflow CRUD + invalid-status rejection + the PATCH name-contract pins (oversize rejected 400 VALIDATION, valid rename ok — Session 11), newsletter + demo endpoints + **the deterministic 429 trip (the 6th newsletter POST engages the limiter AND carries the Retry-After header — Session 15)** + **the generate-limiter trip (the smoke server pins GENERATE_RATE_LIMIT_MAX=2: POST #1/#2 allowed, POST #3 429 RATE_LIMITED + Retry-After — Session 16)** + **the Cache-Control: private, no-store pins on the health 200 / anonymous 401 / authenticated 200 and the X-Powered-By absence pins on both layers (Session 16)**, all nine pages (incl. /demo and the 307/200 dashboard pair), landing content markers, the lazy-img contract (the landing HTML ships NO gasparyan preload link — Session 12), the 404 guard, and the sitemap.
+- **Smoke:** boots the standalone production server on :3200 with its own `db/smoke.db` (schema-pushed + seeded), then asserts: health envelope, login (valid/wrong/short/duplicate), session me (authed/anon/post-logout), workflow CRUD + invalid-status rejection + the PATCH name-contract pins (oversize rejected 400 VALIDATION, valid rename ok — Session 11), newsletter + demo endpoints + **the deterministic 429 trip (the 6th newsletter POST engages the limiter AND carries the Retry-After header — Session 15)** + **the generate-limiter trip (the smoke server pins GENERATE_RATE_LIMIT_MAX=2: POST #1/#2 allowed, POST #3 429 RATE_LIMITED + Retry-After — Session 16)** + **the Cache-Control: private, no-store pins on the health 200 / anonymous 401 / authenticated 200 and the X-Powered-By absence pins on both layers (Session 16)**, all nine pages (incl. /demo and the 307/200 dashboard pair), landing content markers, the lazy-img contract (the landing HTML ships NO gasparyan preload link — Session 12), the 404 guard, and the sitemap + **the login timing-parity pin (7+7 curl-sampled medians, unknown-email vs wrong-password ratio < 2.5x — the suite's first TIMING pin; both paths scrypt-dominated post-fix, so the margin against false failure is structural — Session 17) + the register race-envelope pin (10 truly-parallel curl POSTs with independent sockets, same email: every response is an envelope — status ∈ {201,409} + the ok marker; the smoke server pins AUTH_RATE_LIMIT_MAX=50 for the POST budget) + the closed-registration gate pins (a second mini-server on :3220 with ALLOW_REGISTRATION=false: register 403 + REGISTRATION_CLOSED + the demo user still signs in — Session 17)**.
 
 ### 7.3 Coverage Thresholds
 
-- **Gate (mandatory before push):** `npm run lint` → `npm run typecheck` → `npm run test` (**114/114**) → `npm run build` → `./scripts/smoke-test.sh` (**60/60**) → `npm run test:e2e` (**197/197**). No hosted CI; the local gate is the only gate. The `typecheck` step is not optional: the build sets `ignoreBuildErrors`.
+- **Gate (mandatory before push):** `npm run lint` → `npm run typecheck` → `npm run test` (**126/126**) → `npm run build` → `./scripts/smoke-test.sh` (**65/65**) → `npm run test:e2e` (**197/197**). No hosted CI; the local gate is the only gate. The `typecheck` step is not optional: the build sets `ignoreBuildErrors`.
 - Line/branch coverage is not measured — the seam list is deliberately small and complete.
 
 ### 7.4 Conventions
@@ -1186,12 +1244,13 @@ The standalone tree carries the traced `node_modules`, the static chunks, and `p
 | `NEXT_PUBLIC_SITE_URL` | Recommended | Canonical origin for metadata, `sitemap.xml`, `robots.txt`. | `http://localhost:3000` |
 | `AUTH_RATE_LIMIT_MAX` | Optional | Auth-endpoint attempts per IP per 15-min window (login + register share one bucket). Raise behind shared egress IPs. | `10` |
 | `GENERATE_RATE_LIMIT_MAX` | Optional | AI-composer generations per USER per 15-min window (Session 16 — the LLM endpoint's abuse ceiling). Raise for power users; the Playwright webServer pins 50 and the smoke server pins 2 for its deterministic trip. | `10` |
+| `ALLOW_REGISTRATION` | Optional | Set to the exact string `false` to close registration (Session 17 F3): POST /api/auth/register returns 403 REGISTRATION_CLOSED and the login card shows "Registration is currently closed." Every other value (or unset) keeps registration OPEN — the default preserves the demo workspace story. Login stays open on a closed deployment. | open (`true`) |
 
 **The exported-variable trap:** a shell-exported absolute `DATABASE_URL` overrides `.env` for the Prisma CLI and the Next runtime alike — the server silently opens a foreign file. Every script that boots a server or runs Prisma (`smoke-test.sh`, `playwright.config.ts` webServer, `global-setup.ts`) pins its own value; keep that discipline (it is the historical 12/30 smoke failure mode).
 
 ### 8.3 Docker / CI
 
-None ship with v1.0. The standalone artifact is Docker-ready (single Node entrypoint, no build tools at runtime); containerization and a lint+typecheck+test+build+smoke workflow mirroring §7.3 are tracked in §10.
+A production `Dockerfile` ships since Session 17 (D86): multi-stage on node:22-alpine — deps (npm ci, dev deps for prisma generate) → build (next build with a throwaway DATABASE_URL) → runner (non-root node user, the traced standalone node_modules incl. the Prisma query engine, the /app/db VOLUME defaulting to the absolute `file:/app/db/custom.db` — §8.2 form 2, runtime-injected AUTH_SECRET, the /api/health HEALTHCHECK). The `.dockerignore` keeps `skills/`, screenshots, and test artifacts out of the build context. **Honest labeling:** the image was NOT build-tested in the authoring environment (no Docker daemon) — the local gate (§7.3) remains the only gate; treat the first `docker build` on real infra as the image's own verification step. Runbook: `docs/DEPLOYMENT.md` §8. Hosted CI still ships none (the local gate is the pipeline, §8.4).
 
 ### 8.4 Pushing
 
@@ -1243,10 +1302,10 @@ TypeScript strict (with the template-era `noImplicitAny: false`); ESLint flat co
 
 | Priority | Issue | Impact | Status |
 |----------|-------|--------|--------|
-| MEDIUM | Open registration (any visitor can create an account) | Workspace open to the public internet once deployed | Open — gate behind invite codes or an `ALLOW_REGISTRATION` flag |
+| MEDIUM | Open registration (any visitor can create an account) | Workspace open to the public internet once deployed | **CLOSED (Session 17 F3)** — `ALLOW_REGISTRATION="false"` returns 403 REGISTRATION_CLOSED; default open preserves the demo story (D85) |
 | LOW | Rate-limit buckets are in-process | A multi-instance deploy would need a shared store (Redis) | Accepted (single-node by design); documented in §6.2 |
 | LOW | `tsconfig.json` sets `noImplicitAny: false` | Weaker inference than full strict | Accepted (template default); tighten when convenient |
-| LOW | No Dockerfile / hosted CI | Deployment and gate rely on the operator machine | Open — standalone artifact is Docker-ready; mirror §7.3 in a workflow |
+| LOW | No Dockerfile / hosted CI | Deployment and gate rely on the operator machine | **Dockerfile SHIPPED (Session 17 F4, D86)** — not build-tested in the authoring environment (no Docker daemon); hosted CI still none (the local gate is the pipeline) |
 | INFO | AI composer falls back to the deterministic template without SDK access | Generic-but-useful drafts offline | By design (ADR-004) |
 | INFO | "Continue with Google" renders but degrades to a notice | No OAuth credentials in a self-hosted clone | By design (deviation D4); wire a provider if needed |
 | INFO | `AUTH_SECRET` dev fallback constant | Insecure sessions if deployed unset | By design; README + §8.2 warn loudly |
@@ -1270,7 +1329,9 @@ TypeScript strict (with the template-era `noImplicitAny: false`); ESLint flat co
 | `src/components/dashboard/dashboard-app.tsx` | The superset workspace: stats, AI composer, workflow list, runs chart |
 | `src/app/login/page.tsx` | The reference auth card — sign-in / sign-up / forgot states, `?from_url` |
 | `src/app/api/workflows/generate/route.ts` | The AI composer with the deterministic fallback (ADR-004) |
-| `src/lib/auth.ts` | scrypt hashing, HMAC session tokens, cookie lifecycle (ADR-003) |
+| `src/lib/auth.ts` | scrypt hashing, HMAC session tokens, cookie lifecycle (ADR-003) + the constant-time login decoy `dummyPasswordHash()` and the `registrationOpen()` deployment gate (Session 17) |
+| `src/lib/db-errors.ts` | The P2002 unique-constraint classifier behind the register race catch (Session 17 — pure module, no client instantiation at import) |
+| `Dockerfile` / `.dockerignore` | The multi-stage standalone-artifact image + its lean build context (Session 17 F4; runbook in docs/DEPLOYMENT.md §8) |
 | `src/lib/seo.ts` | The reference's per-route head pattern: `pageDescription` / `pageTitle` / `routeMetadata` (Session 6; unit-tested) |
 | `src/lib/db-path.ts` + `tests/db-path.test.ts` | The SQLite URL-resolution seam + its contract (Pattern B) |
 | `src/lib/rate-limit.ts` | Pure fixed-window limiter (ADR-008) — the `AUTH_RATE_LIMIT_MAX` override (D66) |
@@ -1278,7 +1339,7 @@ TypeScript strict (with the template-era `noImplicitAny: false`); ESLint flat co
 | `src/lib/workflow.ts` | Status/category vocabularies, template + sanitizer (ADR-004) |
 | `src/lib/legal-content.ts` / `faq-content.ts` | Verbatim reference copy (content-as-code) |
 | `prisma/schema.prisma` / `prisma/seed.ts` | 4 models / idempotent demo workspace |
-| `scripts/smoke-test.sh` | 47-check production HTTP suite (pins its own `DATABASE_URL`; incl. the four security-header pins + the asset-caching pin + the PATCH name-contract pins + the lazy-img no-preload contract) |
+| `scripts/smoke-test.sh` | 65-check production HTTP suite (pins its own `DATABASE_URL`; incl. the four security-header pins + the asset-caching pin + the PATCH name-contract pins + the lazy-img no-preload contract) |
 | `tests/e2e/mobile-navigation.spec.ts` | The chrome pins: burger dropdown rows, close-on-navigate, tablet pill, close-on-md resize |
 | `tests/e2e/hydration.spec.ts` | The Session-11 zero-pageerror contract: every route hydrates clean; the 404 quotes the real URL post-mount while the static prerender ships the empty placeholder |
 | `tests/e2e/resource-hygiene.spec.ts` | The Session-12 resource-layer pins: the RSC prefetch injects NO gasparyan preload into /faq (and no console warning); the lazy logo-cloud img still loads on scroll (D67) |

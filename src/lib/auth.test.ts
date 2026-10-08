@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
   createSessionToken,
+  dummyPasswordHash,
   hashPassword,
   parseSessionToken,
+  registrationOpen,
   verifyPassword,
 } from "./auth";
 
@@ -22,6 +24,55 @@ describe("password hashing (scrypt)", () => {
 
   it("salts every hash (no two identical)", () => {
     expect(hashPassword("same")).not.toBe(hashPassword("same"));
+  });
+});
+
+describe("constant-time login (Session 17 F1 — CWE-208)", () => {
+  it("the dummy hash carries the salt:hash shape verifyPassword parses", () => {
+    expect(dummyPasswordHash()).toMatch(/^[0-9a-f]+:[0-9a-f]+$/);
+    // verifyPassword must ACCEPT the shape without throwing (the unknown-
+    // email path calls it unconditionally — its cost is the timing floor).
+    expect(() => verifyPassword("anything", dummyPasswordHash())).not.toThrow();
+  });
+
+  it("the dummy hash is stable across calls (a per-process constant)", () => {
+    expect(dummyPasswordHash()).toBe(dummyPasswordHash());
+  });
+
+  it("the dummy hash never validates a candidate password", () => {
+    expect(verifyPassword("password", dummyPasswordHash())).toBe(false);
+    expect(verifyPassword("", dummyPasswordHash())).toBe(false);
+    expect(verifyPassword("Demo1234!", dummyPasswordHash())).toBe(false);
+  });
+
+  it("the dummy hash is not derivable from a real hash of any input", () => {
+    expect(dummyPasswordHash()).not.toBe(hashPassword("password"));
+    expect(dummyPasswordHash()).not.toBe(hashPassword(""));
+    const [dummySalt] = dummyPasswordHash().split(":");
+    const [realSalt] = hashPassword("password").split(":");
+    expect(dummySalt).not.toBe(realSalt);
+  });
+});
+
+describe("registration gate (Session 17 F3 — PAD §10 MEDIUM)", () => {
+  const ENV_KEY = "ALLOW_REGISTRATION";
+
+  it("defaults OPEN when unset", () => {
+    delete process.env[ENV_KEY];
+    expect(registrationOpen()).toBe(true);
+  });
+
+  it("the exact string \"false\" closes registration", () => {
+    process.env[ENV_KEY] = "false";
+    expect(registrationOpen()).toBe(false);
+  });
+
+  it("every other value stays OPEN (opt-in closure only)", () => {
+    for (const v of ["true", "0", "no", "off", "FALSE", " false"]) {
+      process.env[ENV_KEY] = v;
+      expect(registrationOpen()).toBe(true);
+    }
+    delete process.env[ENV_KEY];
   });
 });
 

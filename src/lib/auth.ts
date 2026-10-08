@@ -36,6 +36,30 @@ export function verifyPassword(password: string, stored: string): boolean {
   return timingSafeEqual(candidate, expected);
 }
 
+// Session 17 F1 (CWE-208): a fixed-cost dummy hash the login route burns on
+// the unknown-email path so response latency cannot enumerate registered
+// addresses. Generated once at module init — the SAME scrypt cost (16-byte
+// salt, 64-byte key) as a real stored hash, a stable per-process constant:
+// the timing floor never varies between requests, and verifyPassword can
+// never validate a candidate against it (it is not any password's hash).
+const DUMMY_SALT = randomBytes(16).toString("hex");
+const DUMMY_HASH = scryptSync(randomBytes(32).toString("hex"), DUMMY_SALT, 64).toString("hex");
+
+/** The constant-time login decoy: `salt:hash` shape, fixed scrypt cost. */
+export function dummyPasswordHash(): string {
+  return `${DUMMY_SALT}:${DUMMY_HASH}`;
+}
+
+// Session 17 F3 (PAD §10 MEDIUM, closed): the registration deployment gate.
+// Only the exact string "false" closes registration — every other value
+// (unset, "true", "0", …) stays OPEN, so the seeded demo workspace, the
+// e2e suite's register specs, and the smoke suite keep their contracts
+// unchanged; operators opt INTO closure. Login stays open on a closed
+// deployment — closing registration must never lock out existing users.
+export function registrationOpen(): boolean {
+  return process.env.ALLOW_REGISTRATION !== "false";
+}
+
 function sign(payload: string): string {
   return createHmac("sha256", secret()).update(payload).digest("hex");
 }
