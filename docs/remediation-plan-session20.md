@@ -308,5 +308,9 @@ session transcript (`docs/session_36.md`) committed and pushed after.
       proxy body-cap note), this plan ticked, session log
       `docs/session_35.md`, repo `worklog.md` — `.env.example` verified
       in sync (no new vars; the ceiling is a code constant)
-- [ ] Commit to `main` + SSH push via `docs/ssh_git_wrapper_v3.py`
-      (wrapper-verified, operator key destroyed after) — the final step
+- [x] Commit to `main` + SSH push via `docs/ssh_git_wrapper_v3.py`
+      (wrapper-verified — remote main @ 7826728 == local HEAD, the
+      tracking ref synced, the operator key destroyed after; note the
+      wrapper's DEFAULT remote is the runbook's original task-management
+      repo — always pass `--remote git@github.com:nordeim/saas-company.git`
+      explicitly) — the final step
