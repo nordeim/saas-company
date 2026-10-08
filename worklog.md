@@ -506,3 +506,21 @@ Stage Summary:
 - The gate is deterministic again (the FAQ pin de-flaked) and strengthened: the resource-hygiene + resilience suites pin the resource layer and the fault layer for the first time.
 - Every route's console is now zero-noise (pageerror, unhandledrejection, console.error, console.warn) — cleaner than the live's own console.
 - Next: final commit + SSH push (Task 27).
+
+---
+Task ID: 27
+Agent: Super Z (main, session 19)
+Task: Final commit + SSH push of the Session 12 remediation
+
+Work Log:
+- Final quick gate on the exact tree (lint/typecheck/94 unit; the full 314-check gate ran on the identical code state): green.
+- Tree review: .env + db/*.db ignored, no keys staged, 25 files changed (2 src fix files, 3 test files incl. 2 new specs, 1 smoke script, 10 docs incl. 2 new, 11 screenshots incl. 1 new).
+- Commit bc017f0 on main (Conventional Commits + emoji per the contract).
+- Operator key materialized to a 0600 file in /tmp (never inside the repo); fingerprint verified: ssh-ed25519 SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — matches the Session 1-11 records.
+- Paramiko shim already deployed at the workspace bin/ (outside the checkout per runbook rule 5); PATH prepended per-command.
+- Wrapper dry-run (pointed at git@github.com:nordeim/saas-company.git): auth OK, remote main @ 23f19fb, fast-forward 23f19fb..bc017f0 accepted.
+- Real push via docs/ssh_git_wrapper_v3.py --remote git@github.com:nordeim/saas-company.git: wrapper verified remote refs/heads/main @ bc017f0 == local HEAD, tracking ref synced. Operator key shredded (the wrapper's temp copy + the /tmp original); working tree clean.
+
+Stage Summary:
+- Commit bc017f0 pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 25 files changed: the de-flaked FAQ motion-parity pin (the pre-reveal contract pinned through the static SSR HTML + expect.poll), the Gasparyan lazy load (React Float's traveling preload suppressed — console warning + wasted fetch eliminated on six routes), the dashboard's fault-resilience catch contract (toggleStatus/remove/signOut with the role=alert banner), +7 checks (gate: 314 = 94 unit + 173 e2e incl. the resource-hygiene + resilience suites + 47 smoke incl. the lazy-img contract), the remediation plan + session log, 18 screenshots, docs + SKILL v2.11.0.
+- Session 12 complete.
