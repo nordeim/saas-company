@@ -577,3 +577,15 @@ Stage Summary:
 - Three defects fixed with mechanism-level evidence: the dead /api/demo endpoint (now the reachable /demo superset route), the authenticated /login card (now the server-gate redirect), and the dashboard's silent successes (now polite status messages).
 - Gate raised 321 → 333 checks; the production-readiness floor now covers feature reachability, authenticated navigation, WCAG 4.1.3 status messages, and the reduced-motion contract.
 - Survey scripts persisted under /home/z/my-project/scripts/ (survey-session14-red.mjs, survey-session14-green.mjs, vlm-check-session14.mjs, capture-error-boundary.mjs).
+
+---
+Task ID: S14-2
+Agent: Super Z (main, session 23)
+Task: Record the verified Session 14 push in the worklog
+
+Work Log:
+- Real push via docs/ssh_git_wrapper_v3.py --remote git@github.com:nordeim/saas-company.git: wrapper verified remote refs/heads/main @ 4f3672e == local HEAD, tracking ref synced. Operator key shredded (the wrapper's temp copy + the /tmp original); working tree clean.
+
+Stage Summary:
+- Commit 4f3672e pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 28 files changed: the reachable /demo superset route (page + view + sitemap — the formerly-dead demo API's front half), the authenticated-/login server-gate redirect (the byte-pinned card split into login-card.tsx), the dashboard's polite status-message live region, +12 checks (gate: 333 = 94 unit + 191 e2e incl. the demo + reduced-motion suites + 48 smoke incl. the /demo page pin), the remediation plan + session log, 20 screenshots, docs + SKILL v2.13.0.
+- Session 14 complete.
