@@ -79,11 +79,20 @@ export function LogoCloud() {
             </div>
           </div>
           {/* Gasparyan — image logo (the SVG bytes are identical to the
-              live's; its alt is the live's verbatim "Logo" — Session 7 F5) */}
+              live's; its alt is the live's verbatim "Logo" — Session 7 F5).
+              loading="lazy" (Session 12 F2): the live's SPA ships this img
+              EAGER with no preload link — but React Float auto-preloads
+              eager imgs rendered in the SSR shell, and the Next.js router's
+              RSC prefetch injects that head link into every navbar-bearing
+              route (the logo Link to /), where the image never renders: a
+              console "preloaded but not used" warning + a wasted fetch on
+              six routes. lazy suppresses the Float emission; the below-fold
+              cloud's visible behavior is unchanged (4KB local SVG). */}
           <div className="text-white/60 hover:text-white/90 transition-all duration-500 cursor-default hover:scale-110 flex justify-center scale-[0.825] md:scale-100">
             <img
               src="/media/gasparyan-logo.svg"
               alt="Logo"
+              loading="lazy"
               className="h-6 w-auto brightness-0 invert opacity-60 hover:opacity-90 transition-opacity duration-500"
             />
           </div>

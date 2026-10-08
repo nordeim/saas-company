@@ -157,6 +157,12 @@ for MARKER in "Automated Workflows" "Trusted by 5,000+ teams" "Simple, Transpare
   if echo "$LANDING" | grep -q "$MARKER"; then say_pass "landing contains: $MARKER"; else say_fail "landing contains: $MARKER"; fi
 done
 
+# Session 12 F2: React Float's automatic <img> preload must NOT ship in the
+# landing HTML — the Next.js router's RSC prefetch would inject it into every
+# navbar-bearing route's head (where the image never renders: a console
+# warning + a wasted fetch). loading="lazy" suppresses the emission.
+if echo "$LANDING" | grep -q 'gasparyan-logo.svg" as="image"'; then say_fail "landing ships NO gasparyan preload link (lazy-img contract)"; else say_pass "landing ships NO gasparyan preload link (lazy-img contract)"; fi
+
 NOTFOUND=$(curl -s -o /dev/null -w '%{http_code}' "$BASE/definitely-not-a-route")
 check "unknown path 404s" "404" "$NOTFOUND"
 

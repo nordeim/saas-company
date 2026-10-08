@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (46) | 94 unit + 167 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (47) | 94 unit + 173 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -147,13 +147,45 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run typecheck` exits 0
 - [ ] `npm run test` → 94/94 PASS
 - [ ] `npm run build` compiles clean
-- [ ] `./scripts/smoke-test.sh` → 46/46 PASS
-- [ ] `npm run test:e2e` → 167/167 PASS (needs the build first)
+- [ ] `./scripts/smoke-test.sh` → 47/47 PASS
+- [ ] `npm run test:e2e` → 173/173 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 12 (2026-10-08) remediation** — see
+  `docs/remediation-plan-session12.md`: a CONSOLE-NOISE-v2 sweep (the
+  first to capture `unhandledrejection` + `console.error/warn` alongside
+  pageerror, on every route AND during interactions), the first
+  network-level FAULT-INJECTION of the dashboard's mutation handlers, and
+  the first preload-emission survey found and fixed three defects: **the
+  flaky FAQ motion-parity pin** (its pre-reveal phase sampled a transient
+  pre-hydration state right after `goto` — the first FAQ item is in the
+  initial viewport, so the rAF reveal could settle before the evaluate
+  landed under load (2/10 isolated + a full-suite failure); the
+  pre-reveal contract now pins through the STATIC HTML and the settled
+  check polls); **the Gasparyan preload injection** (React Float
+  auto-preloads eager SSR-shell imgs, and the router's RSC prefetch
+  injects the head link into every navbar-bearing route — a console
+  warning + a wasted fetch on six routes; `loading="lazy"` suppresses
+  the emission, visible parity unchanged, the live's img stays eager);
+  and **the dashboard's uncaught fetch rejections** (pause/delete/sign-out
+  had NO catch — route-aborted faults surfaced `TypeError: Failed to
+  fetch` pageerrors with zero feedback, and Sign out never navigated;
+  every handler now upholds the composer's catch contract with a
+  full-width `role="alert"` banner). ALSO: the live's own console ships
+  two 401 errors the clone doesn't have (the console tier of the D55
+  family — D68); one mid-verification word-parity "regression" was
+  disproven as a ZOMBIE-SERVER artifact (stale :3000 process serving a
+  build whose CSS chunks were deleted — unstyled page, concatenated
+  innerText; the discipline: compare the served HTML's CSS chunk name
+  against disk); the mobile nav re-verified byte-identical (no Tailwind
+  v4 bug; the live's burger remains pointer-blocked, D32). Gate:
+  **314 checks** (94 unit + 173 e2e incl. the resource-hygiene +
+  resilience suites + 47 smoke incl. the lazy-img contract pin); every
+  route's console: zero noise; word parity 1.0000 on all 8 routes.
 
 - **Session 11 (2026-10-08) remediation** — see
   `docs/remediation-plan-session11.md`: the first HYDRATION-HEALTH survey

@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.10.0 · **Last updated:** 2026-10-08 (Session 11 remediation)
+> **Version:** 2.11.0 · **Last updated:** 2026-10-08 (Session 12 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–11)
+## §12. Lessons Learnt (Sessions 1–12)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -514,6 +514,35 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     `rgba(9,9,11,1)`) — poll to settled and match both spellings; and a
     blind Tab×N walk lands on different elements when hydration shifts
     the tab order — tab-until-focused, then read.
+32. **Survey the FAULT layer — abort the network mid-action and watch the
+    console AND the UI** (Session 12): every happy-path test passed for
+    eleven sessions while the dashboard's pause/delete/sign-out handlers
+    carried NO catch — a route-aborted fetch surfaced `pageerror:
+    TypeError: Failed to fetch` with zero user feedback (and Sign out's
+    navigation never ran — the user was stranded). `page.route(...abort())`
+    around each mutation is a five-line probe that exposes the whole
+    class; the fix contract is the composer's own pattern (catch → a
+    visible `role="alert"` surface → zero pageerrors), and the failed
+    Sign out STAYS on the page (the session cookie is still live —
+    navigating away would lie to the user).
+33. **React Float's automatic preloads TRAVEL — audit `<link
+    rel="preload">` on EVERY route, not just the page that owns the
+    resource; and before believing a mid-verification regression, verify
+    the server serves the CURRENT build** (Session 12): React 19
+    auto-preloads eager `<img>`s rendered in the SSR shell, and the
+    Next.js router's RSC prefetch INJECTS those head links into every
+    route that links to the page (the navbar's logo Link) — the
+    Gasparyan logo's preload became a console warning + a wasted fetch on
+    six routes that never render it (`loading="lazy"` suppresses the
+    emission; the visible layer is unchanged for a below-fold 4KB local
+    SVG). The companion discipline: a sudden word-parity collapse
+    (links CONCATENATED in innerText, everything `display: inline` or
+    `block` with no utilities applied) is the signature of a ZOMBIE
+    server serving a stale build whose CSS chunks the new builds deleted
+    — compare the served HTML's CSS chunk filename against
+    `.next/standalone/.next/static/chunks/` on disk before touching any
+    code; the Playwright/smoke suites are immune (they boot their own
+    servers).
 
 ## §13. Pitfalls to Avoid
 

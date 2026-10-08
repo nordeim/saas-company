@@ -171,28 +171,42 @@ test.describe("entrance behavior (Session-8 F1)", () => {
     expect(style).toBe("opacity: 1; transform: none;");
   });
 
-  test("the /faq items sit in unclassed motion wrappers with staggered reveals", async ({ page }) => {
+  test("the /faq items sit in unclassed motion wrappers with staggered reveals", async ({ page, request }) => {
+    // Session 12 F1 (the de-flake): the PRE-REVEAL state is pinned through
+    // the STATIC HTML contract — the first FAQ item is in the initial
+    // viewport, so the rAF reveal engine (delay 0, 400ms) could settle
+    // BEFORE an immediate post-goto DOM read lands under load (observed
+    // 2/10 isolated failures + a full-suite failure). The SSR markup ships
+    // the motion endpoints deterministically.
+    const ssr = await request.get("/faq");
+    expect(ssr.ok()).toBe(true);
+    const html = await ssr.text();
+    expect(html).toContain('<div style="opacity:0;transform:translateY(15px)">');
+    // The wrapper is an unclassed DIV (stable in SSR and post-hydration).
     await page.goto("/faq");
-    const pre = await page.evaluate(() => {
+    const wrap = await page.evaluate(() => {
       const item = document.querySelector("div[class*='rounded-xl'][class*='bg-white/[0.02]']");
-      const wrap = item?.parentElement;
-      return wrap ? { tag: wrap.tagName, cls: wrap.getAttribute("class"), style: wrap.getAttribute("style") } : null;
+      const w = item?.parentElement;
+      return w ? { tag: w.tagName, cls: w.getAttribute("class") } : null;
     });
-    expect(pre?.tag).toBe("DIV");
-    expect(pre?.cls).toBeNull();
-    const preStyleNorm = (pre?.style || "").replace(/\s/g, "");
-    expect(preStyleNorm).toContain("opacity:0");
-    expect(preStyleNorm).toContain("translateY(15px)");
-    await page.evaluate(async () => {
+    expect(wrap?.tag).toBe("DIV");
+    expect(wrap?.cls).toBeNull();
+    // The settled state — POLLED, never a fixed wait against a
+    // transitioning property (the Session-11 R1 lesson).
+    await page.evaluate(() => {
       const item = document.querySelector("div[class*='rounded-xl'][class*='bg-white/[0.02]']");
       item?.scrollIntoView({ block: "center" });
-      await new Promise((r) => setTimeout(r, 1500));
     });
-    const post = await page.evaluate(() => {
-      const item = document.querySelector("div[class*='rounded-xl'][class*='bg-white/[0.02]']");
-      return item?.parentElement?.getAttribute("style") || "NONE";
-    });
-    expect(post).toBe("opacity: 1; transform: none;");
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () =>
+            document
+              .querySelector("div[class*='rounded-xl'][class*='bg-white/[0.02]']")
+              ?.parentElement?.getAttribute("style") || "NONE",
+        ),
+      )
+      .toBe("opacity: 1; transform: none;");
   });
 
   test("the CTA animates ONLY the badge — the H2 carries no motion", async ({ page }) => {

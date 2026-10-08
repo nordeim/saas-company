@@ -20,15 +20,15 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (94 checks) | `npm run test` |
-| Browser E2E (167 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (173 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
-| End-to-end smoke suite (46 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
+| End-to-end smoke suite (47 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (94/94) → `npm run build` → `./scripts/smoke-test.sh` (46/46)
-→ `npm run test:e2e` (167/167) — 307 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (94/94) → `npm run build` → `./scripts/smoke-test.sh` (47/47)
+→ `npm run test:e2e` (173/173) — 314 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -242,6 +242,28 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    white/40 — audit the EFFECTIVE alpha, not the class; the clone-only
    axe violations on `/`, `/faq`, and the 404 are LIVE-PARITY — D63,
    not bugs to fix).
+26. **React Float auto-preloads eager `<img>`s rendered in the SSR shell —
+   and the Next.js router's RSC prefetch INJECTS those head links into
+   every route that links to the page** (Session 12): the Gasparyan
+   logo's automatic `<link rel="preload" as="image">` traveled from the
+   landing into /faq, /privacy, /terms, /accessibility, /refund-policy,
+   and /dashboard (the navbar's logo `<Link href="/">` prefetch), where
+   the image never renders — a console "preloaded but not used" warning
+   + a wasted fetch on six routes. `loading="lazy"` suppresses the
+   emission entirely (pinned by `tests/e2e/resource-hygiene.spec.ts` +
+   the smoke static-HTML pin). Audit `<link rel="preload">` on EVERY
+   route, not just the page that owns the resource. Related Session-12
+   lessons: fault-inject the network (`page.route(...abort())`) before
+   trusting a happy path — the dashboard's pause/delete/sign-out carried
+   NO catch and surfaced `TypeError: Failed to fetch` pageerrors with
+   zero user feedback (now banners — `tests/e2e/resilience.spec.ts`);
+   and before believing a mid-verification regression, verify the server
+   serves the CURRENT build — compare the served HTML's CSS chunk
+   filename against `.next/standalone/.next/static/chunks/` on disk (a
+   ZOMBIE server on :3000 serving a stale build whose CSS chunks were
+   deleted renders UNSTYLED: links concatenate in innerText and word
+   parity collapses; the Playwright/smoke suites are immune — they boot
+   their own servers).
 
 ## Architecture invariants
 

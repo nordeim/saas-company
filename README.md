@@ -6,7 +6,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?logo=tailwindcss)
 ![Prisma](https://img.shields.io/badge/Prisma-6-2d3748?logo=prisma)
 ![SQLite](https://img.shields.io/badge/DB-SQLite-003b57?logo=sqlite)
-![Tests](https://img.shields.io/badge/tests-307_checks_passing-2ecc8a)
+![Tests](https://img.shields.io/badge/tests-314_checks_passing-2ecc8a)
 
 A production-grade, self-hosted clone of the reference dark-theme SaaS
 marketing site [`saas-company.base44.app`](https://saas-company.base44.app/)
@@ -25,7 +25,7 @@ verbatim copy) and then goes further: cookie-session auth, a workflow
 workspace with an AI composer (`z-ai-web-dev-sdk` with a deterministic
 fallback), newsletter + demo-request capture, sitemap/robots, a health
 probe, Lenis smooth scrolling, per-route SEO metadata with a working og-image + web app
-manifest, and 307 automated checks across three test layers.
+manifest, and 314 automated checks across three test layers.
 
 | Dashboard | Landing hero |
 |:---:|:---:|
@@ -45,7 +45,7 @@ manifest, and 307 automated checks across three test layers.
 | ⚡ **Workflow dashboard (superset)** | The reference's "Dashboard" demo link 404s — here it's real: stats cards, a workflow list with pause/resume/delete, a runs chart, and an AI composer that drafts workflows from one-line ideas (server-side SDK + deterministic fallback, sanitized before persistence) |
 | 📰 **Working capture forms** | Footer newsletter subscribe (idempotent upsert) and demo/contact requests persist to SQLite |
 | ❓ **Interactive FAQ + legal** | The reference's six-question accordion and four legal pages, copy captured verbatim |
-| 🧪 **307 automated checks** | 94 Vitest unit checks (pure domain seams incl. the SEO helpers, the motion engine, and the rate-limit override), 167 Playwright browser checks (incl. the mobile-navigation, navbar scroll-behavior, per-tab features-card, login-theme, login alternate-states, brand-parity, section-parity, head-metadata, typography-parity, motion-parity, palette-parity, mockup-motion-parity, and hydration-health suites), 46 curl smoke checks against the production build (incl. the four security-header pins, the asset-caching pin, and the PATCH name-contract pins) |
+| 🧪 **314 automated checks** | 94 Vitest unit checks (pure domain seams incl. the SEO helpers, the motion engine, and the rate-limit override), 173 Playwright browser checks (incl. the mobile-navigation, navbar scroll-behavior, per-tab features-card, login-theme, login alternate-states, brand-parity, section-parity, head-metadata, typography-parity, motion-parity, palette-parity, mockup-motion-parity, hydration-health, resource-hygiene, and fault-resilience suites), 47 curl smoke checks against the production build (incl. the four security-header pins, the asset-caching pin, the PATCH name-contract pins, and the lazy-img no-preload contract) |
 | 🛡️ **Production headers** | The reference's security posture — `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Strict-Transport-Security` — emitted via `next.config.ts` and pinned by the smoke suite, plus the reference CDN's asset caching (`public, max-age=604800` on `public/` assets) |
 | 🔎 **Per-route SEO head parity** | The reference's per-route `<head>` pattern — "X | SAAS Company" og:titles, "X on SAAS Company. …" descriptions, per-route og:url/canonical, a web app manifest — plus a WORKING self-hosted og-image (the live's own URL 404s); assembled in `src/lib/seo.ts` (`routeMetadata`) and pinned by the head-metadata e2e suite |
 | 🌗 **Measured design system** | Tailwind v4 CSS-first tokens: #000 canvas, #8624FF primary, #0055FF accent, #D500FF violet, self-hosted **Google Fonts' "Vend Sans" variable font** (wght 300-700 — the exact gstatic bytes the reference serves; Session 5 font forensics replaced the Session-1 Wix Madefor misidentification), the reference's keyframes (organic-gradient, border-shimmer, logo petals, marquee) |
@@ -68,7 +68,7 @@ manifest, and 307 automated checks across three test layers.
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font Google (Playfair/DM Serif) | — | Reference typography — the SAME gstatic woff2 bytes the live serves (Session 5 forensics) |
 | Unit tests | Vitest | 5 | Pure domain seams |
 | E2E tests | Playwright | 1.63 | Browser suite (Chromium) |
-| Smoke | bash + curl | — | 42 checks against the production build |
+| Smoke | bash + curl | — | 47 checks against the production build |
 
 ## Architecture
 
@@ -146,10 +146,10 @@ Open <http://localhost:3000>, then sign in to the dashboard at
 curl http://localhost:3000/api/health
 # {"ok":true,"data":{"status":"ok","app":"saas-company","ts":"…"}}
 
-# Full verification (307 checks across three layers)
+# Full verification (314 checks across three layers)
 npm run lint && npm run typecheck && npm run test   # 94 unit checks
-npm run build && ./scripts/smoke-test.sh            # 46 smoke checks
-npm run test:e2e                                    # 167 browser checks
+npm run build && ./scripts/smoke-test.sh            # 47 smoke checks
+npm run test:e2e                                    # 173 browser checks
 ```
 
 ### Production
@@ -221,8 +221,8 @@ inline); the login card and 404 page run the reference's light slate theme.
 
 ```bash
 npm run test              # unit — 94 checks on the pure domain seams
-npm run test:e2e          # Playwright — 167 browser checks (needs a build)
-./scripts/smoke-test.sh   # curl E2E — 46 checks against the production build
+npm run test:e2e          # Playwright — 173 browser checks (needs a build)
+./scripts/smoke-test.sh   # curl E2E — 47 checks against the production build
 ```
 
 The unit layer pins the pure logic: pricing math (plans, the 20% annual
@@ -262,6 +262,8 @@ data.
 | Hero indicator dot travels instead of bouncing | The reference drives it with a JS oscillation; this repo ships the measured `animate-scroll-dot` keyframe | Intended parity (rAF-sampled); `prefers-reduced-motion` collapses it |
 | The 404 page briefly shows empty quotes before the pathname fills | The statically-prerendered 404 ships the placeholder at SSR and fills the real URL one commit after hydration (the React-#418-free pattern — `usePathname()` would render the internal route id `/_not-found` post-settle) | Expected; pinned by `tests/e2e/hydration.spec.ts` |
 | E2E suite intermittently 429s mid-run locally | The suite's own UI sign-ins share the in-memory auth limiter's budget | The Playwright webServer pins `AUTH_RATE_LIMIT_MAX=50`; production keeps the default 10 unless overridden |
+| The Gasparyan logo (trusted-by cloud) loads on scroll, not at page load | `loading="lazy"` suppresses React Float's automatic preload — without it, the Next.js RSC prefetch injected the preload link into every navbar route, triggering console warnings + wasted fetches (Session 12) | Intended resource hygiene; the logo appears instantly when scrolled into view (a 4KB local SVG) |
+| The dashboard shows a red "Could not …" banner after a failed action | The mutation handlers' fault-resilience contract: network/HTTP failures surface a visible `role="alert"` banner instead of an uncaught error (Session 12) | Intended; retry the action or check the connection |
 
 ## License
 

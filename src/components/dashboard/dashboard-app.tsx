@@ -52,6 +52,11 @@ export function DashboardApp({
   const [composing, setComposing] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [error, setError] = useState("");
+  // Session 12 F3: the action-failure banner — visible from every scroll
+  // position (the composer's own error lives inside the composer card,
+  // invisible to a user working the workflow list below). Same contract
+  // as compose()'s setError: surface, never swallow.
+  const [actionError, setActionError] = useState("");
 
   const stats = useMemo(() => {
     const active = workflows.filter((w) => w.status === "active");
@@ -107,13 +112,20 @@ export function DashboardApp({
 
   async function toggleStatus(w: WorkflowRow) {
     setBusyId(w.id);
+    setActionError("");
     try {
-      await fetch(`/api/workflows/${w.id}`, {
+      // Session 12 F3: the catch contract — network-level failures
+      // (fetch rejections) AND HTTP-level failures (!res.ok) surface as
+      // the banner instead of an uncaught pageerror with silent staleness.
+      const res = await fetch(`/api/workflows/${w.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: w.status === "active" ? "paused" : "active" }),
       });
+      if (!res.ok) throw new Error("update failed");
       await refresh();
+    } catch {
+      setActionError("Could not update that workflow. Try again.");
     } finally {
       setBusyId(null);
     }
@@ -121,18 +133,29 @@ export function DashboardApp({
 
   async function remove(w: WorkflowRow) {
     setBusyId(w.id);
+    setActionError("");
     try {
-      await fetch(`/api/workflows/${w.id}`, { method: "DELETE" });
+      const res = await fetch(`/api/workflows/${w.id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("delete failed");
       await refresh();
+    } catch {
+      setActionError("Could not delete that workflow. Try again.");
     } finally {
       setBusyId(null);
     }
   }
 
   async function signOut() {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/");
-    router.refresh();
+    setActionError("");
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      router.push("/");
+      router.refresh();
+    } catch {
+      // The session cookie is still live server-side — navigating away
+      // would lie to the user. The banner explains instead.
+      setActionError("Could not sign out. Check your connection and try again.");
+    }
   }
 
   return (
@@ -161,6 +184,14 @@ export function DashboardApp({
           </div>
         </div>
       </header>
+
+      {/* Session 12 F3: the action-failure banner — full-width, visible
+          from every scroll position, cleared at the start of each action. */}
+      {actionError && (
+        <div role="alert" className="max-w-7xl mx-auto px-6 pt-6">
+          <p className="text-sm text-red-400 font-body">{actionError}</p>
+        </div>
+      )}
 
       <main className="max-w-7xl mx-auto px-6 py-10 space-y-10">
         {/* Stats */}

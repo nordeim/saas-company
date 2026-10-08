@@ -469,3 +469,40 @@ Work Log:
 Stage Summary:
 - Commit 2f8b0eb pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 33 files changed (+807/−59): the 404 hydration fix (useSyncExternalStore mount gate + window.location.pathname — React #418 eliminated from every unknown route), the paused-card contrast fix (text-white/60 through the opacity-80), the PATCH name-contract fix (requiredString both paths), the de-flaked ring pin (tab-until-focused + poll-to-settled), the AUTH_RATE_LIMIT_MAX override (default 10; the e2e webServer pins 50), +8 checks (gate: 307 = 94 unit + 167 e2e incl. the hydration suite + 46 smoke incl. the name-contract pins), the remediation plan + session log, refreshed screenshots (the 404 quoting the real URL), docs + SKILL v2.10.0, .env.example with the new optional var.
 - Session 11 complete.
+
+---
+Task ID: 25
+Agent: Super Z (main, session 19)
+Task: Session 12 audit — console-noise v2, fault injection, and the resource-preload layer
+
+Work Log:
+- git pull (docs/session_18.md transcript arrived); baseline gate: lint/typecheck/94 unit/build/46 smoke green; e2e 166/167 -> 167/167 on re-run — the FAQ motion-parity pin flaky (F1: 2/10 isolated reproduction, root-caused as a pre-reveal race — the first FAQ item is in the initial viewport, so the rAF reveal (delay 0, 400ms) can settle before the post-goto evaluate lands under load).
+- Drift check: word parity 1.0000 on all 8 routes — the reference UNCHANGED since Session 11.
+- NEW surface #1 — console-noise sweep v2 (pageerror + unhandledrejection + console.error/warn, every route AND during interactions): all routes clean except the Gasparyan preload warning on the navbar routes.
+- NEW surface #2 — the first fault-injection sweep (route.abort on the dashboard's API calls): pause/delete/sign-out each produced pageerror "TypeError: Failed to fetch" with ZERO user feedback (sign-out left the user stranded on /dashboard); the composer was the model citizen (catch -> setError -> role=alert, zero pageerrors).
+- NEW surface #3 — the resource-preload survey: React Float auto-preloads eager SSR-shell imgs; the Gasparyan preload shipped in the landing HTML and was INJECTED into every navbar-bearing route's head via the Next.js RSC prefetch (the logo Link to /) — a console warning + a wasted fetch on six routes (/faq, /privacy, /terms, /accessibility, /refund-policy, /dashboard). Verified with the /login control (bare card, no logo link -> no injection); the live's img is EAGER with no preload and no warning (its own console noise is two 401 session-check errors — the clone's console is cleaner, D68). Controlled rebuild experiment: loading="lazy" suppresses the Float emission entirely.
+- Standing mobile-nav paired re-verification (real-touch 390x844): clone byte-identical (burger 342,16 24x24; panel 0,56 390x397; seven 44px rows; scroll-lock, Escape, resize guard; oklab bg = black/95 rendering-identical) — NO Tailwind v4 bug; the live's burger remains pointer-blocked (D32).
+- The remediation plan (docs/remediation-plan-session12.md F1-F8) written + validated against the codebase before execution.
+
+Stage Summary:
+- Three defects found with mechanism-level evidence: the flaky FAQ pre-reveal pin (a transient-state sample with no synchronization), the traveling Gasparyan preload (React Float emission + RSC-prefetch injection), and the dashboard's uncaught fetch rejections (the fault layer no prior session probed).
+- The reference is UNCHANGED; the clone's console is now cleaner than the live's on every tier.
+
+---
+Task ID: 26
+Agent: Super Z (main, session 19)
+Task: Session 12 remediation + verification + docs
+
+Work Log:
+- R1 (de-flake, TDD-RED = the captured 2/10 + full-suite failures): the FAQ pre-reveal contract now pins through the STATIC HTML ('<div style="opacity:0;transform:translateY(15px)">' in /faq's SSR markup) + the settled check converts to expect.poll — 10/10 consecutive isolated greens.
+- R2 (the Gasparyan lazy load): RED first (resource-hygiene.spec.ts failed on the injected link; the smoke pin failed on the landing-HTML preload); fix loading="lazy" on the logo-cloud img; GREEN (2/2 e2e + 47/47 smoke).
+- R3 (the dashboard fault resilience): RED first (resilience.spec.ts — 3 pins failed on pageerrors "TypeError: Failed to fetch"; the compose regression pin passed); fix: toggleStatus/remove/signOut adopt the composer's catch contract (network rejections AND !res.ok) -> a full-width role="alert" banner under the header, cleared per action; sign-out's failed path STAYS on /dashboard (the session cookie is still live — navigating away would lie). GREEN 4/4.
+- Full gate: ALL GREEN — 314 checks (94 unit + 173 e2e = 167 + 2 resource-hygiene + 4 resilience; 47 smoke = 46 + the lazy-img contract pin).
+- Re-verification: word parity 1.0000 on ALL 8 routes — one mid-verification "regression" (0.757-0.955 on five routes) was DISPROVEN as a ZOMBIE-SERVER artifact (a stale :3000 process served old HTML referencing CSS chunks the new builds deleted -> unstyled page -> concatenated innerText; killed by port, re-verified clean; the playwright/smoke suites were never affected). Console sweep v2 re-run: zero noise on every route. Mobile nav re-probed byte-identical.
+- Screenshots: 17 standard shots refreshed + the new 14-dashboard-resilience-banner.png (18 total), VLM-verified (the banner shows "Could not update that workflow. Try again."; the control shows no error).
+- Docs: PAD (revision block, ledger D67-D69, section 7 counts + the two new suites, section 11 key files), AGENTS (counts, gotcha 26: the traveling preload + fault-injection discipline + the zombie-server check), CLAUDE (session-12 context + counts), README (314 badge, the new suites, two troubleshooting rows), SKILL v2.11.0 (lessons 32-33), remediation plan checklist ticked, session log (docs/session_19.md), .env.example re-verified (no changes).
+
+Stage Summary:
+- The gate is deterministic again (the FAQ pin de-flaked) and strengthened: the resource-hygiene + resilience suites pin the resource layer and the fault layer for the first time.
+- Every route's console is now zero-noise (pageerror, unhandledrejection, console.error, console.warn) — cleaner than the live's own console.
+- Next: final commit + SSH push (Task 27).
