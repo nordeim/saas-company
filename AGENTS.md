@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (94 checks) | `npm run test` |
-| Browser E2E (173 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (180 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (94/94) → `npm run build` → `./scripts/smoke-test.sh` (47/47)
-→ `npm run test:e2e` (173/173) — 314 checks across three layers (boots the standalone server on :3100 against its own
+→ `npm run test:e2e` (180/180) — 321 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -264,6 +264,25 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    deleted renders UNSTYLED: links concatenate in innerText and word
    parity collapses; the Playwright/smoke suites are immune — they boot
    their own servers).
+27. **A 401 is not a network fault — failure CLASSES need distinct UI
+   contracts; and ship `error.tsx`/`global-error.tsx` before you need
+   them** (Session 13): a cookie-expired session makes every dashboard
+   mutation 401 — and "Try again." banners LIE (each retry 401s forever).
+   The honest contract is the server gate's own: redirect to
+   `/login?from_url=/dashboard` (the `apiFetch` wrapper in
+   `dashboard-app.tsx`; pinned pairwise against the abort-banner class
+   by `tests/e2e/session-lifecycle.spec.ts`). Likewise a render fault
+   (malformed API data — a row with `runs: null` passes the
+   `Array.isArray` envelope guard and crashes the article template) must
+   surface the BRANDED boundary (`src/app/error.tsx`), never Next.js's
+   default "This page couldn't load" page — the app loses its identity
+   exactly when the user is already having a bad day (pinned by
+   `tests/e2e/error-boundary.spec.ts`; pin the boundary with a
+   route-fulfilled contract violation, not a synthetic throw). Related:
+   Escape-closing the mobile menu must RETURN FOCUS to the burger
+   (`burgerRef`) — the focused link unmounts with the panel and
+   `activeElement` falls to `body`, stranding keyboard users (WCAG
+   2.4.3).
 
 ## Architecture invariants
 

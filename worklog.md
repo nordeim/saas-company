@@ -524,3 +524,24 @@ Work Log:
 Stage Summary:
 - Commit bc017f0 pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 25 files changed: the de-flaked FAQ motion-parity pin (the pre-reveal contract pinned through the static SSR HTML + expect.poll), the Gasparyan lazy load (React Float's traveling preload suppressed — console warning + wasted fetch eliminated on six routes), the dashboard's fault-resilience catch contract (toggleStatus/remove/signOut with the role=alert banner), +7 checks (gate: 314 = 94 unit + 173 e2e incl. the resource-hygiene + resilience suites + 47 smoke incl. the lazy-img contract), the remediation plan + session log, 18 screenshots, docs + SKILL v2.11.0.
 - Session 12 complete.
+
+---
+Task ID: S13-1
+Agent: Super Z (main, session 21)
+Task: Session 13 — session-lifecycle + render-fault + focus-management audit and remediation of the saas-company clone
+
+Work Log:
+- git pull (session_20.md transcript arrived); docs reviewed (AGENTS/CLAUDE/README/PAD/SKILL v2.11.0 + session_19/20 + remediation-plan-12 + worklog); skills/ excluded from all toolchains (verified); the exported-DATABASE_URL shell trap live — neutralized per-command (env -u DATABASE_URL) all session.
+- Baseline gate: lint/typecheck/94 unit/build/47 smoke/173 e2e ALL GREEN on the inherited tree (no flake).
+- Drift check: word parity 1.0000 on all 8 routes — the reference UNCHANGED. Mobile-nav real-touch paired probe re-run: clone byte-identical and working (burger 342,16 24×24; panel 0,56 390×397, seven 44px rows; scroll-lock/Escape/resize guard; oklab bg = black/95) — NO Tailwind v4 bug; the live's burger remains pointer-blocked (D32).
+- Survey (three NEW surfaces): the session-lifecycle layer (cookie deleted post-sign-in → Pause → the 401 banner LIED — "Try again" 401s forever; user stranded on /dashboard; Delete/Compose/refresh same); the render-fault layer (NO error.tsx/global-error.tsx — a {ok:true,data:null} envelope crashes the stats memo → Next.js's DEFAULT unbranded "This page couldn't load" page; refresh() guarded payload?.ok but not the SHAPE of payload.data); the focus-management layer (Escape closed the mobile menu WITHOUT focus return — activeElement fell to body, WCAG 2.4.3). Non-findings: login autocomplete (already the superset), auth cookie flags, double-submit guards, the 401 envelope shape.
+- Remediation plan (docs/remediation-plan-session13.md F1-F6 → R1-R4) written + validated against the codebase, then executed TDD-first: R1 the apiFetch 401-redirect wrapper (RED session-lifecycle.spec.ts 3 pins + abort regression pin → the SessionExpired sentinel + router.push("/login?from_url=/dashboard") — the server gate's own contract → GREEN 4/4); R2 the branded error boundaries (RED error-boundary.spec.ts → error.tsx dark recovery card + global-error.tsx root shell + the Array.isArray shape-guard → GREEN 2/2, Try again restores the segment); R3 the burgerRef Escape focus return (RED focus pin in mobile-navigation.spec.ts → GREEN, 9/9 suite).
+- Full gate: 321 checks green (94 unit + 180 e2e incl. the session-lifecycle + error-boundary suites + 47 smoke).
+- Re-verification: word parity 1.0000 ×8; the three RED probes re-run GREEN (redirect, branded boundary + restore, focus return); console sweep v2 zero noise on every route; one ZOMBIE-SERVER recurrence killed by port (EADDRINUSE :3000; the served CSS chunk verified against disk before trusting results — gotcha 26 discipline); 19 screenshots (18 standard + the new 15-error-boundary evidence shot, VLM-verified).
+- Docs: PAD (revision block, ledger D70-D72, §7 counts, §11 key files), AGENTS (counts, gotcha 27: failure-class-distinct UI contracts + ship error boundaries before you need them), CLAUDE (session-13 context), README (321 badge, new suites, two troubleshooting rows), SKILL v2.12.0 (lessons 34-35), remediation plan ticked, session log docs/session_21.md, this worklog. .env.example re-verified (no new env vars).
+
+Stage Summary:
+- Three defects fixed with mechanism-level evidence: the session-expiry lying banner (every 7-day+ user hit it — the honest redirect now matches the server gate), the missing error boundaries (any render fault debrandized the app — now the dark recovery card with Try again), and the mobile menu's Escape focus loss (keyboard users stranded — now focus returns to the burger).
+- Production-readiness floor raised: the session lifecycle is pinned end-to-end (401 ≠ abort — failure classes distinct), the render-fault layer is pinned with realistic route-fulfilled contract violations, and the a11y floor extends to focus management.
+- Survey scripts persisted under /home/z/my-project/scripts/ (session13-red, session13-green, vlm-check-session13, mobilenav-session13.json).
+- Session 13 complete.

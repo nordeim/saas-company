@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (47) | 94 unit + 173 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (47) | 94 unit + 180 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -148,12 +148,45 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run test` → 94/94 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 47/47 PASS
-- [ ] `npm run test:e2e` → 173/173 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 180/180 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 13 (2026-10-08) remediation** — see
+  `docs/remediation-plan-session13.md`: a SESSION-LIFECYCLE + render-fault
+  + focus-management audit (three layers no prior session surveyed: what
+  the signed-in dashboard does when the cookie EXPIRES mid-tab; what
+  renders on a client-side render fault; where focus lands when the
+  mobile menu Escape-closes) found and fixed three defects: **the
+  session-expiry lying banner** (cookie-expired Pause/Delete/Compose each
+  said "Try again." — but every retry 401s forever; all dashboard fetches
+  now route through `apiFetch`, which redirects a 401 to
+  `/login?from_url=/dashboard` — the SAME contract as the server-side
+  gate; a network ABORT keeps the Session-12 banner contract — the two
+  failure classes stay distinct, pinned pairwise by
+  `tests/e2e/session-lifecycle.spec.ts`); **the missing error
+  boundaries** (any render fault surfaced Next.js's default unbranded
+  "This page couldn't load" page — reachable via a contract-violating API
+  row (`runs: null` passes the `Array.isArray` guard and crashes the
+  article template); now a branded dark recovery card
+  (`src/app/error.tsx` + `global-error.tsx`): role="alert" + Try again
+  (`reset()` restores the server-provided state) + Go-to-home, plus a
+  `refresh()` shape-guard; pinned by `tests/e2e/error-boundary.spec.ts`
+  with a route-fulfilled contract violation); and **the mobile menu's
+  Escape focus loss** (the focused link unmounted and `activeElement`
+  fell to `body` — WCAG 2.4.3; Escape now returns focus to the burger via
+  `burgerRef`, pinned in the mobile-navigation suite). ALSO: the standing
+  battery re-verified — word parity 1.0000 on all 8 routes (reference
+  UNCHANGED), the mobile nav byte-identical with real-touch contexts (no
+  Tailwind v4 bug; the live's burger remains pointer-blocked, D32), every
+  route's console zero-noise, and one ZOMBIE-SERVER recurrence killed by
+  port mid-survey (gotcha 26's CSS-chunk-against-disk discipline). Gate:
+  **321 checks** (94 unit + 180 e2e incl. the session-lifecycle +
+  error-boundary suites + 47 smoke); 19 screenshots (18 standard + the
+  branded-boundary evidence shot, VLM-verified).
 
 - **Session 12 (2026-10-08) remediation** — see
   `docs/remediation-plan-session12.md`: a CONSOLE-NOISE-v2 sweep (the

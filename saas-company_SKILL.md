@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.11.0 · **Last updated:** 2026-10-08 (Session 12 remediation)
+> **Version:** 2.12.0 · **Last updated:** 2026-10-08 (Session 13 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–12)
+## §12. Lessons Learnt (Sessions 1–13)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -543,6 +543,37 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     `.next/standalone/.next/static/chunks/` on disk before touching any
     code; the Playwright/smoke suites are immune (they boot their own
     servers).
+34. **Survey the SESSION-LIFECYCLE layer — expire the cookie mid-session
+    and watch every mutation** (Session 13): a cookie-expired 401 is a
+    different failure CLASS than a network abort (an abort means "retry
+    might work"; a 401 means "the session is GONE") — but the dashboard
+    treated them identically, and the "Try again." banner LIED (every
+    retry 401s forever; the user stranded on /dashboard). The honest
+    contract is the server gate's own: redirect to
+    `/login?from_url=/dashboard` — enforced client-side by the `apiFetch`
+    wrapper (the 401 sentinel is caught by the existing catch blocks, so
+    no unhandled rejection). Pin the two failure classes PAIRWISE: the
+    cookie-deletion probe (ctx.clearCookies → mutation → URL assertion)
+    and the abort probe (banner + stays) — one without the other lets the
+    classes silently re-merge.
+35. **An app without error boundaries is one malformed envelope away from
+    losing its brand at the worst moment — pin the boundary with a
+    route-fulfilled contract violation, not a synthetic throw** (Session
+    13): the repo shipped no `error.tsx`/`global-error.tsx`, so ANY
+    client render error surfaced Next.js's default unbranded page
+    ("This page couldn't load") — reachable through a realistic path
+    (refresh() guarded `payload?.ok` but not the SHAPE of `payload.data`;
+    a `{ok:true,data:[{runs:null}]}` row passes `Array.isArray` and
+    crashes `w.runs.toLocaleString()` in the article template). Fix BOTH
+    layers: the branded boundary (dark card, role="alert", Try again via
+    `reset()` — restores the segment with the server-provided state —
+    plus Go-to-home) AND the shape-guard where the data enters
+    (`Array.isArray(payload.data)`). The e2e pin routes the LIST endpoint
+    to fulfill the violating row — the same fault-injection discipline
+    as lesson 32, one layer up the stack. Related: Escape-closing the
+    mobile menu must RETURN FOCUS to the burger (`burgerRef`) — the
+    focused link unmounts with the panel and activeElement falls to
+    `body`, stranding keyboard users (WCAG 2.4.3).
 
 ## §13. Pitfalls to Avoid
 

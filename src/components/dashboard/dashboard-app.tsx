@@ -39,6 +39,11 @@ export interface WorkflowRow {
   updatedAt: string | Date;
 }
 
+/** Session 13 F1: the 401 sentinel — thrown by apiFetch, caught by the
+ * existing catch blocks so no unhandled rejection escapes (the redirect
+ * is the feedback; the banner never renders for 401s). */
+class SessionExpired {}
+
 export function DashboardApp({
   user,
   initialWorkflows,
@@ -70,10 +75,26 @@ export function DashboardApp({
 
   const maxRuns = Math.max(1, ...workflows.map((w) => w.runs));
 
+  // Session 13 F1: a 401 is NOT a network fault — retrying will 401
+  // forever. "Try again" would lie; the honest contract is the server
+  // gate's (page.tsx:14): go re-authenticate.
+  async function apiFetch(input: string, init?: RequestInit) {
+    const res = await fetch(input, init);
+    if (res.status === 401) {
+      router.push("/login?from_url=/dashboard");
+      throw new SessionExpired();
+    }
+    return res;
+  }
+
   async function refresh() {
-    const res = await fetch("/api/workflows");
+    const res = await apiFetch("/api/workflows");
     const payload = await res.json().catch(() => null);
-    if (res.ok && payload?.ok) setWorkflows(payload.data);
+    // Session 13 F2: shape-check the envelope — a {ok:true,data:null}
+    // response must never reach setWorkflows (the stats memo's .filter
+    // would crash the render; the error boundary is the net, this is
+    // the guard).
+    if (res.ok && payload?.ok && Array.isArray(payload.data)) setWorkflows(payload.data);
   }
 
   async function compose(e: React.FormEvent) {
@@ -83,7 +104,7 @@ export function DashboardApp({
     setError("");
     try {
       // 1) Ask the AI composer (falls back to the deterministic template).
-      const genRes = await fetch("/api/workflows/generate", {
+      const genRes = await apiFetch("/api/workflows/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idea }),
@@ -95,7 +116,7 @@ export function DashboardApp({
           : { name: idea.trim().slice(0, 120), description: "", category: "Ops" };
 
       // 2) Persist it.
-      const createRes = await fetch("/api/workflows", {
+      const createRes = await apiFetch("/api/workflows", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(draft),
@@ -117,7 +138,8 @@ export function DashboardApp({
       // Session 12 F3: the catch contract — network-level failures
       // (fetch rejections) AND HTTP-level failures (!res.ok) surface as
       // the banner instead of an uncaught pageerror with silent staleness.
-      const res = await fetch(`/api/workflows/${w.id}`, {
+      // Session 13 F1: 401s route through apiFetch's redirect instead.
+      const res = await apiFetch(`/api/workflows/${w.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: w.status === "active" ? "paused" : "active" }),
@@ -135,7 +157,7 @@ export function DashboardApp({
     setBusyId(w.id);
     setActionError("");
     try {
-      const res = await fetch(`/api/workflows/${w.id}`, { method: "DELETE" });
+      const res = await apiFetch(`/api/workflows/${w.id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("delete failed");
       await refresh();
     } catch {

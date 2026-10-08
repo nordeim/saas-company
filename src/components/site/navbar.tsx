@@ -39,6 +39,10 @@ export function Navbar() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [light, setLight] = useState(false);
   const router = useRouter();
+  // Session 13 F3: the disclosure control — Escape close returns focus
+  // here (the focused menu link unmounts with the panel; without this,
+  // activeElement fell to <body> and keyboard users lost their place).
+  const burgerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     let raf = 0;
@@ -75,9 +79,15 @@ export function Navbar() {
   }, []);
 
   // Close the mobile menu on Escape and lock body scroll while open.
+  // Session 13 F3: Escape close also RETURNS FOCUS to the burger — the
+  // disclosure pattern's focus contract (WCAG 2.4.3): the panel unmounts
+  // under the focused link, so without the handoff focus drops to body.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        setOpen(false);
+        burgerRef.current?.focus();
+      }
     };
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = open ? "hidden" : "";
@@ -178,6 +188,7 @@ export function Navbar() {
 
         {/* Burger (below md) */}
         <button
+          ref={burgerRef}
           className={`md:hidden ${light ? "text-black/80 hover:text-black" : "text-white/80 hover:text-white"}`}
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}

@@ -75,6 +75,30 @@ test.describe("mobile navigation", () => {
     await expect(page.locator("#mobile-menu")).toHaveCount(0);
   });
 
+  // Session 13 F3: the disclosure pattern's focus contract — Escape close
+  // returns focus to the BURGER (the disclosure control), never to body.
+  // Pre-fix RED: the focused link unmounted and activeElement fell to
+  // <body> — a keyboard user lost their place in the page (WCAG 2.4.3).
+  test("Escape close returns focus to the burger (Session-13 F3)", async ({ page }) => {
+    await page.goto("/");
+    const nav = page.locator("nav").first();
+    const burger = nav.getByRole("button", { name: /open menu/i });
+    await burger.tap();
+    await expect(page.locator("#mobile-menu")).toBeVisible();
+
+    // Focus a menu link (as a keyboard user would have), then Escape.
+    await page.locator("#mobile-menu a").first().focus();
+    await page.keyboard.press("Escape");
+    await expect(page.locator("#mobile-menu")).toHaveCount(0);
+
+    const active = await page.evaluate(() => ({
+      tag: document.activeElement?.tagName ?? "none",
+      controls: document.activeElement?.getAttribute("aria-controls") ?? null,
+    }));
+    expect(active.tag).toBe("BUTTON");
+    expect(active.controls).toBe("mobile-menu");
+  });
+
   test("tapping a link closes the menu and navigates to the anchor", async ({ page }) => {
     await page.goto("/");
     const nav = page.locator("nav").first();
