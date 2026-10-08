@@ -19,16 +19,16 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (137 checks) | `npm run test` |
+| Unit tests (145 checks) | `npm run test` |
 | Browser E2E (197 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
-| End-to-end smoke suite (79 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
+| End-to-end smoke suite (94 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (137/137) → `npm run build` → `./scripts/smoke-test.sh` (79/79)
-→ `npm run test:e2e` (197/197) — 413 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (145/145) → `npm run build` → `./scripts/smoke-test.sh` (94/94)
+→ `npm run test:e2e` (197/197) — 436 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`, `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -415,6 +415,30 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    server on a different port (the "collapsed" parity was the tooling,
    not the build; diagnosed by CSS-links-vs-disk + counting
    stylesheets-in-Chromium, then re-probed on the verified port).
+34. **The FRAMEWORK answers unexported methods with bare 405s — the
+   method layer sits BELOW every handler (Session 20).** A GET on a
+   POST-only route never reaches the handler or its `apiRoute` wrapper:
+   Next.js itself answers `405` with an EMPTY body, NO content-type, NO
+   `Allow`, NO cache-control (probed across 11 method-mismatch requests —
+   the security-header set from `next.config.ts` DOES cover framework
+   answers; only the envelope layer is absent). The fix is guard
+   exports: `export const GET = methodGuard("OPTIONS, POST")` per route
+   file claims the unimplemented methods for the envelope (the RFC 9110
+   §15.4.6 `Allow` header arrives free via the `fail()` seam). Related
+   discoveries the same session: **an explicit `OPTIONS` export replaces
+   Next's auto-answer** (204 + Allow — the auto-answer enumerates EXPORTS
+   and would over-report once guards exist); **POST/PATCH route handlers
+   buffer the full body at `request.json()` with no framework ceiling**
+   (a 50MB login body was fully parsed in 314ms — read the DECLARED
+   `content-length` BEFORE the parse: the `bodyTooLarge` guard rejects
+   128KB+ bodies at the header, 91ms, nothing buffered; chunked bodies
+   without a declaration are the proxy's residual to cap — DEPLOYMENT.md
+   §2); and **a raw-fetch word-parity probe of the LIVE reads the
+   un-hydrated SPA shell** (every route "collapses" to ~130 words — the
+   honest comparison renders BOTH sides in Chromium and diffs
+   `document.body.innerText`; the same class: the live's `/dashboard`
+   server-status is 200 for ANY route — the SPA 404 is the RENDERED
+   content, adjudicate on what the client sees).
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +
@@ -424,8 +448,10 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   `{ ok: false, error: { code, message } }` via `src/lib/api.ts` (`ok` /
   `fail` / `requireSession` + the Session-19 crash-path wrapper
   `apiRoute` — what ESCAPES a handler becomes the INTERNAL_ERROR
-  envelope with the stack re-logged to fd 2). No route returns bare
-  JSON — including on the crash paths.
+  envelope with the stack re-logged to fd 2 — and the Session-20 method
+  guards `methodGuard`/`optionsGuard` + the request-size ceiling
+  `bodyTooLarge` before every body parse). No route returns bare
+  JSON — including on the crash paths AND the method-mismatch paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks
   `z-ai-web-dev-sdk` for a workflow draft and falls back to the
   deterministic template (`src/lib/workflow.ts`) on any SDK failure — the

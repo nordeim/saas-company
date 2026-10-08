@@ -145,15 +145,53 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 137/137 PASS
+- [ ] `npm run test` → 145/145 PASS
 - [ ] `npm run build` compiles clean
-- [ ] `./scripts/smoke-test.sh` → 79/79 PASS
+- [ ] `./scripts/smoke-test.sh` → 94/94 PASS
 - [ ] `npm run test:e2e` → 197/197 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 20 (2026-10-09) remediation** — see
+  `docs/remediation-plan-session20.md`: a method-and-payload audit (the
+  first systematic survey of the METHOD-MISMATCH layer — the
+  framework-owned answer for unexported methods sits BELOW every
+  handler, the one layer `apiRoute` never sees — and the REQUEST-SIZE
+  layer — whether anything caps a POST body before the parse) found
+  and fixed two defects: **the method-mismatch bare-405 violation**
+  (probed: 11 method-mismatch requests — GET on the six POST-only
+  routes, POST on the two GET-only routes, PUT/PATCH/DELETE on
+  workflows, HEAD on a POST-only route — all answered a BARE 405 with
+  an EMPTY body, no content-type, no `Allow`, no cache-control; now
+  `methodGuard(allow)` + `optionsGuard(allow)` in `src/lib/api.ts`:
+  every route file exports a guard for each unimplemented method — the
+  405 METHOD_NOT_ALLOWED envelope + the RFC 9110 `Allow` header +
+  no-store via the fail() seam; the explicit OPTIONS export keeps the
+  204 preflight honest (Next's auto-answer enumerates exports and would
+  over-report) — D93) and **the unbounded request-size parse** (a 50MB
+  login body was fully buffered and JSON-parsed in 314ms — no ceiling
+  in code or docs; now `bodyTooLarge(request)` + MAX_JSON_BODY_BYTES
+  (128KB) placed immediately BEFORE `request.json()` in each of the 7
+  body-parsing handlers — a declared over-ceiling body answers 413
+  PAYLOAD_TOO_LARGE (re-probed: 91ms, nothing buffered); chunked
+  bodies are the proxy's residual (DEPLOYMENT.md §2) — D94). ALSO: the
+  standing battery re-verified — word parity 1.0000 ×8 (BOTH sides
+  rendered in Chromium — a raw-fetch probe reads the live's
+  un-hydrated SPA shell), the mobile-nav byte-identical (7 rows — 6
+  anchors + the Log In button — 44px each; no Tailwind v4 bug), D62
+  holds (the SPA-404 adjudicated on the RENDERED content); adjudicated
+  CLEAN: the unknown-API-route layer (the branded 404 page), the
+  OPTIONS auto-answer, the cookie attributes (httpOnly/Lax/secure),
+  scrypt params, the register-409 by-design trade-off, dependency
+  currency (audit unchanged; outdated majors-only). Gate: **436
+  checks** (145 unit incl. the 8 api-guards pins + 197 e2e unchanged +
+  94 smoke incl. the 15 method/payload pins); 20 screenshots refreshed
+  (VLM-verified ×5 — after adjudicating three check-prompt drifts:
+  the hero fold, the login card's actual S-logo + "Welcome to SAAS
+  Company" contract, and its Google→or→email order).
 
 - **Session 19 (2026-10-08) remediation** — see
   `docs/remediation-plan-session19.md`: a crash-path-honesty audit (the

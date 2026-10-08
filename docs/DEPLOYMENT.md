@@ -39,6 +39,15 @@ every public deployment with a proxy that **OVERWRITES** `X-Forwarded-For`
 (Cloudflare, nginx, Traefik all do); the limiter's trust model is a
 deployment requirement, not a code default.
 
+**Cap request bodies at the proxy (Session 20 F2):** the app itself rejects
+any request whose DECLARED `Content-Length` exceeds 128KB with
+`413 PAYLOAD_TOO_LARGE` (the largest payload any route legitimately parses
+is < 2KB) — but the guard reads the header, so a CHUNKED body without a
+declaration still reaches the JSON parse. Configure the edge to cap request
+bodies at the same order of magnitude (`client_max_body_size 1m` in nginx,
+Cloudflare's free tier caps at 100MB — set a WAF rule lower) — the
+belt-and-braces half of the request-size ceiling.
+
 **The standalone directory carries your `.env` (Session 18 discovery):**
 `next build` copies the repo's `.env` into `.next/standalone/` — a
 standalone-directory deployment ships whatever the build-time `.env` held

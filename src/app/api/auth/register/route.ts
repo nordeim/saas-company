@@ -1,9 +1,17 @@
 import { db } from "@/lib/db";
-import { ok, fail, apiRoute } from "@/lib/api";
+import { ok, fail, apiRoute, methodGuard, optionsGuard, bodyTooLarge } from "@/lib/api";
 import { hashPassword, setSessionCookie, registrationOpen } from "@/lib/auth";
 import { authRateLimit, clientIpOf } from "@/lib/rate-limit";
 import { isValidEmail, isValidPassword, cleanString } from "@/lib/validation";
 import { isUniqueConstraintError } from "@/lib/db-errors";
+
+/** Session 20 F1: the method-mismatch layer answers the envelope too. */
+export const GET = methodGuard("OPTIONS, POST");
+export const HEAD = methodGuard("OPTIONS, POST");
+export const PUT = methodGuard("OPTIONS, POST");
+export const PATCH = methodGuard("OPTIONS, POST");
+export const DELETE = methodGuard("OPTIONS, POST");
+export const OPTIONS = optionsGuard("OPTIONS, POST");
 
 /** POST /api/auth/register — create an account (rate-limited). */
 export async function POST(request: Request) {
@@ -34,6 +42,10 @@ export async function POST(request: Request) {
   }
 
   let body: unknown;
+  // Session 20 F2: the request-size ceiling — read the DECLARED size
+  // before any buffering (probed: a 50MB body was fully parsed pre-fix).
+  const oversized = bodyTooLarge(request);
+  if (oversized) return oversized;
   try {
     body = await request.json();
   } catch {

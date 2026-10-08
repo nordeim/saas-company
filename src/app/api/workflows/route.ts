@@ -1,8 +1,14 @@
 import { db } from "@/lib/db";
-import { ok, fail, apiRoute } from "@/lib/api";
+import { ok, fail, apiRoute, methodGuard, optionsGuard, bodyTooLarge } from "@/lib/api";
 import { requireSession } from "@/lib/api";
 import { cleanString, requiredString } from "@/lib/validation";
 import { WORKFLOW_STATUSES, isWorkflowStatus } from "@/lib/workflow";
+
+/** Session 20 F1: the method-mismatch layer answers the envelope too. */
+export const PUT = methodGuard("GET, HEAD, OPTIONS, POST");
+export const PATCH = methodGuard("GET, HEAD, OPTIONS, POST");
+export const DELETE = methodGuard("GET, HEAD, OPTIONS, POST");
+export const OPTIONS = optionsGuard("GET, HEAD, OPTIONS, POST");
 
 /** GET /api/workflows — the signed-in user's workflows (newest first). */
 export async function GET() {
@@ -27,6 +33,10 @@ export async function POST(request: Request) {
   if (!guard.user) return guard.response;
 
   let body: unknown;
+  // Session 20 F2: the request-size ceiling — read the DECLARED size
+  // before any buffering (probed: a 50MB body was fully parsed pre-fix).
+  const oversized = bodyTooLarge(request);
+  if (oversized) return oversized;
   try {
     body = await request.json();
   } catch {

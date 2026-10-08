@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.18.0 · **Last updated:** 2026-10-08 (Session 19 remediation)
+> **Version:** 2.19.0 · **Last updated:** 2026-10-09 (Session 20 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–19)
+## §12. Lessons Learnt (Sessions 1–20)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -788,6 +788,43 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     URL and every survey must REQUIRE it (no silent defaults), and
     port-zombie symptoms (concatenated words) mean check WHAT you are
     probing before blaming the build.
+48. **The FRAMEWORK answers unexported HTTP methods with bare 405s — the
+    method layer sits BELOW every handler and every wrapper** (Session
+    20): a GET on a POST-only route never reaches the handler, its
+    `apiRoute` wrapper, its rate limiter, or its session gate — Next.js
+    itself answers `405` with an EMPTY body, NO content-type, NO
+    `Allow`, and NO cache-control (probed across 11 method-mismatch
+    requests; the `next.config.ts` security headers DO cover framework
+    answers — only the envelope layer is absent). The invariant "no
+    route returns bare JSON" is false exactly where your code cannot
+    see it. The fix pattern: guard EXPORTS — `export const GET =
+    methodGuard("OPTIONS, POST")` claims each unimplemented method for
+    the envelope (the RFC 9110 §15.4.6 `Allow` header arrives free via
+    the `fail()` seam), and an explicit `OPTIONS` export replaces
+    Next's auto-answer (204 + Allow — the auto-answer enumerates
+    EXPORTS and would over-report once the guards exist). Survey the
+    method matrix of EVERY route file, not just the handlers it
+    exports.
+49. **POST/PATCH route handlers buffer the FULL body at
+    `request.json()` — nothing in the framework caps the size, and a
+    raw-fetch probe of an SPA reads its un-hydrated shell** (Session
+    20): a 50MB login body was fully buffered and JSON-parsed (314ms)
+    before validation answered — no ceiling in code, none in the
+    deployment docs, and the rate limits cap frequency, never size.
+    The guard pattern: read the DECLARED `content-length` BEFORE the
+    parse (`bodyTooLarge`: an O(1) header read — nothing buffered —
+    answering 413 PAYLOAD_TOO_LARGE above 128KB; re-probed: the 50MB
+    body rejected in 91ms); place it parse-adjacent, exactly where the
+    memory is consumed — requests rejected earlier never buffer;
+    chunked bodies without a declaration are the reverse proxy's
+    residual to cap (document it). And the parity-tooling half of the
+    same lesson: a raw-fetch word-parity probe of the LIVE collapses
+    to ~0.07 because the SPA's initial HTML is a ~130-word shell — the
+    honest comparison renders BOTH sides in Chromium and diffs
+    `document.body.innerText`; the same family: the live's
+    `/dashboard` HTTP status is 200 for ANY route (the 404 is the
+    CLIENT-rendered view) — adjudicate on rendered content, not the
+    status line.
 
 ## §13. Pitfalls to Avoid
 

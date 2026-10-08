@@ -70,6 +70,66 @@ export function apiRoute(handler: () => Promise<NextResponse>): Promise<NextResp
 }
 
 /**
+ * Session 20 F1 — the method-mismatch envelope. The invariant above was
+ * surveyed on handled paths (S15–S16) and crash paths (S19), but never on
+ * the METHOD layer — the framework-owned answer for a request whose method
+ * the route does not export sits BELOW every handler: probed, 11
+ * method-mismatch requests answered a BARE 405 (empty body, no
+ * content-type, no `Allow`, no `Cache-Control`). Route files now export a
+ * guard for every unimplemented method so those requests too answer the
+ * envelope — `methodGuard("<real methods>")()` returns the 405
+ * METHOD_NOT_ALLOWED envelope with the RFC 9110 §15.4.6 `Allow` header
+ * the bare framework answer never carried. The guards are module-level
+ * consts: zero request-path cost for real traffic.
+ */
+export function methodGuard(allow: string): () => NextResponse {
+  return () =>
+    fail("METHOD_NOT_ALLOWED", "This endpoint does not accept that request method.", 405, {
+      Allow: allow,
+    });
+}
+
+/**
+ * The explicit OPTIONS answer — Next.js auto-answers OPTIONS with 204 +
+ * `Allow`, but the auto-answer enumerates the route file's EXPORTS (with
+ * the method guards in place it would over-report). The guard keeps the
+ * identical 204 shape, lists the route's REAL methods, and adds the
+ * no-store directive every other API response already carries.
+ */
+export function optionsGuard(allow: string): () => NextResponse {
+  return () =>
+    new NextResponse(null, {
+      status: 204,
+      headers: { Allow: allow, "Cache-Control": NO_STORE },
+    });
+}
+
+/**
+ * Session 20 F2 — the request-size ceiling. Every POST/PATCH route
+ * buffered the full request body into memory at `request.json()` with no
+ * ceiling anywhere: probed, a 50MB login body was fully buffered and
+ * JSON-parsed (314ms) before validation answered — while the largest real
+ * payload in the app is < 2KB and the rate limits cap frequency, never
+ * size. The guard reads the DECLARED `content-length` (an O(1) header
+ * read — nothing is buffered) and answers 413 PAYLOAD_TOO_LARGE above
+ * 128KB (60x the largest legitimate payload). A chunked body without a
+ * declaration falls through to the existing parse path — the residual is
+ * the proxy's to close (DEPLOYMENT.md §2, the belt-and-braces note).
+ * Place the guard immediately BEFORE `request.json()` — exactly where the
+ * memory is consumed; requests rejected earlier (rate limit, session
+ * gate) never parse and never buffer.
+ */
+export const MAX_JSON_BODY_BYTES = 128 * 1024;
+
+export function bodyTooLarge(request: Request): NextResponse | null {
+  const declared = Number(request.headers.get("content-length") ?? "0");
+  if (Number.isFinite(declared) && declared > MAX_JSON_BODY_BYTES) {
+    return fail("PAYLOAD_TOO_LARGE", "Request body is too large.", 413);
+  }
+  return null;
+}
+
+/**
  * Session guard for protected handlers: resolves the authenticated user or
  * returns a 401 envelope. Usage:
  *   const guard = await requireSession();

@@ -345,11 +345,54 @@ if [ "$BROKEN_UP" = "yes" ]; then
   else
     say_pass "broken-db /dashboard is NOT Next's unbranded error document"
   fi
+  # Session 20 F2: the request-size ceiling on a SECOND route — the
+  # broken server's newsletter bucket is fresh (one crash-probe POST only;
+  # the guard fires BEFORE any DB touch — the broken DB is irrelevant).
+  python3 -c "import json;print(json.dumps({'email':'a'*2097152+'@x.example'}))" > /tmp/smoke-big-newsletter.json
+  check "oversized newsletter body answers 413" "413" "$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BROKEN_BASE/api/newsletter" -H "Content-Type: application/json" --data-binary @/tmp/smoke-big-newsletter.json)"
+  python3 -c "import json;print(json.dumps({'email':'a'*100000+'@x.example'}))" > /tmp/smoke-mid-newsletter.json
+  check "under-ceiling (100KB) newsletter body still parses (400 VALIDATION, not 413)" "400" "$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BROKEN_BASE/api/newsletter" -H "Content-Type: application/json" --data-binary @/tmp/smoke-mid-newsletter.json)"
+  rm -f /tmp/smoke-big-newsletter.json /tmp/smoke-mid-newsletter.json
 else
   say_fail "crash-path server booted on :$BROKEN_PORT"
 fi
 kill "$BROKEN_PID" 2>/dev/null
 wait "$BROKEN_PID" 2>/dev/null
+
+echo "== smoke: method + payload guards (Session 20) =="
+# Session 20 F1: the method-mismatch layer — the FRAMEWORK answered
+# unexported methods with a BARE 405 (empty body, no content-type, no
+# Allow, no cache-control; the 11-probe catalog in
+# docs/remediation-plan-session20.md). The guard exports now answer the
+# envelope. Session 20 F2: the request-size ceiling — POST routes
+# buffered arbitrarily large bodies (a 50MB login body was fully parsed
+# pre-fix); the ceiling reads the DECLARED content-length and answers
+# 413 PAYLOAD_TOO_LARGE above 128KB.
+MM_LOGIN=$(curl -s -X GET "$BASE/api/auth/login")
+check "method-mismatch GET login answers 405 (not the framework's bare 405)" "405" "$(curl -s -o /dev/null -w '%{http_code}' -X GET "$BASE/api/auth/login")"
+check "method-mismatch GET login envelope code" "METHOD_NOT_ALLOWED" "$(echo "$MM_LOGIN" | field "['error']['code']")"
+check "method-mismatch GET login content-type is json" "application/json" "$(curl -s -o /dev/null -w '%{content_type}' -X GET "$BASE/api/auth/login")"
+MM_ALLOW=$(curl -s -o /dev/null -w '%{header_json}' -X GET "$BASE/api/auth/login" | python3 -c "import json,sys;h=json.load(sys.stdin);print([v for k,v in h.items() if k.lower()=='allow'][0][0])" 2>/dev/null)
+check "method-mismatch GET login Allow header lists the real methods" "OPTIONS, POST" "$MM_ALLOW"
+MM_CC=$(curl -s -o /dev/null -w '%{header_json}' -X GET "$BASE/api/auth/login" | python3 -c "import json,sys;h=json.load(sys.stdin);print([v for k,v in h.items() if k.lower()=='cache-control'][0][0])" 2>/dev/null)
+check "method-mismatch GET login carries no-store" "private, no-store" "$MM_CC"
+check "method-mismatch POST health answers 405" "405" "$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BASE/api/health")"
+check "method-mismatch POST health envelope code" "METHOD_NOT_ALLOWED" "$(curl -s -X POST "$BASE/api/health" | field "['error']['code']")"
+check "method-mismatch DELETE workflows answers 405" "405" "$(curl -s -o /dev/null -w '%{http_code}' -X DELETE "$BASE/api/workflows")"
+check "method-mismatch POST workflows/[id] answers 405 (guard fires before the session gate)" "405" "$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BASE/api/workflows/guard-probe-id")"
+check "OPTIONS login answers 204" "204" "$(curl -s -o /dev/null -w '%{http_code}' -X OPTIONS "$BASE/api/auth/login")"
+OPT_ALLOW=$(curl -s -o /dev/null -w '%{header_json}' -X OPTIONS "$BASE/api/auth/login" | python3 -c "import json,sys;h=json.load(sys.stdin);print([v for k,v in h.items() if k.lower()=='allow'][0][0])" 2>/dev/null)
+check "OPTIONS login Allow lists the real methods" "OPTIONS, POST" "$OPT_ALLOW"
+
+# Session 20 F2: the request-size ceiling (declared content-length).
+python3 -c "import json;print(json.dumps({'email':'big@probe.example','password':'a'*2097152}))" > /tmp/smoke-big-login.json
+BIG_LOGIN=$(curl -s -X POST "$BASE/api/auth/login" -H "Content-Type: application/json" --data-binary @/tmp/smoke-big-login.json)
+check "oversized (2MB) login body answers 413" "413" "$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BASE/api/auth/login" -H "Content-Type: application/json" --data-binary @/tmp/smoke-big-login.json)"
+check "oversized login envelope code" "PAYLOAD_TOO_LARGE" "$(echo "$BIG_LOGIN" | field "['error']['code']")"
+rm -f /tmp/smoke-big-login.json
+# (The newsletter big-body pins live in the broken-server block below —
+# the MAIN server's newsletter bucket is already consumed by the
+# newsletter+demo section; the third server's bucket is fresh.)
 
 echo "== smoke: pages =="
 for PATH_ROUTE in / /login /demo /faq /privacy /terms /accessibility /refund-policy; do

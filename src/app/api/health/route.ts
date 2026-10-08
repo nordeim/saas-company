@@ -1,6 +1,13 @@
-import { ok, apiRoute } from "@/lib/api";
+import { ok, apiRoute, methodGuard, optionsGuard } from "@/lib/api";
 import { db } from "@/lib/db";
 import { withTimeout } from "@/lib/workflow";
+
+/** Session 20 F1: the method-mismatch layer answers the envelope too. */
+export const POST = methodGuard("GET, HEAD, OPTIONS");
+export const PUT = methodGuard("GET, HEAD, OPTIONS");
+export const PATCH = methodGuard("GET, HEAD, OPTIONS");
+export const DELETE = methodGuard("GET, HEAD, OPTIONS");
+export const OPTIONS = optionsGuard("GET, HEAD, OPTIONS");
 
 /**
  * Liveness + dependency probe.
