@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.20.0 · **Last updated:** 2026-10-09 (Session 21 remediation)
+> **Version:** 2.21.0 · **Last updated:** 2026-10-09 (Session 22 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–21)
+## §12. Lessons Learnt (Sessions 1–22)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -862,6 +862,45 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     silently-swallowed EADDRINUSE and probes the STALE build (the
     gotcha-26/31 family's fourth member: kill detached servers
     explicitly, or probe on fresh ports).
+
+52. **Race the WRITE, don't check-then-write** (Session 22): S17 closed
+    CREATE's register race with a P2002 classifier — the classifier
+    approach catches the SYMPTOM after the fact. The `[id]` PATCH/
+    DELETE routes still ran `findFirst` → parse → `update`/`delete` by
+    bare id, and a DELETE committing inside the parse window threw
+    UNCLASSIFIED P2025 → the 500 INTERNAL_ERROR envelope for a
+    legitimate two-tab user (probed 3/3 with a ~100KB body streamed at
+    60KB/s + a DELETE at +0.7s; the parallel DELETE double-fire hit 500
+    in 2/5 tries — nondeterministic, the worst kind). The honest fix
+    carries the ownership predicate IN the write:
+    `updateMany({ where: { id, userId }, data })` and
+    `deleteMany({ where: { id, userId } })` — count 0 IS the honest
+    404, and neither operation can throw P2025, so the race is closed
+    BY CONSTRUCTION. Companion trap: Prisma's `updateMany({data:{}})`
+    is a no-op returning count 0 EVEN FOR AN EXISTING ROW — an
+    empty-patch 200 contract needs its own read branch. And the
+    ownership guard itself had no wire-level pin anywhere (the suites
+    only ever acted as the row's owner) — pin cross-user isolation
+    (user A on user B's row → 404 ×3) or a dropped `userId` in the
+    WHERE is a silent IDOR, not a failing check.
+
+53. **Smoke-pin authoring is code — the pins catch their own bugs**
+    (Session 22): TWO pin bugs surfaced mid-execution, both caught BY
+    the pins they live in (the S21 family's third and fourth members).
+    First: curl's `-w '%{http_code}'` writes NO trailing newline —
+    `cat c*` concatenates six codes into ONE line, so
+    `grep -c '^200$'` can never match (count per-file with an explicit
+    newline printf). Second: bash's `${f/c/r}` parameter substitution
+    replaces the FIRST 'c' ANYWHERE in the string — a mktemp dir name
+    like `/tmp/tmp.XcR3xq` gets rewritten before the `c<index>` stem
+    you meant (pair files by explicit index). The meta-lesson is the
+    S21 one recurring: deterministic pins that fail inexplicably are
+    usually telling you your PROBE is wrong, not the system — read the
+    pin's own mechanics before blaming the route. Companion this
+    session: the VLM check-prompt drift family's FIFTH member — a
+    FAIL verdict with an EMPTY deviations list is model noise; demand
+    a NAMED deviation or adjudicate with deterministic evidence (the
+    open-description probe + untouched bytes + the e2e suite).
 
 ## §13. Pitfalls to Avoid
 

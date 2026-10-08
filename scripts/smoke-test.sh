@@ -275,6 +275,106 @@ RATE_RA=$(curl -s -D - -o /dev/null -b /tmp/smoke-cookies.txt -X POST "$BASE/api
   -H "Content-Type: application/json" -d '{"name":"Retry-after probe"}' | python3 -c "import sys;[print(l.split(':',1)[1].strip()) for l in sys.stdin if l.lower().startswith('retry-after')]" | head -1)
 if [ -n "$RATE_RA" ] && [ "$RATE_RA" -ge 1 ] 2>/dev/null; then say_pass "workflow-create 429 carries Retry-After ($RATE_RA s)"; else say_fail "workflow-create 429 carries Retry-After"; fi
 
+echo "== smoke: Session 22 — mutation concurrency + cross-user ownership =="
+# F1 (the UPDATE/DELETE twin of S17's register race): the [id] routes ran
+# read-check-act (findFirst -> parse -> update/delete by bare id) with NO
+# P2025 classifier anywhere — a DELETE committing while a slow PATCH body
+# parsed threw P2025 out of update() and the wrapper answered the 500
+# INTERNAL_ERROR envelope (probed 3/3); the parallel DELETE double-fire hit
+# 500 in 2/5 tries (nondeterministic — the same user action answered 404 or
+# 500 depending on scheduling). Post-fix the writes are OWNERSHIP-SCOPED
+# and atomic (updateMany/deleteMany with userId in the WHERE): count===0 ->
+# the honest 404; updateMany/deleteMany never throw P2025 — the race is
+# closed by construction.
+# F2: the cross-user ownership contract had NO wire-level pin — the fix
+# rides the ownership-scoped WHERE clause, so these pins must prove user A
+# cannot read/patch/delete user B's row.
+# User B and C are FRESH accounts: their per-user workflow-creation buckets
+# are untouched (the MAIN user's WORKFLOW_RATE_LIMIT_MAX=2 budget was
+# consumed by the workflow-crud + S21 sections above).
+
+REG_B=$(curl -s -X POST "$BASE/api/auth/register" -H "Content-Type: application/json" \
+  -d '{"name":"Smoke B","email":"smoke-b@example.com","password":"SmokeB123!"}')
+check "user B registration ok" "True" "$(echo "$REG_B" | field "['ok']")"
+LOGIN_B=$(curl -s -c /tmp/smoke-cookies-b.txt -X POST "$BASE/api/auth/login" \
+  -H "Content-Type: application/json" -d '{"email":"smoke-b@example.com","password":"SmokeB123!"}')
+check "user B login ok" "True" "$(echo "$LOGIN_B" | field "['ok']")"
+
+WF_B=$(curl -s -b /tmp/smoke-cookies-b.txt -X POST "$BASE/api/workflows" \
+  -H "Content-Type: application/json" -d '{"name":"B private workflow"}')
+check "user B workflow create ok" "True" "$(echo "$WF_B" | field "['ok']")"
+WF_B_ID=$(echo "$WF_B" | field "['data']['id']")
+
+# --- F2: cross-user ownership — A (the demo session) on B's row -> 404 x3 ---
+check "cross-user GET answers 404" "404" "$(curl -s -o /dev/null -w '%{http_code}' -b /tmp/smoke-cookies.txt "$BASE/api/workflows/$WF_B_ID")"
+check "cross-user PATCH answers 404" "404" "$(curl -s -o /dev/null -w '%{http_code}' -b /tmp/smoke-cookies.txt -X PATCH "$BASE/api/workflows/$WF_B_ID" -H "Content-Type: application/json" -d '{"name":"hijacked"}')"
+check "cross-user DELETE answers 404" "404" "$(curl -s -o /dev/null -w '%{http_code}' -b /tmp/smoke-cookies.txt -X DELETE "$BASE/api/workflows/$WF_B_ID")"
+check "B's workflow survived A's attacks" "True" "$(curl -s -b /tmp/smoke-cookies-b.txt "$BASE/api/workflows/$WF_B_ID" | field "['ok']")"
+
+# --- the empty-patch contract: a {} body historically answers 200 + the
+#     row; Prisma's updateMany({data:{}}) is a no-op returning count 0 EVEN
+#     FOR AN EXISTING ROW (probed) — the route must special-case it ---
+EMPTY_PATCH=$(curl -s -b /tmp/smoke-cookies-b.txt -X PATCH "$BASE/api/workflows/$WF_B_ID" \
+  -H "Content-Type: application/json" -d '{}')
+check "empty-body PATCH keeps the 200 contract" "True" "$(echo "$EMPTY_PATCH" | field "['ok']")"
+check "empty-body PATCH returns the row" "B private workflow" "$(echo "$EMPTY_PATCH" | field "['data']['name']")"
+
+# --- F1 Race B (deterministic): a ~100KB PATCH body (under the S20 128KB
+#     ceiling) streams at 60KB/s (~1.7s parse); a DELETE fired at +0.7s
+#     commits mid-parse; the PATCH's write must answer the honest 404
+#     (pre-fix: the 500 INTERNAL_ERROR envelope — unclassified P2025) ---
+WF_RACE=$(curl -s -b /tmp/smoke-cookies-b.txt -X POST "$BASE/api/workflows" \
+  -H "Content-Type: application/json" -d '{"name":"B race victim"}')
+WF_RACE_ID=$(echo "$WF_RACE" | field "['data']['id']")
+python3 -c "import json;print(json.dumps({'name':'renamed-race','description':'p'*100000}))" > /tmp/smoke-race-body.json
+( sleep 0.7; curl -s -b /tmp/smoke-cookies-b.txt -X DELETE "$BASE/api/workflows/$WF_RACE_ID" \
+  -o /tmp/smoke-race-del.json -w '%{http_code}' > /tmp/smoke-race-del.code ) &
+RACE_DEL_PID=$!
+RACE_PATCH_CODE=$(curl -s --limit-rate 60k -b /tmp/smoke-cookies-b.txt -X PATCH "$BASE/api/workflows/$WF_RACE_ID" \
+  -H "Content-Type: application/json" --data-binary @/tmp/smoke-race-body.json \
+  -o /tmp/smoke-race-patch.json -w '%{http_code}')
+wait "$RACE_DEL_PID"
+check "raced PATCH (delete mid-parse) answers 404" "404" "$RACE_PATCH_CODE"
+check "raced PATCH envelope code" "NOT_FOUND" "$(field "['error']['code']" < /tmp/smoke-race-patch.json)"
+check "racing DELETE answers 200" "200" "$(cat /tmp/smoke-race-del.code)"
+rm -f /tmp/smoke-race-body.json
+
+# --- F1 Race A: six truly-parallel DELETEs on one victim (independent curl
+#     processes = independent sockets — the S17 wire-level-concurrency
+#     lesson): exactly one 200, every answer an envelope in {200,404},
+#     ZERO 500s ---
+REG_C=$(curl -s -X POST "$BASE/api/auth/register" -H "Content-Type: application/json" \
+  -d '{"name":"Smoke C","email":"smoke-c@example.com","password":"SmokeC123!"}')
+LOGIN_C=$(curl -s -c /tmp/smoke-cookies-c.txt -X POST "$BASE/api/auth/login" \
+  -H "Content-Type: application/json" -d '{"email":"smoke-c@example.com","password":"SmokeC123!"}')
+WF_C=$(curl -s -b /tmp/smoke-cookies-c.txt -X POST "$BASE/api/workflows" \
+  -H "Content-Type: application/json" -d '{"name":"C race victim"}')
+WF_C_ID=$(echo "$WF_C" | field "['data']['id']")
+RACEA_DIR=$(mktemp -d)
+RACEA_PIDS=""
+for i in 1 2 3 4 5 6; do
+  curl -s -b /tmp/smoke-cookies-c.txt -X DELETE "$BASE/api/workflows/$WF_C_ID" \
+    -o "$RACEA_DIR/r$i" -w '%{http_code}' > "$RACEA_DIR/c$i" &
+  RACEA_PIDS="$RACEA_PIDS $!"
+done
+for p in $RACEA_PIDS; do wait "$p"; done
+RACEA_200=$(for f in "$RACEA_DIR"/c*; do printf '%s\n' "$(cat "$f")"; done | grep -c '^200$' || true)
+# NB: pair the r-file by INDEX — a `${f/c/r}` substitution would rewrite the
+# first 'c' anywhere in the mktemp path, not the c<index> stem (a
+# mid-execution pin bug caught BY this pin, the S21 family).
+RACEA_BAD=$(for i in 1 2 3 4 5 6; do
+  c=$(cat "$RACEA_DIR/c$i")
+  if [ "$c" != "200" ] && [ "$c" != "404" ]; then echo "bad:$c"; fi
+  if ! grep -q '"ok":' "$RACEA_DIR/r$i"; then echo "bad-body:$c"; fi
+done | head -3)
+rm -rf "$RACEA_DIR"
+check "parallel DELETE race: exactly one 200" "1" "$RACEA_200"
+if [ -z "$RACEA_BAD" ]; then
+  say_pass "parallel DELETE race: every answer in {200,404} (zero 500s)"
+else
+  say_fail "parallel DELETE race: $RACEA_BAD (the unclassified P2025 broke the envelope contract)"
+fi
+
 echo "== smoke: newsletter + demo =="
 NEWS=$(curl -s -X POST "$BASE/api/newsletter" -H "Content-Type: application/json" \
   -d '{"email":"smoke-reader@example.com"}')

@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (60) | 114 unit + 197 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (117) | 156 unit + 197 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -147,13 +147,40 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run typecheck` exits 0
 - [ ] `npm run test` → 156/156 PASS
 - [ ] `npm run build` compiles clean
-- [ ] `./scripts/smoke-test.sh` → 103/103 PASS
+- [ ] `./scripts/smoke-test.sh` → 117/117 PASS
 - [ ] `npm run test:e2e` → 197/197 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 22 (2026-10-09) remediation** — see
+  `docs/remediation-plan-session22.md`: a mutation-concurrency audit
+  (the RACE class on the UPDATE/DELETE side — S17's register race closed
+  CREATE's P2002 window; the `[id]` routes still ran read-check-act;
+  plus the S21-suggested performance-budget survey) found and fixed one
+  defect + one pin gap: **the `[id]` mutation race** — a DELETE
+  committing while a slow under-ceiling PATCH body parsed threw
+  UNCLASSIFIED P2025 → the 500 INTERNAL_ERROR envelope (probed 3/3; the
+  parallel DELETE double-fire hit 500 in 2/5). The fix carries the
+  ownership predicate IN the write: `updateMany`/`deleteMany` with
+  `userId` in the WHERE (count 0 → the honest 404; neither ever throws
+  P2025 — the race is closed by construction), with the empty-patch
+  `{}` body keeping its 200 + row contract (Prisma's
+  `updateMany({data:{}})` returns count 0 even for an existing row).
+  **The cross-user ownership battery** — the IDOR guard had NO
+  wire-level pin anywhere; the smoke suite now registers users B and C
+  and pins user A on B's row → 404 ×3 (+ the survived row). The
+  performance layer adjudicated CLEAN (landing LCP 732ms / 860 DOM
+  nodes; dashboard LCP 120ms / 314 nodes — the S21 ceiling holding; the
+  1.9MB hero video is the reference's own parity asset); the SEO
+  surface re-verified; PATCH/DELETE limiters adjudicated NON-findings
+  (no row growth). Gate: **470 checks** (156 unit + 117 smoke incl. the
+  14 concurrency/ownership pins + 197 e2e); 20 screenshots refreshed
+  (VLM-verified ×5 — after adjudicating the FIFTH check-prompt drift: a
+  FAIL-with-empty-DEVIATIONS on the dashboard shot, disproven by the
+  open-description probe + the untouched bytes + the e2e suite).
 
 - **Session 21 (2026-10-09) remediation** — see
   `docs/remediation-plan-session21.md`: a data-volume audit (the first

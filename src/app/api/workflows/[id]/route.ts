@@ -27,19 +27,25 @@ export async function GET(_request: Request, { params }: Params) {
   });
 }
 
-/** PATCH /api/workflows/[id] — update name/description/status/category. */
+/** PATCH /api/workflows/[id] — update name/description/status/category.
+ *
+ * Session 22 F1 — the mutation-concurrency race (the UPDATE/DELETE twin
+ * of S17's register race): the pre-fix route ran read-check-act
+ * (findFirst → parse → update by bare id) with no P2025 classifier
+ * anywhere. A DELETE committing while a slow PATCH body parsed threw
+ * P2025 out of update() — the wrapper answered the 500 INTERNAL_ERROR
+ * envelope for a legitimate two-tab user (probed 3/3). The write is now
+ * OWNERSHIP-SCOPED and ATOMIC: updateMany({ where: { id, userId } }) is
+ * the check itself (count 0 → the honest 404 the sequential miss always
+ * answered) — updateMany never throws P2025, so the race is closed by
+ * construction, not by catching its symptom.
+ */
 export async function PATCH(request: Request, { params }: Params) {
   // Session 19 F1: the crash-path envelope.
   return apiRoute(async () => {
   const guard = await requireSession();
   if (!guard.user) return guard.response;
   const { id } = await params;
-
-  const existing = await db.workflow.findFirst({
-    where: { id, userId: guard.user.id },
-    select: { id: true },
-  });
-  if (!existing) return fail("NOT_FOUND", "Workflow not found.", 404);
 
   let body: unknown;
   // Session 20 F2: the request-size ceiling — read the DECLARED size
@@ -69,12 +75,43 @@ export async function PATCH(request: Request, { params }: Params) {
     patch.status = data.status;
   }
 
-  const workflow = await db.workflow.update({ where: { id }, data: patch });
+  // The empty patch keeps the long-standing 200 + row contract: a `{}`
+  // body historically answered 200 with the row (update({data:{}})
+  // returns it). Prisma's updateMany({data:{}}) is a no-op returning
+  // count 0 EVEN FOR AN EXISTING ROW (probed) — it cannot distinguish
+  // "no fields" from "no row", so the route reads directly.
+  if (Object.keys(patch).length === 0) {
+    const unchanged = await db.workflow.findFirst({
+      where: { id, userId: guard.user.id },
+    });
+    if (!unchanged) return fail("NOT_FOUND", "Workflow not found.", 404);
+    return ok(unchanged);
+  }
+
+  // Session 22 F1: the atomic ownership-scoped write — count 0 is the
+  // honest 404 (row gone OR never the caller's); a row deleted between
+  // this write and the follow-up read answers 404 too (honest for the
+  // row's CURRENT state — the client refreshes and sees the truth).
+  const result = await db.workflow.updateMany({
+    where: { id, userId: guard.user.id },
+    data: patch,
+  });
+  if (result.count === 0) return fail("NOT_FOUND", "Workflow not found.", 404);
+  const workflow = await db.workflow.findFirst({
+    where: { id, userId: guard.user.id },
+  });
+  if (!workflow) return fail("NOT_FOUND", "Workflow not found.", 404);
   return ok(workflow);
   });
 }
 
-/** DELETE /api/workflows/[id] — remove a workflow. */
+/** DELETE /api/workflows/[id] — remove a workflow.
+ *
+ * Session 22 F1: the atomic ownership-scoped delete — deleteMany never
+ * throws P2025, so the double-fire loser deterministically reads the
+ * honest 404 (pre-fix: a coin-flip between 404 and the unclassified
+ * P2025's 500 INTERNAL_ERROR — probed 2/5 on parallel double-fires).
+ */
 export async function DELETE(_request: Request, { params }: Params) {
   // Session 19 F1: the crash-path envelope.
   return apiRoute(async () => {
@@ -82,13 +119,10 @@ export async function DELETE(_request: Request, { params }: Params) {
   if (!guard.user) return guard.response;
   const { id } = await params;
 
-  const existing = await db.workflow.findFirst({
+  const result = await db.workflow.deleteMany({
     where: { id, userId: guard.user.id },
-    select: { id: true },
   });
-  if (!existing) return fail("NOT_FOUND", "Workflow not found.", 404);
-
-  await db.workflow.delete({ where: { id } });
+  if (result.count === 0) return fail("NOT_FOUND", "Workflow not found.", 404);
   return ok({ deleted: true });
   });
 }

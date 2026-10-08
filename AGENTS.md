@@ -24,11 +24,11 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
-| End-to-end smoke suite (103 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
+| End-to-end smoke suite (117 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (156/156) → `npm run build` → `./scripts/smoke-test.sh` (103/103)
-→ `npm run test:e2e` (197/197) — 456 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (156/156) → `npm run build` → `./scripts/smoke-test.sh` (117/117)
+→ `npm run test:e2e` (197/197) — 470 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`, `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -467,6 +467,29 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    gotcha-26/31 family's fourth member — kill detached servers
    explicitly, or probe on fresh ports).
 
+36. **Race the WRITE, don't check-then-write — and pin the ownership at
+   the wire (Session 22).** S17 closed CREATE's race (P2002 → the 409
+   classifier); the `[id]` PATCH/DELETE routes still ran
+   read-check-act (`findFirst` → parse → `update`/`delete` by bare id):
+   a DELETE committing while a slow under-ceiling PATCH body parsed threw
+   UNCLASSIFIED P2025 → the 500 INTERNAL_ERROR envelope for a legitimate
+   two-tab user (probed 3/3; the parallel DELETE double-fire hit 500 in
+   2/5 — nondeterministic). The fix carries the ownership predicate IN
+   the write (`updateMany`/`deleteMany` with `userId` in the WHERE;
+   count 0 → the honest 404) — closed by construction, not by catching
+   the symptom (`updateMany`/`deleteMany` never throw P2025). Two
+   adjacent traps probed the same session: **Prisma's
+   `updateMany({data:{}})` is a no-op returning count 0 EVEN FOR AN
+   EXISTING ROW** — an empty-patch contract needs its own read branch;
+   and the ownership (IDOR) guard had NO wire-level pin anywhere — the
+   cross-user battery (user A on user B's row → 404 ×3) now pins it
+   (a dropped `userId` regression is a guaranteed smoke failure, not a
+   silent hole). Smoke-pin authoring traps: curl's `-w '%{http_code}'`
+   writes NO trailing newline (a concatenated `cat c*` can never match
+   `^200$` — count per-file), and bash's `${f/c/r}` substitution
+   rewrites the FIRST 'c' anywhere in the path (a mktemp dir name) —
+   pair files by explicit index.
+
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +
@@ -480,8 +503,11 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   guards `methodGuard`/`optionsGuard` + the request-size ceiling
   `bodyTooLarge` before every body parse + the Session-21 optional
   `meta` sibling of `data` carrying the capped list's TRUE total +
-  honest aggregates). No route returns bare
-  JSON — including on the crash paths AND the method-mismatch paths.
+  honest aggregates + the Session-22 ownership-scoped atomic writes
+  `updateMany`/`deleteMany` with `userId` in the WHERE — count 0 is the
+  honest 404, and the mutation race is closed by construction). No route
+  returns bare JSON — including on the crash paths AND the
+  method-mismatch paths AND the raced paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks
   `z-ai-web-dev-sdk` for a workflow draft and falls back to the
   deterministic template (`src/lib/workflow.ts`) on any SDK failure — the
