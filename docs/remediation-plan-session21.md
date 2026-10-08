@@ -275,5 +275,9 @@ after.
       plan ticked, session log `docs/session_38.md`, repo
       `worklog.md`
 - [x] Commit to `main` + SSH push via `docs/ssh_git_wrapper_v3.py`
-      (wrapper-verified; `--remote git@github.com:nordeim/saas-company.git`
-      explicit) — the final step
+      (wrapper-verified — remote main @ 0d9d860 == local HEAD, the
+      tracking ref synced, the operator key destroyed after; the
+      fingerprint SHA256:3ddaNlFh… matches the S20 record; `--remote
+      git@github.com:nordeim/saas-company.git` passed explicitly — the
+      wrapper's DEFAULT remote is the runbook's original task-management
+      repo) — the final step
