@@ -20,15 +20,15 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (94 checks) | `npm run test` |
-| Browser E2E (180 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (191 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
-| End-to-end smoke suite (47 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
+| End-to-end smoke suite (48 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (94/94) → `npm run build` → `./scripts/smoke-test.sh` (47/47)
-→ `npm run test:e2e` (180/180) — 321 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (94/94) → `npm run build` → `./scripts/smoke-test.sh` (48/48)
+→ `npm run test:e2e` (191/191) — 333 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -283,6 +283,26 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    (`burgerRef`) — the focused link unmounts with the panel and
    `activeElement` falls to `body`, stranding keyboard users (WCAG
    2.4.3).
+28. **Audit REACHABILITY, not just behavior — and success is a
+   message class too** (Session 14): grep every API route for a UI
+   consumer BEFORE calling it a shipped feature — `POST /api/demo`
+   shipped complete (validation + rate limit + model) with ZERO
+   consumers: dead code dressed as a superset. A feature unreachable
+   from any URL is not a feature (`/demo` is its front half — D73).
+   Likewise `/login` must redirect ALREADY-authenticated visitors to
+   the workspace (D74) — and NOTE: any script or spec that signs in and
+   then revisits `/login` will hit the redirect (the screenshot
+   refresh script's re-sign-in blocks had to navigate to `/dashboard`
+   directly). And successful mutations need STATUS MESSAGES (WCAG
+   4.1.3): errors alert (`role="alert"`), successes confirm politely
+   (a sr-only `role="status"` `aria-live="polite"` region — D75) —
+   pre-fix the dashboard had zero live regions; a screen-reader user's
+   actions changed the stats in total silence. Related: computed
+   `animation-duration` for sub-millisecond values serializes in
+   SCIENTIFIC NOTATION ("1e-05s" for the authored 0.01ms clamp) —
+   compare parsed milliseconds, never the string; and the browser's
+   own 404-document resource log is inherent noise on BOTH sides (the
+   live's 404 ships two 401s — the D68 parity family).
 
 ## Architecture invariants
 

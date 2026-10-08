@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.12.0 · **Last updated:** 2026-10-08 (Session 13 remediation)
+> **Version:** 2.13.0 · **Last updated:** 2026-10-08 (Session 14 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–13)
+## §12. Lessons Learnt (Sessions 1–14)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -574,6 +574,37 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     mobile menu must RETURN FOCUS to the burger (`burgerRef`) — the
     focused link unmounts with the panel and activeElement falls to
     `body`, stranding keyboard users (WCAG 2.4.3).
+36. **Audit REACHABILITY, not just behavior — a shipped API with zero UI
+    consumers is dead code dressed as a feature** (Session 14):
+    `POST /api/demo` shipped complete (validation, rate limit, the
+    DemoRequest model) but NOTHING called it — the hero's "Book a Demo"
+    pill anchored to `#pricing` (correct live-parity) and the feature
+    was unreachable from every surface. The fix is the missing FRONT
+    half: a first-class route (`/demo`) over the content-page pattern
+    (server page + client view, Navbar/Footer, Reveal), the form
+    mirroring the API's OWN validation rules, the composer's catch
+    contract, and a sitemap entry. Verify the live actually 404s the
+    route before calling it pure superset (the live's SPA serves its
+    404 shell for unknown paths — same bytes as a known-404 route). And
+    beware the collateral: any script that signs in and then revisits
+    `/login` hits the new authenticated-redirect (the screenshot
+    refresh script's re-sign-in blocks had to navigate to `/dashboard`
+    directly).
+37. **Success is a message class too — errors alert, successes confirm
+    politely; and computed sub-millisecond durations serialize in
+    scientific notation** (Session 14): the dashboard's failure paths
+    had `role="alert"` banners but ZERO aria-live regions — a
+    screen-reader user's pause/resume/delete/compose changed the stats
+    in total silence (WCAG 4.1.3 Status Messages). The fix: a sr-only
+    `role="status"` `aria-live="polite"` region announcing every
+    successful mutation ("Paused {name}.", "Workflow created.",
+    "Deleted {name}.") — the success-class mirror of the error-banner
+    contract. Related serialization trap: the reduced-motion clamp
+    (`animation-duration: 0.01ms`) reads back as `"1e-05s"` in Chrome's
+    computed style — compare PARSED milliseconds, never the authored
+    string; and the browser's own 404-document resource log is inherent
+    noise on BOTH sides (the live's 404 console ships two 401s — parity
+    adjudication, not an app bug).
 
 ## §13. Pitfalls to Avoid
 

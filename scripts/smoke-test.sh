@@ -143,7 +143,7 @@ DEMO=$(curl -s -X POST "$BASE/api/demo" -H "Content-Type: application/json" \
 check "demo request ok" "True" "$(echo "$DEMO" | field "['ok']")"
 
 echo "== smoke: pages =="
-for PATH_ROUTE in / /login /faq /privacy /terms /accessibility /refund-policy; do
+for PATH_ROUTE in / /login /demo /faq /privacy /terms /accessibility /refund-policy; do
   CODE=$(curl -s -o /dev/null -w '%{http_code}' "$BASE$PATH_ROUTE")
   check "page $PATH_ROUTE serves 200" "200" "$CODE"
 done

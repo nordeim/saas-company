@@ -557,3 +557,23 @@ Work Log:
 Stage Summary:
 - Commit 3064c64 pushed and VERIFIED on git@github.com:nordeim/saas-company.git main — 27 files changed: the session-expiry 401-redirect contract (apiFetch + the SessionExpired sentinel — the server gate's own redirect, upheld client-side), the branded error boundaries (error.tsx + global-error.tsx + the Array.isArray shape-guard), the mobile-menu Escape focus return (burgerRef), +7 checks (gate: 321 = 94 unit + 180 e2e incl. the session-lifecycle + error-boundary suites + 47 smoke), the remediation plan + session log, 19 screenshots, docs + SKILL v2.12.0.
 - Session 13 complete.
+
+---
+Task ID: S14-1
+Agent: Super Z (main, session 23)
+Task: Session 14 — feature-reachability + authenticated-navigation + status-message + reduced-motion-contract audit and remediation of the saas-company clone
+
+Work Log:
+- git pull (session_22.md transcript arrived); all repo docs + session docs reviewed; skills/ excluded from toolchains (verified); DATABASE_URL trap neutralized per-command (env -u DATABASE_URL).
+- Baseline gate: 321 inherited checks ALL GREEN (94 unit + 180 e2e + 47 smoke — no flake).
+- Drift: word parity 1.0000 on all 8 routes (reference UNCHANGED); mobile-nav real-touch paired probe: clone byte-identical and working — NO Tailwind v4 bug; live's burger remains pointer-blocked (D32).
+- Four NEW audit surfaces surveyed with RED-evidence probes: feature-reachability (POST /api/demo shipped complete with ZERO UI consumers — dead code dressed as a superset), authenticated-navigation (/login rendered the login card to a signed-in session), status-messages (zero aria-live regions on the dashboard — successful mutations silent for screen-reader users, WCAG 4.1.3), reduced-motion contract (verified CLEAN by probe — below-fold content visible under emulation — but unpinned).
+- Remediation plan session14 written + validated (API contract, routeMetadata semantics, FAQ-view design pattern, auth budget recount, pin-conflict scan), executed TDD-first: R1 the /demo route (page + view + sitemap; demo.spec 6 pins RED→GREEN), R2 the login split (login-card.tsx + the async server gate redirecting authed visitors to /dashboard; auth pin RED→GREEN), R3 the polite announcement region (dashboard pin RED→GREEN), R4 the reduced-motion suite (pin-only; the clamp serializes as "1e-05s" — compared numerically).
+- Mid-survey ZOMBIE-SERVER recurrence (gotcha 26): post-rebuild boot silently lost EADDRINUSE to the pre-rebuild process serving deleted CSS chunks (all animations read dead); killed by PID, chunk-verified-against-disk, re-probed clean.
+- Full gate: 333 checks green (94 unit + 191 e2e incl. the demo + reduced-motion suites + 48 smoke incl. the /demo page pin). Re-verification: word parity 1.0000 ×8; RED probes re-run GREEN (authed-/login redirect, "Paused {name}." announcement sr-only-verified, /demo 200 + zero console noise); the 404 route's single resource log adjudicated live-parity-or-better (the live's own 404 ships two 401s, D68); 20 screenshots (18 refreshed + boundary recapture + 16-demo-page, VLM-verified).
+- Docs: PAD (revision block, D73–D75, §7, §11), AGENTS (gotcha 28 + counts), CLAUDE (session-14 context), README (333 badge + demo-form row + troubleshooting), SKILL v2.13.0 (lessons 36–37), remediation plan session14 (ticked), session log docs/session_23.md, repo worklog.md. .env.example re-verified in sync.
+
+Stage Summary:
+- Three defects fixed with mechanism-level evidence: the dead /api/demo endpoint (now the reachable /demo superset route), the authenticated /login card (now the server-gate redirect), and the dashboard's silent successes (now polite status messages).
+- Gate raised 321 → 333 checks; the production-readiness floor now covers feature reachability, authenticated navigation, WCAG 4.1.3 status messages, and the reduced-motion contract.
+- Survey scripts persisted under /home/z/my-project/scripts/ (survey-session14-red.mjs, survey-session14-green.mjs, vlm-check-session14.mjs, capture-error-boundary.mjs).

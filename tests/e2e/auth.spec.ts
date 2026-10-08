@@ -88,6 +88,21 @@ test.describe("login page", () => {
     await expect(page.getByRole("heading", { name: "Welcome to SAAS Company" })).toBeVisible();
   });
 
+  test("an authenticated visit to /login redirects to the workspace (Session-14 F2)", async ({ page }) => {
+    // Sign in through the API (the suite's budget-friendly pattern), then
+    // ask for /login as a signed-in user. The honest contract (every
+    // production auth system): the already-authenticated user is sent to
+    // the workspace, not shown a login card for a session they already
+    // hold. Pure superset (the live has no real auth — D62/D74).
+    const res = await page.request.post("/api/auth/login", {
+      data: { email: DEMO_EMAIL, password: DEMO_PASSWORD },
+    });
+    expect(res.ok()).toBe(true);
+    await page.goto("/login");
+    await expect(page).toHaveURL(/\/dashboard$/, { timeout: 10_000 });
+    await expect(page.getByRole("heading", { name: /Compose a workflow with AI/i })).toBeVisible();
+  });
+
   test("forgot-password state acknowledges without leaving the page", async ({ page }) => {
     await page.goto("/login");
     await page.getByRole("button", { name: "Forgot password?" }).click();

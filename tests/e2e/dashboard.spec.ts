@@ -127,4 +127,43 @@ test.describe("dashboard (functional superset)", () => {
     expect(payload.ok).toBe(false);
     expect(payload.error.code).toBe("UNAUTHORIZED");
   });
+
+  test("mutation successes are announced politely (Session-14 F3, WCAG 4.1.3)", async ({ page }) => {
+    await signIn(page);
+    // The live region: role=status + aria-live=polite + sr-only (success
+    // announcements — the mirror of the error banners' role=alert; the
+    // Session-13 failure-class discipline applied to the success class).
+    const live = page.locator('[aria-live="polite"][role="status"]');
+
+    // (a) Pause → "Paused {name}."
+    const row = page.locator("article", { hasText: "Lead enrichment pipeline" });
+    await row.getByRole("button", { name: /Pause Lead enrichment pipeline/i }).click();
+    await expect(live).toHaveText(/Paused Lead enrichment pipeline\./, { timeout: 10_000 });
+    await expect(row.getByText("paused")).toBeVisible({ timeout: 10_000 });
+
+    // (b) Resume → "Resumed {name}."
+    await row.getByRole("button", { name: /Resume Lead enrichment pipeline/i }).click();
+    await expect(live).toHaveText(/Resumed Lead enrichment pipeline\./, { timeout: 10_000 });
+    await expect(row.getByText("active", { exact: true })).toBeVisible({ timeout: 10_000 });
+
+    // (c) Compose → "Workflow created." (then clean up: Delete announces too).
+    const before = await page.locator("article").count();
+    await page.getByLabel("Workflow idea").fill(`Announce probe ${Date.now()}`);
+    await page.getByRole("button", { name: /^Compose$/ }).click();
+    await expect(live).toHaveText(/Workflow created\./, { timeout: 25_000 });
+    await expect
+      .poll(async () => page.locator("article").count(), { timeout: 25_000 })
+      .toBe(before + 1);
+
+    // (d) Delete → "Deleted {name}." (the newest row; restores the seed).
+    const newest = page.locator("article").first();
+    const name = (await newest.locator("h3").first().textContent())?.trim() ?? "";
+    await newest.getByRole("button", { name: /Delete/ }).first().click();
+    await expect(live).toHaveText(new RegExp(`Deleted ${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\.`), {
+      timeout: 10_000,
+    });
+    await expect
+      .poll(async () => page.locator("article").count(), { timeout: 10_000 })
+      .toBe(before);
+  });
 });

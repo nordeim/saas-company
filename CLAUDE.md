@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (47) | 94 unit + 180 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (48) | 94 unit + 191 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -147,13 +147,49 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run typecheck` exits 0
 - [ ] `npm run test` → 94/94 PASS
 - [ ] `npm run build` compiles clean
-- [ ] `./scripts/smoke-test.sh` → 47/47 PASS
-- [ ] `npm run test:e2e` → 180/180 PASS (needs the build first)
+- [ ] `./scripts/smoke-test.sh` → 48/48 PASS
+- [ ] `npm run test:e2e` → 191/191 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 14 (2026-10-08) remediation** — see
+  `docs/remediation-plan-session14.md`: a FEATURE-REACHABILITY +
+  authenticated-navigation + status-message + reduced-motion-contract
+  audit (four layers no prior session surveyed: is every shipped
+  superset feature REACHABLE from a URL — grep every API route for a UI
+  consumer; what `/login` does for an ALREADY-authenticated visitor;
+  whether successful dashboard mutations announce themselves (WCAG
+  4.1.3); and the reduced-motion contract, verified clean but unpinned)
+  found and fixed three defects: **the dead `/api/demo` endpoint**
+  (validation + rate limit + the DemoRequest model shipped complete with
+  ZERO UI consumers — dead code dressed as a superset; now `/demo`, a
+  dark-brand Book-a-Demo page mirroring the API's own validation with the
+  composer's catch contract + a polite role=status confirmation + a
+  sitemap entry — the live 404s /demo so it's pure superset; pinned by
+  `tests/e2e/demo.spec.ts`); **the authenticated `/login` card** (a
+  signed-in visitor got the login form — every production auth system
+  sends them to the workspace; `login/page.tsx` is now a thin async
+  server gate `sessionUserId()` → `redirect("/dashboard")` over the
+  byte-pinned card split unchanged into `login-card.tsx`; pinned in
+  `tests/e2e/auth.spec.ts`); and **the dashboard's silent successes**
+  (zero aria-live regions — a screen-reader user's pause/resume/delete/
+  compose changed the stats in silence; now a sr-only polite
+  `role="status"` region announces every successful mutation, pinned in
+  the dashboard suite). ALSO: the reduced-motion contract pinned for the
+  first time (`tests/e2e/reduced-motion.spec.ts` — content visible
+  without scrolling + the loop clamp, whose computed value serializes as
+  "1e-05s"); the standing battery re-verified — word parity 1.0000 on
+  all 8 routes (reference UNCHANGED), the mobile nav byte-identical
+  (no Tailwind v4 bug; live's burger D32-blocked); one ZOMBIE-SERVER
+  recurrence killed by PID (the post-rebuild boot silently lost
+  EADDRINUSE — gotcha 26); the 404-route console log adjudicated
+  live-parity (the live's own 404 ships two 401s, D68). Gate: **333
+  checks** (94 unit + 191 e2e incl. the demo + reduced-motion suites +
+  48 smoke incl. the /demo page pin); 20 screenshots (18 refreshed +
+  the boundary recapture + the new demo-page shot, VLM-verified).
 
 - **Session 13 (2026-10-08) remediation** — see
   `docs/remediation-plan-session13.md`: a SESSION-LIFECYCLE + render-fault

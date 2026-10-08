@@ -62,6 +62,13 @@ export function DashboardApp({
   // invisible to a user working the workflow list below). Same contract
   // as compose()'s setError: surface, never swallow.
   const [actionError, setActionError] = useState("");
+  // Session 14 F3: the success-class mirror of that banner — a polite
+  // screen-reader live region (WCAG 4.1.3 Status Messages). Errors alert
+  // (role="alert", assertive by convention); successes confirm politely.
+  // Without it a paused/deleted/composed workflow changed the stats in
+  // silence for a screen-reader user — the action landed but nothing
+  // announced it.
+  const [announce, setAnnounce] = useState("");
 
   const stats = useMemo(() => {
     const active = workflows.filter((w) => w.status === "active");
@@ -124,6 +131,7 @@ export function DashboardApp({
       if (!createRes.ok) throw new Error("create failed");
       setIdea("");
       await refresh();
+      setAnnounce("Workflow created.");
     } catch {
       setError("Could not compose that workflow. Try again.");
     } finally {
@@ -146,6 +154,9 @@ export function DashboardApp({
       });
       if (!res.ok) throw new Error("update failed");
       await refresh();
+      setAnnounce(
+        w.status === "active" ? `Paused ${w.name}.` : `Resumed ${w.name}.`,
+      );
     } catch {
       setActionError("Could not update that workflow. Try again.");
     } finally {
@@ -160,6 +171,7 @@ export function DashboardApp({
       const res = await apiFetch(`/api/workflows/${w.id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("delete failed");
       await refresh();
+      setAnnounce(`Deleted ${w.name}.`);
     } catch {
       setActionError("Could not delete that workflow. Try again.");
     } finally {
@@ -182,6 +194,13 @@ export function DashboardApp({
 
   return (
     <div className="min-h-screen bg-black text-white">
+      {/* Session 14 F3: the polite success live region (WCAG 4.1.3) —
+          visually hidden (sr-only), announced by screen readers. The
+          success-class mirror of the role="alert" banners below: errors
+          alert, successes confirm politely. */}
+      <p role="status" aria-live="polite" className="sr-only">
+        {announce}
+      </p>
       {/* Top bar */}
       <header className="border-b border-white/10 bg-black/80 backdrop-blur-xl sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
