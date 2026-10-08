@@ -42,7 +42,10 @@ DATABASE_URL="$SMOKE_DB_URL" npx tsx prisma/seed.ts >/dev/null 2>&1 || { echo "F
 say_pass "scratch db pushed + seeded"
 
 echo "== smoke: boot production server on :$PORT =="
-DATABASE_URL="$SMOKE_DB_URL" AUTH_SECRET="smoke-secret" PORT=$PORT NODE_ENV=production \
+# GENERATE_RATE_LIMIT_MAX=2 (Session 16 F1): the smoke server pins the LLM
+# composer's per-user ceiling LOW so the generate-limiter trip below is
+# exactly deterministic (nothing else in smoke calls /api/workflows/generate).
+DATABASE_URL="$SMOKE_DB_URL" AUTH_SECRET="smoke-secret" GENERATE_RATE_LIMIT_MAX=2 PORT=$PORT NODE_ENV=production \
   node .next/standalone/server.js >/tmp/smoke-server.log 2>&1 &
 SERVER_PID=$!
 
@@ -165,6 +168,34 @@ else
   say_fail "429 carries a positive Retry-After header (got '${RETRY_AFTER}')"
 fi
 
+# Session-16 F1: the LLM composer endpoint carries its OWN abuse ceiling —
+# the most expensive endpoint per call (a live SDK completion) was the only
+# unlimited one (the pre-fix probe: 15/15 rapid authenticated POSTs all
+# 200 in 8.1s, no 429 ever engaged). The limit is per-USER (the route is
+# authenticated — the honest unit), 10/15min by default, and the smoke
+# server boots GENERATE_RATE_LIMIT_MAX=2 with nothing else calling generate,
+# so the trip is exactly deterministic: POST #1 and #2 allowed, POST #3 429.
+GEN1=$(curl -s -o /dev/null -w '%{http_code}' -b /tmp/smoke-cookies.txt -X POST "$BASE/api/workflows/generate" \
+  -H "Content-Type: application/json" -d '{"idea":"smoke generate probe 1"}')
+check "generate allowed under the limit (200)" "200" "$GEN1"
+GEN2=$(curl -s -o /dev/null -w '%{http_code}' -b /tmp/smoke-cookies.txt -X POST "$BASE/api/workflows/generate" \
+  -H "Content-Type: application/json" -d '{"idea":"smoke generate probe 2"}')
+check "generate allowed at the ceiling (200)" "200" "$GEN2"
+GEN3=$(curl -s -o /dev/null -w '%{http_code}' -b /tmp/smoke-cookies.txt -X POST "$BASE/api/workflows/generate" \
+  -H "Content-Type: application/json" -d '{"idea":"smoke generate probe 3"}')
+check "generate rate limit engages (429 on the 3rd POST)" "429" "$GEN3"
+GEN3_BODY=$(curl -s -b /tmp/smoke-cookies.txt -X POST "$BASE/api/workflows/generate" \
+  -H "Content-Type: application/json" -d '{"idea":"smoke generate probe 4"}')
+check "generate 429 error code" "RATE_LIMITED" "$(echo "$GEN3_BODY" | field "['error']['code']")"
+GEN_HEADERS=$(curl -s -D - -o /dev/null -b /tmp/smoke-cookies.txt -X POST "$BASE/api/workflows/generate" \
+  -H "Content-Type: application/json" -d '{"idea":"smoke generate probe 5"}')
+GEN_RETRY=$(echo "$GEN_HEADERS" | grep -i '^retry-after:' | tr -d '\r' | awk '{print $2}')
+if [ -n "$GEN_RETRY" ] && [ "$GEN_RETRY" -gt 0 ] 2>/dev/null; then
+  say_pass "generate 429 carries a positive Retry-After header (${GEN_RETRY}s)"
+else
+  say_fail "generate 429 carries a positive Retry-After header (got '${GEN_RETRY}')"
+fi
+
 echo "== smoke: pages =="
 for PATH_ROUTE in / /login /demo /faq /privacy /terms /accessibility /refund-policy; do
   CODE=$(curl -s -o /dev/null -w '%{http_code}' "$BASE$PATH_ROUTE")
@@ -197,6 +228,27 @@ if echo "$HEADERS" | grep -qi "x-content-type-options: nosniff"; then say_pass "
 if echo "$HEADERS" | grep -qi "x-frame-options: DENY"; then say_pass "header X-Frame-Options: DENY"; else say_fail "header X-Frame-Options: DENY"; fi
 if echo "$HEADERS" | grep -qi "referrer-policy: strict-origin-when-cross-origin"; then say_pass "header Referrer-Policy: strict-origin-when-cross-origin"; else say_fail "header Referrer-Policy: strict-origin-when-cross-origin"; fi
 if echo "$HEADERS" | grep -qi "strict-transport-security: max-age=31536000"; then say_pass "header Strict-Transport-Security: max-age=31536000"; else say_fail "header Strict-Transport-Security: max-age=31536000"; fi
+
+# Session 16 F3: the framework banner is OFF — the live ships NO
+# X-Powered-By (probed: server: cloudflare, x-render-origin-server:
+# uvicorn), and fingerprinting the framework on every page response is
+# pure downside (poweredByHeader: false).
+if echo "$HEADERS" | grep -qi "x-powered-by"; then say_fail "no X-Powered-By on pages (poweredByHeader: false)"; else say_pass "no X-Powered-By on pages (poweredByHeader: false)"; fi
+API_BANNER=$(curl -s -D - -o /dev/null "$BASE/api/health" | grep -i '^x-powered-by:' | tr -d '\r')
+if [ -z "$API_BANNER" ]; then say_pass "no X-Powered-By on API responses"; else say_fail "no X-Powered-By on API responses (got '$API_BANNER')"; fi
+
+# Session 16 F2: every envelope API response carries an explicit
+# no-store — Next.js protects its dynamic PAGES with no-store but NOT
+# route-handler JSON; authenticated data must never transit a cache
+# without an explicit directive (RFC 9111 permits heuristic storage of
+# unmarked 200s by any cache). Pinned on the happy path, the anonymous
+# 401, and the authenticated 200.
+CC_HEALTH=$(curl -s -D - -o /dev/null "$BASE/api/health" | grep -i '^cache-control:' | tr -d '\r' | awk '{print tolower($0)}')
+if echo "$CC_HEALTH" | grep -q "no-store"; then say_pass "API no-store: /api/health 200 (${CC_HEALTH#cache-control: })"; else say_fail "API no-store: /api/health 200 (got '${CC_HEALTH}')"; fi
+CC_ANON=$(curl -s -D - -o /dev/null "$BASE/api/workflows" | grep -i '^cache-control:' | tr -d '\r' | awk '{print tolower($0)}')
+if echo "$CC_ANON" | grep -q "no-store"; then say_pass "API no-store: anonymous /api/workflows 401"; else say_fail "API no-store: anonymous /api/workflows 401 (got '${CC_ANON}')"; fi
+CC_AUTHED=$(curl -s -D - -o /dev/null -b /tmp/smoke-cookies.txt "$BASE/api/workflows" | grep -i '^cache-control:' | tr -d '\r' | awk '{print tolower($0)}')
+if echo "$CC_AUTHED" | grep -q "no-store"; then say_pass "API no-store: authenticated /api/workflows 200"; else say_fail "API no-store: authenticated /api/workflows 200 (got '${CC_AUTHED}')"; fi
 
 # Session 10 F4: the public/ assets ship the live's CDN caching value (the
 # 1.9MB hero video re-validated on every load at max-age=0 before).

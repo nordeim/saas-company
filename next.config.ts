@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   reactStrictMode: false,
+  // Session 16 F3: drop the X-Powered-By framework banner — the live ships
+  // none (server: cloudflare), and fingerprinting the framework on every
+  // page response is pure downside.
+  poweredByHeader: false,
   // Keep the dev-tools indicator out of the viewport (parity screenshots).
   devIndicators: false,
   // The app is a conventional multi-route Next.js site (/, /login, /faq,

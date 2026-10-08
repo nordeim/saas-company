@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { authRateLimit, checkRate, clientIpOf, type RateBuckets } from "./rate-limit";
+import { authRateLimit, checkRate, clientIpOf, generateRateLimit, type RateBuckets } from "./rate-limit";
 
 function freshBuckets(): RateBuckets {
   return new Map();
@@ -96,6 +96,57 @@ describe("authRateLimit (Session-11: the AUTH_RATE_LIMIT_MAX override)", () => {
     } finally {
       if (prior !== undefined) process.env.AUTH_RATE_LIMIT_MAX = prior;
       else delete process.env.AUTH_RATE_LIMIT_MAX;
+    }
+  });
+});
+
+describe("generateRateLimit (Session-16 F1: the LLM endpoint's abuse ceiling)", () => {
+  it("defaults to 10 generations per USER when the env is unset or invalid", () => {
+    const prior = process.env.GENERATE_RATE_LIMIT_MAX;
+    delete process.env.GENERATE_RATE_LIMIT_MAX;
+    try {
+      // a distinct user per run keeps the shared in-memory buckets isolated
+      const user = `user-${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
+      for (let i = 0; i < 10; i++) {
+        expect(generateRateLimit(user).allowed).toBe(true);
+      }
+      const blocked = generateRateLimit(user);
+      expect(blocked.allowed).toBe(false); // the 11th trips
+      expect(blocked.retryAfterSec).toBeGreaterThan(0);
+    } finally {
+      if (prior !== undefined) process.env.GENERATE_RATE_LIMIT_MAX = prior;
+      else delete process.env.GENERATE_RATE_LIMIT_MAX;
+    }
+  });
+
+  it("honors GENERATE_RATE_LIMIT_MAX (the e2e webServer's 50 / smoke's 2)", () => {
+    const prior = process.env.GENERATE_RATE_LIMIT_MAX;
+    process.env.GENERATE_RATE_LIMIT_MAX = "3";
+    try {
+      const user = `user-${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
+      for (let i = 0; i < 3; i++) {
+        expect(generateRateLimit(user).allowed).toBe(true);
+      }
+      expect(generateRateLimit(user).allowed).toBe(false); // the 4th trips at the override
+    } finally {
+      if (prior !== undefined) process.env.GENERATE_RATE_LIMIT_MAX = prior;
+      else delete process.env.GENERATE_RATE_LIMIT_MAX;
+    }
+  });
+
+  it("keys per USER — two users keep independent buckets (a shared-egress office does not share one abuser's budget)", () => {
+    const prior = process.env.GENERATE_RATE_LIMIT_MAX;
+    process.env.GENERATE_RATE_LIMIT_MAX = "1";
+    try {
+      const stamp = `${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
+      const a = `user-a-${stamp}`;
+      const b = `user-b-${stamp}`;
+      expect(generateRateLimit(a).allowed).toBe(true);
+      expect(generateRateLimit(a).allowed).toBe(false); // a's budget spent
+      expect(generateRateLimit(b).allowed).toBe(true); // b's is untouched
+    } finally {
+      if (prior !== undefined) process.env.GENERATE_RATE_LIMIT_MAX = prior;
+      else delete process.env.GENERATE_RATE_LIMIT_MAX;
     }
   });
 });

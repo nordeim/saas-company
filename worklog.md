@@ -612,3 +612,27 @@ Stage Summary:
 - Gate raised 333 → 357 checks; the production-readiness floor now covers redirect targets, superset-route a11y, external-dependency hangs, and the docs-truth layer.
 - Survey scripts persisted under /home/z/my-project/scripts/ (survey-session15-red/green, survey-navigate-close-session15, survey-console-session15, vlm-check-session15).
 - Session 15 complete.
+
+---
+Task ID: S16-1
+Agent: Super Z (main, session 27)
+Task: Session 16 — authenticated-endpoint-abuse + response-cache-directive + framework-banner audit and remediation of the saas-company clone
+
+Work Log:
+- git pull (session_26.md transcript + prompt-to-review-3.md arrived); all repo docs + session docs reviewed; skills/ excluded from toolchains (verified); DATABASE_URL trap LIVE in the shell — neutralized per-command (env -u DATABASE_URL) all session; zombie servers on :3000/:3010 bypassed via fresh-port boots (:3020-:3023) per the gotcha-26/29 discipline.
+- Baseline gate: 357 inherited checks ALL GREEN (111 unit + 196 e2e + 50 smoke — no flake).
+- Drift: word parity 1.0000 on all 8 routes (reference UNCHANGED); mobile-nav real-touch paired probe: clone byte-identical and working (corrected navigate-close probe GREEN) — NO Tailwind v4 bug; live's burger remains pointer-blocked (D32).
+- Three NEW audit surfaces surveyed with RED-evidence probes: the authenticated-endpoint abuse layer (/api/workflows/generate — the most expensive endpoint per call — had NO rate limit: 15/15 rapid authenticated POSTs all 200 in 8.1s through in-page fetches), the response-cache directive layer (Next protects dynamic PAGES with no-store but NOT route-handler JSON — the envelope carried no Cache-Control; RFC 9111 permits heuristic storage of unmarked 200s), and the framework-banner layer (pages advertised X-Powered-By: Next.js; the live ships none — server: cloudflare).
+- Adjudicated CLEAN with evidence: hostile-content rendering (<script>-named workflow + max-length fields: zero dialogs, escaped-as-text, truncate + line-clamp + zero overflow), fresh-user empty state ("No workflows yet"), post-logout back-button (server 307 -> /login?from_url=/dashboard, no bfcache leak), IDOR scoping (userId-scoped findFirst), email normalization, password bounds, seed idempotency, UI busy guards.
+- Two survey-tooling traps discovered: page.request (APIRequestContext) REFUSES to send Secure cookies over plain http while Chromium navigations treat 127.0.0.1 as trustworthy (the v1 probe's 401s were a tool artifact — authenticated probing must use in-page fetches); API-register then /login visit hits the S14 authenticated gate (navigate directly).
+- Remediation plan session16 written + validated (single-seam scan, pin-conflict scan, e2e generate-budget recount, smoke-bucket arithmetic, docs-truth scan), executed TDD-first: R1 generateRateLimit — per-USER buckets (gen:${userId}), 10/15min default, GENERATE_RATE_LIMIT_MAX override (webServer 50 / smoke 2), 429 + Retry-After; CLIENT contract unchanged by design (compose()'s genRes.ok degrade: a 429 still creates the template workflow — the feature never hard-fails; pinned by the e2e route-fulfilled-429 row). R2 Cache-Control: private, no-store at the ok()/fail() seam (Retry-After survives the merge). R3 poweredByHeader: false.
+- RED observed at every layer: 3 unit "not a function"; smoke 7 defect pins failing (429-got-200, code-got-[], Retry-After-got-'', X-Powered-By present, no-store x3 got ''); GREEN after the fixes: 114/114 unit, 60/60 smoke (the trip: POST #1/#2 allowed, POST #3 429 RATE_LIMITED + Retry-After 899s), 197/197 e2e.
+- Full gate: 371 checks green. Re-verification on fresh ports: word parity 1.0000 x8; the GREEN probe family (15 POSTs -> 10x200 + 5x429, first 429 at index 10, Retry-After 890s; no-store on the API; no X-Powered-By); console sweep ZERO on /, /login, /demo, /dashboard+composer (fresh-bucket server; the one 429 console line on the exhausted server = the browser's inherent non-2xx resource log, D68 family, survey-induced); axe /dashboard + /demo ZERO; mobile-nav byte-identical.
+- Screenshots: 20 refreshed (VLM-verified x4). Workspace-hygiene discovery en route: the DEV db/custom.db had DRIFTED all-paused across S12-S15 probe traffic (the resilience shot's Pause-button locator found nothing) — re-seeded to the canonical workspace (e2e/smoke immune: fresh DBs per run).
+- Docs: PAD (revision block, D80-D82, §7 counts, §8.2 env table +GENERATE_RATE_LIMIT_MAX, §11 key files), AGENTS (gotcha 30 + counts), CLAUDE (session-16 context + checklist counts), README (371 badge + composer rate-limit rows + no-store/banner), SKILL v2.15.0 (lessons 40-41), .env.example (+GENERATE_RATE_LIMIT_MAX), remediation plan session16 (ticked), session log docs/session_27.md, this worklog.
+
+Stage Summary:
+- Three defects fixed with mechanism-level evidence: the unlimited LLM endpoint (now the per-USER generateRateLimit ceiling with the degrade contract preserved), the missing envelope cache directive (now private, no-store at the single seam), and the framework banner (now poweredByHeader: false, matching the live's posture).
+- Gate raised 357 -> 371 checks; the production-readiness floor now covers cost control on the expensive endpoint, API cache hardening, and fingerprint hygiene.
+- Survey scripts persisted under /home/z/my-project/scripts/ (survey-session16-red/green, survey-session16-console-axe, vlm-check-session16).
+- Session 16 complete.

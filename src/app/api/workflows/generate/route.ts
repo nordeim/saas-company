@@ -1,5 +1,6 @@
 import { ok, fail } from "@/lib/api";
 import { requireSession } from "@/lib/api";
+import { generateRateLimit } from "@/lib/rate-limit";
 import { requiredString } from "@/lib/validation";
 import {
   SDK_TIMEOUT_MS,
@@ -15,10 +16,28 @@ import {
  * (name/description/category); any SDK failure, malformed output, or
  * short-notice environment falls back to the deterministic template so the
  * feature never hard-fails. Output is clamped by sanitizeGeneratedWorkflow.
+ *
+ * Session 16 F1: the endpoint carries its own abuse ceiling — the most
+ * expensive endpoint per call was the only unlimited one. The per-USER
+ * limiter (10/15min, GENERATE_RATE_LIMIT_MAX) runs AFTER the session guard
+ * and BEFORE the body parse (the auth routes' own ordering — any attempt
+ * counts, valid or not). A 429 keeps the S15 contract (Retry-After); the
+ * CLIENT degrades to its template draft (compose()'s genRes.ok check), so
+ * the feature still never hard-fails — the limiter only caps the LLM spend.
  */
 export async function POST(request: Request) {
   const guard = await requireSession();
   if (!guard.user) return guard.response;
+
+  const limit = generateRateLimit(guard.user.id);
+  if (!limit.allowed) {
+    return fail(
+      "RATE_LIMITED",
+      `Too many generations. Try again in ${limit.retryAfterSec}s.`,
+      429,
+      { "Retry-After": String(limit.retryAfterSec) },
+    );
+  }
 
   let body: unknown;
   try {

@@ -19,17 +19,17 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (111 checks) | `npm run test` |
-| Browser E2E (196 checks; needs a build) | `npm run test:e2e` |
+| Unit tests (114 checks) | `npm run test` |
+| Browser E2E (197 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
-| End-to-end smoke suite (50 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
+| End-to-end smoke suite (60 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (111/111) → `npm run build` → `./scripts/smoke-test.sh` (50/50)
-→ `npm run test:e2e` (196/196) — 357 checks across three layers (boots the standalone server on :3100 against its own
-`db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
+`npm run test` (114/114) → `npm run build` → `./scripts/smoke-test.sh` (60/60)
+→ `npm run test:e2e` (197/197) — 371 checks across three layers (boots the standalone server on :3100 against its own
+`db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`, `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
 
@@ -327,6 +327,35 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    old process served fresh static HTML from disk with its own stale
    hydrated JS; when ps//proc are process-blind, move the survey to a
    FRESH PORT with a fresh boot instead of trusting a reboot).
+30. **Rate-limit the expensive endpoint, not just the sensitive ones —
+   and probe authenticated APIs through the PAGE, not `page.request`**
+   (Session 16): auth/newsletter/demo were all limited while
+   `/api/workflows/generate` — the ONLY endpoint that costs real money
+   per call — was unlimited (the probe drove 15/15 rapid authenticated
+   POSTs all 200 in 8.1s). The fix keys the bucket PER-USER
+   (`gen:${userId}` — the route is authenticated; an IP-keyed bucket
+   would make a shared-egress office share one abuser's budget),
+   overrides via `GENERATE_RATE_LIMIT_MAX` (the AUTH_RATE_LIMIT_MAX
+   pattern), and keeps the CLIENT contract untouched: compose()'s
+   `genRes.ok` degrade means a 429 still creates the template workflow
+   — the feature never hard-fails, the limiter only caps the LLM spend
+   (D80). The envelope also now carries `Cache-Control: private,
+   no-store` at the ok()/fail() seam (Next protects dynamic PAGES with
+   no-store but NOT route-handler JSON — D81), and
+   `poweredByHeader: false` drops the X-Powered-By banner the live
+   doesn't ship (D82). Survey-tooling traps: Playwright's
+   `page.request` (APIRequestContext) REFUSES to send `Secure` cookies
+   over plain http while Chromium page navigations treat 127.0.0.1 as
+   trustworthy and DO send them — authenticated API probing must go
+   through in-page fetches after a navigation; and after an API
+   register, navigate DIRECTLY to the target page (a `/login` visit
+   hits the S14 authenticated gate and redirects). Also: the DEV
+   `db/custom.db` can DRIFT across sessions of probe traffic
+   (S12–S15's pauses accumulated until every seeded workflow was
+   paused — the resilience screenshot's Pause-button locator found
+   nothing); re-seed with `npm run db:push && npm run db:seed` when a
+   survey depends on the canonical workspace (e2e/smoke are immune —
+   they boot fresh DBs).
 
 ## Architecture invariants
 

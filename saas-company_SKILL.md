@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.14.0 · **Last updated:** 2026-10-08 (Session 15 remediation)
+> **Version:** 2.15.0 · **Last updated:** 2026-10-08 (Session 16 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -640,6 +640,42 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     turned every probe into a lie) — when ps//proc are process-blind,
     move the survey to a FRESH PORT with a fresh boot instead of
     trusting a reboot.
+40. **Rate-limit the EXPENSIVE endpoint, not just the sensitive ones —
+    and key authenticated buckets per USER** (Session 16): auth,
+    newsletter, and demo were all limited while `/api/workflows/generate`
+    — the only endpoint that costs real money per call — was unlimited
+    (the probe drove 15/15 rapid authenticated POSTs all 200 in 8.1s).
+    The audit question that finds this class: "which endpoint is most
+    expensive per call, and is IT limited?" The fix keys the bucket
+    per-USER (`gen:${userId}`) — an IP-keyed bucket on an authenticated
+    route makes a shared-egress office share one abuser's budget. And
+    the CLIENT contract stayed untouched BY DESIGN: compose()'s
+    `genRes.ok` degrade means a 429 still creates the template workflow
+    — the feature never hard-fails, the limiter only caps the LLM spend
+    (pin the degrade with a route-fulfilled 429 so it can't silently
+    break). Related: Next.js protects its dynamic PAGES with no-store
+    but NOT route-handler JSON — emit `Cache-Control: private,
+    no-store` at the single ok()/fail() seam (RFC 9111 permits
+    heuristic storage of unmarked 200s), and drop the X-Powered-By
+    banner (`poweredByHeader: false` — the live ships none).
+41. **Probe authenticated APIs through the PAGE, not `page.request` —
+    and re-seed the dev DB when a survey depends on the canonical
+    workspace** (Session 16): Playwright's APIRequestContext REFUSES to
+    send `Secure` cookies over plain http, while Chromium page
+    navigations treat `http://127.0.0.1` as a trustworthy origin and DO
+    send them — the production session cookie (`secure: true`) quietly
+    never reaches `page.request` calls, and every authenticated probe
+    401s as if the session were broken (the v1 survey's 15/15 "401s"
+    were a tool artifact, not a defect). Authenticated API probing must
+    go through IN-PAGE fetches after a navigation (the realistic
+    browser path). Two same-class traps: after an API register,
+    navigate DIRECTLY to the target (a /login visit hits the S14
+    authenticated gate and redirects); and the DEV `db/custom.db`
+    DRIFTS across sessions of probe traffic (S12–S15's pauses
+    accumulated until every seeded workflow was paused and the
+    resilience screenshot's Pause-button locator found nothing) —
+    `npm run db:push && npm run db:seed` restores the canonical
+    workspace (the e2e/smoke suites are immune: they boot fresh DBs).
 
 ## §13. Pitfalls to Avoid
 

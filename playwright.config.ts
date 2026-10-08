@@ -59,6 +59,13 @@ export default defineConfig({
       // one process with the in-memory auth limiter — raise the budget so
       // the razor-edge default (exactly 10) can't 429 mid-suite.
       AUTH_RATE_LIMIT_MAX: "50",
+      // Session 16 F1: the LLM composer's per-user ceiling gets the same
+      // insurance — the suite's ~2 real generate POSTs sit far below the
+      // default 10, but a reused server across repeated local runs could
+      // climb toward the ceiling; the pin makes the suite immune by
+      // construction (the new 429-degrade pin route-FULFILLS its 429 and
+      // never reaches the server at all).
+      GENERATE_RATE_LIMIT_MAX: "50",
     } as Record<string, string>,
   },
 });

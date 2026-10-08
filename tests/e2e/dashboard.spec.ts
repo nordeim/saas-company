@@ -166,4 +166,60 @@ test.describe("dashboard (functional superset)", () => {
       .poll(async () => page.locator("article").count(), { timeout: 10_000 })
       .toBe(before);
   });
+
+  test("the composer degrades to the template when generate is rate-limited (Session-16 F1 client contract)", async ({
+    page,
+  }) => {
+    // The generate limiter (per-USER, GENERATE_RATE_LIMIT_MAX) is the
+    // backend cost ceiling on the LLM endpoint; the CLIENT contract is
+    // ADR-004's doctrine applied at the compose() layer: a failed
+    // generate (any non-ok — here a 429 with the S15 Retry-After
+    // contract) falls back to the client-side template draft and the
+    // create STILL succeeds. The feature never hard-fails on the rate
+    // limit; the limiter only caps the LLM spend. Pin-only (GREEN on
+    // arrival — the degrade has shipped since the composer's first
+    // session; this row keeps the contract from silently breaking).
+    await signIn(page);
+    const pageerrors: string[] = [];
+    page.on("pageerror", (e) => pageerrors.push(String(e)));
+
+    // Route-fulfill the 429 BEFORE composing — no real LLM call, the
+    // exact envelope shape the limiter emits (incl. Retry-After).
+    await page.route("**/api/workflows/generate", async (route) => {
+      await route.fulfill({
+        status: 429,
+        headers: { "content-type": "application/json", "retry-after": "900" },
+        body: JSON.stringify({
+          ok: false,
+          error: { code: "RATE_LIMITED", message: "Too many generations. Try again in 900s." },
+        }),
+      });
+    });
+
+    const before = await page.locator("article").count();
+    const idea = `Rate-limited probe ${Date.now()}`;
+    await page.getByLabel("Workflow idea").fill(idea);
+    await page.getByRole("button", { name: /^Compose$/ }).click();
+
+    // The action SUCCEEDS through the degrade: announced politely…
+    await expect(page.locator('[aria-live="polite"][role="status"]')).toHaveText(/Workflow created\./, {
+      timeout: 25_000,
+    });
+    // …and the row persists (template-named from the idea text)…
+    await expect
+      .poll(async () => page.locator("article").count(), { timeout: 25_000 })
+      .toBe(before + 1);
+    await expect(page.locator("article").first().locator("h3")).toContainText(idea.slice(0, 40), {
+      ignoreCase: true,
+    });
+    // …with ZERO uncaught pageerrors (the 429 is handled, never thrown).
+    expect(pageerrors).toEqual([]);
+
+    // Clean up the newest row so later specs see the pristine seed.
+    const newest = page.locator("article").first();
+    await newest.getByRole("button", { name: /Delete/ }).first().click();
+    await expect
+      .poll(async () => page.locator("article").count(), { timeout: 10_000 })
+      .toBe(before);
+  });
 });

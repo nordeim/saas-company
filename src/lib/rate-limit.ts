@@ -69,6 +69,22 @@ export function newsletterRateLimit(ip: string): RateDecision {
   return checkRate(buckets, `news:${ip}`, 5, 10 * 60 * 1000);
 }
 
+/** Generate limiter: 10 LLM generations per USER per 15 minutes
+ *  (Session 16 F1 — the composer endpoint's abuse ceiling).
+ *
+ *  Keyed by the authenticated USER id, not the IP: the route sits behind
+ *  requireSession, so the user is the honest unit (a shared-egress office
+ *  does not share one abuser's budget). The limit is overridable via
+ *  GENERATE_RATE_LIMIT_MAX (the AUTH_RATE_LIMIT_MAX operator pattern) —
+ *  the Playwright webServer pins 50 and the smoke suite pins 2 for its
+ *  deterministic trip.
+ */
+export function generateRateLimit(userId: string): RateDecision {
+  const raw = Number.parseInt(process.env.GENERATE_RATE_LIMIT_MAX ?? "", 10);
+  const limit = Number.isFinite(raw) && raw >= 1 ? raw : 10;
+  return checkRate(buckets, `gen:${userId}`, limit, 15 * 60 * 1000);
+}
+
 /** Best-effort client IP (single trusted proxy assumed). */
 export function clientIpOf(headers: Headers): string {
   const fwd = headers.get("x-forwarded-for");

@@ -8,9 +8,22 @@ import { db } from "./db";
  * The optional `headers` argument carries response-level metadata —
  * the 429 sites use it for the machine-readable `Retry-After` signal
  * (Session-15 F4).
+ *
+ * Session 16 F2: every envelope response carries an explicit
+ * `Cache-Control: private, no-store` — Next.js protects its dynamic
+ * PAGES with no-store but NOT route-handler JSON, and authenticated
+ * data must never transit a cache without an explicit directive
+ * (RFC 9111 permits heuristic storage of unmarked 200s by any cache).
+ * `no-store` forbids all storage; `private` additionally fences shared
+ * caches — belt and braces at the single seam every response shares.
  */
+const NO_STORE = "private, no-store";
+
 export function ok<T>(data: T, status = 200) {
-  return NextResponse.json({ ok: true as const, data }, { status });
+  return NextResponse.json({ ok: true as const, data }, {
+    status,
+    headers: { "Cache-Control": NO_STORE },
+  });
 }
 
 export function fail(
@@ -21,7 +34,7 @@ export function fail(
 ) {
   return NextResponse.json(
     { ok: false as const, error: { code, message } },
-    { status, headers },
+    { status, headers: { "Cache-Control": NO_STORE, ...headers } },
   );
 }
 

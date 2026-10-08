@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (50) | 111 unit + 196 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (60) | 114 unit + 197 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -145,15 +145,63 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 111/111 PASS
+- [ ] `npm run test` → 114/114 PASS
 - [ ] `npm run build` compiles clean
-- [ ] `./scripts/smoke-test.sh` → 50/50 PASS
-- [ ] `npm run test:e2e` → 196/196 PASS (needs the build first)
+- [ ] `./scripts/smoke-test.sh` → 60/60 PASS
+- [ ] `npm run test:e2e` → 197/197 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 16 (2026-10-08) remediation** — see
+  `docs/remediation-plan-session16.md`: an authenticated-endpoint-abuse +
+  response-cache-directive + framework-banner audit (three layers no
+  prior session surveyed: COST CONTROL on the LLM route — auth,
+  newsletter, and demo were all rate-limited while the most expensive
+  endpoint per call was the only unlimited one; the caching directives
+  of the API envelope — Next.js protects its dynamic PAGES with
+  no-store but NOT route-handler JSON; and the fingerprinting layer of
+  the response banner) found and fixed three defects: **the unlimited
+  LLM composer** (the probe drove 15/15 rapid authenticated POSTs to
+  `/api/workflows/generate` — all 200 in 8.1s, no 429 ever engaged;
+  now `generateRateLimit` in `src/lib/rate-limit.ts` — **per-USER**
+  buckets (the route is authenticated — the honest unit), 10/15min
+  default, `GENERATE_RATE_LIMIT_MAX` override, 429 + `Retry-After`
+  (the S15 contract); the CLIENT contract unchanged BY DESIGN:
+  compose()'s `genRes.ok` check degrades a 429 into the client-side
+  template draft, so the feature never hard-fails — the limiter only
+  caps the LLM spend — pinned by the new e2e route-fulfilled-429
+  degrade row + the deterministic smoke trip at
+  `GENERATE_RATE_LIMIT_MAX=2` — D80); **the missing cache directive**
+  (`Cache-Control: private, no-store` now emitted at the single
+  `ok()`/`fail()` seam — authenticated JSON previously carried NO
+  caching directive while RFC 9111 permits heuristic storage of
+  unmarked 200s; the 429 sites' Retry-After survives the merge — D81);
+  and **the X-Powered-By banner** (`poweredByHeader: false` — the live
+  ships none: `server: cloudflare`; fingerprinting the framework on
+  every page response was pure downside — D82). ALSO adjudicated CLEAN
+  with evidence: hostile-content rendering (a `<script>`-named workflow
+  + max-length fields: zero dialogs, escaped-as-text, truncate +
+  line-clamp + zero horizontal overflow), the fresh-user empty state,
+  the post-logout back-button (server 307 → login, no stale bfcache
+  leak), IDOR scoping, email normalization, password bounds, seed
+  idempotency, UI busy guards. ONE workspace-hygiene discovery: the
+  DEV `db/custom.db` had drifted to all-paused across S12–S15's probe
+  traffic — re-seeded (the e2e/smoke suites are immune: fresh DBs per
+  run). TWO survey-tooling traps: Playwright's `page.request` refuses
+  to SEND `Secure` cookies over plain http (Chromium navigations treat
+  127.0.0.1 as trustworthy and DO — probe authenticated APIs through
+  in-page fetches), and after an API-register, navigate DIRECTLY (a
+  /login visit hits the S14 authenticated gate). Gate: **371 checks**
+  (114 unit incl. the generateRateLimit pins + 197 e2e incl. the
+  composer 429-degrade row + 60 smoke incl. the generate-limiter trip,
+  Retry-After, no-store ×3, and banner-absence ×2); 20 screenshots
+  refreshed (VLM-verified); word parity 1.0000 on all 8 routes
+  (reference UNCHANGED), mobile nav byte-identical (no Tailwind v4
+  bug; live's burger D32-blocked), axe /dashboard + /demo zero,
+  console zero-noise on every touched route.
 
 - **Session 15 (2026-10-08) remediation** — see
   `docs/remediation-plan-session15.md`: a REDIRECT-TARGET +
