@@ -19,16 +19,16 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (145 checks) | `npm run test` |
+| Unit tests (156 checks) | `npm run test` |
 | Browser E2E (197 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
-| End-to-end smoke suite (94 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
+| End-to-end smoke suite (103 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (145/145) → `npm run build` → `./scripts/smoke-test.sh` (94/94)
-→ `npm run test:e2e` (197/197) — 436 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (156/156) → `npm run build` → `./scripts/smoke-test.sh` (103/103)
+→ `npm run test:e2e` (197/197) — 456 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`, `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -439,6 +439,34 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    `document.body.innerText`; the same class: the live's `/dashboard`
    server-status is 200 for ANY route — the SPA 404 is the RENDERED
    content, adjudicate on what the client sees).
+35. **Cap the OUTPUT side too — and pair every list ceiling with honest
+   aggregates (Session 21).** S20 capped what a request may CARRY (the
+   128KB input ceiling); the OUTPUT side was unbounded: `GET
+   /api/workflows` had no `take` (probed: a 400-workflow user's GET
+   answered a 134.5KB body, the dashboard mounted 400 article cards —
+   9,649 DOM nodes — while the runs chart sliced to 8; the LIST rendered
+   everything). The fix rides SQL `take: MAX_WORKFLOW_LIST` (the
+   wire-level cap, not a client slice) AND moves the stat cards to
+   server-side aggregates shipped as the envelope's additive `meta`
+   sibling — because a capped list without honest aggregates silently
+   turns the four stat cards into subset summaries (a ceiling that lies
+   is worse than no ceiling). The `meta` field is strictly OPTIONAL in
+   the client (the e2e error-boundary mocks fulfill with bare arrays and
+   must keep working). Related discoveries the same session:
+   **`POST /api/workflows` was the ONLY unthrottled mutation** (auth,
+   newsletter, demo, generate all carry limiters — a script minted
+   unbounded rows with one tiny JSON POST each; now `workflowRateLimit`,
+   30/USER/15min, `WORKFLOW_RATE_LIMIT_MAX` override);
+   **Playwright's `context.cookies(url)` filters SECURE cookies on plain
+   http** — 127.0.0.1 is trustworthy for NAVIGATION (the cookie is sent)
+   but cookie ENUMERATION with a URL argument drops it; enumerate with
+   `context.cookies()` (no args) and match by name (the gotcha-30
+   family); and **a `setsid`-detached survey server OUTLIVES its
+   diagnostic session** — the next runner's fresh boot on the same port
+   hits a silently-swallowed EADDRINUSE and probes the STALE build (the
+   gotcha-26/31 family's fourth member — kill detached servers
+   explicitly, or probe on fresh ports).
+
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +
@@ -450,7 +478,9 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   `apiRoute` — what ESCAPES a handler becomes the INTERNAL_ERROR
   envelope with the stack re-logged to fd 2 — and the Session-20 method
   guards `methodGuard`/`optionsGuard` + the request-size ceiling
-  `bodyTooLarge` before every body parse). No route returns bare
+  `bodyTooLarge` before every body parse + the Session-21 optional
+  `meta` sibling of `data` carrying the capped list's TRUE total +
+  honest aggregates). No route returns bare
   JSON — including on the crash paths AND the method-mismatch paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks
   `z-ai-web-dev-sdk` for a workflow draft and falls back to the

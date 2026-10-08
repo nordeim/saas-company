@@ -8,6 +8,50 @@ export function isWorkflowStatus(value: unknown): value is WorkflowStatus {
   return typeof value === "string" && (WORKFLOW_STATUSES as readonly string[]).includes(value);
 }
 
+/**
+ * Session 21 R1 — the workflows list ceiling (the OUTPUT twin of the S20
+ * request-size ceiling, D94). Probed: GET /api/workflows answered a
+ * 134.5KB body for a 400-workflow user with no `take` anywhere, and the
+ * dashboard mounted 400 article cards (9,649 DOM nodes). The capped
+ * fetch rides SQL `take` (the wire-level fix), and the four stat cards
+ * move to server-side aggregates so a ceiling never turns them into
+ * subset summaries. 100 rows is two orders above the 6-row demo story —
+ * the honest unpaginated ceiling for a personal workspace list.
+ */
+export const MAX_WORKFLOW_LIST = 100;
+
+/** The stat-card shape rendered by the dashboard (the honest aggregate). */
+export interface WorkflowStats {
+  active: number;
+  runs: number;
+  hours: number;
+  avgSuccessRate: number;
+}
+
+/**
+ * Normalize a Prisma aggregate into the stat-card shape. Pure and
+ * unit-tested; shared by the GET /api/workflows route and the dashboard
+ * page (one definition, no drift between the two seams).
+ *
+ * - `hours` rounds to the integer the card renders.
+ * - a null `_avg` (Prisma's answer for zero rows) maps to the 100 the
+ *   client already displays for an empty workspace.
+ */
+export function statsFromAggregate(
+  total: number,
+  active: number,
+  runs: number,
+  hours: number,
+  avgSuccessRate: number | null,
+): WorkflowStats {
+  return {
+    active,
+    runs,
+    hours: Math.round(hours),
+    avgSuccessRate: avgSuccessRate === null ? 100 : avgSuccessRate,
+  };
+}
+
 export const WORKFLOW_CATEGORIES = [
   "Marketing",
   "Sales",

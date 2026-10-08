@@ -85,6 +85,29 @@ export function generateRateLimit(userId: string): RateDecision {
   return checkRate(buckets, `gen:${userId}`, limit, 15 * 60 * 1000);
 }
 
+/** Workflow-create limiter: 30 creates per USER per 15 minutes
+ *  (Session 21 R2 — the creation-frequency ceiling).
+ *
+ *  POST /api/workflows was the ONLY unthrottled mutation in the app
+ *  (auth, newsletter, demo, and generate all carry limiters): a script
+ *  minted unbounded rows — one tiny JSON POST each — growing the
+ *  database and the user's own unbounded list. Keyed by the
+ *  authenticated USER (the generateRateLimit pattern: the route sits
+ *  behind requireSession, so the user is the honest unit — a
+ *  shared-egress office does not share one abuser's budget).
+ *
+ *  30 is generous by design: a power user hand-building 30 workflows
+ *  in 15 minutes is plausible; a script minting 1,000 rows in seconds
+ *  is not. Overridable via WORKFLOW_RATE_LIMIT_MAX (the
+ *  AUTH_RATE_LIMIT_MAX operator pattern) — the smoke server pins 2
+ *  for its deterministic trip.
+ */
+export function workflowRateLimit(userId: string): RateDecision {
+  const raw = Number.parseInt(process.env.WORKFLOW_RATE_LIMIT_MAX ?? "", 10);
+  const limit = Number.isFinite(raw) && raw >= 1 ? raw : 30;
+  return checkRate(buckets, `wf:${userId}`, limit, 15 * 60 * 1000);
+}
+
 /** Best-effort client IP (single trusted proxy assumed).
  *
  * Session 18 F4 (the trust model, stated honestly): the FIRST

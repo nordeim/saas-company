@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import type { WorkflowStats } from "@/lib/workflow";
 import {
   Activity,
   Check,
@@ -47,12 +48,24 @@ class SessionExpired {}
 export function DashboardApp({
   user,
   initialWorkflows,
+  totalWorkflows,
+  initialStats,
 }: {
   user: { id: string; email: string; name: string };
   initialWorkflows: WorkflowRow[];
+  /** Session 21 R1: the TRUE workflow count (the list may be capped at
+   *  MAX_WORKFLOW_LIST — the header counter must never read the fetched
+   *  length when the workspace is larger). */
+  totalWorkflows: number;
+  /** Session 21 R1: the server-side aggregates — TRUE at any volume from
+   *  the first paint (a capped list without honest aggregates would turn
+   *  the stat cards into subset summaries). */
+  initialStats: WorkflowStats;
 }) {
   const router = useRouter();
   const [workflows, setWorkflows] = useState<WorkflowRow[]>(initialWorkflows);
+  const [total, setTotal] = useState(totalWorkflows);
+  const [serverStats, setServerStats] = useState<WorkflowStats | null>(initialStats);
   const [idea, setIdea] = useState("");
   const [composing, setComposing] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -70,7 +83,13 @@ export function DashboardApp({
   // announced it.
   const [announce, setAnnounce] = useState("");
 
-  const stats = useMemo(() => {
+  // Session 21 R1: the stat cards read the SERVER aggregates when
+  // available (TRUE at any volume — a capped list must never turn the
+  // cards into subset summaries); the list-derived memo below remains
+  // the FALLBACK for meta-less payloads (the e2e error-boundary mocks
+  // fulfill with bare arrays). The shapes agree exactly at <= 100 rows
+  // (the common case — the memo and the aggregate walk the same rows).
+  const listStats = useMemo(() => {
     const active = workflows.filter((w) => w.status === "active");
     const runs = workflows.reduce((n, w) => n + w.runs, 0);
     const hours = workflows.reduce((n, w) => n + w.timeSavedHours, 0);
@@ -79,6 +98,14 @@ export function DashboardApp({
       : 100;
     return { active: active.length, runs, hours: Math.round(hours), avgRate: avgRate.toFixed(1) };
   }, [workflows]);
+  const stats = serverStats
+    ? {
+        active: serverStats.active,
+        runs: serverStats.runs,
+        hours: serverStats.hours,
+        avgRate: serverStats.avgSuccessRate.toFixed(1),
+      }
+    : listStats;
 
   const maxRuns = Math.max(1, ...workflows.map((w) => w.runs));
 
@@ -102,6 +129,18 @@ export function DashboardApp({
     // would crash the render; the error boundary is the net, this is
     // the guard).
     if (res.ok && payload?.ok && Array.isArray(payload.data)) setWorkflows(payload.data);
+    // Session 21 R1: consume the meta sibling when present (the TRUE
+    // total + honest server aggregates). Strictly optional — the e2e
+    // error-boundary mocks fulfill with bare arrays and keep working
+    // through the memo fallback below.
+    if (res.ok && payload?.ok && payload.meta && typeof payload.meta === "object") {
+      const meta = payload.meta as { total?: unknown; stats?: Partial<WorkflowStats> };
+      if (typeof meta.total === "number") setTotal(meta.total);
+      if (meta.stats && typeof meta.stats.active === "number" && typeof meta.stats.runs === "number"
+        && typeof meta.stats.hours === "number" && typeof meta.stats.avgSuccessRate === "number") {
+        setServerStats(meta.stats as WorkflowStats);
+      }
+    }
   }
 
   async function compose(e: React.FormEvent) {
@@ -314,8 +353,19 @@ export function DashboardApp({
                 <WorkflowIcon className="w-4 h-4 text-violet" />
                 Workflows
               </h2>
-              <span className="text-xs text-white/60 font-body">{workflows.length} total</span>
+              <span className="text-xs text-white/60 font-body">{total} total</span>
             </div>
+
+            {/* Session 21 R1: the honest truncation note — the list is
+                capped at MAX_WORKFLOW_LIST (newest first); when the
+                workspace is larger, SAY so instead of silently hiding
+                the rest (the stats above remain TRUE — they ride the
+                server-side aggregate, not this visible subset). */}
+            {workflows.length > 0 && workflows.length < total && (
+              <p className="text-xs text-white/40 font-body">
+                Showing the {workflows.length} most recent of {total} workflows.
+              </p>
+            )}
 
             {workflows.length === 0 ? (
               <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-10 text-center">

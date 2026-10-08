@@ -49,7 +49,10 @@ echo "== smoke: boot production server on :$PORT =="
 # pattern — the new login-timing pins (14 POSTs) + the parallel race pin
 # (10 POSTs) lift the suite's auth-POST count to ~30; no auth-429 pin exists
 # in smoke (the newsletter + generate buckets own those trips).
-DATABASE_URL="$SMOKE_DB_URL" AUTH_SECRET="smoke-secret" AUTH_RATE_LIMIT_MAX=50 GENERATE_RATE_LIMIT_MAX=2 PORT=$PORT NODE_ENV=production \
+# WORKFLOW_RATE_LIMIT_MAX=2 (Session 21 R2): the workflow-create limiter
+# trips deterministically — the create + invalid-status POSTs consume the
+# bucket, so the Session-21 section's next POST answers the 429 envelope.
+DATABASE_URL="$SMOKE_DB_URL" AUTH_SECRET="smoke-secret" AUTH_RATE_LIMIT_MAX=50 GENERATE_RATE_LIMIT_MAX=2 WORKFLOW_RATE_LIMIT_MAX=2 PORT=$PORT NODE_ENV=production \
   node .next/standalone/server.js >/tmp/smoke-server.log 2>&1 &
 SERVER_PID=$!
 
@@ -222,6 +225,55 @@ check "patch valid name ok" "True" "$(echo "$RENAMED" | field "['ok']")"
 
 DELETED=$(curl -s -b /tmp/smoke-cookies.txt -X DELETE "$BASE/api/workflows/$WF_ID")
 check "workflow delete ok" "True" "$(echo "$DELETED" | field "['ok']")"
+
+echo "== smoke: Session 21 — the data-volume ceiling + creation limiter =="
+# R1 (the OUTPUT twin of the S20 request-size ceiling): seed 105 probe rows
+# for the demo user DIRECTLY into the smoke scratch DB (the suite's own
+# database — no API traffic, no limiter budget). The user now owns 111
+# workflows (6 seeded + 1 created - 1 deleted + 105 probe rows; 70 of the
+# probe rows active, 35 paused; every probe row runs:10 / hours:1 / 99.5).
+# The GET must cap the response at 100 rows while meta carries the TRUTH.
+DATABASE_URL="$SMOKE_DB_URL" node -e '
+const { PrismaClient } = require("@prisma/client");
+const p = new PrismaClient();
+(async () => {
+  const user = await p.user.findUnique({ where: { email: "demo@novaai.app" } });
+  const rows = Array.from({ length: 105 }, (_, i) => ({
+    userId: user.id,
+    name: "Probe workflow " + String(i + 1).padStart(3, "0"),
+    description: "A smoke probe row for the Session-21 ceiling pin.",
+    status: i % 3 === 0 ? "paused" : "active",
+    category: "Ops",
+    runs: 10,
+    successRate: 99.5,
+    timeSavedHours: 1,
+  }));
+  await p.workflow.createMany({ data: rows });
+  await p.$disconnect();
+})().catch((e) => { console.error(e.message); process.exit(1); });
+' || { say_fail "probe-row seeding"; }
+
+CAPPED=$(curl -s -b /tmp/smoke-cookies.txt "$BASE/api/workflows")
+check "workflows list ceiling caps the response at 100 rows" "100" "$(echo "$CAPPED" | python3 -c "import json,sys;print(len(json.load(sys.stdin)['data']))")"
+check "workflows list meta.total reports the TRUE count (111)" "111" "$(echo "$CAPPED" | field "['meta']['total']")"
+check "workflows list meta.stats.active is the honest aggregate (75)" "75" "$(echo "$CAPPED" | field "['meta']['stats']['active']")"
+check "workflows list meta.stats.runs is the honest aggregate (8170)" "8170" "$(echo "$CAPPED" | field "['meta']['stats']['runs']")"
+check "workflows list meta.stats.hours is the honest aggregate (265)" "265" "$(echo "$CAPPED" | field "['meta']['stats']['hours']")"
+CAPPED_CT=$(curl -s -o /dev/null -w '%{header_json}' -b /tmp/smoke-cookies.txt "$BASE/api/workflows" | python3 -c "import json,sys;h=json.load(sys.stdin);print(h.get('cache-control',[''])[0].lower())")
+check "capped list keeps the no-store directive" "private, no-store" "$CAPPED_CT"
+
+# R2 (the creation-frequency ceiling): the create + invalid-status POSTs
+# above consumed the smoke server's WORKFLOW_RATE_LIMIT_MAX=2 bucket — the
+# next POST answers the 429 envelope with the S15 Retry-After contract.
+RATE=$(curl -s -b /tmp/smoke-cookies.txt -X POST "$BASE/api/workflows" \
+  -H "Content-Type: application/json" -d '{"name":"Should not exist"}')
+check "workflow-create limiter trips (429) after the budget" "RATE_LIMITED" "$(echo "$RATE" | field "['error']['code']")"
+RATE_STATUS=$(curl -s -o /dev/null -w '%{http_code}' -b /tmp/smoke-cookies.txt -X POST "$BASE/api/workflows" \
+  -H "Content-Type: application/json" -d '{"name":"Should not exist either"}')
+check "workflow-create limiter answers 429" "429" "$RATE_STATUS"
+RATE_RA=$(curl -s -D - -o /dev/null -b /tmp/smoke-cookies.txt -X POST "$BASE/api/workflows" \
+  -H "Content-Type: application/json" -d '{"name":"Retry-after probe"}' | python3 -c "import sys;[print(l.split(':',1)[1].strip()) for l in sys.stdin if l.lower().startswith('retry-after')]" | head -1)
+if [ -n "$RATE_RA" ] && [ "$RATE_RA" -ge 1 ] 2>/dev/null; then say_pass "workflow-create 429 carries Retry-After ($RATE_RA s)"; else say_fail "workflow-create 429 carries Retry-After"; fi
 
 echo "== smoke: newsletter + demo =="
 NEWS=$(curl -s -X POST "$BASE/api/newsletter" -H "Content-Type: application/json" \

@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { DashboardApp } from "@/components/dashboard/dashboard-app";
 import { DashboardUnavailable } from "@/components/dashboard/dashboard-unavailable";
 import { routeMetadata } from "@/lib/seo";
+import { MAX_WORKFLOW_LIST, statsFromAggregate, type WorkflowStats } from "@/lib/workflow";
 
 // No live counterpart (the superset) — follow the app-wide per-route head
 // pattern (Session 6 F5).
@@ -33,15 +34,51 @@ export default async function DashboardPage() {
   }
   if (!user) redirect("/login?from_url=/dashboard");
 
+  // Session 21 R1 — the list ceiling (the OUTPUT twin of the S20
+  // request-size ceiling): the page fetch rides SQL
+  // `take: MAX_WORKFLOW_LIST` and the four stat cards move to
+  // server-side aggregates, so the numbers are TRUE at any volume from
+  // the first paint (a capped list without honest aggregates would
+  // silently summarize the visible subset). The queries join the
+  // EXISTING narrow try/catch — the S19 redirect-outside discipline.
   let workflows;
+  let totalWorkflows = 0;
+  let initialStats: WorkflowStats = { active: 0, runs: 0, hours: 0, avgSuccessRate: 100 };
   try {
-    workflows = await db.workflow.findMany({
-      where: { userId },
-      orderBy: [{ createdAt: "desc" }],
-    });
+    const where = { userId };
+    const [rows, total, active, agg] = await Promise.all([
+      db.workflow.findMany({
+        where,
+        orderBy: [{ createdAt: "desc" }],
+        take: MAX_WORKFLOW_LIST,
+      }),
+      db.workflow.count({ where }),
+      db.workflow.count({ where: { ...where, status: "active" } }),
+      db.workflow.aggregate({
+        where,
+        _sum: { runs: true, timeSavedHours: true },
+        _avg: { successRate: true },
+      }),
+    ]);
+    workflows = rows;
+    totalWorkflows = total;
+    initialStats = statsFromAggregate(
+      total,
+      active,
+      agg._sum.runs ?? 0,
+      agg._sum.timeSavedHours ?? 0,
+      agg._avg.successRate ?? null,
+    );
   } catch {
     return <DashboardUnavailable />;
   }
 
-  return <DashboardApp user={user} initialWorkflows={workflows} />;
+  return (
+    <DashboardApp
+      user={user}
+      initialWorkflows={workflows}
+      totalWorkflows={totalWorkflows}
+      initialStats={initialStats}
+    />
+  );
 }

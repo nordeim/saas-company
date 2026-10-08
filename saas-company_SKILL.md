@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.19.0 · **Last updated:** 2026-10-09 (Session 20 remediation)
+> **Version:** 2.20.0 · **Last updated:** 2026-10-09 (Session 21 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–20)
+## §12. Lessons Learnt (Sessions 1–21)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -825,6 +825,43 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     `/dashboard` HTTP status is 200 for ANY route (the 404 is the
     CLIENT-rendered view) — adjudicate on rendered content, not the
     status line.
+50. **Cap the OUTPUT side too — and pair every list ceiling with
+    honest aggregates** (Session 21): S20 capped what a request may
+    CARRY (the 128KB input ceiling), but the OUTPUT side was unbounded
+    — `GET /api/workflows` had no `take` (probed on a probe-only DB
+    with 400 seeded workflows: a 134.5KB response, the dashboard
+    mounting 400 article cards — 9,649 DOM nodes — while the runs
+    chart sliced to 8; the LIST rendered everything). The fix rides
+    SQL `take: MAX_WORKFLOW_LIST` in BOTH the route and the page query
+    (the wire-level cap, not a client slice) AND moves the stat cards
+    to server-side aggregates shipped as the envelope's additive
+    `meta` sibling of `data` — a capped list without honest aggregates
+    silently turns summary cards into subset summaries (a ceiling
+    that lies is worse than no ceiling); the `meta` field stays
+    strictly OPTIONAL in the client so every bare-array mock keeps
+    working; the capped UI states the truth ("Showing the 100 most
+    recent of N workflows."). And the audit question that found it:
+    survey what a response may RETURN, what a page query may FETCH,
+    and what the client may RENDER — the three legs of output volume,
+    each with its own ceiling seam.
+51. **Every mutation deserves a limiter — and detached probe servers
+    outlive their diagnostics** (Session 21): `POST /api/workflows`
+    was the ONLY unthrottled mutation in the app (auth, newsletter,
+    demo, and generate all carry limiters) — a script minted unbounded
+    rows with one tiny JSON POST each; the fix is the
+    `generateRateLimit` pattern (`workflowRateLimit(userId)`: 30 per
+    USER per 15 min, `WORKFLOW_RATE_LIMIT_MAX` override, the 429
+    envelope + Retry-After, ordered after the session gate and before
+    the body parse). Two survey-tooling companions: Playwright's
+    `context.cookies(url)` FILTERS Secure cookies on plain http —
+    127.0.0.1 is trustworthy for navigation (the cookie is sent) but
+    cookie ENUMERATION with a URL argument drops it (enumerate with no
+    arguments and match by name — the gotcha-30 family); and a
+    `setsid`-detached survey server OUTLIVES its diagnostic session —
+    the next runner's fresh boot on the same port hits a
+    silently-swallowed EADDRINUSE and probes the STALE build (the
+    gotcha-26/31 family's fourth member: kill detached servers
+    explicitly, or probe on fresh ports).
 
 ## §13. Pitfalls to Avoid
 

@@ -66,6 +66,7 @@ Audit `.next/standalone/.env` before copying the directory anywhere.
 | `ALLOW_REGISTRATION` | Optional | Set to the exact string `false` to close registration (Session 17 F3): `POST /api/auth/register` returns `403 REGISTRATION_CLOSED` and the login card shows "Registration is currently closed." Every other value (or unset) keeps registration OPEN — the default preserves the demo workspace story. Login stays open on a closed deployment — closing registration never locks out existing users. |
 | `AUTH_RATE_LIMIT_MAX` | Optional | Auth attempts (login + register) per IP per 15 minutes. Default 10; raise behind shared egress IPs. |
 | `GENERATE_RATE_LIMIT_MAX` | Optional | AI-composer generations per user per 15 minutes. Default 10. |
+| `WORKFLOW_RATE_LIMIT_MAX` | Optional | Workflow creations per user per 15 minutes (Session 21 R2) — the creation-frequency ceiling on `POST /api/workflows`, previously the only unthrottled mutation. Default 30; a 429 carries `Retry-After`. |
 
 ## 4. Database location
 

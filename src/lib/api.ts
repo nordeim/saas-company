@@ -17,13 +17,29 @@ import { db } from "./db";
  * (RFC 9111 permits heuristic storage of unmarked 200s by any cache).
  * `no-store` forbids all storage; `private` additionally fences shared
  * caches — belt and braces at the single seam every response shares.
+ *
+ * Session 21 R1: `ok()` gains an optional opts object — `{ headers, meta }`.
+ * `meta` lands as an additive TOP-LEVEL sibling of `data`
+ * (`{ ok: true, data, meta }`) so a capped list can carry the TRUE total
+ * and honest aggregates alongside the array (the output twin of the S20
+ * request-size ceiling: the capped GET /api/workflows ships
+ * `meta: { total, stats }`). Strictly optional: every consumer that
+ * reads `data` — including the e2e route-fulfilled mocks with bare
+ * arrays — is untouched; `ok(data)` alone emits NO meta key. The
+ * headers half mirrors `fail()`'s S15 extension.
  */
 const NO_STORE = "private, no-store";
 
-export function ok<T>(data: T, status = 200) {
-  return NextResponse.json({ ok: true as const, data }, {
+export function ok<T>(
+  data: T,
+  status = 200,
+  opts?: { headers?: Record<string, string>; meta?: Record<string, unknown> },
+) {
+  const body: Record<string, unknown> = { ok: true as const, data };
+  if (opts?.meta) body.meta = opts.meta;
+  return NextResponse.json(body, {
     status,
-    headers: { "Cache-Control": NO_STORE },
+    headers: { "Cache-Control": NO_STORE, ...opts?.headers },
   });
 }
 

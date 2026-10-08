@@ -145,15 +145,59 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 145/145 PASS
+- [ ] `npm run test` → 156/156 PASS
 - [ ] `npm run build` compiles clean
-- [ ] `./scripts/smoke-test.sh` → 94/94 PASS
+- [ ] `./scripts/smoke-test.sh` → 103/103 PASS
 - [ ] `npm run test:e2e` → 197/197 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 21 (2026-10-09) remediation** — see
+  `docs/remediation-plan-session21.md`: a data-volume audit (the first
+  systematic survey of the OUTPUT side of the wire — what a response may
+  RETURN, what a page query may FETCH, and what the client may RENDER;
+  the OUTPUT twin of S20's request-size survey) found and fixed two
+  defects: **the unbounded workflows list** (probed on a probe-only DB
+  with 400 seeded workflows: `GET /api/workflows` answered a **134.5KB
+  body** — `findMany` with no `take`, linear growth, no ceiling — and
+  the dashboard mounted **400 article cards (9,649 DOM nodes)**; now
+  `MAX_WORKFLOW_LIST = 100` rides SQL `take` in BOTH the GET route and
+  the dashboard page query, with the envelope gaining an additive
+  top-level `meta` sibling of `data` (`ok()` now accepts
+  `{ headers, meta }`): the capped GET ships `meta: { total, stats }`
+  — the TRUE total and the honest server-side aggregates via the pure
+  `statsFromAggregate()` — because a ceiling without honest aggregates
+  would silently turn the four stat cards into subset summaries; the
+  client consumes `meta` in `refresh()` with the list-derived memo as
+  the FALLBACK (the e2e error-boundary mocks fulfill with bare arrays
+  and keep working); the list header reads the TRUE total; a capped
+  workspace renders "Showing the 100 most recent of N workflows.";
+  re-probed: 100 rows / 33.7KB / `meta.total: 400` / 100 articles
+  (2,584 DOM nodes) — D95) and **the unthrottled workflow creation**
+  (`POST /api/workflows` was the ONLY unthrottled mutation in the app —
+  auth, newsletter, demo, and generate all carry limiters; now
+  `workflowRateLimit(userId)`: 30 creates per USER per 15 minutes,
+  `WORKFLOW_RATE_LIMIT_MAX` override, the 429 `RATE_LIMITED` envelope
+  with the S15 `Retry-After` contract — D96). ALSO: the standing
+  battery re-verified — word parity 1.0000 ×8 (reference UNCHANGED),
+  the mobile-nav byte-identical (7 rows × 44px, REAL tap; no Tailwind
+  v4 bug), D62 holds; adjudicated CLEAN with evidence: the PATCH
+  numeric-integrity layer (runs/successRate/timeSavedHours are
+  server-controlled, not patchable), the SEO static-asset layer
+  (og-image a real 1200×630 PNG; manifest valid; robots/sitemap the
+  honest superset semantics), the logging-hygiene layer (the probe
+  server's log after the full survey traffic: boot banner only, zero
+  PII), the hero-video layer (1.9MB, muted + playsInline), and the
+  dependency currency (the documented F10 chain only; majors-only).
+  Gate: **456 checks** (156 unit incl. the 11 meta/ceiling/limiter
+  pins + 197 e2e unchanged + 103 smoke incl. the 9 data-volume/creation
+  pins); 20 screenshots refreshed (VLM-verified ×5 — after adjudicating
+  the FOURTH check-prompt drift: the login chip's actual LIGHT
+  slate-100→200 gradient read against a prompt that said "gradient
+  slate").
 
 - **Session 20 (2026-10-09) remediation** — see
   `docs/remediation-plan-session20.md`: a method-and-payload audit (the
