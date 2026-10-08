@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (48) | 94 unit + 191 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (50) | 111 unit + 196 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -145,15 +145,53 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 94/94 PASS
+- [ ] `npm run test` → 111/111 PASS
 - [ ] `npm run build` compiles clean
-- [ ] `./scripts/smoke-test.sh` → 48/48 PASS
-- [ ] `npm run test:e2e` → 191/191 PASS (needs the build first)
+- [ ] `./scripts/smoke-test.sh` → 50/50 PASS
+- [ ] `npm run test:e2e` → 196/196 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 15 (2026-10-08) remediation** — see
+  `docs/remediation-plan-session15.md`: a REDIRECT-TARGET +
+  superset-a11y + external-dependency-hang + rate-limit-response
+  audit (four layers no prior session surveyed: WHERE a user-controlled
+  redirect parameter can ship the browser — the `from_url` open-redirect
+  class (CWE-601); the axe floor of the SUPERSET-only routes (D63's
+  live-parity adjudication covers live-mirrored routes only); the HANG
+  class for external deps — degrade-not-fail covers failures, not
+  hangs; and the 429 response headers the README promised but no route
+  emitted) found and fixed four defects: **the open redirect**
+  (`/login?from_url=https://evil.example/phish` shipped the
+  just-authenticated browser off-site — confirmed in the pre-fix
+  network log; now `safeRedirectPath` in `src/lib/validation.ts`:
+  prefix checks + a WHATWG dummy-origin re-parse, only same-site
+  absolute paths survive, everything else falls back to /dashboard —
+  D76, 12 unit cases + 3 auth pins incl. the legit /faq round-trip);
+  **the /demo heading-order violation** (the h1-only superset page put
+  the byte-pinned footer's first h3 after an h1 with no intervening h2;
+  now an sr-only h2 opens the form card — axe re-run: ZERO violations,
+  matching the dashboard — D77); **the SDK hang** (/api/workflows/generate
+  awaited the LLM SDK with no timeout; now the `withTimeout` seam in
+  `src/lib/workflow.ts` resolves with the deterministic template after
+  SDK_TIMEOUT_MS (10s) — a hang is a DEGRADE condition, a rejection
+  still propagates — D78, fake-timer unit pins); and **the missing
+  `Retry-After` header** (`fail()` now accepts response headers; all
+  four rate-limited sites emit `Retry-After: <sec>` on 429 — D79,
+  deterministic smoke trip of the newsletter bucket). ALSO: word
+  parity 1.0000 on all 8 routes (reference UNCHANGED), the mobile nav
+  byte-identical (no Tailwind v4 bug; live's burger D32-blocked), the
+  Session-11 probe's `navigateCloses: false` adjudicated a selector-typo
+  artifact (the corrected probe GREEN); one zombie-server recurrence
+  caught mid-survey — the chunk-against-disk check was BLIND (only JS
+  changed, so the CSS chunk name was unchanged) and ps//proc are
+  process-blind in this sandbox, so the survey moved to a FRESH PORT.
+  Gate: **357 checks** (111 unit + 196 e2e incl. the redirect-target
+  pins, the outline pin, and the reduced-motion /demo row + 50 smoke
+  incl. the Retry-After pins); 20 screenshots refreshed (VLM-verified).
 
 - **Session 14 (2026-10-08) remediation** — see
   `docs/remediation-plan-session14.md`: a FEATURE-REACHABILITY +

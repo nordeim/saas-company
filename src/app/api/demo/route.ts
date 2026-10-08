@@ -8,7 +8,9 @@ export async function POST(request: Request) {
   const ip = clientIpOf(request.headers);
   const limit = newsletterRateLimit(ip);
   if (!limit.allowed) {
-    return fail("RATE_LIMITED", "Too many attempts. Try again shortly.", 429);
+    return fail("RATE_LIMITED", "Too many attempts. Try again shortly.", 429, {
+      "Retry-After": String(limit.retryAfterSec),
+    });
   }
 
   let body: unknown;

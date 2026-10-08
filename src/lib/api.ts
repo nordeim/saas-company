@@ -5,15 +5,23 @@ import { db } from "./db";
 /**
  * Uniform API envelope: every route handler returns
  * `{ ok: true, data }` or `{ ok: false, error: { code, message } }`.
+ * The optional `headers` argument carries response-level metadata —
+ * the 429 sites use it for the machine-readable `Retry-After` signal
+ * (Session-15 F4).
  */
 export function ok<T>(data: T, status = 200) {
   return NextResponse.json({ ok: true as const, data }, { status });
 }
 
-export function fail(code: string, message: string, status: number) {
+export function fail(
+  code: string,
+  message: string,
+  status: number,
+  headers?: Record<string, string>,
+) {
   return NextResponse.json(
     { ok: false as const, error: { code, message } },
-    { status },
+    { status, headers },
   );
 }
 

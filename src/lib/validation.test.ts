@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { cleanString, isValidEmail, isValidPassword, requiredString } from "./validation";
+import {
+  cleanString,
+  isValidEmail,
+  isValidPassword,
+  requiredString,
+  safeRedirectPath,
+} from "./validation";
 
 describe("isValidEmail", () => {
   it.each(["a@b.co", "user.name+tag@example.co.uk", "  spaced@example.com  "])(
@@ -54,5 +60,45 @@ describe("requiredString", () => {
   it("carries the field name in the error", () => {
     const result = requiredString("", 10, "Name");
     if (!result.ok) expect(result.error).toContain("Name");
+  });
+});
+
+describe("safeRedirectPath (Session-15 F1: the from_url open-redirect guard)", () => {
+  it("falls back to /dashboard for missing and non-string values", () => {
+    expect(safeRedirectPath(null)).toBe("/dashboard");
+    expect(safeRedirectPath(undefined)).toBe("/dashboard");
+    expect(safeRedirectPath(123)).toBe("/dashboard");
+  });
+
+  it("falls back for empty and whitespace-only values", () => {
+    expect(safeRedirectPath("")).toBe("/dashboard");
+    expect(safeRedirectPath("   ")).toBe("/dashboard");
+  });
+
+  it("keeps internal absolute paths, with query and hash", () => {
+    expect(safeRedirectPath("/dashboard")).toBe("/dashboard");
+    expect(safeRedirectPath("/faq")).toBe("/faq");
+    expect(safeRedirectPath("/faq?x=1#z")).toBe("/faq?x=1#z");
+  });
+
+  it("trims padding before judging (browsers ignore leading whitespace)", () => {
+    expect(safeRedirectPath("  /dashboard  ")).toBe("/dashboard");
+  });
+
+  it.each([
+    "https://evil.example/phish",
+    "http://evil.example",
+    "//evil.example/phish",
+    "/\\evil.example/phish",
+    "javascript:alert(1)",
+    "data:text/html,hello",
+    "mailto:someone@example.com",
+  ])("rejects the external/absolute vector %s", (value) => {
+    expect(safeRedirectPath(value)).toBe("/dashboard");
+  });
+
+  it("rejects a relative-path value (no leading slash)", () => {
+    expect(safeRedirectPath("dashboard")).toBe("/dashboard");
+    expect(safeRedirectPath("faq?x=1")).toBe("/dashboard");
   });
 });

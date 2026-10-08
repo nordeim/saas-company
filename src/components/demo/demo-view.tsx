@@ -82,6 +82,13 @@ export function DemoView() {
           </div>
 
           <div className="border border-white/15 rounded-2xl bg-white/[0.02] p-6 md:p-10">
+            {/* The Session-15 F2 outline fix: the page's only heading was the
+                h1, so the byte-pinned footer's first h3 landed after it with
+                no intervening h2 (a heading-order violation on a SUPERSET
+                route — D63 parity adjudication covers live-mirrored routes
+                only). An sr-only h2 opens the form card: the outline reads
+                h1 → h2 → footer h3s with zero visual delta. */}
+            <h2 className="sr-only">Request a demo</h2>
             {done ? (
               <div
                 role="status"

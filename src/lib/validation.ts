@@ -37,3 +37,30 @@ export function requiredString(
 export function isValidPassword(value: unknown): value is string {
   return typeof value === "string" && value.length >= 8 && value.length <= 128;
 }
+
+/**
+ * A same-site redirect target (the CWE-601 guard for /login?from_url=):
+ * only internal, absolute-path references survive; every external or
+ * ambiguous spelling falls back to the dashboard.
+ *
+ * Belt and braces: the explicit prefix checks reject the known vectors
+ * (absolute URLs, protocol-relative `//`, the `/\` backslash-normalization
+ * trick, scheme-prefixed values), and a WHATWG parse against a dummy
+ * origin re-serializes whatever the browser's URL parser would do with
+ * the rest — any value whose origin escapes the dummy is external.
+ */
+export function safeRedirectPath(raw: unknown): string {
+  const fallback = "/dashboard";
+  if (typeof raw !== "string") return fallback;
+  const s = raw.trim();
+  if (!s.startsWith("/") || s.startsWith("//") || s.startsWith("/\\")) {
+    return fallback;
+  }
+  try {
+    const u = new URL(s, "http://localhost");
+    if (u.origin !== "http://localhost") return fallback;
+    return u.pathname + u.search + u.hash || fallback;
+  } catch {
+    return fallback;
+  }
+}

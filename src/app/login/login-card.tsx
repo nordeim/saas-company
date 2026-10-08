@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Lock, Mail } from "lucide-react";
+import { safeRedirectPath } from "@/lib/validation";
 
 type Mode = "signin" | "signup" | "forgot";
 
@@ -65,7 +66,7 @@ const BACK_FULL =
 export function LoginCard() {
   const router = useRouter();
   const params = useSearchParams();
-  const fromUrl = params.get("from_url") || "/dashboard";
+  const fromUrl = safeRedirectPath(params.get("from_url"));
 
   const [mode, setMode] = useState<Mode>("signin");
   const [email, setEmail] = useState("");

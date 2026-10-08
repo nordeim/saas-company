@@ -2,8 +2,10 @@ import { ok, fail } from "@/lib/api";
 import { requireSession } from "@/lib/api";
 import { requiredString } from "@/lib/validation";
 import {
+  SDK_TIMEOUT_MS,
   sanitizeGeneratedWorkflow,
   templateWorkflow,
+  withTimeout,
 } from "@/lib/workflow";
 
 /**
@@ -32,18 +34,26 @@ export async function POST(request: Request) {
   try {
     const { default: ZAI } = await import("z-ai-web-dev-sdk");
     const zai = await ZAI.create();
-    const completion = await zai.chat.completions.create({
-      messages: [
-        {
-          role: "system",
-          content:
-            'You turn one-line automation ideas into workflow definitions. Reply with ONLY minified JSON of shape {"name": string (<= 60 chars), "description": string (one sentence, <= 220 chars), "category": one of "Marketing" | "Sales" | "Engineering" | "Ops" | "Finance" | "Support"}. No prose, no markdown fences.',
-        },
-        { role: "user", content: idea.value },
-      ],
-      thinking: { type: "disabled" },
-    });
-    const text = completion.choices[0]?.message?.content ?? "";
+    // Session-15 F3: the SDK call gains a hang ceiling — a black-holed
+    // connection resolves with null after SDK_TIMEOUT_MS and flows into
+    // the "" → parse-throw → catch → template path below (the route's
+    // structure is unchanged; only the await gains a timeout).
+    const completion = await withTimeout(
+      zai.chat.completions.create({
+        messages: [
+          {
+            role: "system",
+            content:
+              'You turn one-line automation ideas into workflow definitions. Reply with ONLY minified JSON of shape {"name": string (<= 60 chars), "description": string (one sentence, <= 220 chars), "category": one of "Marketing" | "Sales" | "Engineering" | "Ops" | "Finance" | "Support"}. No prose, no markdown fences.',
+          },
+          { role: "user", content: idea.value },
+        ],
+        thinking: { type: "disabled" },
+      }),
+      SDK_TIMEOUT_MS,
+      () => null as Awaited<ReturnType<typeof zai.chat.completions.create>> | null,
+    );
+    const text = completion?.choices[0]?.message?.content ?? "";
     const jsonText = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
     const parsed: unknown = JSON.parse(jsonText);
     const sanitized = sanitizeGeneratedWorkflow(parsed, idea.value);

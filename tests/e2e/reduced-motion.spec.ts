@@ -99,4 +99,26 @@ test.describe("reduced motion (Session-14 F4)", () => {
     const heading = page.getByRole("heading", { name: "Questions? We've Got Answers" });
     await expect(heading).toBeVisible();
   });
+
+  test("(d) the /demo form renders visible (Session-15 F5 — the newest Reveal surface)", async ({ page }) => {
+    await page.goto("/demo");
+    await page.waitForLoadState("domcontentloaded");
+    await page.waitForTimeout(1200);
+    // The h1 + the form settle instantly under reduced motion — no
+    // scrolling needed to reveal them (the settle() early-return
+    // contract; walk the form's whole ancestor chain for any opacity
+    // below 1, the Reveal wrapper included).
+    await expect(page.getByRole("heading", { name: "Book a Demo" })).toBeVisible();
+    const chainVisible = await page.evaluate(() => {
+      const form = document.querySelector("main form");
+      if (!form) return false;
+      let el: HTMLElement | null = form as HTMLElement;
+      while (el && el !== document.body) {
+        if (getComputedStyle(el).opacity !== "1") return false;
+        el = el.parentElement;
+      }
+      return true;
+    });
+    expect(chainVisible).toBe(true);
+  });
 });

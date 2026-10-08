@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.13.0 · **Last updated:** 2026-10-08 (Session 14 remediation)
+> **Version:** 2.14.0 · **Last updated:** 2026-10-08 (Session 15 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–14)
+## §12. Lessons Learnt (Sessions 1–15)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -605,6 +605,41 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     string; and the browser's own 404-document resource log is inherent
     noise on BOTH sides (the live's 404 console ships two 401s — parity
     adjudication, not an app bug).
+38. **Guard WHERE a user-controlled redirect can ship the browser —
+    and pin the docs-truth layer** (Session 15): any query param that
+    becomes a post-auth `router.push` target is an OPEN REDIRECT
+    (CWE-601) until proven otherwise — `/login?from_url=https://…`
+    genuinely shipped the just-authenticated browser off-site (the
+    pre-fix probe's network log carried the external `?_rsc=…`
+    request). The guard (`safeRedirectPath`): prefix checks (`//`,
+    `/\`, non-`/`) + a WHATWG dummy-origin re-parse; only same-site
+    absolute paths survive, everything else falls back to a known-safe
+    internal page. Pin the honest use case TOO (`from_url=/faq`
+    round-trips) or the guard silently breaks the feature it protects.
+    Same session: README promised `Retry-After` on 429s that no route
+    emitted — survey the DOCS layer for claims the code doesn't keep,
+    and pin them where the docs make them (the smoke layer for HTTP
+    headers).
+39. **A hang is not a failure — and a JS-only rebuild blinds the
+    chunk-against-disk zombie check** (Session 15): ADR-004's
+    degrade-not-fail covers SDK FAILURES, not hangs — a black-holed
+    `await` blocks the request forever with the UI's busy guard
+    engaged and no error ever arrives to trigger the catch. Every
+    external await needs a timeout that RESOLVES with the fallback
+    (the deterministic template), while genuine rejections still
+    PROPAGATE — two different contracts, deliberately distinct.
+    Related tooling traps: (a) the Bash output layer can SWALLOW
+    `[m`-style character pairs from file contents — `const [mode,
+    setMode]` displayed as `const ode, setMode]` and looked like a
+    syntax error while tsc/esbuild/build were all green (hex-dump
+    before believing a "corrupt" file); (b) the zombie-server
+    chunk-against-disk discipline is BLIND when only JS changed (the
+    CSS chunk name is content-hashed and unchanged — the old process
+    served FRESH static HTML from disk while hydrating it with its own
+    STALE in-memory JS, and its exhausted in-memory rate buckets
+    turned every probe into a lie) — when ps//proc are process-blind,
+    move the survey to a FRESH PORT with a fresh boot instead of
+    trusting a reboot.
 
 ## §13. Pitfalls to Avoid
 

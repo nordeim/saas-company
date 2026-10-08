@@ -19,16 +19,16 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (94 checks) | `npm run test` |
-| Browser E2E (191 checks; needs a build) | `npm run test:e2e` |
+| Unit tests (111 checks) | `npm run test` |
+| Browser E2E (196 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
-| End-to-end smoke suite (48 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
+| End-to-end smoke suite (50 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (94/94) → `npm run build` → `./scripts/smoke-test.sh` (48/48)
-→ `npm run test:e2e` (191/191) — 333 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (111/111) → `npm run build` → `./scripts/smoke-test.sh` (50/50)
+→ `npm run test:e2e` (196/196) — 357 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -303,6 +303,30 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    compare parsed milliseconds, never the string; and the browser's
    own 404-document resource log is inherent noise on BOTH sides (the
    live's 404 ships two 401s — the D68 parity family).
+29. **Guard WHERE a user-controlled redirect can ship the browser — and
+   a hang is not a failure** (Session 15): any query param that becomes
+   a post-auth `router.push` target is an OPEN REDIRECT (CWE-601) until
+   proven otherwise — `/login?from_url=https://evil.example/phish`
+   genuinely shipped the just-authenticated browser off-site (the
+   network log carried `?_rsc=…`). The guard (`safeRedirectPath`):
+   prefix checks + a WHATWG dummy-origin re-parse; only same-site
+   absolute paths survive (D76). Likewise the HANG class: ADR-004's
+   degrade-not-fail covers SDK FAILURES, not hangs — a black-holed
+   `await` blocks the request forever with the UI's busy guard
+   engaged; every external await needs a timeout that RESOLVES with
+   the fallback (a hang is a degrade condition; a rejection still
+   propagates — D78). And survey the DOCS-TRUTH layer: README promised
+   `Retry-After` on 429s that no route emitted (D79) — pin what the
+   docs claim. Related traps this session: the Bash output layer can
+   SWALLOW `[m`-style character pairs from file contents (a
+   `const [mode, setMode]` line DISPLAYED as `const ode, setMode]` —
+   looked like a syntax error while tsc/esbuild/build were all green;
+   hex-dump before believing a "corrupt" file), and the
+   chunk-against-disk zombie check is BLIND when only JS changed (the
+   CSS chunk name is content-hashed and the CSS was untouched — the
+   old process served fresh static HTML from disk with its own stale
+   hydrated JS; when ps//proc are process-blind, move the survey to a
+   FRESH PORT with a fresh boot instead of trusting a reboot).
 
 ## Architecture invariants
 

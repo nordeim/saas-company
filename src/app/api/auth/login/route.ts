@@ -13,6 +13,7 @@ export async function POST(request: Request) {
       "RATE_LIMITED",
       `Too many attempts. Try again in ${limit.retryAfterSec}s.`,
       429,
+      { "Retry-After": String(limit.retryAfterSec) },
     );
   }
 

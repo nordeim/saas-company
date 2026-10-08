@@ -56,3 +56,31 @@ export function sanitizeGeneratedWorkflow(
   void idea;
   return { name, description, category };
 }
+
+/**
+ * The SDK hang ceiling (Session-15 F3): ADR-004's "degrade, never fail"
+ * covers SDK FAILURES but not SDK HANGS — a black-holed connection left
+ * POST /api/workflows/generate blocked indefinitely with the composer's
+ * busy guard engaged. A hang is a DEGRADE condition, not a failure: the
+ * timer resolves with the fallback (the deterministic template) instead
+ * of throwing, while a genuine rejection still propagates so the
+ * caller's existing catch owns the failure class. The timer is cleared
+ * on settle — no dangling handle holds the process.
+ */
+export const SDK_TIMEOUT_MS = 10_000;
+
+export async function withTimeout<T>(
+  promise: Promise<T>,
+  ms: number,
+  fallback: () => T,
+): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timedOut = new Promise<T>((resolve) => {
+    timer = setTimeout(() => resolve(fallback()), ms);
+  });
+  try {
+    return await Promise.race([promise, timedOut]);
+  } finally {
+    clearTimeout(timer);
+  }
+}

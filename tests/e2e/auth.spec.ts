@@ -120,3 +120,43 @@ test.describe("login page", () => {
     ).toBeVisible();
   });
 });
+
+test.describe("from_url redirect-target guard (Session-15 F1: the open-redirect fix)", () => {
+  // The card used to push the raw from_url param after sign-in — an
+  // attacker-crafted /login?from_url=https://evil.example/phish shipped
+  // the just-authenticated browser to the attacker's host (CWE-601;
+  // probed empirically pre-fix: the network log carried
+  // https://evil.example/phish?_rsc=…). The guard: only same-site
+  // absolute paths survive; everything else falls back to /dashboard.
+  test("(a) an absolute-URL target falls back to the dashboard", async ({ page }) => {
+    const externals: string[] = [];
+    page.on("request", (req) => {
+      const u = req.url();
+      if (!u.startsWith("http://localhost")) externals.push(u);
+    });
+    await page.goto("/login?from_url=https://evil.example/phish");
+    await page.getByLabel("Email").fill(DEMO_EMAIL);
+    await page.getByLabel("Password").fill(DEMO_PASSWORD);
+    await page.getByRole("button", { name: "Sign in", exact: true }).click();
+    await expect(page).toHaveURL(/\/dashboard$/, { timeout: 15_000 });
+    await expect(page.getByRole("heading", { name: /Compose a workflow with AI/i })).toBeVisible();
+    expect(externals).toEqual([]);
+  });
+
+  test("(b) the protocol-relative variant is guarded too", async ({ page }) => {
+    await page.goto("/login?from_url=//evil.example/phish");
+    await page.getByLabel("Email").fill(DEMO_EMAIL);
+    await page.getByLabel("Password").fill(DEMO_PASSWORD);
+    await page.getByRole("button", { name: "Sign in", exact: true }).click();
+    await expect(page).toHaveURL(/\/dashboard$/, { timeout: 15_000 });
+  });
+
+  test("(c) a legit internal from_url round-trips to its page", async ({ page }) => {
+    await page.goto("/login?from_url=/faq");
+    await page.getByLabel("Email").fill(DEMO_EMAIL);
+    await page.getByLabel("Password").fill(DEMO_PASSWORD);
+    await page.getByRole("button", { name: "Sign in", exact: true }).click();
+    await expect(page).toHaveURL(/\/faq$/, { timeout: 15_000 });
+    await expect(page.getByRole("heading", { name: "Questions? We've Got Answers" })).toBeVisible();
+  });
+});

@@ -142,6 +142,29 @@ DEMO=$(curl -s -X POST "$BASE/api/demo" -H "Content-Type: application/json" \
   -d '{"name":"Smoke","email":"smoke@example.com","plan":"pro"}')
 check "demo request ok" "True" "$(echo "$DEMO" | field "['ok']")"
 
+# Session-15 F4: the 429 contract carries the machine-readable Retry-After
+# header (README's troubleshooting documents it; pre-fix NO route emitted
+# it). Trip the newsletter limiter deterministically — the fresh process
+# has already consumed 3 of the 5-POST/10-min news bucket (subscribe,
+# invalid-email, demo); two more land the bucket at its ceiling and the
+# sixth POST returns 429. The auth bucket is separate, so the suite's
+# login-dependent checks above and below are unaffected.
+for _ in 1 2; do
+  curl -s -o /dev/null -X POST "$BASE/api/newsletter" -H "Content-Type: application/json" \
+    -d '{"email":"smoke-reader@example.com"}'
+done
+RATE_CODE=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BASE/api/newsletter" \
+  -H "Content-Type: application/json" -d '{"email":"smoke-reader@example.com"}')
+check "newsletter rate limit engages (429 on the 6th POST)" "429" "$RATE_CODE"
+RATE_HEADERS=$(curl -s -D - -o /dev/null -X POST "$BASE/api/newsletter" \
+  -H "Content-Type: application/json" -d '{"email":"smoke-reader@example.com"}')
+RETRY_AFTER=$(echo "$RATE_HEADERS" | grep -i '^retry-after:' | tr -d '\r' | awk '{print $2}')
+if [ -n "$RETRY_AFTER" ] && [ "$RETRY_AFTER" -gt 0 ] 2>/dev/null; then
+  say_pass "429 carries a positive Retry-After header (${RETRY_AFTER}s)"
+else
+  say_fail "429 carries a positive Retry-After header (got '${RETRY_AFTER}')"
+fi
+
 echo "== smoke: pages =="
 for PATH_ROUTE in / /login /demo /faq /privacy /terms /accessibility /refund-policy; do
   CODE=$(curl -s -o /dev/null -w '%{http_code}' "$BASE$PATH_ROUTE")

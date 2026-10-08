@@ -6,7 +6,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?logo=tailwindcss)
 ![Prisma](https://img.shields.io/badge/Prisma-6-2d3748?logo=prisma)
 ![SQLite](https://img.shields.io/badge/DB-SQLite-003b57?logo=sqlite)
-![Tests](https://img.shields.io/badge/tests-333_checks_passing-2ecc8a)
+![Tests](https://img.shields.io/badge/tests-357_checks_passing-2ecc8a)
 
 A production-grade, self-hosted clone of the reference dark-theme SaaS
 marketing site [`saas-company.base44.app`](https://saas-company.base44.app/)
@@ -25,7 +25,7 @@ verbatim copy) and then goes further: cookie-session auth, a workflow
 workspace with an AI composer (`z-ai-web-dev-sdk` with a deterministic
 fallback), newsletter + demo-request capture, sitemap/robots, a health
 probe, Lenis smooth scrolling, per-route SEO metadata with a working og-image + web app
-manifest, and 333 automated checks across three test layers.
+manifest, and 357 automated checks across three test layers.
 
 | Dashboard | Landing hero |
 |:---:|:---:|
@@ -41,11 +41,11 @@ manifest, and 333 automated checks across three test layers.
 |---------|-------------|
 | 🎬 **Faithful landing page** | Looping AI-video hero with the shimmer-bordered beta badge and animated gradient heading, dashboard mockup with the browser-chrome skeleton, trusted-by logo cloud (serif wordmarks), problem cards, "One Platform" showcase, white features tabs, how-it-works steps, pricing (Monthly/Annual — **defaults to Annual like the reference**: Pro $39/mo annual, $49/mo monthly, "Save 20%"), testimonial drag-strip, CTA, and the four-column footer |
 | 🧭 **Reference chrome** | Fixed transparent nav with the center pill (md+), LOG IN + white Get Started pill, and the measured mobile burger dropdown (black/95 blur panel, 44px rows) — the nav is **section-aware** like the reference: scroll-spy highlights the section in view (white/30 pill on dark, black/15 on light) and the chrome swaps to black variants over the white features section; plus the slate login card (light body theme + system font, exactly as the reference's login bundle) and light 404 |
-| 🔐 **Cookie-session auth** | scrypt password hashing + HMAC-signed sessions, per-IP rate limiting on auth endpoints (10/15 min), register/login/logout/me — sign-up lands straight in the workspace |
+| 🔐 **Cookie-session auth** | scrypt password hashing + HMAC-signed sessions, per-IP rate limiting on auth endpoints (10/15 min) with machine-readable `Retry-After` headers on 429s, register/login/logout/me — sign-up lands straight in the workspace, and the post-login redirect only ever targets same-site paths (the `from_url` open-redirect guard) |
 | ⚡ **Workflow dashboard (superset)** | The reference's "Dashboard" demo link 404s — here it's real: stats cards, a workflow list with pause/resume/delete, a runs chart, and an AI composer that drafts workflows from one-line ideas (server-side SDK + deterministic fallback, sanitized before persistence) |
 | 📰 **Working capture forms** | Footer newsletter subscribe (idempotent upsert) and a first-class **/demo Book-a-Demo page** (dark-brand form mirroring the API's validation, with the composer's fault contract and a polite screen-reader confirmation — the formerly-unreachable demo API's front half, listed in the sitemap) |
 | ❓ **Interactive FAQ + legal** | The reference's six-question accordion and four legal pages, copy captured verbatim |
-| 🧪 **333 automated checks** | 94 Vitest unit checks (pure domain seams incl. the SEO helpers, the motion engine, and the rate-limit override), 191 Playwright browser checks (incl. the mobile-navigation, navbar scroll-behavior, per-tab features-card, login-theme, login alternate-states, brand-parity, section-parity, head-metadata, typography-parity, motion-parity, palette-parity, mockup-motion-parity, hydration-health, resource-hygiene, fault-resilience, session-lifecycle, error-boundary, demo-reachability, and reduced-motion suites), 48 curl smoke checks against the production build (incl. the four security-header pins, the asset-caching pin, the PATCH name-contract pins, the lazy-img no-preload contract, and the /demo page pin) |
+| 🧪 **357 automated checks** | 111 Vitest unit checks (pure domain seams incl. the SEO helpers, the motion engine, the rate-limit override, the redirect-target guard, and the SDK hang seam), 196 Playwright browser checks (incl. the mobile-navigation, navbar scroll-behavior, per-tab features-card, login-theme, login alternate-states, brand-parity, section-parity, head-metadata, typography-parity, motion-parity, palette-parity, mockup-motion-parity, hydration-health, resource-hygiene, fault-resilience, session-lifecycle, error-boundary, demo-reachability, reduced-motion, and redirect-target suites), 50 curl smoke checks against the production build (incl. the four security-header pins, the asset-caching pin, the PATCH name-contract pins, the lazy-img no-preload contract, the /demo page pin, and the 429 Retry-After pin) |
 | 🛡️ **Production headers** | The reference's security posture — `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Strict-Transport-Security` — emitted via `next.config.ts` and pinned by the smoke suite, plus the reference CDN's asset caching (`public, max-age=604800` on `public/` assets) |
 | 🔎 **Per-route SEO head parity** | The reference's per-route `<head>` pattern — "X | SAAS Company" og:titles, "X on SAAS Company. …" descriptions, per-route og:url/canonical, a web app manifest — plus a WORKING self-hosted og-image (the live's own URL 404s); assembled in `src/lib/seo.ts` (`routeMetadata`) and pinned by the head-metadata e2e suite |
 | 🌗 **Measured design system** | Tailwind v4 CSS-first tokens: #000 canvas, #8624FF primary, #0055FF accent, #D500FF violet, self-hosted **Google Fonts' "Vend Sans" variable font** (wght 300-700 — the exact gstatic bytes the reference serves; Session 5 font forensics replaced the Session-1 Wix Madefor misidentification), the reference's keyframes (organic-gradient, border-shimmer, logo petals, marquee) |
@@ -146,10 +146,10 @@ Open <http://localhost:3000>, then sign in to the dashboard at
 curl http://localhost:3000/api/health
 # {"ok":true,"data":{"status":"ok","app":"saas-company","ts":"…"}}
 
-# Full verification (333 checks across three layers)
-npm run lint && npm run typecheck && npm run test   # 94 unit checks
-npm run build && ./scripts/smoke-test.sh            # 48 smoke checks
-npm run test:e2e                                    # 191 browser checks
+# Full verification (357 checks across three layers)
+npm run lint && npm run typecheck && npm run test   # 111 unit checks
+npm run build && ./scripts/smoke-test.sh            # 50 smoke checks
+npm run test:e2e                                    # 196 browser checks
 ```
 
 ### Production
@@ -220,9 +220,9 @@ inline); the login card and 404 page run the reference's light slate theme.
 ## Testing
 
 ```bash
-npm run test              # unit — 94 checks on the pure domain seams
-npm run test:e2e          # Playwright — 180 browser checks (needs a build)
-./scripts/smoke-test.sh   # curl E2E — 47 checks against the production build
+npm run test              # unit — 111 checks on the pure domain seams
+npm run test:e2e          # Playwright — 196 browser checks (needs a build)
+./scripts/smoke-test.sh   # curl E2E — 50 checks against the production build
 ```
 
 The unit layer pins the pure logic: pricing math (plans, the 20% annual
@@ -255,7 +255,7 @@ data.
 |---------|-------|-----|
 | `Error code 14: Unable to open the database file` | Server started with an inherited/absolute `DATABASE_URL` pointing elsewhere | Start via `npm run dev`/`npm run start`, or unset the exported variable; scripts pin their own `DATABASE_URL` |
 | Prisma `P1003` / missing tables | Database not initialized | `npm run db:push && npm run db:seed` |
-| Login suddenly returns 429 | Per-IP rate limit engaged (10 attempts / 15 min) | Wait for the window (see `Retry-After`) or restart the server |
+| Login suddenly returns 429 | Per-IP rate limit engaged (10 attempts / 15 min) | Wait for the window — the response carries a machine-readable `Retry-After` header (seconds) alongside the message |
 | "Continue with Google" shows a notice instead of signing in | Expected — the self-hosted clone carries no OAuth credentials (documented deviation) | Use email sign-in |
 | Fonts differ from the reference | The UI font is self-hosted Google "Vend Sans" (variable 300-700) from `src/fonts/` — the same gstatic bytes the live serves | Keep the `@font-face` blocks in `globals.css` intact |
 | `oklab(...)` colors in computed styles | Tailwind v4 serializes alpha colors through oklab — rendering-identical to rgba | Expected; assertions accept either spelling |
@@ -268,6 +268,7 @@ data.
 | A page shows the dark "Something went wrong" card | The branded render-fault boundary: a client-side render error (e.g. malformed API data) surfaces the recovery card with Try again + Go to home — never the unbranded default error page (Session 13) | Click Try again (restores the page); if it persists, check the API/console for the underlying fault |
 | Visiting `/login` while signed in lands on `/dashboard` | The authenticated-navigation gate: a user who already holds a session and asks for `/login` is redirected to the workspace — the honest contract every production auth system upholds (Session 14) | Intended; sign out first if you want the login card |
 | `/demo` renders a Book-a-Demo form | The demo-request superset surface — the front half of the demo capture API (the live reference 404s /demo; this page is a deliberate extension) | Submit the form to persist a demo request; rate-limited like the newsletter |
+| Signing in from `/login?from_url=…` with an external URL lands on `/dashboard` | The open-redirect guard (CWE-601): only same-site absolute paths survive the `from_url` parameter — absolute URLs, protocol-relative `//…`, and backslash variants all fall back to the dashboard | Intended (Session 15); internal paths like `from_url=/faq` round-trip normally |
 
 ## License
 

@@ -109,4 +109,31 @@ test.describe("/demo (Session-14 F1: the reachable demo-request surface)", () =>
     expect(xml).toContain("<loc>");
     expect(xml).toMatch(/\/demo<\/loc>/);
   });
+
+  test("(g) the page's heading outline is valid (Session-15 F2: no h1→h3 skip)", async ({ page }) => {
+    // /demo is a SUPERSET route (the live 404s it) — its a11y floor is
+    // axe-clean, not live-parity-adjudicated (D63 covers live-mirrored
+    // routes only). Pre-fix the page's only heading was the h1, so the
+    // byte-pinned footer's first h3 ("Product") landed after an h1 with
+    // no intervening h2 — a heading-order violation (moderate). The fix:
+    // an sr-only h2 opens the form card; the outline must read
+    // h1 → h2 → the four footer h3s.
+    await page.goto("/demo");
+    await page.waitForLoadState("domcontentloaded");
+    const outline = await page.evaluate(() =>
+      [...document.querySelectorAll("h1, h2, h3, h4, h5, h6")].map((h) => ({
+        tag: h.tagName,
+        text: (h.textContent || "").trim(),
+        visuallyHidden: h.classList.contains("sr-only"),
+      })),
+    );
+    expect(outline).toEqual([
+      { tag: "H1", text: "Book a Demo", visuallyHidden: false },
+      { tag: "H2", text: "Request a demo", visuallyHidden: true },
+      { tag: "H3", text: "Product", visuallyHidden: false },
+      { tag: "H3", text: "Legal", visuallyHidden: false },
+      { tag: "H3", text: "Social", visuallyHidden: false },
+      { tag: "H3", text: "Subscribe", visuallyHidden: false },
+    ]);
+  });
 });

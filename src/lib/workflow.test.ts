@@ -1,9 +1,11 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
+  SDK_TIMEOUT_MS,
   WORKFLOW_CATEGORIES,
   isWorkflowStatus,
   sanitizeGeneratedWorkflow,
   templateWorkflow,
+  withTimeout,
 } from "./workflow";
 
 describe("templateWorkflow (deterministic fallback)", () => {
@@ -73,5 +75,55 @@ describe("status vocabulary", () => {
 
   it("keeps the category list stable", () => {
     expect(WORKFLOW_CATEGORIES).toHaveLength(6);
+  });
+});
+
+describe("withTimeout (Session-15 F3: the SDK hang guard)", () => {
+  it("passes a fast resolution straight through", async () => {
+    const p = withTimeout(Promise.resolve("draft"), SDK_TIMEOUT_MS, () => "template");
+    await expect(p).resolves.toBe("draft");
+  });
+
+  it("resolves with the fallback when the timer fires first", async () => {
+    vi.useFakeTimers();
+    try {
+      let settle: (v: string) => void = () => {};
+      const hung = new Promise<string>((resolve) => {
+        settle = resolve;
+      });
+      const p = withTimeout(hung, 10_000, () => "template");
+      const assertion = expect(p).resolves.toBe("template");
+      await vi.advanceTimersByTimeAsync(10_001);
+      await assertion;
+      settle("late"); // the hung promise settling later changes nothing
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("propagates a rejection (the caller's catch owns the failure class)", async () => {
+    const p = withTimeout(Promise.reject(new Error("sdk down")), SDK_TIMEOUT_MS, () => "template");
+    await expect(p).rejects.toThrow("sdk down");
+  });
+
+  it("clears the timer on settle (no dangling handle)", async () => {
+    vi.useFakeTimers();
+    try {
+      let timerFiredFallback = false;
+      const p = withTimeout(Promise.resolve("fast"), 10_000, () => {
+        timerFiredFallback = true;
+        return "template";
+      });
+      await p;
+      await vi.advanceTimersByTimeAsync(60_000);
+      expect(timerFiredFallback).toBe(false);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("exposes a sane SDK ceiling (10s, not minutes)", () => {
+    expect(SDK_TIMEOUT_MS).toBeGreaterThan(1_000);
+    expect(SDK_TIMEOUT_MS).toBeLessThanOrEqual(30_000);
   });
 });
