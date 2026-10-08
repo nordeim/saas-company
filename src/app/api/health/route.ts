@@ -1,4 +1,4 @@
-import { ok } from "@/lib/api";
+import { ok, apiRoute } from "@/lib/api";
 import { db } from "@/lib/db";
 import { withTimeout } from "@/lib/workflow";
 
@@ -21,6 +21,10 @@ import { withTimeout } from "@/lib/workflow";
  * existing contract surfaces (ok / status / app) are unchanged.
  */
 export async function GET() {
+  // Session 19 F1: uniform crash-path coverage (the handler's own probe
+  // try/catch already resolves every failure — the wrapper is the
+  // unconditional belt: nothing here can escape to a bare 500).
+  return apiRoute(async () => {
   let dbState: "up" | "down" = "up";
   try {
     // Timeout resolves null (down); a rejection propagates to the catch
@@ -35,5 +39,6 @@ export async function GET() {
     app: "saas-company",
     ts: new Date().toISOString(),
     db: dbState,
+  });
   });
 }

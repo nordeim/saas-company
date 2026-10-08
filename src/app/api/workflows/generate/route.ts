@@ -1,4 +1,4 @@
-import { ok, fail } from "@/lib/api";
+import { ok, fail, apiRoute } from "@/lib/api";
 import { requireSession } from "@/lib/api";
 import { generateRateLimit } from "@/lib/rate-limit";
 import { requiredString } from "@/lib/validation";
@@ -26,6 +26,9 @@ import {
  * the feature still never hard-fails — the limiter only caps the LLM spend.
  */
 export async function POST(request: Request) {
+  // Session 19 F1: the crash-path envelope (the SDK's own degrade path
+  // still fires first — this only formats what escapes).
+  return apiRoute(async () => {
   const guard = await requireSession();
   if (!guard.user) return guard.response;
 
@@ -82,4 +85,5 @@ export async function POST(request: Request) {
   }
 
   return ok(generated);
+  });
 }

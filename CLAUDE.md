@@ -145,15 +145,48 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 132/132 PASS
+- [ ] `npm run test` → 137/137 PASS
 - [ ] `npm run build` compiles clean
-- [ ] `./scripts/smoke-test.sh` → 66/66 PASS
+- [ ] `./scripts/smoke-test.sh` → 79/79 PASS
 - [ ] `npm run test:e2e` → 197/197 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 19 (2026-10-08) remediation** — see
+  `docs/remediation-plan-session19.md`: a crash-path-honesty audit (the
+  first systematic survey of what the wire carries when a route's
+  dependencies CRASH, not merely when input is wrong — plus the
+  server-component half of the S13 branded-boundary goal) found and
+  fixed two defects: **the crash-path envelope violation** (probed
+  with an unwritable DATABASE_URL: SEVEN endpoints answered a BARE 500
+  with an EMPTY body and NO content-type — login, register,
+  newsletter, demo, me-with-session, workflows GET/POST — violating
+  the invariant "no route returns bare JSON" on exactly the worst-day
+  paths; now `apiRoute()` in `src/lib/api.ts` wraps every exported
+  handler in all 10 route files: what escapes becomes the
+  INTERNAL_ERROR envelope AND the stack is RESTORED to fd 2 — Next
+  only logs UNhandled route errors, so catching without re-logging
+  would REMOVE the operator's stack; classification inside handlers
+  untouched — D91) and **the unbranded server-crash page** (the
+  dashboard page's own DB failure answered Next's `__next_error__`
+  document; now two NARROW try/catch blocks — deliberately narrow:
+  `redirect()` throws a control error a wide catch would swallow,
+  breaking the S14 authenticated gate — render the branded
+  `dashboard-unavailable.tsx` degraded view, status 200 by design
+  (the S18 health-probe pattern; `/api/health`'s `db` field owns the
+  alerting) — D92). ALSO: the dependency-currency layer adjudicated
+  CLEAN (npm audit: the documented F10 chain only; npm outdated:
+  majors only); the standing battery re-verified (word parity 1.0000
+  ×8, mobile-nav byte-identical, D62); two survey-tooling lessons:
+  the zombie-port trap recurred AND a survey script that DEFAULTS its
+  probe port evaluated the zombie while its runner booted a healthy
+  server elsewhere (pass base URLs EXPLICITLY — gotcha 33). Gate:
+  **413 checks** (137 unit incl. the 5 apiRoute pins + 197 e2e
+  unchanged + 79 smoke incl. the 13 broken-DB pins on the third
+  mini-server :3230); 20 screenshots refreshed (VLM-verified ×5).
 
 - **Session 18 (2026-10-08) remediation** — see
   `docs/remediation-plan-session18.md`: a deployment-honesty audit (the

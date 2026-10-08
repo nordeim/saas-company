@@ -1,11 +1,13 @@
 import { db } from "@/lib/db";
-import { ok, fail } from "@/lib/api";
+import { ok, fail, apiRoute } from "@/lib/api";
 import { requireSession } from "@/lib/api";
 import { cleanString, requiredString } from "@/lib/validation";
 import { WORKFLOW_STATUSES, isWorkflowStatus } from "@/lib/workflow";
 
 /** GET /api/workflows — the signed-in user's workflows (newest first). */
 export async function GET() {
+  // Session 19 F1: the crash-path envelope.
+  return apiRoute(async () => {
   const guard = await requireSession();
   if (!guard.user) return guard.response;
 
@@ -14,10 +16,13 @@ export async function GET() {
     orderBy: [{ createdAt: "desc" }],
   });
   return ok(workflows);
+  });
 }
 
 /** POST /api/workflows — create a workflow. */
 export async function POST(request: Request) {
+  // Session 19 F1: the crash-path envelope.
+  return apiRoute(async () => {
   const guard = await requireSession();
   if (!guard.user) return guard.response;
 
@@ -50,4 +55,5 @@ export async function POST(request: Request) {
     },
   });
   return ok(workflow, 201);
+  });
 }

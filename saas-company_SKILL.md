@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.17.0 · **Last updated:** 2026-10-08 (Session 18 remediation)
+> **Version:** 2.18.0 · **Last updated:** 2026-10-08 (Session 19 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–18)
+## §12. Lessons Learnt (Sessions 1–19)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -758,6 +758,36 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     parity battery that collapses to 0.0000 with CONCATENATED words
     ("FeaturesHow") is the zombie's gotcha-26 signature (old-build HTML
     hydrated against regenerated chunks), not a real regression.
+46. **Catching an error REMOVES the framework's log line — a wrapper
+    must restore the operator's sight itself** (Session 19): Next.js
+    logs UNhandled route errors (the Prisma stack + digest land in the
+    server log — verified while cataloguing the bare-500 crash paths).
+    The moment `apiRoute()` catches the error to answer the
+    INTERNAL_ERROR envelope, that stack VANISHES — the catch must
+    re-log via the fd-2 seam (`writeSync(2, …)`, lesson 44's channel)
+    or the operator is blind to exactly the failures the wrapper now
+    handles (verified: 9 `[api:unhandled]` stacks in the broken-DB
+    server's log). Same session, same family: **`redirect()` inside a
+    try/catch is SWALLOWED** — it throws a control error
+    (NEXT_REDIRECT) that a page-level catch converts into the degraded
+    view, silently breaking the authenticated gate; keep redirect
+    calls OUTSIDE error catches (two narrow blocks beat one wide one).
+47. **Pass the base URL EXPLICITLY to every probe script — a defaulted
+    port can silently evaluate a zombie** (Session 19): the drift
+    re-run's RUNNER booted a healthy fresh server on :3075, but the
+    SURVEY script it invoked carried its own hardcoded :3070 default —
+    so the survey probed a stale zombie serving the old build (its
+    chunks regenerated away) while the healthy server sat unused, and
+    a perfectly good build "collapsed" to 0.0000. The diagnosis
+    pattern that resolved it in minutes: (1) curl the served HTML's
+    CSS chunk href and diff it against the disk chunk; (2) load the
+    page in Chromium and count `document.styleSheets` + read
+    `getComputedStyle(document.body).backgroundColor` (a styled page
+    reads rgb(0,0,0); an unstyled one reads the UA default); (3)
+    re-probe on the VERIFIED port. Every runner must export its base
+    URL and every survey must REQUIRE it (no silent defaults), and
+    port-zombie symptoms (concatenated words) mean check WHAT you are
+    probing before blaming the build.
 
 ## §13. Pitfalls to Avoid
 

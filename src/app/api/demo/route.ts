@@ -1,10 +1,12 @@
 import { db } from "@/lib/db";
-import { ok, fail } from "@/lib/api";
+import { ok, fail, apiRoute } from "@/lib/api";
 import { clientIpOf, newsletterRateLimit } from "@/lib/rate-limit";
 import { isValidEmail, cleanString, requiredString } from "@/lib/validation";
 
 /** POST /api/demo — "Book a Demo" / "Contact Sales" requests. */
 export async function POST(request: Request) {
+  // Session 19 F1: the crash-path envelope.
+  return apiRoute(async () => {
   const ip = clientIpOf(request.headers);
   const limit = newsletterRateLimit(ip);
   if (!limit.allowed) {
@@ -37,4 +39,5 @@ export async function POST(request: Request) {
   });
 
   return ok({ id: row.id, received: true }, 201);
+  });
 }

@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { ok, fail } from "@/lib/api";
+import { ok, fail, apiRoute } from "@/lib/api";
 import { requireSession } from "@/lib/api";
 import { cleanString, requiredString } from "@/lib/validation";
 import { isWorkflowStatus } from "@/lib/workflow";
@@ -8,6 +8,8 @@ type Params = { params: Promise<{ id: string }> };
 
 /** GET /api/workflows/[id] — one workflow (must belong to the caller). */
 export async function GET(_request: Request, { params }: Params) {
+  // Session 19 F1: the crash-path envelope.
+  return apiRoute(async () => {
   const guard = await requireSession();
   if (!guard.user) return guard.response;
   const { id } = await params;
@@ -17,10 +19,13 @@ export async function GET(_request: Request, { params }: Params) {
   });
   if (!workflow) return fail("NOT_FOUND", "Workflow not found.", 404);
   return ok(workflow);
+  });
 }
 
 /** PATCH /api/workflows/[id] — update name/description/status/category. */
 export async function PATCH(request: Request, { params }: Params) {
+  // Session 19 F1: the crash-path envelope.
+  return apiRoute(async () => {
   const guard = await requireSession();
   if (!guard.user) return guard.response;
   const { id } = await params;
@@ -57,10 +62,13 @@ export async function PATCH(request: Request, { params }: Params) {
 
   const workflow = await db.workflow.update({ where: { id }, data: patch });
   return ok(workflow);
+  });
 }
 
 /** DELETE /api/workflows/[id] — remove a workflow. */
 export async function DELETE(_request: Request, { params }: Params) {
+  // Session 19 F1: the crash-path envelope.
+  return apiRoute(async () => {
   const guard = await requireSession();
   if (!guard.user) return guard.response;
   const { id } = await params;
@@ -73,4 +81,5 @@ export async function DELETE(_request: Request, { params }: Params) {
 
   await db.workflow.delete({ where: { id } });
   return ok({ deleted: true });
+  });
 }

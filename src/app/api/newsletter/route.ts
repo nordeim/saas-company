@@ -1,10 +1,12 @@
 import { db } from "@/lib/db";
-import { ok, fail } from "@/lib/api";
+import { ok, fail, apiRoute } from "@/lib/api";
 import { newsletterRateLimit, clientIpOf } from "@/lib/rate-limit";
 import { isValidEmail } from "@/lib/validation";
 
 /** POST /api/newsletter — footer subscribe (idempotent upsert). */
 export async function POST(request: Request) {
+  // Session 19 F1: the crash-path envelope.
+  return apiRoute(async () => {
   const ip = clientIpOf(request.headers);
   const limit = newsletterRateLimit(ip);
   if (!limit.allowed) {
@@ -31,4 +33,5 @@ export async function POST(request: Request) {
   });
 
   return ok({ subscribed: true });
+  });
 }

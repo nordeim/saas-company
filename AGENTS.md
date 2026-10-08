@@ -19,16 +19,16 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (132 checks) | `npm run test` |
+| Unit tests (137 checks) | `npm run test` |
 | Browser E2E (197 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
-| End-to-end smoke suite (66 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
+| End-to-end smoke suite (79 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (132/132) → `npm run build` → `./scripts/smoke-test.sh` (66/66)
-→ `npm run test:e2e` (197/197) — 395 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (137/137) → `npm run build` → `./scripts/smoke-test.sh` (79/79)
+→ `npm run test:e2e` (197/197) — 413 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`, `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -398,6 +398,23 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    :3030/:3033/:3044 zombies) — the parity battery's collapse to 0.0000
    with concatenated words is the zombie's gotcha-26 signature; prefer
    FRESH PORTS per boot-and-probe cycle.
+33. **Catching an error REMOVES Next's log line — a wrapper must restore
+   the operator's sight itself (Session 19).** Next.js logs UNhandled
+   route errors (the Prisma stack + digest in the server log); the moment
+   a wrapper catches the error to answer the INTERNAL_ERROR envelope, the
+   stack VANISHES from the log — the catch must re-log via the fd-2 seam
+   (`writeSync(2, …)`, the gotcha-32 channel) or the operator is blind to
+   exactly the failures the wrapper now handles. Related traps the same
+   session: **`redirect()` inside a try/catch is swallowed** — it throws
+   a control error (NEXT_REDIRECT) that a page-level catch converts into
+   the degraded view, silently breaking the authenticated gate (keep
+   redirect calls OUTSIDE error catches — two narrow blocks beat one
+   wide one); and **pass the base URL EXPLICITLY to every probe script**
+   — a survey script that DEFAULTS its probe port silently evaluated a
+   zombie serving a stale build while its runner booted a healthy fresh
+   server on a different port (the "collapsed" parity was the tooling,
+   not the build; diagnosed by CSS-links-vs-disk + counting
+   stylesheets-in-Chromium, then re-probed on the verified port).
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +
@@ -405,7 +422,10 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   initial state and the client component mutates through the API envelope.
 - **The envelope:** every API route returns `{ ok: true, data }` or
   `{ ok: false, error: { code, message } }` via `src/lib/api.ts` (`ok` /
-  `fail` / `requireSession`). No route returns bare JSON.
+  `fail` / `requireSession` + the Session-19 crash-path wrapper
+  `apiRoute` — what ESCAPES a handler becomes the INTERNAL_ERROR
+  envelope with the stack re-logged to fd 2). No route returns bare
+  JSON — including on the crash paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks
   `z-ai-web-dev-sdk` for a workflow draft and falls back to the
   deterministic template (`src/lib/workflow.ts`) on any SDK failure — the

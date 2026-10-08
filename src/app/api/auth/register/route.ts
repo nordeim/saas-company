@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { ok, fail } from "@/lib/api";
+import { ok, fail, apiRoute } from "@/lib/api";
 import { hashPassword, setSessionCookie, registrationOpen } from "@/lib/auth";
 import { authRateLimit, clientIpOf } from "@/lib/rate-limit";
 import { isValidEmail, isValidPassword, cleanString } from "@/lib/validation";
@@ -7,6 +7,11 @@ import { isUniqueConstraintError } from "@/lib/db-errors";
 
 /** POST /api/auth/register — create an account (rate-limited). */
 export async function POST(request: Request) {
+  // Session 19 F1: the crash-path envelope — a rethrown unknown failure
+  // (the S17 "never swallow what you cannot classify" discipline) now
+  // lands HERE and answers the INTERNAL_ERROR envelope + the fd-2 stack,
+  // instead of the bare 500 with an empty body the S17 survey catalogued.
+  return apiRoute(async () => {
   const ip = clientIpOf(request.headers);
   const limit = authRateLimit(ip);
   if (!limit.allowed) {
@@ -75,4 +80,5 @@ export async function POST(request: Request) {
   await setSessionCookie(user.id);
 
   return ok(user, 201);
+  });
 }

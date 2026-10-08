@@ -6,7 +6,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?logo=tailwindcss)
 ![Prisma](https://img.shields.io/badge/Prisma-6-2d3748?logo=prisma)
 ![SQLite](https://img.shields.io/badge/DB-SQLite-003b57?logo=sqlite)
-![Tests](https://img.shields.io/badge/tests-395_checks_passing-2ecc8a)
+![Tests](https://img.shields.io/badge/tests-413_checks_passing-2ecc8a)
 
 A production-grade, self-hosted clone of the reference dark-theme SaaS
 marketing site [`saas-company.base44.app`](https://saas-company.base44.app/)
@@ -25,7 +25,7 @@ verbatim copy) and then goes further: cookie-session auth, a workflow
 workspace with an AI composer (`z-ai-web-dev-sdk` with a deterministic
 fallback), newsletter + demo-request capture, sitemap/robots, a DB-aware health
 probe (`db: up|down` — Session 18), Lenis smooth scrolling, per-route SEO metadata with a working og-image + web app
-manifest, and 395 automated checks across three test layers.
+manifest, and 413 automated checks across three test layers.
 
 | Dashboard | Landing hero |
 |:---:|:---:|
@@ -45,7 +45,7 @@ manifest, and 395 automated checks across three test layers.
 | ⚡ **Workflow dashboard (superset)** | The reference's "Dashboard" demo link 404s — here it's real: stats cards, a workflow list with pause/resume/delete, a runs chart, and an AI composer that drafts workflows from one-line ideas (server-side SDK + deterministic fallback, sanitized before persistence — rate-limited per user at 10 generations/15 min so the LLM endpoint carries its own abuse ceiling while the composer degrades to the template on 429) |
 | 📰 **Working capture forms** | Footer newsletter subscribe (idempotent upsert) and a first-class **/demo Book-a-Demo page** (dark-brand form mirroring the API's validation, with the composer's fault contract and a polite screen-reader confirmation — the formerly-unreachable demo API's front half, listed in the sitemap) |
 | ❓ **Interactive FAQ + legal** | The reference's six-question accordion and four legal pages, copy captured verbatim |
-| 🧪 **395 automated checks** | 132 Vitest unit checks (pure domain seams incl. the SEO helpers, the motion engine, the rate-limit overrides, the redirect-target guard, the SDK hang seam, the constant-time login decoy, the registration gate, the P2002 race classifier, and the AUTH_SECRET boot-warning hook), 197 Playwright browser checks (incl. the mobile-navigation, navbar scroll-behavior, per-tab features-card, login-theme, login alternate-states, brand-parity, section-parity, head-metadata, typography-parity, motion-parity, palette-parity, mockup-motion-parity, hydration-health, resource-hygiene, fault-resilience, session-lifecycle, error-boundary, demo-reachability, reduced-motion, and redirect-target suites + the composer 429-degrade row), 66 curl smoke checks against the production build (incl. the four security-header pins, the asset-caching pin, the PATCH name-contract pins, the lazy-img no-preload contract, the /demo page pin, the 429 Retry-After pins, the generate-limiter trip, the API no-store pins, the X-Powered-By absence pins, the login timing-parity pin, the parallel-register race-envelope pin, the closed-registration gate pins, and the health db-reachability pin) |
+| 🧪 **413 automated checks** | 137 Vitest unit checks (pure domain seams incl. the SEO helpers, the motion engine, the rate-limit overrides, the redirect-target guard, the SDK hang seam, the constant-time login decoy, the registration gate, the P2002 race classifier, the AUTH_SECRET boot-warning hook, and the crash-path envelope wrapper), 197 Playwright browser checks (incl. the mobile-navigation, navbar scroll-behavior, per-tab features-card, login-theme, login alternate-states, brand-parity, section-parity, head-metadata, typography-parity, motion-parity, palette-parity, mockup-motion-parity, hydration-health, resource-hygiene, fault-resilience, session-lifecycle, error-boundary, demo-reachability, reduced-motion, and redirect-target suites + the composer 429-degrade row), 79 curl smoke checks against the production build (incl. the four security-header pins, the asset-caching pin, the PATCH name-contract pins, the lazy-img no-preload contract, the /demo page pin, the 429 Retry-After pins, the generate-limiter trip, the API no-store pins, the X-Powered-By absence pins, the login timing-parity pin, the parallel-register race-envelope pin, the closed-registration gate pins, the health db-reachability pin, and the broken-database crash-path envelope + branded-fallback pins) |
 | 🛡️ **Production headers** | The reference's security posture — `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Strict-Transport-Security` — emitted via `next.config.ts` and pinned by the smoke suite, plus the reference CDN's asset caching (`public, max-age=604800` on `public/` assets), `Cache-Control: private, no-store` on every API response (authenticated data never transits a cache without an explicit directive), and no `X-Powered-By` banner (the reference ships none) |
 | 🔎 **Per-route SEO head parity** | The reference's per-route `<head>` pattern — "X | SAAS Company" og:titles, "X on SAAS Company. …" descriptions, per-route og:url/canonical, a web app manifest — plus a WORKING self-hosted og-image (the live's own URL 404s); assembled in `src/lib/seo.ts` (`routeMetadata`) and pinned by the head-metadata e2e suite |
 | 🌗 **Measured design system** | Tailwind v4 CSS-first tokens: #000 canvas, #8624FF primary, #0055FF accent, #D500FF violet, self-hosted **Google Fonts' "Vend Sans" variable font** (wght 300-700 — the exact gstatic bytes the reference serves; Session 5 font forensics replaced the Session-1 Wix Madefor misidentification), the reference's keyframes (organic-gradient, border-shimmer, logo petals, marquee) |
@@ -68,7 +68,7 @@ manifest, and 395 automated checks across three test layers.
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font Google (Playfair/DM Serif) | — | Reference typography — the SAME gstatic woff2 bytes the live serves (Session 5 forensics) |
 | Unit tests | Vitest | 5 | Pure domain seams |
 | E2E tests | Playwright | 1.63 | Browser suite (Chromium) |
-| Smoke | bash + curl | — | 66 checks against the production build |
+| Smoke | bash + curl | — | 79 checks against the production build |
 
 ## Architecture
 
@@ -146,9 +146,9 @@ Open <http://localhost:3000>, then sign in to the dashboard at
 curl http://localhost:3000/api/health
 # {"ok":true,"data":{"status":"ok","app":"saas-company","ts":"…"}}
 
-# Full verification (395 checks across three layers)
-npm run lint && npm run typecheck && npm run test   # 126 unit checks
-npm run build && ./scripts/smoke-test.sh            # 65 smoke checks
+# Full verification (413 checks across three layers)
+npm run lint && npm run typecheck && npm run test   # 137 unit checks
+npm run build && ./scripts/smoke-test.sh            # 79 smoke checks
 npm run test:e2e                                    # 197 browser checks
 ```
 
@@ -268,6 +268,8 @@ data.
 | Hero indicator dot travels instead of bouncing | The reference drives it with a JS oscillation; this repo ships the measured `animate-scroll-dot` keyframe | Intended parity (rAF-sampled); `prefers-reduced-motion` collapses it |
 | The 404 page briefly shows empty quotes before the pathname fills | The statically-prerendered 404 ships the placeholder at SSR and fills the real URL one commit after hydration (the React-#418-free pattern — `usePathname()` would render the internal route id `/_not-found` post-settle) | Expected; pinned by `tests/e2e/hydration.spec.ts` |
 | E2E suite intermittently 429s mid-run locally | The suite's own UI sign-ins share the in-memory auth limiter's budget | The Playwright webServer pins `AUTH_RATE_LIMIT_MAX=50`; production keeps the default 10 unless overridden |
+| Every API call returns `500 {"ok":false,"error":{"code":"INTERNAL_ERROR"}}` while the pages still load | The database is unreachable (broken volume/path) — the crash-path envelope (Session 19) answers every endpoint honestly instead of a bare empty 500; the server log carries the `[api:unhandled]` stack on fd 2 | Check `/api/health` — the `db:"down"` field is the operator's alerting signal (D87); fix the `DATABASE_URL`/volume, then re-check |
+| `/dashboard` shows the dark "Workspace unavailable" card | The dashboard's own DB queries failed — the branded server-crash boundary (Session 19) renders the degraded view (status 200 by design) instead of Next's unbranded error page | Same as above: resolve the database reachability; the card's Try again re-requests the page |
 | The Gasparyan logo (trusted-by cloud) loads on scroll, not at page load | `loading="lazy"` suppresses React Float's automatic preload — without it, the Next.js RSC prefetch injected the preload link into every navbar route, triggering console warnings + wasted fetches (Session 12) | Intended resource hygiene; the logo appears instantly when scrolled into view (a 4KB local SVG) |
 | The dashboard shows a red "Could not …" banner after a failed action | The mutation handlers' fault-resilience contract: network/HTTP failures surface a visible `role="alert"` banner instead of an uncaught error (Session 12) | Intended; retry the action or check the connection |
 | The dashboard suddenly redirects to the login page mid-action | The session-expiry contract: a 401 from any dashboard API call (the 7-day cookie TTL expired) redirects to `/login?from_url=/dashboard` — the same behavior as loading /dashboard signed-out (Session 13) | Intended; sign in again — retrying with a dead session would 401 forever |

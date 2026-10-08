@@ -1,11 +1,15 @@
 import { db } from "@/lib/db";
-import { ok, fail } from "@/lib/api";
+import { ok, fail, apiRoute } from "@/lib/api";
 import { setSessionCookie, verifyPassword, dummyPasswordHash } from "@/lib/auth";
 import { authRateLimit, clientIpOf } from "@/lib/rate-limit";
 import { isValidEmail } from "@/lib/validation";
 
 /** POST /api/auth/login — sign in, sets the session cookie. */
 export async function POST(request: Request) {
+  // Session 19 F1: the crash-path envelope — whatever escapes the handler
+  // (e.g. an unreachable database) answers the INTERNAL_ERROR envelope,
+  // never a bare 500 with an empty body.
+  return apiRoute(async () => {
   const ip = clientIpOf(request.headers);
   const limit = authRateLimit(ip);
   if (!limit.allowed) {
@@ -43,4 +47,5 @@ export async function POST(request: Request) {
 
   await setSessionCookie(user.id);
   return ok({ id: user.id, email: user.email, name: user.name });
+  });
 }

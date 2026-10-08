@@ -286,6 +286,71 @@ else
   say_fail "generate 429 carries a positive Retry-After header (got '${GEN_RETRY}')"
 fi
 
+# Session 19 F1/F2: the crash-path envelope + the branded server-crash
+# boundary. A THIRD mini-server boots with an UNWRITABLE DATABASE_URL
+# (/dev/null is a char device — ENOTDIR by construction, PID-independent)
+# and the SAME AUTH_SECRET as the main server, so the main server's session
+# cookie is structurally valid there and the authenticated crash paths are
+# reachable. Pre-fix (the catalog in docs/remediation-plan-session19.md):
+# seven endpoints answered a BARE 500 with an EMPTY body and NO
+# content-type; /dashboard served Next's unbranded __next_error__ document.
+echo "== smoke: crash-path envelope (third server on :3230, unwritable DB) =="
+BROKEN_PORT=3230
+BROKEN_BASE="http://localhost:$BROKEN_PORT"
+BROKEN_DB_URL="file:/dev/null/unwritable-s19/custom.db"
+DATABASE_URL="$BROKEN_DB_URL" AUTH_SECRET="smoke-secret" PORT=$BROKEN_PORT NODE_ENV=production \
+  node .next/standalone/server.js >/tmp/smoke-broken-server.log 2>&1 &
+BROKEN_PID=$!
+BROKEN_UP=no
+for i in $(seq 1 40); do
+  if curl -sf "$BROKEN_BASE/api/health" >/dev/null 2>&1; then BROKEN_UP=yes; break; fi
+  sleep 0.5
+done
+if [ "$BROKEN_UP" = "yes" ]; then
+  # The S18 field, pinned on the DOWN side for the first time.
+  BROKEN_HEALTH=$(curl -s "$BROKEN_BASE/api/health")
+  check "broken-db health reports db down" "down" "$(echo "$BROKEN_HEALTH" | field "['data']['db']")"
+
+  CRASH_LOGIN=$(curl -s -X POST "$BROKEN_BASE/api/auth/login" -H "Content-Type: application/json" \
+    -d '{"email":"demo@novaai.app","password":"Demo1234!"}')
+  CRASH_LOGIN_CODE=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BROKEN_BASE/api/auth/login" -H "Content-Type: application/json" \
+    -d '{"email":"demo@novaai.app","password":"Demo1234!"}')
+  check "broken-db login answers 500 (not a bare crash)" "500" "$CRASH_LOGIN_CODE"
+  check "broken-db login envelope code" "INTERNAL_ERROR" "$(echo "$CRASH_LOGIN" | field "['error']['code']")"
+  CRASH_LOGIN_CT=$(curl -s -o /dev/null -w '%{content_type}' -X POST "$BROKEN_BASE/api/auth/login" -H "Content-Type: application/json" \
+    -d '{"email":"demo@novaai.app","password":"Demo1234!"}')
+  check "broken-db login content-type is json (no bare empty body)" "application/json" "$CRASH_LOGIN_CT"
+
+  check "broken-db register answers 500" "500" "$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BROKEN_BASE/api/auth/register" -H "Content-Type: application/json" \
+    -d '{"name":"Crash Probe","email":"crash-s19@example.com","password":"Crash123!"}')"
+  check "broken-db newsletter answers 500" "500" "$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BROKEN_BASE/api/newsletter" -H "Content-Type: application/json" \
+    -d '{"email":"crash-s19@example.com"}')"
+  check "broken-db demo answers 500" "500" "$(curl -s -o /dev/null -w '%{http_code}' -X POST "$BROKEN_BASE/api/demo" -H "Content-Type: application/json" \
+    -d '{"name":"Crash Probe","email":"crash-s19@example.com"}')"
+  check "broken-db auth/me (session) answers 500" "500" "$(curl -s -b /tmp/smoke-cookies.txt -o /dev/null -w '%{http_code}' "$BROKEN_BASE/api/auth/me")"
+  check "broken-db workflows GET (session) answers 500" "500" "$(curl -s -b /tmp/smoke-cookies.txt -o /dev/null -w '%{http_code}' "$BROKEN_BASE/api/workflows")"
+  check "broken-db workflows POST (session) answers 500" "500" "$(curl -s -b /tmp/smoke-cookies.txt -o /dev/null -w '%{http_code}' -X POST "$BROKEN_BASE/api/workflows" -H "Content-Type: application/json" \
+    -d '{"name":"crash probe workflow"}')"
+
+  # Session 19 F2: the server-crash branded boundary on the page layer.
+  check "broken-db /dashboard (session) serves 200 (degraded, not a crash)" "200" "$(curl -s -b /tmp/smoke-cookies.txt -o /dev/null -w '%{http_code}' "$BROKEN_BASE/dashboard")"
+  DASH_BODY=$(curl -s -b /tmp/smoke-cookies.txt "$BROKEN_BASE/dashboard")
+  if echo "$DASH_BODY" | grep -q "Workspace unavailable"; then
+    say_pass "broken-db /dashboard renders the branded fallback view"
+  else
+    say_fail "broken-db /dashboard renders the branded fallback view (got no 'Workspace unavailable')"
+  fi
+  if echo "$DASH_BODY" | grep -q "__next_error__"; then
+    say_fail "broken-db /dashboard is NOT Next's unbranded error document"
+  else
+    say_pass "broken-db /dashboard is NOT Next's unbranded error document"
+  fi
+else
+  say_fail "crash-path server booted on :$BROKEN_PORT"
+fi
+kill "$BROKEN_PID" 2>/dev/null
+wait "$BROKEN_PID" 2>/dev/null
+
 echo "== smoke: pages =="
 for PATH_ROUTE in / /login /demo /faq /privacy /terms /accessibility /refund-policy; do
   CODE=$(curl -s -o /dev/null -w '%{http_code}' "$BASE$PATH_ROUTE")
