@@ -1,0 +1,683 @@
+     1→# AGENTS.md — SAAS Company (NovaAI)
+     2→
+     3→Single Next.js 16 App Router application cloning the reference dark-theme
+     4→SaaS marketing site (`saas-company.base44.app` — "NovaAI") with a functional
+     5→superset: real cookie-session auth, a persisted workflow dashboard, a working
+     6→newsletter/demo-capture API, and SEO surfaces. Stack: React 19, TypeScript
+     7→strict, Tailwind CSS v4 (CSS-first — no `tailwind.config.*`), Prisma 6 +
+     8→SQLite at `db/custom.db`, Vitest + Playwright. Clone remote:
+     9→`https://github.com/nordeim/saas-company.git`; pushes go to the SSH remote
+    10→via `docs/ssh_git_wrapper_v3.py`.
+    11→
+    12→## Commands
+    13→
+    14→| Task | Command |
+    15→|------|---------|
+    16→| Install | `npm install` |
+    17→| Dev server (port 3000) | `npm run dev` |
+    18→| Production build | `npm run build` |
+    19→| Production server | `npm run start` |
+    20→| Lint | `npm run lint` |
+    21→| Type check | `npm run typecheck` |
+    22→| Unit tests (176 checks) | `npm run test` |
+    23→| Browser E2E (229 checks; needs a build) | `npm run test:e2e` |
+    24→| Prisma client after schema change | `npx prisma generate` |
+    25→| Recreate DB from schema | `npm run db:push` |
+    26→| Seed demo workspace | `npm run db:seed` |
+    27→| End-to-end smoke suite (124 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
+    28→
+    29→**Gate order before every push:** `npm run lint` → `npm run typecheck` →
+    30→`npm run test` (176/176) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
+    31→→ `npm run test:e2e` (229/229) — 529 checks across three layers (boots the standalone server on :3100 against its own
+    32→`db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`, `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
+    33→`next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
+    34→what catches type errors; never skip it.
+    35→
+    36→First-run setup: `npm install && cp .env.example .env && npm run db:push &&
+    37→npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
+    38→`Demo1234!`.
+    39→
+    40→## Gotchas (verified the hard way)
+    41→
+    42→1. **The exported-`DATABASE_URL` trap.** A shell-exported absolute
+    43→   `DATABASE_URL` overrides the repo `.env` for the Prisma CLI **and** the
+    44→   Next runtime — the server silently opens a foreign database file (the
+    45→   historical 12/30 smoke failure). `scripts/smoke-test.sh` and
+    46→   `playwright.config.ts` PIN their own `DATABASE_URL` per command; keep that
+    47→   discipline in every script that boots a server or runs Prisma.
+    48→2. **Relative `file:` URLs are schema-anchored.** `DATABASE_URL` in `.env` is
+    49→   `file:../db/custom.db`, which resolves against `prisma/schema.prisma` for
+    50→   the CLI and against the same anchor at runtime via `src/lib/db-path.ts`
+    51→   (unit-tested by `tests/db-path.test.ts`). One string → one file:
+    52→   `<repo>/db/custom.db`. The `db/` folder sits at the repo root and is
+    53→   git-ignored (`db/*.db`).
+    54→3. **Tailwind v4 is CSS-first.** Tokens live in `src/app/globals.css` under
+    55→   `@theme` — never add a `tailwind.config.*` or the `@config` bridge. Two
+    56→   v4 traps are load-bearing here: theme vars must be FULL color values
+    57→   (bare HSL triplets resolve to transparent), and `button,
+    58→   [role="button"] { cursor: pointer }` is set in the base layer because v4's
+    59→   preflight sets no pointer. See `docs/Tailwind-V4-Validation-Report.md`.
+    60→4. **v4 serializes `bg-white/10`-style colors through `oklab()`** —
+    61→   rendering-identical to the reference's rgba strings but
+    62→   computed-string-different. E2E assertions accept either spelling (see the
+    63→   mobile-navigation spec comments); never "fix" the CSS to chase byte-parity.
+    64→5. **The UI font is GOOGLE's "Vend Sans"** (variable wght 300-700),
+    65→   self-hosted as the two gstatic subsets in `src/fonts/` — the SAME bytes
+    66→   the live serves (`fonts.gstatic.com/s/vendsans/v1/…`, traced via
+    67→   performance entries in Session 5). Session 1 misidentified it as
+    68→   "Base44-hosted Wix Madefor" (the Wix faces are declared only in the
+    69→   live's unused login-bundle css) and the wrong metrics (+2.4% glyph
+    70→   width) drifted every text surface for four sessions. Never trust a
+    71→   font's NAME — trace its bytes.
+    72→6. **The reference ships INERT classes** — its markup carries utilities
+    73→   its compiled css never emits (the pricing Pro card's `scale-[1.02]
+    74→   md:scale-105` renders UNSCALED: `scale: none`, 540px at every width).
+    75→   Match the RENDERED computed style, not the class string; v4 here WOULD
+    76→   emit those utilities (540×1.05 = the old 567px D19 delta).
+    77→7. **The reference is a moving target.** The live app at
+    78→   `saas-company.base44.app` has been redeployed with different products
+    79→   across this repo's history (the previous cycle cloned a PM workspace
+    80→   called ORBITAL). Visual parity was re-measured against the CURRENT live
+    81→   (dark NovaAI marketing site); the measurements live in
+    82→   `Project_Architecture_Document.md` §5 and the e2e pins.
+    83→8. **Rate limits are per-process.** Auth endpoints throttle 10
+    84→   attempts/IP/15 min (in-memory `src/lib/rate-limit.ts`; override with
+    85→   `AUTH_RATE_LIMIT_MAX` — the Playwright webServer pins 50 because the
+    86→   suite's own ~10 UI sign-ins share one IP and one process with the
+    87→   limiter; at the default they sat at EXACTLY the budget — Session 11
+    88→   saw one extra signed-in spec trip a mid-suite 429 that broke an
+    89→   unrelated pin).
+    90→9. **Dependency overrides are load-bearing.** `package.json` pins
+    91→   `overrides` for `braces`/`micromatch`/`fast-glob`/`deepmerge-ts` — the
+    92→   patched transitive versions for advisories whose parents haven't shipped
+    93→   fixes (the residual `braces` GHSA-vfj7-8cjw-p6xm covers every published
+    94→   version; lint-toolchain-only — see the remediation plan F10). Never run
+    95→   `npm audit fix --force` here: it would downgrade `eslint-config-next`
+    96→   16→14 to silence a dev-time advisory.
+    97→10. **`/dashboard` is session-gated** (`redirect("/login?from_url=/dashboard")`)
+    98→   — expect 307 for anonymous requests; the smoke suite pins both the 307
+    99→   and the cookie'd 200.
+   100→11. **The reference ships TWO token blocks — `:root` and `.dark`.** The app
+   101→   never mounts `.dark`, so `:root` is what renders: primary = hsl(267 100%
+   102→   57%) = #8624ff, accent/electric-blue = hsl(220 100% 50%) = #0055ff, while
+   103→   `violet` (the magenta used by text/border/bg-violet) = #d500ff. Session 1
+   104→   read the `.dark` block and shipped the wrong primary/accent for two
+   105→   sessions — the Session-3 audit fixed it (see
+   106→   `docs/remediation-plan-session3.md` F1/F2).
+   107→12. **Arbitrary aspect ratios use the SLASH (`aspect-[16/9]`), never the
+   108→   colon spelling** — writing the ratio with a colon inside the brackets
+   109→   emits the invalid `aspect-ratio: 16:9` into the compiled CSS and postcss
+   110→   fails the whole build with an opaque `CssSyntaxError … Missed semicolon`
+   111→   at a flattened column. Worse: Tailwind's scanner reads class candidates
+   112→   from MARKDOWN too — documenting the colon spelling in a .md file breaks
+   113→   the build just like using it in a component (docs/ is `@source not`-ed
+   114→   in globals.css for exactly this reason; Session 4 hit both).
+   115→13. **The reference's /login loads its OWN css bundle** (light `:root`, body
+   116→   white + zinc-950 + the system font stack) — the login route swaps the
+   117→   body theme via a route-scoped `<style>` in `login/page.tsx`; every other
+   118→   route keeps the dark theme. Also: the reference's compiled `space-y-*`
+   119→   puts the gap on the FOLLOWING sibling (v3-style) — v4's
+   120→   margin-bottom-on-preceding is lost on inline labels (the login form)
+   121→   AND is cancelled by the alternate-states' back-button `-mb-2`, so the
+   122→   route style restores that pattern inside forms (`.space-y-1\.5`) and
+   123→   the auth stack (`.auth-stack` / `.auth-stack-sm6`). The card's
+   124→   ALTERNATE states (sign-up / forgot / reset-success) use a DIFFERENT
+   125→   layout from the default: back-button + h2 + form, NO logo chip,
+   126→   NO Google button, NO OR divider, and shadcn-style alert banners
+   127→   (bg-red-50/70 / bg-green-50/70) rendered BETWEEN the last field and
+   128→   the submit button — measured in Session 5, pinned by
+   129→   `tests/e2e/login-states.spec.ts`.
+   130→14. **The navbar is section-aware and never gains a background.** It is
+   131→   `bg-transparent` at every scroll depth (no scrolled-glass bar); a
+   132→   scroll-spy highlights the section in view (last section whose top passed
+   133→   the ⅔ viewport line) and the chrome swaps to black variants while the
+   134→   nav band overlaps `[data-nav-theme="light"]` sections (the white
+   135→   features section). Pinned by `tests/e2e/navbar-behavior.spec.ts`.
+   136→15. **The dashboard mockup LOOPS — never re-add the skeleton-wave shimmer,
+   137→   and never trust a CSS-property census against a JS animation engine.**
+   138→   The live pulses the ambient `-inset-32` glow (scale 1→1.15→1 + opacity
+   139→   .3→.5→.3, 4s), the red chrome dot (scale 1→1.2→1, 2s), the four list
+   140→   dots (same, staggered delay:i*.1), the under-glow (y 0→−12→0 + opacity
+   141→   .3→.5→.3, 3s — a SIBLING of the card, unclipped, rendered UNCENTERED:
+   142→   its framer transform kills the `-translate-x-1/2`, pinned via
+   143→   `translate-none`), and the One-Platform mini-dashboard's skeleton
+   144→   shapes (opacity pairs at 3s with delays) — reproduced as the measured
+   145→   `animate-mockup-*`/`animate-skel-*` keyframes in globals.css. The list
+   146→   dots keep their SOLID `bg-primary/80` fill (never re-add the
+   147→   `skeleton-wave` shimmer: as an UNLAYERED class it overrides the layered
+   148→   `bg-primary/80` utility). Session 4's "the mockup is completely
+   149→   STATIC" census was an artifact: framer writes inline styles per frame,
+   150→   so `animationName` reads `none` on an element that is mid-loop — survey
+   151→   motion by sampling VALUES over time (see PAD §5.5 trap 16). The pricing
+   152→   toggle defaults to ANNUAL (Pro $39/mo annual, $49/mo monthly — the $39
+   153→   Session 1 read was the annual price).
+   154→16. **Hover-state probes need REAL pointer events** (Session 6) — an
+   155→   agent-browser `mouse move` reported `:hover` matching while no hover
+   156→   utility applied (a false negative Playwright's real `page.mouse.move`
+   157→   disproved — the Get Started pill's shimmer was working all along).
+   158→   Related: the live's arrow slide renders v3 `transform: matrix(1,0,0,1,2,0)`
+   159→   while v4 emits `translate: 2px` — compare RENDERED geometry, not the
+   160→   property name.
+   161→17. **The reference's `<head>` is per-route** (Session 6): content routes
+   162→   ship og:title = the page title, description = "X on SAAS Company. …",
+   163→   and og:url = canonical = the route (implemented here through
+   164→   `src/lib/seo.ts` + per-page `routeMetadata` exports; `/og-image.png`
+   165→   is the WORKING replacement for the live's dead og:image URL). Do NOT
+   166→   re-add `theme-color` or `viewport-fit` — the live ships neither.
+   167→18. **The live's mobile burger is pointer-blocked by its own empty toast
+   168→   portal** (fixed top-0 z-[100], 390×32, pointer-events auto — a JS
+   169→   click opens the live's menu, a real tap cannot; D32). The clone keeps
+   170→   the WORKING burger; never "fix" it toward the live's broken state.
+   171→19. **The reference's SPA bundle DOUBLES the tracking scale** (Session 7):
+   172→   `tracking-wider` renders 0.1em and `tracking-widest` 0.2em on the live
+   173→   — the overrides live in globals.css `@theme`
+   174→   (`--tracking-wider`/`--tracking-widest`), while the live's LOGIN bundle
+   175→   keeps the standard scale (pinned back in the login route's scoped
+   176→   `<style>`). Never "simplify" either side — the divergence is the
+   177→   reference's own two-bundle reality.
+   178→20. **Breakpoint-mounted chrome needs a resize guard** (Session 7): the
+   179→   mobile menu mounted below `md` and hidden above it kept its state (and
+   180→   the body scroll-lock) alive when the viewport crossed 768 — the
+   181→   `matchMedia("(min-width: 768px)")` close-on-match listener in
+   182→   `navbar.tsx` is load-bearing for resize/rotate flows.
+   183→21. **The scroll entrances are rAF-driven, NOT CSS transitions** (Session 8):
+   184→   the reference uses framer-motion (per-frame inline opacity/transform
+   185→   writes, easeOut cubic-bezier(0,0,0.58,1), per-element params); the
+   186→   `Reveal` component re-implements it via `src/lib/motion.ts`. Never add
+   187→   `transition-*` classes to entrance wrappers — on children that carry
+   188→   their own `transition-colors` the cascade SNAPS the entrance and
+   189→   corrupts the child's hover timing (the Session-8 F1 bug). The
+   190→   per-element parameter table lives in `docs/remediation-plan-session8.md`.
+   191→22. **v4 ships THREE more engine shifts beyond oklab** (Sessions 7–8): the
+   192→   tracking scale (the live's config doubles the two widest steps —
+   193→   `@theme --tracking-*`), the shadow-scale rename (v3 shadow-sm → v4
+   194→   shadow-xs — pinned via `--shadow-sm`), and the line-height cascade
+   195→   (v3's responsive `text-*` beats `leading-*`; v4's `--tw-leading` always
+   196→   wins — pinned per-element via `--tw-leading: initial`). Survey the
+   197→   ENGINE layer (computed values + the emitted rules), not just class
+   198→   strings — every one of these hid from class-string parity for 6+
+   199→   sessions.
+   200→23. **v4's default palette is OKLCH-DEFINED — the roundtrip drifts from
+   201→   v3's hex** (Session 9): up to 69 RGB units off (green-400; the stars'
+   202→   yellow-400, the problem cards' reds, the avatar gradient endpoints,
+   203→   every login slate drifted). The pins live in `globals.css` `@theme`
+   204→   (`--color-<family>-<shade>: <v3 hex>` — 31 tokens). Never "simplify"
+   205→   them back to v4 defaults, and never trust a color assertion that
+   206→   accepts both spellings without comparing VALUES. Related v4
+   207→   token-emission trap: `ring-ring` reads `--color-ring` (a legacy
+   208→   `--ring` HSL variable is NOT the emission path — without the @theme
+   209→   token the utility never emits and the ring falls back to currentColor),
+   210→   and v4 emits ring-ring AFTER ring-slate-400, so elements carrying both
+   211→   need the `input:focus:focus-visible` cascade nudge in the utilities
+   212→   layer. The live also ships NO `::selection` rule (ours was an
+   213→   invention, removed) and pins `/login` `html { overscroll-behavior-y:
+   214→   none }` + a light `--border` (both reproduced route-scoped).
+   215→24. **A JS animation engine is INVISIBLE to a CSS-property census**
+   216→   (Session 10): framer-motion writes inline `transform`/`opacity` per
+   217→   frame, so an element can be mid-loop while `getComputedStyle()
+   218→   .animationName` reads `none` — the Session-4 "static mockup" verdict
+   219→   shipped static for six sessions while the live pulsed eight loop
+   220→   groups. Survey the LOOP layer by sampling computed VALUES across
+   221→   multiple rounds after entrances settle AND by extracting the
+   222→   `animate:{…}`/`transition:{…}` configs from the live's JS bundle.
+   223→   Related: framer's inline transform REPLACES v3's `--tw-translate-*`
+   224→   composition (the live's under-glow renders un-centered) — v4's
+   225→   `translate` property is SEPARATE from `transform`, so reproducing that
+   226→   geometry needs an explicit `translate-none` (PAD §5.5 trap 16).
+   227→25. **A statically-prerendered CLIENT component cannot render route state
+   228→   at SSR — and `usePathname()` settles to the INTERNAL route id on
+   229→   404s** (Session 11): the not-found page shipped React #418 on EVERY
+   230→   unknown route (the prerendered HTML quoted `"_not-found"` while the
+   231→   hydration render carried the real URL — a text mismatch by
+   232→   construction), and post-settle `usePathname()` returns `/_not-found`,
+   233→   not the browser URL. The pattern: a `useSyncExternalStore` mount gate
+   234→   (server snapshot false) reading `window.location.pathname` — pinned
+   235→   by `tests/e2e/hydration.spec.ts`. Sweep the CONSOLE layer (pageerror)
+   236→   on every route — a clean render can still ship a broken hydration.
+   237→   Related Session-11 lessons: sample TRANSITIONING properties to
+   238→   settled (the ring pin's fixed-200ms mid-flight samples + its
+   239→   blind-Tab×4 focus misses made the gate itself flaky — poll, and
+   240→   tab-until-focused), and alpha composites through ANCESTOR opacity
+   241→   (the paused cards' `opacity-80` turned `text-white/50` into effective
+   242→   white/40 — audit the EFFECTIVE alpha, not the class; the clone-only
+   243→   axe violations on `/`, `/faq`, and the 404 are LIVE-PARITY — D63,
+   244→   not bugs to fix).
+   245→26. **React Float auto-preloads eager `<img>`s rendered in the SSR shell —
+   246→   and the Next.js router's RSC prefetch INJECTS those head links into
+   247→   every route that links to the page** (Session 12): the Gasparyan
+   248→   logo's automatic `<link rel="preload" as="image">` traveled from the
+   249→   landing into /faq, /privacy, /terms, /accessibility, /refund-policy,
+   250→   and /dashboard (the navbar's logo `<Link href="/">` prefetch), where
+   251→   the image never renders — a console "preloaded but not used" warning
+   252→   + a wasted fetch on six routes. `loading="lazy"` suppresses the
+   253→   emission entirely (pinned by `tests/e2e/resource-hygiene.spec.ts` +
+   254→   the smoke static-HTML pin). Audit `<link rel="preload">` on EVERY
+   255→   route, not just the page that owns the resource. Related Session-12
+   256→   lessons: fault-inject the network (`page.route(...abort())`) before
+   257→   trusting a happy path — the dashboard's pause/delete/sign-out carried
+   258→   NO catch and surfaced `TypeError: Failed to fetch` pageerrors with
+   259→   zero user feedback (now banners — `tests/e2e/resilience.spec.ts`);
+   260→   and before believing a mid-verification regression, verify the server
+   261→   serves the CURRENT build — compare the served HTML's CSS chunk
+   262→   filename against `.next/standalone/.next/static/chunks/` on disk (a
+   263→   ZOMBIE server on :3000 serving a stale build whose CSS chunks were
+   264→   deleted renders UNSTYLED: links concatenate in innerText and word
+   265→   parity collapses; the Playwright/smoke suites are immune — they boot
+   266→   their own servers).
+   267→27. **A 401 is not a network fault — failure CLASSES need distinct UI
+   268→   contracts; and ship `error.tsx`/`global-error.tsx` before you need
+   269→   them** (Session 13): a cookie-expired session makes every dashboard
+   270→   mutation 401 — and "Try again." banners LIE (each retry 401s forever).
+   271→   The honest contract is the server gate's own: redirect to
+   272→   `/login?from_url=/dashboard` (the `apiFetch` wrapper in
+   273→   `dashboard-app.tsx`; pinned pairwise against the abort-banner class
+   274→   by `tests/e2e/session-lifecycle.spec.ts`). Likewise a render fault
+   275→   (malformed API data — a row with `runs: null` passes the
+   276→   `Array.isArray` envelope guard and crashes the article template) must
+   277→   surface the BRANDED boundary (`src/app/error.tsx`), never Next.js's
+   278→   default "This page couldn't load" page — the app loses its identity
+   279→   exactly when the user is already having a bad day (pinned by
+   280→   `tests/e2e/error-boundary.spec.ts`; pin the boundary with a
+   281→   route-fulfilled contract violation, not a synthetic throw). Related:
+   282→   Escape-closing the mobile menu must RETURN FOCUS to the burger
+   283→   (`burgerRef`) — the focused link unmounts with the panel and
+   284→   `activeElement` falls to `body`, stranding keyboard users (WCAG
+   285→   2.4.3).
+   286→28. **Audit REACHABILITY, not just behavior — and success is a
+   287→   message class too** (Session 14): grep every API route for a UI
+   288→   consumer BEFORE calling it a shipped feature — `POST /api/demo`
+   289→   shipped complete (validation + rate limit + model) with ZERO
+   290→   consumers: dead code dressed as a superset. A feature unreachable
+   291→   from any URL is not a feature (`/demo` is its front half — D73).
+   292→   Likewise `/login` must redirect ALREADY-authenticated visitors to
+   293→   the workspace (D74) — and NOTE: any script or spec that signs in and
+   294→   then revisits `/login` will hit the redirect (the screenshot
+   295→   refresh script's re-sign-in blocks had to navigate to `/dashboard`
+   296→   directly). And successful mutations need STATUS MESSAGES (WCAG
+   297→   4.1.3): errors alert (`role="alert"`), successes confirm politely
+   298→   (a sr-only `role="status"` `aria-live="polite"` region — D75) —
+   299→   pre-fix the dashboard had zero live regions; a screen-reader user's
+   300→   actions changed the stats in total silence. Related: computed
+   301→   `animation-duration` for sub-millisecond values serializes in
+   302→   SCIENTIFIC NOTATION ("1e-05s" for the authored 0.01ms clamp) —
+   303→   compare parsed milliseconds, never the string; and the browser's
+   304→   own 404-document resource log is inherent noise on BOTH sides (the
+   305→   live's 404 ships two 401s — the D68 parity family).
+   306→29. **Guard WHERE a user-controlled redirect can ship the browser — and
+   307→   a hang is not a failure** (Session 15): any query param that becomes
+   308→   a post-auth `router.push` target is an OPEN REDIRECT (CWE-601) until
+   309→   proven otherwise — `/login?from_url=https://evil.example/phish`
+   310→   genuinely shipped the just-authenticated browser off-site (the
+   311→   network log carried `?_rsc=…`). The guard (`safeRedirectPath`):
+   312→   prefix checks + a WHATWG dummy-origin re-parse; only same-site
+   313→   absolute paths survive (D76). Likewise the HANG class: ADR-004's
+   314→   degrade-not-fail covers SDK FAILURES, not hangs — a black-holed
+   315→   `await` blocks the request forever with the UI's busy guard
+   316→   engaged; every external await needs a timeout that RESOLVES with
+   317→   the fallback (a hang is a degrade condition; a rejection still
+   318→   propagates — D78). And survey the DOCS-TRUTH layer: README promised
+   319→   `Retry-After` on 429s that no route emitted (D79) — pin what the
+   320→   docs claim. Related traps this session: the Bash output layer can
+   321→   SWALLOW `[m`-style character pairs from file contents (a
+   322→   `const [mode, setMode]` line DISPLAYED as `const ode, setMode]` —
+   323→   looked like a syntax error while tsc/esbuild/build were all green;
+   324→   hex-dump before believing a "corrupt" file), and the
+   325→   chunk-against-disk zombie check is BLIND when only JS changed (the
+   326→   CSS chunk name is content-hashed and the CSS was untouched — the
+   327→   old process served fresh static HTML from disk with its own stale
+   328→   hydrated JS; when ps//proc are process-blind, move the survey to a
+   329→   FRESH PORT with a fresh boot instead of trusting a reboot).
+   330→30. **Rate-limit the expensive endpoint, not just the sensitive ones —
+   331→   and probe authenticated APIs through the PAGE, not `page.request`**
+   332→   (Session 16): auth/newsletter/demo were all limited while
+   333→   `/api/workflows/generate` — the ONLY endpoint that costs real money
+   334→   per call — was unlimited (the probe drove 15/15 rapid authenticated
+   335→   POSTs all 200 in 8.1s). The fix keys the bucket PER-USER
+   336→   (`gen:${userId}` — the route is authenticated; an IP-keyed bucket
+   337→   would make a shared-egress office share one abuser's budget),
+   338→   overrides via `GENERATE_RATE_LIMIT_MAX` (the AUTH_RATE_LIMIT_MAX
+   339→   pattern), and keeps the CLIENT contract untouched: compose()'s
+   340→   `genRes.ok` degrade means a 429 still creates the template workflow
+   341→   — the feature never hard-fails, the limiter only caps the LLM spend
+   342→   (D80). The envelope also now carries `Cache-Control: private,
+   343→   no-store` at the ok()/fail() seam (Next protects dynamic PAGES with
+   344→   no-store but NOT route-handler JSON — D81), and
+   345→   `poweredByHeader: false` drops the X-Powered-By banner the live
+   346→   doesn't ship (D82). Survey-tooling traps: Playwright's
+   347→   `page.request` (APIRequestContext) REFUSES to send `Secure` cookies
+   348→   over plain http while Chromium page navigations treat 127.0.0.1 as
+   349→   trustworthy and DO send them — authenticated API probing must go
+   350→   through in-page fetches after a navigation; and after an API
+   351→   register, navigate DIRECTLY to the target page (a `/login` visit
+   352→   hits the S14 authenticated gate and redirects). Also: the DEV
+   353→   `db/custom.db` can DRIFT across sessions of probe traffic
+   354→   (S12–S15's pauses accumulated until every seeded workflow was
+   355→   paused — the resilience screenshot's Pause-button locator found
+   356→   nothing); re-seed with `npm run db:push && npm run db:seed` when a
+   357→   survey depends on the canonical workspace (e2e/smoke are immune —
+   358→   they boot fresh DBs).
+   359→
+   360→31. **Identical envelopes can still leak through LATENCY — and a crashed
+   361→   script orphans its servers (Session 17).** The login 401 was
+   362→   byte-identical for unknown-email and wrong-password, but the unknown
+   363→   path SKIPPED scrypt: ~3.5ms vs ~34ms — a 9.8x median delta that
+   364→   enumerates registered addresses at 1,440 candidates/day/IP even under
+   365→   the rate limit (CWE-208). The fix pattern: burn a fixed-cost dummy
+   366→   hash (`dummyPasswordHash()`) whenever the lookup misses — the response
+   367→   never changes, only the timing floor flattens (pinned by the suite's
+   368→   first timing pin: 7+7 curl medians, ratio < 2.5x). The same session's
+   369→   RACE class: undici's fetch pool serializes on ONE socket — probing a
+   370→   TOCTOU window (findUnique→create) needs TRUE wire-level concurrency
+   371→   (independent sockets: parallel curl processes or http.request with
+   372→   keepAlive: false); the loser's unhandled P2002 was a bare 500 with an
+   373→   EMPTY body. And the zombie-server family gained a new member: a
+   374→   SYNTAX ERROR mid-script aborts bash AFTER the server-boot lines but
+   375→   BEFORE the kill — the orphan then answers a later run's fresh boot on
+   376→   the same port (the EADDRINUSE is silently swallowed; the health check
+   377→   sees the STALE process serving the OLD build — the S17 closed-gate
+   378→   smoke pins read "409 EMAIL_TAKEN" instead of 403 until the port
+   379→   moved to :3220). Boot-and-kill server blocks belong at the END of a
+   380→   script block or in a trap — and give every auxiliary server its own
+   381→   port.
+   382→32. **The Next.js 16 production runtime captures route-module console
+   383→   output — and `process.stderr.write` too (Session 18).** A boot-time
+   384→   diagnostic (the AUTH_SECRET warning) survived THREE channels' worth of
+   385→   silence: a module-init `console.error` executed with the login route
+   386→   answering and the log stayed empty; the instrumentation hook's
+   387→   `process.stderr.write` ran (proved by a diagnostic `appendFileSync`)
+   388→   and the log stayed empty; only `fs.writeSync(2, …)` from a STATIC
+   389→   `import { writeSync } from "node:fs"` reliably lands (a dynamic
+   390→   `await import("node:fs")` compiles to the turbopack chunk loader,
+   391→   which RACES at boot — hung on one boot, resolved on the next). Boot
+   392→   diagnostics belong in `src/instrumentation.ts` writing to fd 2
+   393→   directly. Related discoveries the same session: **`next build` COPIES
+   394→   the repo `.env` into `.next/standalone/`** (an unset-in-shell
+   395→   AUTH_SECRET is still SET from the copied file — probe the standalone's
+   396→   OWN `.env` when testing env-dependent boot behavior), and the
+   397→   `kill $PID; wait $PID` pattern proved UNRELIABLE in this sandbox (the
+   398→   :3030/:3033/:3044 zombies) — the parity battery's collapse to 0.0000
+   399→   with concatenated words is the zombie's gotcha-26 signature; prefer
+   400→   FRESH PORTS per boot-and-probe cycle.
+   401→33. **Catching an error REMOVES Next's log line — a wrapper must restore
+   402→   the operator's sight itself (Session 19).** Next.js logs UNhandled
+   403→   route errors (the Prisma stack + digest in the server log); the moment
+   404→   a wrapper catches the error to answer the INTERNAL_ERROR envelope, the
+   405→   stack VANISHES from the log — the catch must re-log via the fd-2 seam
+   406→   (`writeSync(2, …)`, the gotcha-32 channel) or the operator is blind to
+   407→   exactly the failures the wrapper now handles. Related traps the same
+   408→   session: **`redirect()` inside a try/catch is swallowed** — it throws
+   409→   a control error (NEXT_REDIRECT) that a page-level catch converts into
+   410→   the degraded view, silently breaking the authenticated gate (keep
+   411→   redirect calls OUTSIDE error catches — two narrow blocks beat one
+   412→   wide one); and **pass the base URL EXPLICITLY to every probe script**
+   413→   — a survey script that DEFAULTS its probe port silently evaluated a
+   414→   zombie serving a stale build while its runner booted a healthy fresh
+   415→   server on a different port (the "collapsed" parity was the tooling,
+   416→   not the build; diagnosed by CSS-links-vs-disk + counting
+   417→   stylesheets-in-Chromium, then re-probed on the verified port).
+   418→34. **The FRAMEWORK answers unexported methods with bare 405s — the
+   419→   method layer sits BELOW every handler (Session 20).** A GET on a
+   420→   POST-only route never reaches the handler or its `apiRoute` wrapper:
+   421→   Next.js itself answers `405` with an EMPTY body, NO content-type, NO
+   422→   `Allow`, NO cache-control (probed across 11 method-mismatch requests —
+   423→   the security-header set from `next.config.ts` DOES cover framework
+   424→   answers; only the envelope layer is absent). The fix is guard
+   425→   exports: `export const GET = methodGuard("OPTIONS, POST")` per route
+   426→   file claims the unimplemented methods for the envelope (the RFC 9110
+   427→   §15.4.6 `Allow` header arrives free via the `fail()` seam). Related
+   428→   discoveries the same session: **an explicit `OPTIONS` export replaces
+   429→   Next's auto-answer** (204 + Allow — the auto-answer enumerates EXPORTS
+   430→   and would over-report once guards exist); **POST/PATCH route handlers
+   431→   buffer the full body at `request.json()` with no framework ceiling**
+   432→   (a 50MB login body was fully parsed in 314ms — read the DECLARED
+   433→   `content-length` BEFORE the parse: the `bodyTooLarge` guard rejects
+   434→   128KB+ bodies at the header, 91ms, nothing buffered; chunked bodies
+   435→   without a declaration are the proxy's residual to cap — DEPLOYMENT.md
+   436→   §2); and **a raw-fetch word-parity probe of the LIVE reads the
+   437→   un-hydrated SPA shell** (every route "collapses" to ~130 words — the
+   438→   honest comparison renders BOTH sides in Chromium and diffs
+   439→   `document.body.innerText`; the same class: the live's `/dashboard`
+   440→   server-status is 200 for ANY route — the SPA 404 is the RENDERED
+   441→   content, adjudicate on what the client sees).
+   442→35. **Cap the OUTPUT side too — and pair every list ceiling with honest
+   443→   aggregates (Session 21).** S20 capped what a request may CARRY (the
+   444→   128KB input ceiling); the OUTPUT side was unbounded: `GET
+   445→   /api/workflows` had no `take` (probed: a 400-workflow user's GET
+   446→   answered a 134.5KB body, the dashboard mounted 400 article cards —
+   447→   9,649 DOM nodes — while the runs chart sliced to 8; the LIST rendered
+   448→   everything). The fix rides SQL `take: MAX_WORKFLOW_LIST` (the
+   449→   wire-level cap, not a client slice) AND moves the stat cards to
+   450→   server-side aggregates shipped as the envelope's additive `meta`
+   451→   sibling — because a capped list without honest aggregates silently
+   452→   turns the four stat cards into subset summaries (a ceiling that lies
+   453→   is worse than no ceiling). The `meta` field is strictly OPTIONAL in
+   454→   the client (the e2e error-boundary mocks fulfill with bare arrays and
+   455→   must keep working). Related discoveries the same session:
+   456→   **`POST /api/workflows` was the ONLY unthrottled mutation** (auth,
+   457→   newsletter, demo, generate all carry limiters — a script minted
+   458→   unbounded rows with one tiny JSON POST each; now `workflowRateLimit`,
+   459→   30/USER/15min, `WORKFLOW_RATE_LIMIT_MAX` override);
+   460→   **Playwright's `context.cookies(url)` filters SECURE cookies on plain
+   461→   http** — 127.0.0.1 is trustworthy for NAVIGATION (the cookie is sent)
+   462→   but cookie ENUMERATION with a URL argument drops it; enumerate with
+   463→   `context.cookies()` (no args) and match by name (the gotcha-30
+   464→   family); and **a `setsid`-detached survey server OUTLIVES its
+   465→   diagnostic session** — the next runner's fresh boot on the same port
+   466→   hits a silently-swallowed EADDRINUSE and probes the STALE build (the
+   467→   gotcha-26/31 family's fourth member — kill detached servers
+   468→   explicitly, or probe on fresh ports).
+   469→
+   470→36. **Race the WRITE, don't check-then-write — and pin the ownership at
+   471→   the wire (Session 22).** S17 closed CREATE's race (P2002 → the 409
+   472→   classifier); the `[id]` PATCH/DELETE routes still ran
+   473→   read-check-act (`findFirst` → parse → `update`/`delete` by bare id):
+   474→   a DELETE committing while a slow under-ceiling PATCH body parsed threw
+   475→   UNCLASSIFIED P2025 → the 500 INTERNAL_ERROR envelope for a legitimate
+   476→   two-tab user (probed 3/3; the parallel DELETE double-fire hit 500 in
+   477→   2/5 — nondeterministic). The fix carries the ownership predicate IN
+   478→   the write (`updateMany`/`deleteMany` with `userId` in the WHERE;
+   479→   count 0 → the honest 404) — closed by construction, not by catching
+   480→   the symptom (`updateMany`/`deleteMany` never throw P2025). Two
+   481→   adjacent traps probed the same session: **Prisma's
+   482→   `updateMany({data:{}})` is a no-op returning count 0 EVEN FOR AN
+   483→   EXISTING ROW** — an empty-patch contract needs its own read branch;
+   484→   and the ownership (IDOR) guard had NO wire-level pin anywhere — the
+   485→   cross-user battery (user A on user B's row → 404 ×3) now pins it
+   486→   (a dropped `userId` regression is a guaranteed smoke failure, not a
+   487→   silent hole). Smoke-pin authoring traps: curl's `-w '%{http_code}'`
+   488→   writes NO trailing newline (a concatenated `cat c*` can never match
+   489→   `^200$` — count per-file), and bash's `${f/c/r}` substitution
+   490→   rewrites the FIRST 'c' anywhere in the path (a mktemp dir name) —
+   491→   pair files by explicit index.
+   492→
+   493→37. **The CLIENT dispatches failure classes too — and a stale client
+   494→   snapshot can beat the truth (Session 23).** S13's law ("failure
+   495→   CLASSES need distinct UI contracts") did not stop at the wire: S22
+   496→   made the raced PATCH/DELETE answer the honest 404, but the client
+   497→   catch still wore the retry-lie banner ("Try again" — every retry
+   498→   404s forever) and kept the ghost row mounted. The client now
+   499→   mirrors the truth: a 404 drops the row locally + re-syncs + the
+   500→   polite `role="status"` announce (PATCH: "no longer in the
+   501→   workspace"; DELETE: the IDEMPOTENT-SUCCESS "already removed"), the
+   502→   `SessionExpired` early-return keeps 401s banner-free by
+   503→   construction, and only the RETRYABLE classes (network faults)
+   504→   keep the banner. The sibling trap: `refresh()` had no in-flight
+   505→   ordering guard — two concurrent actions on DIFFERENT rows (busyId
+   506→   only guards one row) fire two GETs, and a delayed stale snapshot
+   507→   landing LAST resurrected the deleted row (probed deterministically
+   508→   via route-delay); a `useRef` sequence counter drops any response
+   509→   superseded by a newer refresh. Pin-authoring traps this session:
+   510→   **Next.js's route announcer is itself a `role=alert` element
+   511→   carrying the page title** — an unfiltered alert-count pin can never
+   512→   pass; filter by text (the session-lifecycle pattern). And
+   513→   survey-tooling (the gotcha-30 family): **a `page.route` mock's
+   514→   `**/api/workflows` glob does NOT match `/api/workflows/[id]`** —
+   515→   the capture script's error-boundary Pause-click escaped the mock
+   516→   and landed on the dev DB (the seed checksum covers names/rows, not
+   517→   statuses — two sessions closed "canonical" with paused rows);
+   518→   cover the [id] routes in the regex and verify the dev DB logical
+   519→   state (rows + active count + runs sum) before AND after capture
+   520→   runs.
+   521→
+   522→38. **A hang is not a failure — and a failure surface must not outlive
+   523→   its action (Session 24).** No client fetch carried a timeout: a
+   524→   black-holed request (a stalled connection — the CLIENT twin of
+   525→   S15's server-side hang) neither resolves nor rejects, so the
+   526→   dashboard's busyId spinner stayed engaged FOREVER with no banner
+   527→   and no recovery (the S12 resilience pins cover aborts, which
+   528→   reject immediately — the hang class was invisible to the gates
+   529→   until probed with a never-fulfilling `page.route`). Every client
+   530→   fetch now rides `fetchWithTimeout` (`src/lib/client-fetch.ts`, 20s
+   531→   — above the server's own 10s SDK ceiling), converting the hang
+   532→   into the existing network-fault contract. Pin it with Playwright's
+   533→   `clock` API (`page.clock.install()` + `fastForward`) — the 20s
+   534→   ceiling costs milliseconds; an inert fetch MOCK cannot observe the
+   535→   abort rejection (unit-pin the seam against a REAL hung TCP
+   536→   socket). The sibling law: every action start clears BOTH error
+   537→   surfaces — a "Try again." banner left mounted after a SUCCESSFUL
+   538→   unrelated action is a lie by staleness. And the first-run placement
+   539→   trap (this session's in-vivo RED): the seed and db:push now resolve
+   540→   through the db-path seam and PRINT their target (`seed-target:` /
+   541→   `[db] DATABASE_URL=`) — the seed must always write where the app
+   542→   reads; the sandbox's shell-exported absolute `DATABASE_URL` +
+   543→   parent `.env` (gotcha 1's vectors) silently redirected a whole
+   544→   first-run to a foreign database while login answered P2021.
+   545→
+   546→39. **Every ceiling must say what it hides — and pin the budgets you
+   547→   measured (Session 25).** The runs chart rendered `slice(0, 8)`
+   548→   silently: with a 12-row workspace it showed 8 bars with no note while
+   549→   the heading read "Runs by workflow" — the same lie the workflow LIST
+   550→   was fixed for in Session 21 ("a ceiling that lies is worse than no
+   551→   ceiling"); the chart's ceiling never got the honesty because no probe
+   552→   ever held >8 rows. Now `CHART_ROWS` + the S21-pattern note with the
+   553→   TRUE total (D104) — and the survey discipline: probe EVERY capped
+   554→   surface with data that EXCEEDS its cap (the seeded 6-row workspace
+   555→   hides every ceiling above 6). The sibling law: performance budgets
+   556→   measured ad hoc are REGRESSIONS WAITING — the S21/S22 LCP/DOM-node
+   557→   ceilings now live in `tests/e2e/performance-budget.spec.ts` with 2–4x
+   558→   margins (the budget catches GROSS regressions, not milliseconds —
+   559→   generous ceilings are the de-flake strategy, not a weakness). And the
+   560→   a11y twin: a chart's rows are a LIST — div soup never announces
+   561→   "list, N items" to a screen reader (now `ul`/`li`, D105); when you
+   562→   add a note to a dark card, reach for `text-white/50` FIRST — this
+   563→   session's own first draft shipped `text-white/40` and the axe scan
+   564→   caught it at 3.5:1 (the S10/D59 lesson: the scan only catches what
+   565→   RENDERS — the LIST's S21 note carried the same latent violation for
+   566→   four sessions because it needs a >100-row workspace to appear).
+   567→
+   568→40. **A ranked surface must rank by its own title — and the cap can hide
+   569→   the champion entirely (Session 26).** The runs chart under the heading
+   570→   "Runs by workflow" charted `workflows.slice(0, 8)` — the 8 most
+   571→   RECENT rows, mirroring the list: a 12-row workspace whose OLDEST row
+   572→   carried 12,000 runs rendered the champion INVISIBLE with every bar a
+   573→   4%–7.5% stub (the `maxRuns` denominator came from a row the chart
+   574→   never displayed — the bar-length encoding carried no information
+   575→   exactly when a runs ranking is meaningful). The survey discipline:
+   576→   probe every RANKED surface with a workspace whose top row by the
+   577→   ranking key is NOT the newest row (the seeded 6-row workspace hides
+   578→   the question — recency and rank coincide). And the deeper trap found
+   579→   while designing the fix: at >100 workflows the client's `workflows`
+   580→   state is the CAPPED newest-100 list — every old high-run row sits
+   581→   OUTSIDE the cap, so ANY client-side ranking ranks only the newest 100
+   582→   (the smoke 111-row workspace: the champion sits in ZERO of the
+   583→   newest-100 rows). An honest ranking over capped data must be
+   584→   SERVER-SIDE — the envelope's `meta` sibling (the S21 stat-cards
+   585→   precedent) carries `topRuns` across the FULL workspace; the client
+   586→   keeps a pure fallback seam for the meta-less contract. The VLM twin:
+   587→   a single-frame screenshot of an ANIMATED surface (the gradient
+   588→   heading's 14s sweep) can catch a white-dominant instant — adjudicate
+   589→   with a time-sampled probe before believing "missing" (the gotcha-15/24
+   590→   single-frame family), and write the check prompt FROM the spec's
+   591→   pinned assertions (the hero's video is the full-bleed BACKGROUND —
+   592→   `section video` pinned by src — NOT a mockup card; twelfth drift).
+   593→
+   594→41. **A stat card's aggregate must weight by what it aggregates — and a
+   595→   `finally` block's `process.exit(0)` swallows the in-flight error
+   596→   (Session 27).** The card labeled "Avg success rate" rendered Prisma's
+   597→   `_avg successRate` — the UNWEIGHTED mean over workflows: with one
+   598→   12,000-run row at 60% and four 3-run rows at 100% it displayed 92.0%
+   599→   while the workspace's true (run-weighted) rate was 60.0% — the
+   600→   average-of-averages fallacy, displayed directly beside "Total runs
+   601→   12,012" (the run-share reading it invites). The law: a workspace-level
+   602→   rate must weight by RUNS (`Σ(runs × successRate) / Σ(runs)` — the
+   603→   share of runs that succeeded), computed server-side through a pure
+   604→   seam shared by the route, the page, and the client fallback; and the
+   605→   label + the wire field NAME their criterion ("Success rate" /
+   606→   `meta.stats.successRate` — a field named "avg" carrying a weighted
+   607→   rate would be the gotcha-40 chart lie one layer down). The pin
+   608→   discipline: a discriminating smoke pin needs probe data where the
+   609→   semantics DIVERGE (the 105 volumetric probe rows at successRate 50:
+   610→   unweighted 52.7 vs weighted 93.1 — at the old 99.5 BOTH rendered
+   611→   99.5%, pinning nothing). The tooling twin (caught the same session):
+   612→   the standing screenshot capture script failed mid-run after shot 13
+   613→   — and its `finally` block's `process.exit(ok ? 0 : 1)` PREEMPTED the
+   614→   pending catch handler, so the S26 run "succeeded" (exit 0) having
+   615→   refreshed only 17 of 20 shots; never exit 0 from a finally, and check
+   616→   the COMPLETION log line, never the exit code alone (the gotcha-32
+   617→   channels family — a swallowed channel lies).
+   618→
+   619→## Architecture invariants
+   620→
+   621→- **Layering:** route handlers (`src/app/api/**`) own validation +
+   622→  persistence; views never fetch directly — the dashboard server page loads
+   623→  initial state and the client component mutates through the API envelope.
+   624→- **The envelope:** every API route returns `{ ok: true, data }` or
+   625→  `{ ok: false, error: { code, message } }` via `src/lib/api.ts` (`ok` /
+   626→  `fail` / `requireSession` + the Session-19 crash-path wrapper
+   627→  `apiRoute` — what ESCAPES a handler becomes the INTERNAL_ERROR
+   628→  envelope with the stack re-logged to fd 2 — and the Session-20 method
+   629→  guards `methodGuard`/`optionsGuard` + the request-size ceiling
+   630→  `bodyTooLarge` before every body parse + the Session-21 optional
+   631→  `meta` sibling of `data` carrying the capped list's TRUE total +
+   632→  honest aggregates + the Session-22 ownership-scoped atomic writes
+   633→  `updateMany`/`deleteMany` with `userId` in the WHERE — count 0 is the
+   634→  honest 404, and the mutation race is closed by construction). The
+   635→  CLIENT mirrors the same honesty (Session 23): a PATCH/DELETE 404 drops
+   636→  the ghost row + re-syncs + announces politely (never the retry-lie
+   637→  banner — the S13 failure-class law extended to the client; a DELETE 404
+   638→  is idempotent success), 401s stay banner-free via the `SessionExpired`
+   639→  early-return, and `refresh()`'s sequence guard drops any response
+   640→  superseded by a newer refresh (no stale-snapshot resurrection). The
+   641→  client's TEMPORAL layer (Session 24): every fetch rides
+   642→  `fetchWithTimeout` (the 20s client ceiling — a hang converts into the
+   643→  network-fault banner + busy release, never an eternal spinner) and
+   644→  every action start clears BOTH error surfaces (a failure surface lives
+   645→  exactly until the user's next action of ANY class) + the Session-25
+   646→  observability layer: the runs chart's ceiling is honest (CHART_ROWS +
+   647→  the S21-pattern note with the TRUE total, D104) with semantic list
+   648→  rows (D105), and the measured performance ceilings (LCP/DOM budgets)
+   649→  are PINNED in the e2e gate — `tests/e2e/performance-budget.spec.ts` —
+   650→  and the Session-26 ranking layer: the chart titled "Runs by workflow"
+   651→  RANKS BY RUNS across the FULL workspace via the server-side
+   652→  `meta.topRuns` aggregate (the capped client list can never rank
+   653→  honestly at >100 rows — D106) with the pure `rankByRuns()` fallback
+   654→  seam, and the script-TRANSFER bytes are pinned (scripts ≤ 400KB per
+   655→  route — D107), and the Session-27 weighting layer: the stat card
+   656→  "Success rate" carries the RUN-WEIGHTED truth (`weightedSuccessRate()`
+   657→  — Σ(runs × successRate) / Σ(runs) over the FULL workspace, server-side
+   658→  via the shared pure seam; the meta field is `successRate`; the client
+   659→  fallback weights identically — D108) with the paint-milestone budgets
+   660→  pinned (TTFB ≤ 500ms + FCP ≤ 1000ms per route + the authed-dashboard
+   661→  LCP ≤ 1000ms — D109). No route
+   662→  returns bare JSON — including on the crash paths AND the
+   663→  method-mismatch paths AND the raced paths.
+   664→- **Degrade-not-fail AI:** `/api/workflows/generate` asks
+   665→  `z-ai-web-dev-sdk` for a workflow draft and falls back to the
+   666→  deterministic template (`src/lib/workflow.ts`) on any SDK failure — the
+   667→  feature never hard-fails, and the sanitizer clamps LLM output before
+   668→  persistence.
+   669→- **Legal/FAQ content is code:** `src/lib/legal-content.ts` and
+   670→  `src/lib/faq-content.ts` carry the reference-captured copy verbatim;
+   671→  content integrity is unit-tested (`content.test.ts`).
+   672→
+   673→## Git workflow
+   674→
+   675→- **`main` only** — no feature branches (operator contract).
+   676→- **Commits:** Conventional Commits with emoji prefixes: `:art: feat: …`,
+   677→  `:memo: docs: …`, `:bug: fix: …`.
+   678→- **Push:** via `docs/ssh_git_wrapper_v3.py` with an externally supplied key
+   679→  (see `docs/how-to-git-push-using-ssh-wrapper_SKILL.md`) — never a resident
+   680→  `~/.ssh` dependency.
+   681→- **Never committed:** `.env`, `*.key`, `db/*.db`, `node_modules/`,
+   682→  `dev.log`/`server.log`, `tests/e2e/.auth/` (all gitignored).
+   683→
