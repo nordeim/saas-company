@@ -70,7 +70,7 @@ export interface WorkflowStats {
   active: number;
   runs: number;
   hours: number;
-  avgSuccessRate: number;
+  successRate: number;
 }
 
 /**
@@ -87,26 +87,52 @@ export interface RankedWorkflowRow {
 }
 
 /**
+ * Session 27 R1 — the run-weighted success rate (D108): the workspace's
+ * TRUE success rate, Σ(runs × successRate) / Σ(runs) — the share of runs
+ * that succeeded. Probed RED with the extreme shape (1 row: 12,000 runs
+ * @ 60% + 4 rows: 3 runs @ 100%): the UNWEIGHTED mean over workflows
+ * displays 92.0% while the run-weighted truth is 60.0% — the classic
+ * "average of averages" fallacy (averaging pre-aggregated per-workflow
+ * rates without weighting by sample size erases the champion's weight —
+ * the exact defect class the S21 stat-cards fix closed for the capped
+ * list). Answer null iff Σruns = 0 (the empty or zero-run workspace —
+ * the caller maps it to the documented 100 default).
+ *
+ * Pure and unit-tested (workflow-ceiling.test.ts); shared by the GET
+ * route's meta.stats and the dashboard page's initial paint (one
+ * definition, no drift between the two seams) — and by the CLIENT's
+ * meta-less fallback (the same weighting over the visible rows).
+ */
+export function weightedSuccessRate(
+  rows: ReadonlyArray<{ runs: number; successRate: number }>,
+): number | null {
+  const totalRuns = rows.reduce((n, r) => n + r.runs, 0);
+  if (totalRuns === 0) return null;
+  return rows.reduce((n, r) => n + r.runs * r.successRate, 0) / totalRuns;
+}
+
+/**
  * Normalize a Prisma aggregate into the stat-card shape. Pure and
  * unit-tested; shared by the GET /api/workflows route and the dashboard
  * page (one definition, no drift between the two seams).
  *
  * - `hours` rounds to the integer the card renders.
- * - a null `_avg` (Prisma's answer for zero rows) maps to the 100 the
- *   client already displays for an empty workspace.
+ * - a null rate (the zero-run workspace — weightedSuccessRate's answer
+ *   when Σruns = 0) maps to the 100 the client already displays for an
+ *   empty workspace.
  */
 export function statsFromAggregate(
   total: number,
   active: number,
   runs: number,
   hours: number,
-  avgSuccessRate: number | null,
+  successRate: number | null,
 ): WorkflowStats {
   return {
     active,
     runs,
     hours: Math.round(hours),
-    avgSuccessRate: avgSuccessRate === null ? 100 : avgSuccessRate,
+    successRate: successRate === null ? 100 : successRate,
   };
 }
 

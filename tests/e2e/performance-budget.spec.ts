@@ -37,6 +37,49 @@ const DASHBOARD_DOM_BUDGET = 500;
  * accidental full-library import — not kilobytes). */
 const SCRIPT_TRANSFER_BUDGET_BYTES = 400 * 1024;
 
+/** Session 27 R2 — the PAINT-MILESTONE budgets (the S50 log's first
+ * suggested surface: the paint corners the S25/S26 budgets never pinned).
+ * Measured at authoring time (localhost standalone, fresh contexts, cold
+ * cache): TTFB landing 10ms / login 7ms / the authed dashboard 30ms; FCP
+ * landing 196ms / login 136ms / dashboard 152ms; the authed dashboard's
+ * LCP 152ms (login/landing LCP were pinned in S25 — the dashboard's was
+ * not). The ceilings follow the generous-margin discipline: TTFB ≤ 500ms
+ * (16–70x the measured values — a route that grows an N+1 query pattern
+ * or seconds of sync work fails the gate), FCP ≤ 1000ms (5–7x — a
+ * render-blocking regression), the authed-dashboard LCP ≤ 1000ms (~6.5x). */
+const TTFB_BUDGET_MS = 500;
+const FCP_BUDGET_MS = 1000;
+const DASHBOARD_LCP_BUDGET_MS = 1000;
+
+/** The navigation's paint milestones: TTFB (responseStart − requestStart)
+ * and FCP (the first-contentful-paint entry's startTime). */
+async function paintMilestones(page: Page): Promise<{ ttfb: number; fcp: number }> {
+  return page.evaluate(() => {
+    const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+    const fcp = performance
+      .getEntriesByType("paint")
+      .find((p) => p.name === "first-contentful-paint") as PerformancePaintTiming | undefined;
+    return {
+      ttfb: nav ? Math.round(nav.responseStart - nav.requestStart) : -1,
+      fcp: fcp ? Math.round(fcp.startTime) : -1,
+    };
+  });
+}
+
+/** Sign in and re-navigate so the CURRENT navigation entry is /dashboard
+ * itself (the paint milestones belong to the dashboard load, not the
+ * post-login redirect chain). */
+async function authedDashboardNavigation(page: Page): Promise<void> {
+  await page.goto("/login");
+  await page.getByLabel("Email").fill(DEMO_EMAIL);
+  await page.getByLabel("Password").fill(DEMO_PASSWORD);
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(page).toHaveURL(/\/dashboard$/, { timeout: 15_000 });
+  await page.getByRole("heading", { name: "Workflows" }).waitFor();
+  await page.goto("/dashboard", { waitUntil: "load" });
+  await page.getByRole("heading", { name: "Workflows" }).waitFor();
+}
+
 /** The script bytes transferred for the current document, sampled to
  * settled (the §7.4 poll discipline). */
 async function scriptTransferBytes(page: Page): Promise<number> {
@@ -144,5 +187,49 @@ test.describe("JS-transfer budgets (Session 26 R2 — the S48 third surface)", (
       bytes,
       `authed dashboard script transfer ${Math.round(bytes / 1024)}KB <= ${SCRIPT_TRANSFER_BUDGET_BYTES / 1024}KB (measured 177KB at authoring)`,
     ).toBeLessThanOrEqual(SCRIPT_TRANSFER_BUDGET_BYTES);
+  });
+});
+
+test.describe("paint-milestone budgets (Session 27 R2 — the S50 unpainted corners)", () => {
+  test("landing: TTFB budget", async ({ page }) => {
+    await page.goto("/", { waitUntil: "load" });
+    const { ttfb } = await paintMilestones(page);
+    expect(ttfb, `landing TTFB ${ttfb}ms <= ${TTFB_BUDGET_MS}ms (measured 10ms at authoring)`).toBeLessThanOrEqual(TTFB_BUDGET_MS);
+  });
+
+  test("landing: FCP budget", async ({ page }) => {
+    await page.goto("/", { waitUntil: "load" });
+    const { fcp } = await paintMilestones(page);
+    expect(fcp, `landing FCP ${fcp}ms <= ${FCP_BUDGET_MS}ms (measured 196ms at authoring)`).toBeLessThanOrEqual(FCP_BUDGET_MS);
+  });
+
+  test("login: TTFB budget", async ({ page }) => {
+    await page.goto("/login", { waitUntil: "load" });
+    const { ttfb } = await paintMilestones(page);
+    expect(ttfb, `login TTFB ${ttfb}ms <= ${TTFB_BUDGET_MS}ms (measured 7ms at authoring)`).toBeLessThanOrEqual(TTFB_BUDGET_MS);
+  });
+
+  test("login: FCP budget", async ({ page }) => {
+    await page.goto("/login", { waitUntil: "load" });
+    const { fcp } = await paintMilestones(page);
+    expect(fcp, `login FCP ${fcp}ms <= ${FCP_BUDGET_MS}ms (measured 136ms at authoring)`).toBeLessThanOrEqual(FCP_BUDGET_MS);
+  });
+
+  test("dashboard (authed): TTFB budget", async ({ page }) => {
+    await authedDashboardNavigation(page);
+    const { ttfb } = await paintMilestones(page);
+    expect(ttfb, `authed dashboard TTFB ${ttfb}ms <= ${TTFB_BUDGET_MS}ms (measured 30ms at authoring)`).toBeLessThanOrEqual(TTFB_BUDGET_MS);
+  });
+
+  test("dashboard (authed): FCP budget", async ({ page }) => {
+    await authedDashboardNavigation(page);
+    const { fcp } = await paintMilestones(page);
+    expect(fcp, `authed dashboard FCP ${fcp}ms <= ${FCP_BUDGET_MS}ms (measured 152ms at authoring)`).toBeLessThanOrEqual(FCP_BUDGET_MS);
+  });
+
+  test("dashboard (authed): LCP budget", async ({ page }) => {
+    await authedDashboardNavigation(page);
+    const lcp = await settledLcp(page);
+    expect(lcp, `authed dashboard LCP ${lcp}ms <= ${DASHBOARD_LCP_BUDGET_MS}ms (measured 152ms at authoring — the unpinned corner)`).toBeLessThanOrEqual(DASHBOARD_LCP_BUDGET_MS);
   });
 });

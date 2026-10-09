@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.25.0 · **Last updated:** 2026-10-09 (Session 26 remediation)
+> **Version:** 2.26.0 · **Last updated:** 2026-10-09 (Session 27 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–26)
+## §12. Lessons Learnt (Sessions 1–27)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -1071,6 +1071,55 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     reports a deviation, verify the CLAIM against the spec + a
     geometry/time probe before believing either the verdict OR your
     own prompt.
+
+
+62. **A workspace-level rate must weight by what it aggregates — the
+    average-of-averages fallacy (Session 27)**: the stat card rendered
+    Prisma's `_avg successRate` — the UNWEIGHTED mean over
+    per-workflow rates. The extreme probe shape (1 row: 12,000 runs @
+    60% + 4 rows: 3 runs @ 100%) displayed 92.0% while the
+    workspace's true rate was 60.0% — a 32-point divergence sitting
+    directly beside "Total runs 12,012" (the run-share reading the
+    adjacency invites: "92% of my 12,012 runs succeed" is off by
+    ~4,000 runs). Averaging pre-aggregated values without weighting
+    by sample size is the classic statistical fallacy — and it hides
+    in plain sight because the seeded demo data (rates 97.8–100)
+    renders both semantics identically at one decimal. The fix
+    pattern: the pure `weightedSuccessRate()` seam
+    (`Σ(runs × successRate) / Σ(runs)`, null iff Σruns = 0) shared by
+    the route's meta, the page's initial paint, AND the client's
+    fallback memo — one definition, no drift; the wire field and the
+    label NAME their criterion (`meta.stats.successRate` /
+    "Success rate" — a field named "avg" carrying a weighted rate
+    would be the lesson-60 chart lie one layer down). The pin
+    discipline: a wire pin needs probe data where the semantics
+    DIVERGE (the smoke's 105 volumetric probe rows at successRate 50:
+    unweighted 52.7 vs weighted 93.1 — at the old 99.5 BOTH rendered
+    99.5%, pinning nothing); and the e2e pin derives its expectation
+    from the SURVIVING rows (session23-honesty has deleted two seeds
+    by then) while carrying a self-checking discrimination
+    meta-assertion (weighted ≠ unweighted at one decimal — the S17
+    timing-ratio pattern: the pin verifies it still pins).
+
+63. **A finally block's `process.exit(0)` swallows the in-flight
+    error — the completion log line is the check, never the exit
+    code alone (Session 27)**: the standing screenshot capture script
+    failed mid-run after shot 13 (after the mobile section the
+    desktop page sat on /accessibility, so the resilience-shot Pause
+    click found no button and timed out) — and its `finally` block's
+    `process.exit(ok ? 0 : 1)` PREEMPTED the pending catch handler,
+    so the run exited 0 having refreshed only 17 of 20 shots; the S26
+    session closed "20 screenshots refreshed" on the exit code's word
+    (the gotcha-32 channels family: a swallowed channel lies — the
+    log line "20 shots captured" never printed and nobody looked).
+    The laws: never `process.exit(0)` from a finally (drift forces 1;
+    shot failures propagate to the catch; only a clean full run
+    exits 0), and verify the COMPLETION artifact (the log line, the
+    file count, the timestamp set) — an exit code is a summary, not
+    a proof. The audit corollary: when a multi-step script's step
+    count matters, count the OUTPUTS (this session's `ls` showed
+    14/15/16 stale at the clone timestamp — the git-checkout mtime
+    was the tell).
 
 ## §13. Pitfalls to Avoid
 

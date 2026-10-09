@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import { DashboardApp } from "@/components/dashboard/dashboard-app";
 import { DashboardUnavailable } from "@/components/dashboard/dashboard-unavailable";
 import { routeMetadata } from "@/lib/seo";
-import { MAX_WORKFLOW_LIST, CHART_ROWS, statsFromAggregate, type WorkflowStats, type RankedWorkflowRow } from "@/lib/workflow";
+import { MAX_WORKFLOW_LIST, CHART_ROWS, statsFromAggregate, weightedSuccessRate, type WorkflowStats, type RankedWorkflowRow } from "@/lib/workflow";
 
 // No live counterpart (the superset) — follow the app-wide per-route head
 // pattern (Session 6 F5).
@@ -48,13 +48,18 @@ export default async function DashboardPage() {
   // the capped `workflows` list hides every old high-run row from any
   // client-side computation — only the server can rank honestly (the
   // S21 stat-cards precedent, extended to the ranking surface).
+  //
+  // Session 27 R1 — the stats' successRate becomes the RUN-WEIGHTED truth
+  // (D108, twin to the GET route's change): the unweighted `_avg` was the
+  // average-of-averages fallacy; the Promise.all gains the two-column
+  // rate-rows fetch feeding the pure weightedSuccessRate seam.
   let workflows;
   let totalWorkflows = 0;
-  let initialStats: WorkflowStats = { active: 0, runs: 0, hours: 0, avgSuccessRate: 100 };
+  let initialStats: WorkflowStats = { active: 0, runs: 0, hours: 0, successRate: 100 };
   let initialTopRuns: RankedWorkflowRow[] = [];
   try {
     const where = { userId };
-    const [rows, total, active, agg, topRuns] = await Promise.all([
+    const [rows, total, active, agg, rateRows, topRuns] = await Promise.all([
       db.workflow.findMany({
         where,
         orderBy: [{ createdAt: "desc" }],
@@ -65,7 +70,13 @@ export default async function DashboardPage() {
       db.workflow.aggregate({
         where,
         _sum: { runs: true, timeSavedHours: true },
-        _avg: { successRate: true },
+      }),
+      // Session 27 R1: the rate-rows fetch — the two columns the
+      // run-weighted success rate needs (the weighting math lives in
+      // the pure seam, shared with the GET route — one definition).
+      db.workflow.findMany({
+        where,
+        select: { runs: true, successRate: true },
       }),
       db.workflow.findMany({
         where,
@@ -82,7 +93,7 @@ export default async function DashboardPage() {
       active,
       agg._sum.runs ?? 0,
       agg._sum.timeSavedHours ?? 0,
-      agg._avg.successRate ?? null,
+      weightedSuccessRate(rateRows),
     );
   } catch {
     return <DashboardUnavailable />;

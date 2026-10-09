@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (123) | 170 unit + 218 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 176 unit + 229 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -145,15 +145,50 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 170/170 PASS
+- [ ] `npm run test` → 176/176 PASS
 - [ ] `npm run build` compiles clean
-- [ ] `./scripts/smoke-test.sh` → 123/123 PASS
-- [ ] `npm run test:e2e` → 218/218 PASS (needs the build first)
+- [ ] `./scripts/smoke-test.sh` → 124/124 PASS
+- [ ] `npm run test:e2e` → 229/229 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 27 (2026-10-09) remediation** — see
+  `docs/remediation-plan-session27.md`: a stat-honesty + paint-budget
+  audit (the S50 log's three suggested surfaces — the unpinned
+  TTFB/FCP budget families, the composed-vs-charted cross-surface
+  consistency audit, and the first-run story under the empty-workspace
+  boundary shapes — surveyed then extended to their class) found and
+  fixed one defect and shipped the paint-budget extension: **the
+  success-rate stat card's average-of-averages fallacy** — the card
+  rendered Prisma's `_avg successRate`, the UNWEIGHTED mean over
+  workflows (probed RED with the extreme shape: 1 row of 12,000 runs @
+  60% + 4 rows of 3 runs @ 100% — the card displayed 92.0% while the
+  workspace's true run-weighted rate is 60.0%, a 32-point divergence
+  sitting directly beside "Total runs 12,012"); the fix is the pure
+  `weightedSuccessRate()` seam (`Σ(runs × successRate) / Σ(runs)`,
+  null iff Σruns = 0 → the documented 100 mapping) riding the GET
+  route's and the dashboard page's `Promise.all` (the two-column
+  rate-rows fetch replaces `_avg`) + the client's weighted fallback
+  memo + the meta field rename `avgSuccessRate` → `successRate`
+  (name/value coherence on the wire) + the label rename to "Success
+  rate" (the S26 label-names-its-criterion law); the smoke's 105
+  volumetric probe rows changed rate 99.5 → 50 so the new wire pin
+  DISCRIMINATES (unweighted 52.7 vs weighted 93.1 — at 99.5 both
+  rendered 99.5%, pinning nothing). ALSO: the paint-milestone budgets
+  (TTFB ≤ 500ms + FCP ≤ 1000ms per route + the authed-dashboard LCP ≤
+  1000ms — the unpainted corners of the S25/S26 families); the pin-gap
+  closures (the chart's client-refresh path on compose/delete WITHOUT
+  a reload + the empty-workspace first-run render); and the capture
+  script's swallowed-error bug fixed (its `finally`'s
+  `process.exit(0)` preempted the pending catch — the S26 run had
+  refreshed only 17 of 20 shots while exiting 0; the completion log
+  line is the check, never the exit code alone). Gate: **529 checks**
+  (176 unit + 124 smoke + 229 e2e); 20 screenshots genuinely
+  refreshed (VLM ×5 PASS on the first run — both S26 lessons encoded
+  in the prompts).
 
 - **Session 26 (2026-10-09) remediation** — see
   `docs/remediation-plan-session26.md`: a chart-ranking + transfer-budget

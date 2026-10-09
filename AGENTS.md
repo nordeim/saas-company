@@ -19,16 +19,16 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (170 checks) | `npm run test` |
-| Browser E2E (218 checks; needs a build) | `npm run test:e2e` |
+| Unit tests (176 checks) | `npm run test` |
+| Browser E2E (229 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
-| End-to-end smoke suite (123 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
+| End-to-end smoke suite (124 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (170/170) → `npm run build` → `./scripts/smoke-test.sh` (123/123)
-→ `npm run test:e2e` (218/218) — 511 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (176/176) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
+→ `npm run test:e2e` (229/229) — 529 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`, `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -591,6 +591,31 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    pinned assertions (the hero's video is the full-bleed BACKGROUND —
    `section video` pinned by src — NOT a mockup card; twelfth drift).
 
+41. **A stat card's aggregate must weight by what it aggregates — and a
+   `finally` block's `process.exit(0)` swallows the in-flight error
+   (Session 27).** The card labeled "Avg success rate" rendered Prisma's
+   `_avg successRate` — the UNWEIGHTED mean over workflows: with one
+   12,000-run row at 60% and four 3-run rows at 100% it displayed 92.0%
+   while the workspace's true (run-weighted) rate was 60.0% — the
+   average-of-averages fallacy, displayed directly beside "Total runs
+   12,012" (the run-share reading it invites). The law: a workspace-level
+   rate must weight by RUNS (`Σ(runs × successRate) / Σ(runs)` — the
+   share of runs that succeeded), computed server-side through a pure
+   seam shared by the route, the page, and the client fallback; and the
+   label + the wire field NAME their criterion ("Success rate" /
+   `meta.stats.successRate` — a field named "avg" carrying a weighted
+   rate would be the gotcha-40 chart lie one layer down). The pin
+   discipline: a discriminating smoke pin needs probe data where the
+   semantics DIVERGE (the 105 volumetric probe rows at successRate 50:
+   unweighted 52.7 vs weighted 93.1 — at the old 99.5 BOTH rendered
+   99.5%, pinning nothing). The tooling twin (caught the same session):
+   the standing screenshot capture script failed mid-run after shot 13
+   — and its `finally` block's `process.exit(ok ? 0 : 1)` PREEMPTED the
+   pending catch handler, so the S26 run "succeeded" (exit 0) having
+   refreshed only 17 of 20 shots; never exit 0 from a finally, and check
+   the COMPLETION log line, never the exit code alone (the gotcha-32
+   channels family — a swallowed channel lies).
+
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +
@@ -627,7 +652,13 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   `meta.topRuns` aggregate (the capped client list can never rank
   honestly at >100 rows — D106) with the pure `rankByRuns()` fallback
   seam, and the script-TRANSFER bytes are pinned (scripts ≤ 400KB per
-  route — D107). No route
+  route — D107), and the Session-27 weighting layer: the stat card
+  "Success rate" carries the RUN-WEIGHTED truth (`weightedSuccessRate()`
+  — Σ(runs × successRate) / Σ(runs) over the FULL workspace, server-side
+  via the shared pure seam; the meta field is `successRate`; the client
+  fallback weights identically — D108) with the paint-milestone budgets
+  pinned (TTFB ≤ 500ms + FCP ≤ 1000ms per route + the authed-dashboard
+  LCP ≤ 1000ms — D109). No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks

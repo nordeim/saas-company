@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { ok, fail, apiRoute, methodGuard, optionsGuard, bodyTooLarge } from "@/lib/api";
 import { requireSession } from "@/lib/api";
 import { cleanString, requiredString } from "@/lib/validation";
-import { WORKFLOW_STATUSES, isWorkflowStatus, MAX_WORKFLOW_LIST, CHART_ROWS, statsFromAggregate } from "@/lib/workflow";
+import { WORKFLOW_STATUSES, isWorkflowStatus, MAX_WORKFLOW_LIST, CHART_ROWS, statsFromAggregate, weightedSuccessRate } from "@/lib/workflow";
 import { workflowRateLimit } from "@/lib/rate-limit";
 
 /** Session 20 F1: the method-mismatch layer answers the envelope too. */
@@ -30,6 +30,15 @@ export const OPTIONS = optionsGuard("GET, HEAD, OPTIONS, POST");
  * client-side computation (the smoke suite's 111-row case: the champion
  * "Anomaly scan on billing events" sits OUTSIDE the newest-100 cap —
  * probed). The server is the only seam that can rank honestly.
+ *
+ * Session 27 R1 — the stats' `successRate` becomes the RUN-WEIGHTED truth
+ * (D108): the unweighted Prisma `_avg` over per-workflow rates was the
+ * average-of-averages fallacy (a 12,000-run row at 60% averaged with four
+ * 3-run rows at 100% displayed 92.0% while the workspace's true rate is
+ * 60.0%). The aggregate drops `_avg` and the Promise.all gains a
+ * two-column rate-rows fetch feeding the pure weightedSuccessRate seam
+ * (the S21 stat-cards precedent extended to the weighting — the same
+ * one-pass cost as the aggregate scan it replaces).
  */
 export async function GET() {
   // Session 19 F1: the crash-path envelope.
@@ -38,7 +47,7 @@ export async function GET() {
   if (!guard.user) return guard.response;
 
   const where = { userId: guard.user.id };
-  const [workflows, total, active, agg, topRuns] = await Promise.all([
+  const [workflows, total, active, agg, rateRows, topRuns] = await Promise.all([
     db.workflow.findMany({
       where,
       orderBy: [{ createdAt: "desc" }],
@@ -49,7 +58,12 @@ export async function GET() {
     db.workflow.aggregate({
       where,
       _sum: { runs: true, timeSavedHours: true },
-      _avg: { successRate: true },
+    }),
+    // Session 27 R1: the rate-rows fetch — the two columns the run-weighted
+    // success rate needs (the weighting math lives in the pure seam).
+    db.workflow.findMany({
+      where,
+      select: { runs: true, successRate: true },
     }),
     // Session 26 R1: the chart's ranking aggregate — the top CHART_ROWS
     // by runs across the FULL workspace (ties: newest first, the list's
@@ -67,7 +81,7 @@ export async function GET() {
     active,
     agg._sum.runs ?? 0,
     agg._sum.timeSavedHours ?? 0,
-    agg._avg.successRate ?? null,
+    weightedSuccessRate(rateRows),
   );
   return ok(workflows, 200, { meta: { total, stats, topRuns } });
   });

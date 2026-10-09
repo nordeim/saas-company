@@ -3,7 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CHART_ROWS, rankByRuns, type RankedWorkflowRow, type WorkflowStats } from "@/lib/workflow";
+import { CHART_ROWS, rankByRuns, weightedSuccessRate, type RankedWorkflowRow, type WorkflowStats } from "@/lib/workflow";
 import {
   Activity,
   Check,
@@ -116,21 +116,23 @@ export function DashboardApp({
   // the FALLBACK for meta-less payloads (the e2e error-boundary mocks
   // fulfill with bare arrays). The shapes agree exactly at <= 100 rows
   // (the common case — the memo and the aggregate walk the same rows).
+  // Session 27 R1: the rate is RUN-WEIGHTED on both paths (the pure seam
+  // — the average-of-averages fallacy closed at every layer: the
+  // unweighted mean over workflows displayed 92.0% where the workspace's
+  // truth was 60.0%).
   const listStats = useMemo(() => {
     const active = workflows.filter((w) => w.status === "active");
     const runs = workflows.reduce((n, w) => n + w.runs, 0);
     const hours = workflows.reduce((n, w) => n + w.timeSavedHours, 0);
-    const avgRate = workflows.length
-      ? workflows.reduce((n, w) => n + w.successRate, 0) / workflows.length
-      : 100;
-    return { active: active.length, runs, hours: Math.round(hours), avgRate: avgRate.toFixed(1) };
+    const rate = weightedSuccessRate(workflows) ?? 100;
+    return { active: active.length, runs, hours: Math.round(hours), rate: rate.toFixed(1) };
   }, [workflows]);
   const stats = serverStats
     ? {
         active: serverStats.active,
         runs: serverStats.runs,
         hours: serverStats.hours,
-        avgRate: serverStats.avgSuccessRate.toFixed(1),
+        rate: serverStats.successRate.toFixed(1),
       }
     : listStats;
 
@@ -191,7 +193,7 @@ export function DashboardApp({
       const meta = payload.meta as { total?: unknown; stats?: Partial<WorkflowStats>; topRuns?: unknown };
       if (typeof meta.total === "number") setTotal(meta.total);
       if (meta.stats && typeof meta.stats.active === "number" && typeof meta.stats.runs === "number"
-        && typeof meta.stats.hours === "number" && typeof meta.stats.avgSuccessRate === "number") {
+        && typeof meta.stats.hours === "number" && typeof meta.stats.successRate === "number") {
         setServerStats(meta.stats as WorkflowStats);
       }
       // Session 26 R1: the ranking twin of the stats aggregate — the
@@ -396,7 +398,7 @@ export function DashboardApp({
             { label: "Active workflows", value: stats.active, icon: Zap, tint: "text-violet" },
             { label: "Total runs", value: stats.runs.toLocaleString(), icon: Activity, tint: "text-electric-blue" },
             { label: "Hours saved", value: stats.hours.toLocaleString(), icon: Clock, tint: "text-violet" },
-            { label: "Avg success rate", value: `${stats.avgRate}%`, icon: Check, tint: "text-electric-blue" },
+            { label: "Success rate", value: `${stats.rate}%`, icon: Check, tint: "text-electric-blue" },
           ].map((s) => (
             <div
               key={s.label}

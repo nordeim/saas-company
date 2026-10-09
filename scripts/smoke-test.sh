@@ -243,7 +243,13 @@ echo "== smoke: Session 21 — the data-volume ceiling + creation limiter =="
 # for the demo user DIRECTLY into the smoke scratch DB (the suite's own
 # database — no API traffic, no limiter budget). The user now owns 111
 # workflows (6 seeded + 1 created - 1 deleted + 105 probe rows; 70 of the
-# probe rows active, 35 paused; every probe row runs:10 / hours:1 / 99.5).
+# probe rows active, 35 paused; every probe row runs:10 / hours:1 / 50).
+# Session 27 R1: the probe rows' successRate is 50 (was 99.5 — a value
+# where BOTH the unweighted mean and the run-weighted rate render 99.5%,
+# pinning nothing); at 50 the two semantics diverge hard (the unweighted
+# mean over the 111 rows says 52.7%, the run-weighted truth 93.1%), which
+# makes the meta.stats.successRate pin below DISCRIMINATING — a regression
+# to the unweighted computation is a guaranteed failure, not a silent hole.
 # The GET must cap the response at 100 rows while meta carries the TRUTH.
 DATABASE_URL="$SMOKE_DB_URL" node -e '
 const { PrismaClient } = require("@prisma/client");
@@ -257,7 +263,7 @@ const p = new PrismaClient();
     status: i % 3 === 0 ? "paused" : "active",
     category: "Ops",
     runs: 10,
-    successRate: 99.5,
+    successRate: 50,
     timeSavedHours: 1,
   }));
   await p.workflow.createMany({ data: rows });
@@ -271,6 +277,14 @@ check "workflows list meta.total reports the TRUE count (111)" "111" "$(echo "$C
 check "workflows list meta.stats.active is the honest aggregate (75)" "75" "$(echo "$CAPPED" | field "['meta']['stats']['active']")"
 check "workflows list meta.stats.runs is the honest aggregate (8170)" "8170" "$(echo "$CAPPED" | field "['meta']['stats']['runs']")"
 check "workflows list meta.stats.hours is the honest aggregate (265)" "265" "$(echo "$CAPPED" | field "['meta']['stats']['hours']")"
+# Session 27 R1 — the run-weighted success rate (D108): the stat card's
+# value must be the WORKSPACE's truth — the share of runs that succeeded,
+# sum(runs x successRate) / sum(runs) — never the unweighted mean over
+# workflows (the average-of-averages fallacy). At this shape the weighted
+# truth is 760874.3 / 8170 = 93.1; the unweighted mean over the 111 rows
+# would say 52.7. Pre-fix the envelope carried _avg (52.7) — the pin
+# failed; post-fix it carries the weighted truth.
+check "workflows list meta.stats.successRate is the run-weighted truth (93.1 — the unweighted mean would say 52.7)" "93.1" "$(echo "$CAPPED" | python3 -c "import json,sys;print(round(json.load(sys.stdin)['meta']['stats']['successRate'],1))")"
 
 # Session 26 R1 — the chart's RANKING aggregate rides the same meta (the
 # S21 stat-cards precedent extended to the ranking surface). The 111-row
