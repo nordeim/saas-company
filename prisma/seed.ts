@@ -7,6 +7,22 @@
 import { PrismaClient } from "@prisma/client";
 import { createHash } from "node:crypto";
 import { randomBytes, scryptSync } from "node:crypto";
+import { resolveCliDatabaseUrl } from "../src/lib/db-path";
+
+// Session 24 R3: the seed must WRITE WHERE THE APP READS. A raw
+// `new PrismaClient()` let Prisma's env AUTO-load walk UP the directory
+// tree — a PARENT-directory .env could silently win over the repo's own
+// .env (probed in vivo: the seed wrote outside the repo while the app
+// opened <repo>/db/custom.db — a 0-byte file — and login answered P2021).
+// Setting the resolved ABSOLUTE url in the process env BEFORE the client
+// construction mirrors src/lib/db.ts and closes the trap by construction:
+// Prisma's auto-load never overrides an already-set value. Precedence (the
+// tested selectDatabaseUrl seam): explicit process env (the smoke/e2e
+// discipline) → the repo's own .env → the documented default.
+process.env.DATABASE_URL = resolveCliDatabaseUrl();
+// Observable placement — the smoke suite pins this line against db/smoke.db
+// (the seed must never write where the server does not read).
+console.log(`seed-target:${process.env.DATABASE_URL}`);
 
 const prisma = new PrismaClient();
 

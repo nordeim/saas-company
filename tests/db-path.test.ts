@@ -154,3 +154,91 @@ describe("anchor validation", () => {
     }
   });
 });
+
+// ---------------------------------------------------------------------------
+// Session 24 R3 — the CLI/seed URL selection seams. `npm run db:push` /
+// `npm run db:seed` used to rely on Prisma's env AUTO-load, whose search
+// walks UP the directory tree — a PARENT-directory .env silently WINS over
+// the repo's own .env (probed in vivo: the seed wrote the schema + data
+// OUTSIDE the repo while the app opened <repo>/db/custom.db — a 0-byte
+// file — and login answered P2021 INTERNAL_ERROR). The seams below make
+// the selection deterministic: explicit process env (the smoke/e2e
+// discipline) → the REPO's own .env value (parsed directly — never the
+// parent walk-up) → the documented default; every value resolves through
+// the anchor logic; absolute file: and non-SQLite URLs pass through
+// untouched (the PostgreSQL swap story is preserved).
+// ---------------------------------------------------------------------------
+
+describe("parseEnvValue", () => {
+  it("parses a quoted value (the .env.example spelling) and an unquoted one", async () => {
+    const { parseEnvValue } = await import("@/lib/db-path");
+    expect(parseEnvValue('DATABASE_URL="file:../db/custom.db"\n', "DATABASE_URL")).toBe("file:../db/custom.db");
+    expect(parseEnvValue("DATABASE_URL=file:../db/other.db\n", "DATABASE_URL")).toBe("file:../db/other.db");
+  });
+
+  it("ignores commented-out declarations and unknown keys", async () => {
+    const { parseEnvValue } = await import("@/lib/db-path");
+    const content = [
+      "# DATABASE_URL=\"file:../db/parent-trap.db\"",
+      "AUTH_SECRET=abc123",
+      "DATABASE_URL=file:../db/custom.db",
+    ].join("\n");
+    // The commented line must NOT win; the real declaration does.
+    expect(parseEnvValue(content, "DATABASE_URL")).toBe("file:../db/custom.db");
+    expect(parseEnvValue(content, "MISSING_KEY")).toBeUndefined();
+  });
+
+  it("returns undefined when the key is absent entirely (CRLF-safe parsing)", async () => {
+    const { parseEnvValue } = await import("@/lib/db-path");
+    expect(parseEnvValue("AUTH_SECRET=abc\r\nOTHER=x\r\n", "DATABASE_URL")).toBeUndefined();
+    // CRLF declarations still parse.
+    expect(parseEnvValue("DATABASE_URL=\"file:../db/x.db\"\r\n", "DATABASE_URL")).toBe("file:../db/x.db");
+  });
+});
+
+describe("selectDatabaseUrl (the seed/push precedence)", () => {
+  let repo: string;
+  let other: string;
+
+  beforeAll(() => {
+    repo = mkdtempSync(path.join(tmpdir(), "dbpath-select-"));
+    mkdirSync(path.join(repo, "prisma"));
+    writeFileSync(path.join(repo, "prisma", "schema.prisma"), "datasource db { provider = \"sqlite\" }");
+    other = mkdtempSync(path.join(tmpdir(), "dbpath-select-other-"));
+  });
+
+  afterAll(() => {
+    rmSync(repo, { recursive: true, force: true });
+    rmSync(other, { recursive: true, force: true });
+  });
+
+  it("the explicit process env WINS over the repo .env — absolute and non-SQLite URLs pass through untouched", async () => {
+    const { selectDatabaseUrl } = await import("@/lib/db-path");
+    // The smoke/e2e discipline: an explicitly-set process env (even a
+    // relative one) beats the repo .env, resolved through the anchors.
+    const out = selectDatabaseUrl("file:../db/smoke.db", 'DATABASE_URL="file:../db/custom.db"', [repo]);
+    expect(toPosix(out)).toBe(`file:${toPosix(path.join(repo, "db", "smoke.db"))}`);
+
+    // Absolute file: URLs pass through EXACTLY (operator intent — the
+    // gotcha-1 semantics preserved for explicitly-set process envs).
+    expect(selectDatabaseUrl("file:/etc/prod.db", 'DATABASE_URL="file:../db/custom.db"', [repo])).toBe("file:/etc/prod.db");
+    // The PostgreSQL swap story survives every precedence level.
+    expect(selectDatabaseUrl("postgresql://u:p@h:5432/db", 'DATABASE_URL="file:../db/custom.db"', [repo])).toBe("postgresql://u:p@h:5432/db");
+    expect(selectDatabaseUrl(undefined, "DATABASE_URL=postgresql://u:p@h:5432/db", [repo])).toBe("postgresql://u:p@h:5432/db");
+  });
+
+  it("with no process env, the REPO's own .env value resolves through the anchor — and the documented default applies when it is absent", async () => {
+    const { selectDatabaseUrl } = await import("@/lib/db-path");
+    // The parent-.env trap is closed BY CONSTRUCTION: the selection sees
+    // ONLY the passed repo .env content — a parent directory's .env is
+    // never consulted.
+    const out = selectDatabaseUrl(undefined, 'DATABASE_URL="file:../db/custom.db"\n', [repo]);
+    expect(toPosix(out)).toBe(`file:${toPosix(path.join(repo, "db", "custom.db"))}`);
+
+    // No process env + no repo .env declaration → the documented default.
+    const def = selectDatabaseUrl(undefined, "AUTH_SECRET=abc\n", [repo]);
+    expect(toPosix(def)).toBe(`file:${toPosix(path.join(repo, "db", "custom.db"))}`);
+    const def2 = selectDatabaseUrl(undefined, undefined, [other]);
+    expect(toPosix(def2)).toBe(`file:${toPosix(path.join(other, "prisma", "..", "db", "custom.db"))}`);
+  });
+});

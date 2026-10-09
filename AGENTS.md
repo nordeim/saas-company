@@ -19,16 +19,16 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (156 checks) | `npm run test` |
-| Browser E2E (200 checks; needs a build) | `npm run test:e2e` |
+| Unit tests (164 checks) | `npm run test` |
+| Browser E2E (204 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
-| End-to-end smoke suite (117 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
+| End-to-end smoke suite (118 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (156/156) → `npm run build` → `./scripts/smoke-test.sh` (117/117)
-→ `npm run test:e2e` (200/200) — 473 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (164/164) → `npm run build` → `./scripts/smoke-test.sh` (118/118)
+→ `npm run test:e2e` (204/204) — 486 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`, `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -519,6 +519,30 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    state (rows + active count + runs sum) before AND after capture
    runs.
 
+38. **A hang is not a failure — and a failure surface must not outlive
+   its action (Session 24).** No client fetch carried a timeout: a
+   black-holed request (a stalled connection — the CLIENT twin of
+   S15's server-side hang) neither resolves nor rejects, so the
+   dashboard's busyId spinner stayed engaged FOREVER with no banner
+   and no recovery (the S12 resilience pins cover aborts, which
+   reject immediately — the hang class was invisible to the gates
+   until probed with a never-fulfilling `page.route`). Every client
+   fetch now rides `fetchWithTimeout` (`src/lib/client-fetch.ts`, 20s
+   — above the server's own 10s SDK ceiling), converting the hang
+   into the existing network-fault contract. Pin it with Playwright's
+   `clock` API (`page.clock.install()` + `fastForward`) — the 20s
+   ceiling costs milliseconds; an inert fetch MOCK cannot observe the
+   abort rejection (unit-pin the seam against a REAL hung TCP
+   socket). The sibling law: every action start clears BOTH error
+   surfaces — a "Try again." banner left mounted after a SUCCESSFUL
+   unrelated action is a lie by staleness. And the first-run placement
+   trap (this session's in-vivo RED): the seed and db:push now resolve
+   through the db-path seam and PRINT their target (`seed-target:` /
+   `[db] DATABASE_URL=`) — the seed must always write where the app
+   reads; the sandbox's shell-exported absolute `DATABASE_URL` +
+   parent `.env` (gotcha 1's vectors) silently redirected a whole
+   first-run to a foreign database while login answered P2021.
+
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +
@@ -540,7 +564,12 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   banner — the S13 failure-class law extended to the client; a DELETE 404
   is idempotent success), 401s stay banner-free via the `SessionExpired`
   early-return, and `refresh()`'s sequence guard drops any response
-  superseded by a newer refresh (no stale-snapshot resurrection). No route
+  superseded by a newer refresh (no stale-snapshot resurrection). The
+  client's TEMPORAL layer (Session 24): every fetch rides
+  `fetchWithTimeout` (the 20s client ceiling — a hang converts into the
+  network-fault banner + busy release, never an eternal spinner) and
+  every action start clears BOTH error surfaces (a failure surface lives
+  exactly until the user's next action of ANY class). No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks

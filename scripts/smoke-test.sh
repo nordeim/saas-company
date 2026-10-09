@@ -38,8 +38,20 @@ trap cleanup EXIT
 echo "== smoke: scratch database =="
 rm -f "$SMOKE_DB_FILE"
 DATABASE_URL="$SMOKE_DB_URL" npx prisma db push --skip-generate >/dev/null 2>&1 || { echo "FAIL: prisma db push"; exit 1; }
-DATABASE_URL="$SMOKE_DB_URL" npx tsx prisma/seed.ts >/dev/null 2>&1 || { echo "FAIL: seed"; exit 1; }
+SEED_OUT="$(DATABASE_URL="$SMOKE_DB_URL" npx tsx prisma/seed.ts 2>&1)" || { echo "FAIL: seed"; exit 1; }
 say_pass "scratch db pushed + seeded"
+# Session 24 R3: the seed must WRITE WHERE THE SERVER READS. The seed
+# prints its resolved target (seed-target:<url>) — an explicit process
+# env (this invocation's discipline) resolves through the repo anchor to
+# db/smoke.db. Pre-fix, a PARENT-directory .env could silently win the
+# Prisma auto-load and redirect the write outside the repo while the
+# server opened the in-repo file (probed in vivo: login answered P2021).
+SEED_TARGET_LINE="$(printf '%s\n' "$SEED_OUT" | grep -o 'seed-target:.*' | head -1)"
+if printf '%s' "$SEED_TARGET_LINE" | grep -q "db/smoke.db$"; then
+  say_pass "seed placement pinned (seed-target resolves to db/smoke.db)"
+else
+  say_fail "seed placement (expected seed-target ending db/smoke.db, got [$SEED_TARGET_LINE])"
+fi
 
 echo "== smoke: boot production server on :$PORT =="
 # GENERATE_RATE_LIMIT_MAX=2 (Session 16 F1): the smoke server pins the LLM

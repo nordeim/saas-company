@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (117) | 156 unit + 200 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (118) | 164 unit + 204 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -145,15 +145,51 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 156/156 PASS
+- [ ] `npm run test` → 164/164 PASS
 - [ ] `npm run build` compiles clean
-- [ ] `./scripts/smoke-test.sh` → 117/117 PASS
-- [ ] `npm run test:e2e` → 200/200 PASS (needs the build first)
+- [ ] `./scripts/smoke-test.sh` → 118/118 PASS
+- [ ] `npm run test:e2e` → 204/204 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 24 (2026-10-09) remediation** — see
+  `docs/remediation-plan-session24.md`: a temporal-and-placement-
+  honesty audit (the S44 log's suggested surfaces — the banner
+  lifecycle and a performance-budget hook — surveyed first, then
+  extended to their class) found and fixed three defects: **the
+  client hang class** — no client fetch carried a timeout, so a
+  black-holed request (the CLIENT twin of S15's server-side hang)
+  left the dashboard's busyId spinner engaged FOREVER (probed RED:
+  still spinning after 8s, no banner; the S12 pins cover aborts,
+  which reject immediately — the hang was invisible to the gates);
+  now `fetchWithTimeout()` (`src/lib/client-fetch.ts`, 20s) rides
+  ALL five client fetch sites — D101. **The stale-banner class** —
+  the two error surfaces outlived their context (a failed compose's
+  "Try again." stayed mounted after a SUCCESSFUL unrelated pause,
+  and vice versa — probed RED both directions); now every action
+  start clears BOTH surfaces — D102. **The seed-placement class** —
+  the first-run db:push/db:seed relied on env resolution outside the
+  app's tested seam (RED-confirmed in vivo: this sandbox's
+  shell-exported absolute DATABASE_URL + parent .env — gotcha 1's
+  vectors — redirected the seed's write outside the repo while the
+  app opened the 0-byte <repo>/db/custom.db and login answered
+  P2021); now `parseEnvValue()`/`selectDatabaseUrl()`/
+  `resolveCliDatabaseUrl()` in `src/lib/db-path.ts` + the seed's
+  `seed-target:` line + `scripts/prisma-with-db.ts` for
+  db:push/migrate/reset (deterministic precedence: process env →
+  repo .env → default, anchored, observable) — D103. +13 checks
+  (8 unit incl. a REAL hung TCP socket — an inert mock can't observe
+  the abort; 1 smoke seed-target pin; 4 e2e in the session24-temporal
+  suite — the hang pins ride Playwright's clock API so the 20s
+  ceiling costs milliseconds); gate: **486 checks** (164 unit + 118
+  smoke + 204 e2e); 20 screenshots refreshed (VLM ×5 — after
+  adjudicating the SEVENTH and EIGHTH check-prompt drifts: the hero's
+  primary CTA IS "Book a Demo" (Get Started lives in the navbar —
+  pinned), and the demo page's footer sits below the 900px fold
+  (footerTop 1009, page height 1378)).
 
 - **Session 23 (2026-10-09) remediation** — see
   `docs/remediation-plan-session23.md`: a client-side failure-class

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Github, Instagram, Linkedin, Mail, Twitter } from "lucide-react";
 import { LogoWordmark } from "./logo";
+import { fetchWithTimeout } from "@/lib/client-fetch";
 
 /**
  * Site footer — mirrors the reference layout (brand column + Product/Legal/
@@ -21,7 +22,9 @@ export function Footer() {
     setState("loading");
     setMessage("");
     try {
-      const res = await fetch("/api/newsletter", {
+      // Session 24 R1: the timeout rides the subscribe POST — a black-holed
+      // request would otherwise leave the loading state forever.
+      const res = await fetchWithTimeout("/api/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

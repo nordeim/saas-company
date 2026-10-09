@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Lock, Mail } from "lucide-react";
 import { safeRedirectPath } from "@/lib/validation";
+import { fetchWithTimeout } from "@/lib/client-fetch";
 
 type Mode = "signin" | "signup" | "forgot";
 
@@ -97,7 +98,10 @@ export function LoginCard() {
     }
     setBusy(true);
     try {
-      const res = await fetch(`/api/auth/${mode === "signup" ? "register" : "login"}`, {
+      // Session 24 R1: the timeout rides the auth POST — a black-holed
+      // login request would otherwise spin the busy state forever with
+      // zero feedback (probed RED; the pin lives in the session24 spec).
+      const res = await fetchWithTimeout(`/api/auth/${mode === "signup" ? "register" : "login"}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

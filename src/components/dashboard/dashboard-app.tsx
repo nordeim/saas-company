@@ -19,6 +19,7 @@ import {
   Zap,
 } from "lucide-react";
 import { LogoWordmark } from "@/components/site/logo";
+import { fetchWithTimeout } from "@/lib/client-fetch";
 
 /**
  * The NovaAI workspace (functional superset over the reference, whose
@@ -116,8 +117,13 @@ export function DashboardApp({
   // Session 13 F1: a 401 is NOT a network fault — retrying will 401
   // forever. "Try again" would lie; the honest contract is the server
   // gate's (page.tsx:14): go re-authenticate.
+  // Session 24 R1: every fetch rides the client timeout — a black-holed
+  // request (the CLIENT twin of S15's server-side hang) rejects at the
+  // 20s ceiling into the existing network-fault catches instead of
+  // spinning the busy guard forever (probed RED: the spinner was still
+  // engaged after 8s with no banner).
   async function apiFetch(input: string, init?: RequestInit) {
-    const res = await fetch(input, init);
+    const res = await fetchWithTimeout(input, init);
     if (res.status === 401) {
       router.push("/login?from_url=/dashboard");
       throw new SessionExpired();
@@ -158,7 +164,12 @@ export function DashboardApp({
     e.preventDefault();
     if (composing || !idea.trim()) return;
     setComposing(true);
+    // Session 24 R2: clear BOTH failure surfaces at every action start —
+    // a retry invitation must never outlive the context it describes
+    // (a stale "Try again." after the network recovered is a lie by
+    // staleness; probed RED in both directions).
     setError("");
+    setActionError("");
     try {
       // 1) Ask the AI composer (falls back to the deterministic template).
       const genRes = await apiFetch("/api/workflows/generate", {
@@ -194,7 +205,9 @@ export function DashboardApp({
 
   async function toggleStatus(w: WorkflowRow) {
     setBusyId(w.id);
+    // Session 24 R2: both surfaces (see compose).
     setActionError("");
+    setError("");
     try {
       // Session 12 F3: the catch contract — network-level failures
       // (fetch rejections) AND HTTP-level failures (!res.ok) surface as
@@ -238,7 +251,9 @@ export function DashboardApp({
 
   async function remove(w: WorkflowRow) {
     setBusyId(w.id);
+    // Session 24 R2: both surfaces (see compose).
     setActionError("");
+    setError("");
     try {
       const res = await apiFetch(`/api/workflows/${w.id}`, { method: "DELETE" });
       if (!res.ok) {
@@ -265,9 +280,13 @@ export function DashboardApp({
   }
 
   async function signOut() {
+    // Session 24 R2: both surfaces (see compose).
     setActionError("");
+    setError("");
     try {
-      await fetch("/api/auth/logout", { method: "POST" });
+      // Session 24 R1: the timeout rides the logout fetch too — a hung
+      // logout POST would otherwise strand the user with no feedback.
+      await fetchWithTimeout("/api/auth/logout", { method: "POST" });
       router.push("/");
       router.refresh();
     } catch {

@@ -5,6 +5,7 @@ import { CalendarClock } from "lucide-react";
 import { Navbar } from "@/components/site/navbar";
 import { Footer } from "@/components/site/footer";
 import { Reveal } from "@/components/site/reveal";
+import { fetchWithTimeout } from "@/lib/client-fetch";
 
 /**
  * The Book-a-Demo view — the front half of the demo-request superset
@@ -41,7 +42,9 @@ export function DemoView() {
     setBusy(true);
     setError("");
     try {
-      const res = await fetch("/api/demo", {
+      // Session 24 R1: the timeout rides the demo POST — a black-holed
+      // request would otherwise spin the busy state forever.
+      const res = await fetchWithTimeout("/api/demo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, company, message }),

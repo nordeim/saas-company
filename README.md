@@ -6,7 +6,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?logo=tailwindcss)
 ![Prisma](https://img.shields.io/badge/Prisma-6-2d3748?logo=prisma)
 ![SQLite](https://img.shields.io/badge/DB-SQLite-003b57?logo=sqlite)
-![Tests](https://img.shields.io/badge/tests-473_checks_passing-2ecc8a)
+![Tests](https://img.shields.io/badge/tests-486_checks_passing-2ecc8a)
 
 A production-grade, self-hosted clone of the reference dark-theme SaaS
 marketing site [`saas-company.base44.app`](https://saas-company.base44.app/)
@@ -25,7 +25,7 @@ verbatim copy) and then goes further: cookie-session auth, a workflow
 workspace with an AI composer (`z-ai-web-dev-sdk` with a deterministic
 fallback), newsletter + demo-request capture, sitemap/robots, a DB-aware health
 probe (`db: up|down` — Session 18), Lenis smooth scrolling, per-route SEO metadata with a working og-image + web app
-manifest, and 473 automated checks across three test layers.
+manifest, and 486 automated checks across three test layers.
 
 | Dashboard | Landing hero |
 |:---:|:---:|
@@ -42,10 +42,10 @@ manifest, and 473 automated checks across three test layers.
 | 🎬 **Faithful landing page** | Looping AI-video hero with the shimmer-bordered beta badge and animated gradient heading, dashboard mockup with the browser-chrome skeleton, trusted-by logo cloud (serif wordmarks), problem cards, "One Platform" showcase, white features tabs, how-it-works steps, pricing (Monthly/Annual — **defaults to Annual like the reference**: Pro $39/mo annual, $49/mo monthly, "Save 20%"), testimonial drag-strip, CTA, and the four-column footer |
 | 🧭 **Reference chrome** | Fixed transparent nav with the center pill (md+), LOG IN + white Get Started pill, and the measured mobile burger dropdown (black/95 blur panel, 44px rows) — the nav is **section-aware** like the reference: scroll-spy highlights the section in view (white/30 pill on dark, black/15 on light) and the chrome swaps to black variants over the white features section; plus the slate login card (light body theme + system font, exactly as the reference's login bundle) and light 404 |
 | 🔐 **Cookie-session auth** | scrypt password hashing + HMAC-signed sessions, per-IP rate limiting on auth endpoints (10/15 min) with machine-readable `Retry-After` headers on 429s, register/login/logout/me — sign-up lands straight in the workspace (**constant-time verification** — the unknown-email path burns the same scrypt cost as the wrong-password path, so response latency cannot enumerate registered addresses, CWE-208; and an optional `ALLOW_REGISTRATION=false` deployment gate returns `403 REGISTRATION_CLOSED` while login keeps working), and the post-login redirect only ever targets same-site paths (the `from_url` open-redirect guard) |
-| ⚡ **Workflow dashboard (superset)** | The reference's "Dashboard" demo link 404s — here it's real: stats cards, a workflow list with pause/resume/delete, a runs chart, and an AI composer that drafts workflows from one-line ideas (server-side SDK + deterministic fallback, sanitized before persistence — rate-limited per user at 10 generations/15 min so the LLM endpoint carries its own abuse ceiling while the composer degrades to the template on 429) — with a **data-volume ceiling** (Session 21): the list rides SQL `take: 100` (the response body itself is bounded, not just the render) while the envelope's additive `meta` sibling carries the TRUE total + honest server-side aggregates, and the stat cards never lie about a capped subset; workflow creation is rate-limited per user (30/15 min, `WORKFLOW_RATE_LIMIT_MAX`) — with **mutation-concurrency honesty** (Session 22): the per-workflow PATCH/DELETE writes carry the ownership predicate in the write itself (`updateMany`/`deleteMany` with `userId` in the WHERE — count 0 → the honest 404), so a rename racing a delete in another tab answers the same 404 the sequential miss always gave, never an unclassified-P2025 500; the cross-user ownership contract (user A on user B's row → 404) is pinned at the wire — with **client failure-class honesty** (Session 23): a 404 from a row deleted in another tab drops the ghost row locally and re-syncs with the server (the polite "no longer in the workspace" announce — never the retry-lie banner; a raced Delete is idempotent success), and the refresh sequence guard drops any response superseded by a newer refresh, so a delayed stale snapshot can never resurrect a deleted row |
+| ⚡ **Workflow dashboard (superset)** | The reference's "Dashboard" demo link 404s — here it's real: stats cards, a workflow list with pause/resume/delete, a runs chart, and an AI composer that drafts workflows from one-line ideas (server-side SDK + deterministic fallback, sanitized before persistence — rate-limited per user at 10 generations/15 min so the LLM endpoint carries its own abuse ceiling while the composer degrades to the template on 429) — with a **data-volume ceiling** (Session 21): the list rides SQL `take: 100` (the response body itself is bounded, not just the render) while the envelope's additive `meta` sibling carries the TRUE total + honest server-side aggregates, and the stat cards never lie about a capped subset; workflow creation is rate-limited per user (30/15 min, `WORKFLOW_RATE_LIMIT_MAX`) — with **mutation-concurrency honesty** (Session 22): the per-workflow PATCH/DELETE writes carry the ownership predicate in the write itself (`updateMany`/`deleteMany` with `userId` in the WHERE — count 0 → the honest 404), so a rename racing a delete in another tab answers the same 404 the sequential miss always gave, never an unclassified-P2025 500; the cross-user ownership contract (user A on user B's row → 404) is pinned at the wire — with **client failure-class honesty** (Session 23): a 404 from a row deleted in another tab drops the ghost row locally and re-syncs with the server (the polite "no longer in the workspace" announce — never the retry-lie banner; a raced Delete is idempotent success), and the refresh sequence guard drops any response superseded by a newer refresh, so a delayed stale snapshot can never resurrect a deleted row — with **temporal honesty** (Session 24): every client fetch rides a 20s timeout (a black-holed request converts into the visible retry banner + busy release instead of an eternal spinner — the client twin of the server-side hang guard), and every action start clears both error surfaces, so a failure banner never outlives the user's next action |
 | 📰 **Working capture forms** | Footer newsletter subscribe (idempotent upsert) and a first-class **/demo Book-a-Demo page** (dark-brand form mirroring the API's validation, with the composer's fault contract and a polite screen-reader confirmation — the formerly-unreachable demo API's front half, listed in the sitemap) |
 | ❓ **Interactive FAQ + legal** | The reference's six-question accordion and four legal pages, copy captured verbatim |
-| 🧪 **473 automated checks** | 156 Vitest unit checks (pure domain seams incl. the SEO helpers, the motion engine, the rate-limit overrides, the redirect-target guard, the SDK hang seam, the constant-time login decoy, the registration gate, the P2002 race classifier, the AUTH_SECRET boot-warning hook, the crash-path envelope wrapper, the method/payload guards, and the meta/ceiling/limiter seams), 200 Playwright browser checks (incl. the mobile-navigation, navbar scroll-behavior, per-tab features-card, login-theme, login alternate-states, brand-parity, section-parity, head-metadata, typography-parity, motion-parity, palette-parity, mockup-motion-parity, hydration-health, resource-hygiene, fault-resilience, session-lifecycle, error-boundary, demo-reachability, reduced-motion, redirect-target, and client-honesty suites + the composer 429-degrade row), 117 curl smoke checks against the production build (incl. the four security-header pins, the asset-caching pin, the PATCH name-contract pins, the lazy-img no-preload contract, the /demo page pin, the 429 Retry-After pins, the generate-limiter trip, the API no-store pins, the X-Powered-By absence pins, the login timing-parity pin, the parallel-register race-envelope pin, the closed-registration gate pins, the health db-reachability pin, the broken-database crash-path envelope + branded-fallback pins, the method-mismatch envelope + request-size ceiling pins, the data-volume ceiling + workflow-create limiter pins, and the mutation-concurrency race + cross-user ownership pins) |
+| 🧪 **486 automated checks** | 164 Vitest unit checks (pure domain seams incl. the SEO helpers, the motion engine, the rate-limit overrides, the redirect-target guard, the SDK hang seam, the constant-time login decoy, the registration gate, the P2002 race classifier, the AUTH_SECRET boot-warning hook, the crash-path envelope wrapper, the method/payload guards, the meta/ceiling/limiter seams, the client-fetch timeout, and the seed URL-selection seams), 204 Playwright browser checks (incl. the mobile-navigation, navbar scroll-behavior, per-tab features-card, login-theme, login alternate-states, brand-parity, section-parity, head-metadata, typography-parity, motion-parity, palette-parity, mockup-motion-parity, hydration-health, resource-hygiene, fault-resilience, session-lifecycle, error-boundary, demo-reachability, reduced-motion, redirect-target, client-honesty, and temporal-honesty suites + the composer 429-degrade row), 118 curl smoke checks against the production build (incl. the four security-header pins, the asset-caching pin, the PATCH name-contract pins, the lazy-img no-preload contract, the /demo page pin, the 429 Retry-After pins, the generate-limiter trip, the API no-store pins, the X-Powered-By absence pins, the login timing-parity pin, the parallel-register race-envelope pin, the closed-registration gate pins, the health db-reachability pin, the broken-database crash-path envelope + branded-fallback pins, the method-mismatch envelope + request-size ceiling pins, the data-volume ceiling + workflow-create limiter pins, the mutation-concurrency race + cross-user ownership pins, and the seed-placement pin) |
 | 🛡️ **Production headers** | The reference's security posture — `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Strict-Transport-Security` — emitted via `next.config.ts` and pinned by the smoke suite, plus the reference CDN's asset caching (`public, max-age=604800` on `public/` assets), `Cache-Control: private, no-store` on every API response (authenticated data never transits a cache without an explicit directive), and no `X-Powered-By` banner (the reference ships none) |
 | 🔎 **Per-route SEO head parity** | The reference's per-route `<head>` pattern — "X | SAAS Company" og:titles, "X on SAAS Company. …" descriptions, per-route og:url/canonical, a web app manifest — plus a WORKING self-hosted og-image (the live's own URL 404s); assembled in `src/lib/seo.ts` (`routeMetadata`) and pinned by the head-metadata e2e suite |
 | 🌗 **Measured design system** | Tailwind v4 CSS-first tokens: #000 canvas, #8624FF primary, #0055FF accent, #D500FF violet, self-hosted **Google Fonts' "Vend Sans" variable font** (wght 300-700 — the exact gstatic bytes the reference serves; Session 5 font forensics replaced the Session-1 Wix Madefor misidentification), the reference's keyframes (organic-gradient, border-shimmer, logo petals, marquee) |
@@ -68,7 +68,7 @@ manifest, and 473 automated checks across three test layers.
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font Google (Playfair/DM Serif) | — | Reference typography — the SAME gstatic woff2 bytes the live serves (Session 5 forensics) |
 | Unit tests | Vitest | 5 | Pure domain seams |
 | E2E tests | Playwright | 1.63 | Browser suite (Chromium) |
-| Smoke | bash + curl | — | 117 checks against the production build |
+| Smoke | bash + curl | — | 118 checks against the production build |
 
 ## Architecture
 
@@ -146,10 +146,10 @@ Open <http://localhost:3000>, then sign in to the dashboard at
 curl http://localhost:3000/api/health
 # {"ok":true,"data":{"status":"ok","app":"saas-company","ts":"…"}}
 
-# Full verification (473 checks across three layers)
-npm run lint && npm run typecheck && npm run test   # 156 unit checks
-npm run build && ./scripts/smoke-test.sh            # 117 smoke checks
-npm run test:e2e                                    # 200 browser checks
+# Full verification (486 checks across three layers)
+npm run lint && npm run typecheck && npm run test   # 164 unit checks
+npm run build && ./scripts/smoke-test.sh            # 118 smoke checks
+npm run test:e2e                                    # 204 browser checks
 ```
 
 ### Production
@@ -226,9 +226,9 @@ inline); the login card and 404 page run the reference's light slate theme.
 ## Testing
 
 ```bash
-npm run test              # unit — 156 checks on the pure domain seams
-npm run test:e2e          # Playwright — 200 browser checks (needs a build)
-./scripts/smoke-test.sh   # curl E2E — 117 checks against the production build
+npm run test              # unit — 164 checks on the pure domain seams
+npm run test:e2e          # Playwright — 204 browser checks (needs a build)
+./scripts/smoke-test.sh   # curl E2E — 118 checks against the production build
 ```
 
 The unit layer pins the pure logic: pricing math (plans, the 20% annual

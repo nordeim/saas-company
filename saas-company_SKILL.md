@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.22.0 · **Last updated:** 2026-10-09 (Session 23 remediation)
+> **Version:** 2.23.0 · **Last updated:** 2026-10-09 (Session 24 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -936,6 +936,50 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     member — a "missing 3 workflow cards" verdict on a 900px viewport
     screenshot, disproven by the viewport cut (the cards extend below
     the fold by design); state the VIEWPORT contract in the prompt.
+
+56. **A hang is not a failure — pin it with the clock, not the wall
+    (Session 24)**: no client fetch carried a timeout, so a black-
+    holed request (a stalled connection — the CLIENT twin of the S15
+    server-side hang) neither resolved nor rejected: the busy spinner
+    stayed engaged FOREVER with no banner and no recovery. The
+    resilience suites covered ABORTS, which reject immediately — the
+    hang class was invisible to every gate until probed with a
+    NEVER-FULFILLING `page.route`. The fix family: `fetchWithTimeout`
+    (an AbortController + setTimeout wrapper riding every client fetch
+    site) converts the hang into the existing network-fault catches.
+    Two pin-authoring discoveries: an inert fetch MOCK cannot observe
+    the abort rejection (a never-settling mock ignores the signal —
+    unit-pin the seam against a REAL hung TCP socket: `net.createServer`
+    that accepts and never answers), and Playwright's `clock` API
+    (`page.clock.install()` BEFORE navigation + `fastForward`) makes a
+    20s ceiling cost milliseconds of wall-clock. The sibling law: every
+    action start clears BOTH error surfaces — a "Try again." banner
+    left mounted after a SUCCESSFUL unrelated action is a lie by
+    staleness (the S13/S23 family's temporal member).
+
+57. **The seed must write where the app reads — make the placement
+    OBSERVABLE (Session 24)**: the first-run `db:push`/`db:seed` relied
+    on env resolution outside the app's tested db-path seam, and this
+    sandbox's shell-exported absolute `DATABASE_URL` + a parent
+    `.env` (gotcha 1's vectors — the parent WALKS UP into Prisma's env
+    auto-load) silently redirected a whole first-run to a foreign
+    database while the app opened the 0-byte in-repo file (login
+    answered P2021 INTERNAL_ERROR with the seed reporting SUCCESS).
+    The fix: the seed resolves through `resolveCliDatabaseUrl()` (the
+    deterministic precedence: explicit process env → the repo's own
+    .env → the default, all through the anchor logic) BEFORE
+    constructing its client, and PRINTS `seed-target:`; db:push/
+    migrate/reset route through a wrapper printing `[db]
+    DATABASE_URL=`. The meta-lesson: a silent placement assumption is
+    a latent first-run breaker — surface the resolved target wherever
+    two tools must agree on the same file, and pin the agreement (the
+    smoke seed-target pin). Companion this session: the VLM drift
+    family's SEVENTH and EIGHTH members — the hero's primary CTA IS
+    "Book a Demo" (Get Started lives in the navbar — the landing spec
+    pins both roles), and the demo page's footer sits below the 900px
+    fold (footerTop 1009 of a 1378px page) — always adjudicate a FAIL
+    against the PINNED contract and the geometry before touching
+    code.
 
 ## §13. Pitfalls to Avoid
 
