@@ -3,7 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CHART_ROWS, rankByRuns, weightedSuccessRate, type RankedWorkflowRow, type WorkflowStats } from "@/lib/workflow";
+import { CHART_ROWS, rankByRuns, weightedSuccessRate, sumHours, type RankedWorkflowRow, type WorkflowStats } from "@/lib/workflow";
 import {
   Activity,
   Check,
@@ -120,10 +120,16 @@ export function DashboardApp({
   // — the average-of-averages fallacy closed at every layer: the
   // unweighted mean over workflows displayed 92.0% where the workspace's
   // truth was 60.0%).
+  // Session 28 R1: the hours ride the exact decimal-grid seam on both
+  // paths (D110): the pre-fix memo's naive float reduce was
+  // ORDER-DEPENDENT at exactly-x.5 shapes — [15.4, 17.9, 15.2] summed
+  // to 48.499999999999993 in list order (displaying 48) where the
+  // server's sum displayed 49; sumHours' integer-tenths accumulation
+  // is order-free and agrees with the server at every shape.
   const listStats = useMemo(() => {
     const active = workflows.filter((w) => w.status === "active");
     const runs = workflows.reduce((n, w) => n + w.runs, 0);
-    const hours = workflows.reduce((n, w) => n + w.timeSavedHours, 0);
+    const hours = sumHours(workflows);
     const rate = weightedSuccessRate(workflows) ?? 100;
     return { active: active.length, runs, hours: Math.round(hours), rate: rate.toFixed(1) };
   }, [workflows]);

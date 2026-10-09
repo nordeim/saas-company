@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 176 unit + 229 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 182 unit + 235 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -145,15 +145,51 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 176/176 PASS
+- [ ] `npm run test` → 182/182 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 124/124 PASS
-- [ ] `npm run test:e2e` → 229/229 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 235/235 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 28 (2026-10-09) remediation** — see
+  `docs/remediation-plan-session28.md`: an hours-seam-exactness +
+  tie-break-pinning + CLS-budget audit (the S53 log's three suggested
+  surfaces — the `topRuns` tie-break under live mutation, the stat
+  cards' `hours` rounding boundary at exactly x.5, and the CLS
+  layout-stability milestone — surveyed then extended to their class)
+  found and fixed one latent defect and shipped two pin families:
+  **the client-fallback hours seam's order-dependent float drift** —
+  the "Hours saved" card's CLIENT fallback (the meta-less
+  `listStats` memo) summed `timeSavedHours` with a naive JS float
+  reduce, order-dependent at exactly-x.5 decimal shapes (probed:
+  [15.4, 17.9, 15.2] summed to 48.499999999999993 in list order —
+  displaying 48 where the server's SQLite SUM displayed 49; four of
+  six probed drift shapes diverged by 1 between the seams — the
+  S22/S27 "one definition" law violated at the exact boundary). The
+  fix: the pure `sumHours()` seam (`src/lib/workflow.ts` — integer-tenths
+  accumulation, associative, order-free; every persisted hours value is
+  on the 0.1 grid so the snap is exact for every reachable state);
+  the route's rate-rows fetch became the STAT-ROWS fetch
+  (+timeSavedHours, renamed `statRows`) feeding both pure seams; the
+  aggregate dropped its dead hours column; the page took the twin
+  change; the client memo rides the same seam — the seam survey
+  re-run shows all six drift shapes AGREE. ALSO: the tie-break pins
+  (`session28-tie-break.spec.ts` — the dedicated-user pattern with a
+  deterministic 10-row workspace; probed CORRECT 5/5 first: newest
+  first among equals, the boundary tie, the pause/resume stability),
+  the CLS pins (≤ 0.1 on landing/login/dashboard — the last unpinned
+  milestone family), and the e2e suite's AUTH_RATE_LIMIT_MAX raised
+  50 → 100 (the ~45 auth flows per run had outgrown the pin — the
+  Session-11 razor-edge pattern recurring; the 429s landed on the
+  last files alphabetically while an isolated re-run passed). Gate:
+  **541 checks** (182 unit + 124 smoke + 235 e2e); 20 screenshots
+  genuinely refreshed (VLM ×5 PASS — the three first-run FAILs were
+  the check prompts' own contracts written from memory, adjudicated
+  against the code before any change).
 
 - **Session 27 (2026-10-09) remediation** — see
   `docs/remediation-plan-session27.md`: a stat-honesty + paint-budget

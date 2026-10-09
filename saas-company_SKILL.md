@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.26.0 · **Last updated:** 2026-10-09 (Session 27 remediation)
+> **Version:** 2.27.0 · **Last updated:** 2026-10-09 (Session 28 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–27)
+## §12. Lessons Learnt (Sessions 1–28)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -1120,6 +1120,48 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     count matters, count the OUTPUTS (this session's `ls` showed
     14/15/16 stale at the clone timestamp — the git-checkout mtime
     was the tell).
+
+64. **A value computed at more than one seam must share its ARITHMETIC,
+    not just its formula — float addition is order-dependent at exact
+    display boundaries (Session 28)**: the "Hours saved" card had two
+    computations behind one definition — the server's (SQLite's SUM,
+    extended-precision, grid-exact at every probed shape) and the
+    client fallback's (a naive JS float reduce over the list in
+    createdAt-DESC order). At a workspace whose true decimal sum sits
+    exactly on x.5, the JS reduce answered 48.499999999999993 where
+    the decimal truth is 48.5 — displaying 48 where the server
+    displayed 49 (four of six probed drift shapes diverged by 1
+    between the seams). The law: when a value is computed at more
+    than one seam, share the pure seam AND make the seam's arithmetic
+    ORDER-FREE — `sumHours()` accumulates INTEGER TENTHS (associative
+    by construction) and every persisted value sits on the 0.1 grid,
+    so the exactness is closed by construction, not by rounding luck.
+    The survey corollary: extend a boundary probe to the CLASS (the
+    integer runs sum was exact everywhere; the run-weighted rate
+    survived a 50,000-shape flip search — both adjudicated CLEAN and
+    documented so the next session does not re-litigate).
+
+65. **A suite's per-process budgets grow with the suite — re-count
+    them every cycle (Session 28)**: the e2e webServer's
+    `AUTH_RATE_LIMIT_MAX=50` pin was set in Session 11 when the suite
+    made ~10 auth flows; seventeen sessions of spec growth later the
+    suite made ~45 (38 signIn calls + the register round-trips that
+    share login's bucket) — and the first Session-28 full run 429'd
+    the LAST files alphabetically (session27/session28) while the
+    isolated re-run on a fresh server passed 3/3. That signature —
+    late-file failures in the full run, clean in isolation — is a
+    budget exhaustion, not a defect. The law: when the suite grows,
+    re-count EVERY per-process budget it consumes (auth flows,
+    workflow creates, generate calls); a pin sized at the suite's
+    authoring-time footprint is a razor edge two cycles later. And
+    the tooling twin: never launch a full-suite run inside a command
+    that can time out mid-run — the killed run's playwright+webServer
+    orphans itself, the next run's `reuseExistingServer` latches onto
+    the orphan's server, and when the orphan's run finally tears down
+    it kills the server OUT FROM UNDER the live run (the
+    gotcha-26/31 zombie family's fifth member: 233/235 failed with
+    ERR_CONNECTION_REFUSED until the orphans were cleared and the
+    suite re-ran clean).
 
 ## §13. Pitfalls to Avoid
 

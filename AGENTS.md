@@ -19,16 +19,16 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (176 checks) | `npm run test` |
-| Browser E2E (229 checks; needs a build) | `npm run test:e2e` |
+| Unit tests (182 checks) | `npm run test` |
+| Browser E2E (235 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
 | End-to-end smoke suite (124 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (176/176) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
-→ `npm run test:e2e` (229/229) — 529 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (182/182) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
+→ `npm run test:e2e` (235/235) — 541 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`, `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -616,6 +616,35 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    the COMPLETION log line, never the exit code alone (the gotcha-32
    channels family — a swallowed channel lies).
 
+42. **A seam's arithmetic is part of its contract — and the suite's own
+    budgets grow with it (Session 28).** The "Hours saved" card had two
+    computations behind one definition: the SERVER loaders (SQLite's SUM
+    — extended-precision, grid-exact at every probed shape) and the
+    CLIENT's fallback memo (a naive JS float reduce — ORDER-DEPENDENT at
+    exactly-x.5 decimal shapes: [15.4, 17.9, 15.2] is 48.5 in decimal but
+    48.499999999999993 in the list's addition order, displaying 48 where
+    the server displayed 49 — four of six probed shapes diverged by 1).
+    The law: when a value is computed at MORE THAN ONE seam, the
+    arithmetic itself must be shared and ORDER-FREE — `sumHours()`
+    accumulates INTEGER TENTHS (associative by construction) and every
+    persisted hours value sits on the 0.1 grid (POST hardcodes 0; PATCH
+    never writes hours), so the exactness is closed by construction, not
+    by rounding luck. The survey corollary: extend a boundary probe to
+    the CLASS — the runs sum (integer) was exact everywhere, and the
+    run-weighted rate survived a 50,000-shape flip search (the
+    large-magnitude integer-weighted products keep the toFixed(1)
+    display stable) — both adjudicated CLEAN and documented so the next
+    session does not re-litigate. And the tooling twin (caught the same
+    session): the e2e suite's OWN auth flows grew to ~45 per run and
+    crossed the webServer's `AUTH_RATE_LIMIT_MAX=50` mid-suite — the
+    Session-11 razor-edge pattern recurring after 17 sessions of spec
+    growth; the 429s landed on the LAST files alphabetically
+    (session27/session28) while an isolated re-run passed 3/3, the
+    signature of a budget exhaustion, not a defect. When the suite
+    grows, re-count EVERY per-process budget it consumes — a pin set at
+    the suite's size at authoring time is a razor edge at the suite's
+    size two cycles later.
+
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +
@@ -658,7 +687,13 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   via the shared pure seam; the meta field is `successRate`; the client
   fallback weights identically — D108) with the paint-milestone budgets
   pinned (TTFB ≤ 500ms + FCP ≤ 1000ms per route + the authed-dashboard
-  LCP ≤ 1000ms — D109). No route
+  LCP ≤ 1000ms — D109), and the Session-28 exactness layer: the "Hours
+  saved" card's sum rides the ORDER-FREE `sumHours()` seam (integer-tenths
+  accumulation over the stat-rows fetch — the route, the page, and the
+  client fallback share ONE definition; a naive float reduce displayed
+  1 low at exactly-x.5 shapes — D110) with the chart's tie-break
+  (`runs DESC, createdAt DESC` — D111) and the CLS budgets (≤ 0.1 per
+  route — D112) pinned. No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks

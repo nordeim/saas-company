@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import { DashboardApp } from "@/components/dashboard/dashboard-app";
 import { DashboardUnavailable } from "@/components/dashboard/dashboard-unavailable";
 import { routeMetadata } from "@/lib/seo";
-import { MAX_WORKFLOW_LIST, CHART_ROWS, statsFromAggregate, weightedSuccessRate, type WorkflowStats, type RankedWorkflowRow } from "@/lib/workflow";
+import { MAX_WORKFLOW_LIST, CHART_ROWS, statsFromAggregate, weightedSuccessRate, sumHours, type WorkflowStats, type RankedWorkflowRow } from "@/lib/workflow";
 
 // No live counterpart (the superset) — follow the app-wide per-route head
 // pattern (Session 6 F5).
@@ -59,7 +59,7 @@ export default async function DashboardPage() {
   let initialTopRuns: RankedWorkflowRow[] = [];
   try {
     const where = { userId };
-    const [rows, total, active, agg, rateRows, topRuns] = await Promise.all([
+    const [rows, total, active, agg, statRows, topRuns] = await Promise.all([
       db.workflow.findMany({
         where,
         orderBy: [{ createdAt: "desc" }],
@@ -69,14 +69,15 @@ export default async function DashboardPage() {
       db.workflow.count({ where: { ...where, status: "active" } }),
       db.workflow.aggregate({
         where,
-        _sum: { runs: true, timeSavedHours: true },
+        _sum: { runs: true },
       }),
-      // Session 27 R1: the rate-rows fetch — the two columns the
-      // run-weighted success rate needs (the weighting math lives in
-      // the pure seam, shared with the GET route — one definition).
+      // Session 27 R1 + Session 28 R1: the stat-rows fetch — the three
+      // columns the honest stats need (the rate weighting + the exact
+      // decimal-grid hours; the math lives in the pure seams, shared
+      // with the GET route — one definition, no drift between the seams).
       db.workflow.findMany({
         where,
-        select: { runs: true, successRate: true },
+        select: { runs: true, successRate: true, timeSavedHours: true },
       }),
       db.workflow.findMany({
         where,
@@ -92,8 +93,8 @@ export default async function DashboardPage() {
       total,
       active,
       agg._sum.runs ?? 0,
-      agg._sum.timeSavedHours ?? 0,
-      weightedSuccessRate(rateRows),
+      sumHours(statRows),
+      weightedSuccessRate(statRows),
     );
   } catch {
     return <DashboardUnavailable />;

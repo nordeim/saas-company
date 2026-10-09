@@ -233,3 +233,59 @@ test.describe("paint-milestone budgets (Session 27 R2 — the S50 unpainted corn
     expect(lcp, `authed dashboard LCP ${lcp}ms <= ${DASHBOARD_LCP_BUDGET_MS}ms (measured 152ms at authoring — the unpinned corner)`).toBeLessThanOrEqual(DASHBOARD_LCP_BUDGET_MS);
   });
 });
+
+/** Session 28 R3 — the CLS (layout-stability) budgets: the LAST unpinned
+ * milestone family (the S53 log's third suggested surface — S25 pinned
+ * DOM/LCP, S26 the script-transfer bytes, S27 TTFB/FCP; layout stability
+ * had no pin anywhere). Measured on the Session-28 probe server (fresh
+ * contexts, entrances settled): landing 0.0028 / login 0.0000 / the
+ * authed dashboard 0.0000 — the expected noise floor is tiny by
+ * construction (the entrance animations are opacity/transform — no
+ * layout participation; the fonts are self-hosted with preload; the
+ * dashboard is server-rendered with its initial state). The 0.1 ceiling
+ * is the Core Web Vitals "good" threshold itself — 35x+ the measured
+ * values, the generous-margin discipline: the budget catches GROSS
+ * regressions (a late-loading banner that shoves the hero, an unsized
+ * image swap), not hundredths. hadRecentInput shifts are excluded by
+ * the CLS definition itself (none occur on these input-free loads). */
+const CLS_BUDGET = 0.1;
+
+/** CLS read after the entrances settle: the buffered layout-shift
+ * entries summed (the Chromium buffer retains them — the same
+ * read-after-the-fact pattern as paintMilestones; entries with
+ * hadRecentInput are excluded per the CLS spec). */
+async function settledCls(page: Page): Promise<number> {
+  await page.waitForTimeout(1200);
+  return page.evaluate(() =>
+    Math.round(
+      performance
+        .getEntriesByType("layout-shift")
+        .reduce((n, e) => n + ((e as LayoutShiftEntry).hadRecentInput ? 0 : (e as LayoutShiftEntry).value), 0) * 10000,
+    ) / 10000,
+  );
+}
+
+interface LayoutShiftEntry extends PerformanceEntry {
+  value: number;
+  hadRecentInput: boolean;
+}
+
+test.describe("CLS layout-stability budgets (Session 28 R3 — the S53 third surface)", () => {
+  test("landing: CLS budget", async ({ page }) => {
+    await page.goto("/", { waitUntil: "load" });
+    const cls = await settledCls(page);
+    expect(cls, `landing CLS ${cls} <= ${CLS_BUDGET} (measured 0.0028 at authoring)`).toBeLessThanOrEqual(CLS_BUDGET);
+  });
+
+  test("login: CLS budget", async ({ page }) => {
+    await page.goto("/login", { waitUntil: "load" });
+    const cls = await settledCls(page);
+    expect(cls, `login CLS ${cls} <= ${CLS_BUDGET} (measured 0.0000 at authoring)`).toBeLessThanOrEqual(CLS_BUDGET);
+  });
+
+  test("dashboard (authed): CLS budget", async ({ page }) => {
+    await authedDashboardNavigation(page);
+    const cls = await settledCls(page);
+    expect(cls, `authed dashboard CLS ${cls} <= ${CLS_BUDGET} (measured 0.0000 at authoring)`).toBeLessThanOrEqual(CLS_BUDGET);
+  });
+});

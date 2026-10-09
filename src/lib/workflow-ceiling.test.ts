@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { MAX_WORKFLOW_LIST, statsFromAggregate, weightedSuccessRate } from "./workflow";
+import { MAX_WORKFLOW_LIST, statsFromAggregate, sumHours, weightedSuccessRate } from "./workflow";
 
 /**
  * Session 21 R1 — the workflows list ceiling (the OUTPUT twin of the S20
@@ -30,6 +30,15 @@ describe("statsFromAggregate — the honest server-side stats (Session 21 R1; Se
   it("rounds hours to the integer the card renders", () => {
     expect(statsFromAggregate(3, 3, 50, 10.6, 99.2).hours).toBe(11);
     expect(statsFromAggregate(3, 3, 50, 10.4, 99.2).hours).toBe(10);
+  });
+
+  it("rounds the x.5 boundary HALF-UP — the nearest-integer convention at the exact tie (Session 28 R1)", () => {
+    // The S53 candidate surface: a workspace whose true decimal hours sum
+    // sits exactly on x.5. The convention (Math.round) rounds half toward
+    // +Infinity — 48.5 renders 49, 53.5 renders 54. The pins exist so the
+    // boundary can never silently become truncation or banker's drift.
+    expect(statsFromAggregate(3, 3, 50, 48.5, 99.2).hours).toBe(49);
+    expect(statsFromAggregate(3, 3, 50, 53.5, 99.2).hours).toBe(54);
   });
 });
 
@@ -81,5 +90,56 @@ describe("weightedSuccessRate — the workspace's run-weighted truth (Session 27
       { runs: 2_107, successRate: 99.9 },
     ];
     expect(weightedSuccessRate(seeded)).toBeCloseTo(708_374.3 / 7_120, 4);
+  });
+});
+
+/**
+ * Session 28 R1 — the exact hours seam (D110): the "Hours saved" card's
+ * HOURS must come from ONE order-free definition. Probed RED at the seam
+ * level: the client's listStats fallback summed timeSavedHours with a
+ * naive JS float reduce — order-dependent at exactly-x.5 decimal shapes
+ * ([15.4, 17.9, 15.2] is 48.5 in decimal but 48.499999999999993 in the
+ * list's addition order — displaying 48 where the server's SQLite SUM,
+ * extended-precision, answers 48.5 and displays 49). The seam accumulates
+ * INTEGER TENTHS (associative — order-free by construction) and answers
+ * the exact decimal-grid sum; every persisted timeSavedHours value is on
+ * the 0.1 grid (POST hardcodes 0; PATCH never writes hours), so the grid
+ * snap is exact for every reachable workspace state.
+ */
+describe("sumHours — the exact decimal-grid hours sum (Session 28 R1)", () => {
+  it("answers the DRIFT shape's decimal truth exactly (48.5, not the 48.499999999999993 a naive float reduce yields in list order)", () => {
+    const rows = [{ timeSavedHours: 15.2 }, { timeSavedHours: 17.9 }, { timeSavedHours: 15.4 }];
+    // The discriminating assertion: the naive reduce over THIS order
+    // answers 48.499999999999993 (Math.round → 48); the seam must answer
+    // the exact grid value 48.5 (Math.round → 49, the half-up convention).
+    const naive = rows.reduce((n, r) => n + r.timeSavedHours, 0);
+    expect(naive).toBeLessThan(48.5); // the bug the seam exists to close
+    expect(sumHours(rows)).toBe(48.5);
+  });
+
+  it("is ORDER-FREE — the same shape in any addition order answers identically", () => {
+    const shape = [23.4, 15.7, 14.4];
+    const perms = [
+      shape,
+      [...shape].reverse(),
+      [shape[1], shape[2], shape[0]],
+      [shape[2], shape[0], shape[1]],
+    ];
+    const answers = new Set(perms.map((p) => sumHours(p.map((h) => ({ timeSavedHours: h })))));
+    expect(answers.size).toBe(1);
+    expect([...answers][0]).toBe(53.5);
+  });
+
+  it("the seeded 6-row workspace answers exactly 160", () => {
+    const seeded = [41.5, 12, 26, 33, 18.5, 29].map((h) => ({ timeSavedHours: h }));
+    expect(sumHours(seeded)).toBe(160);
+  });
+
+  it("the empty workspace answers 0", () => {
+    expect(sumHours([])).toBe(0);
+  });
+
+  it("the exact-halves control stays exact (23.5 — Math.round renders 24)", () => {
+    expect(sumHours([{ timeSavedHours: 10.5 }, { timeSavedHours: 13 }])).toBe(23.5);
   });
 });

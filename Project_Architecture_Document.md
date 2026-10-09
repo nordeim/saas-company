@@ -439,6 +439,82 @@
   README 486 badge + the temporal-honesty row, SKILL v2.23.0 lessons
   56–57, remediation plan session24, session log 45.
 
+- `[NOTE]` **Session 28 remediation (2026-10-09)** — an hours-seam
+  exactness + tie-break-pinning + CLS-budget audit (the S53 log's
+  three suggested surfaces — the `topRuns` tie-break under live
+  mutation, the stat cards' `hours` rounding boundary at exactly x.5,
+  and the CLS layout-stability milestone — surveyed first, then
+  extended to the class they belong to; see
+  `docs/remediation-plan-session28.md`) found and fixed one latent
+  defect and shipped two pin families. **(F1) the client-fallback
+  hours seam's order-dependent float drift (D110):** the "Hours
+  saved" card's HOURS had two computations — the SERVER loaders
+  (Prisma `_sum timeSavedHours` over SQLite's extended-precision SUM:
+  grid-exact at every probed shape) and the CLIENT's `listStats`
+  fallback (a naive JS float `reduce` over the list in createdAt-DESC
+  order — ORDER-DEPENDENT at exactly-x.5 decimal shapes: probed with
+  [15.4, 17.9, 15.2], the list-order sum is 48.499999999999993 —
+  displaying **48** where the server displays **49**; four of six
+  probed drift shapes diverged by 1). The production card always
+  renders the SERVER value (the meta-present path), so the
+  divergence was LATENT (the fallback fires only on meta-less
+  payloads — the error-boundary mock contract) — but the S22/S27
+  "one definition, no drift between the seams" law was violated at
+  the exact boundary the S53 log asked about. The fix: the pure
+  `sumHours()` seam (`src/lib/workflow.ts` — Σ`Math.round(hours ×
+  10)` accumulated in INTEGER TENTHS, associative, order-free by
+  construction; every persisted `timeSavedHours` is on the 0.1 grid —
+  POST hardcodes 0, PATCH never writes hours — so the grid snap is
+  exact for every reachable state); the route's rate-rows fetch
+  becomes the STAT-ROWS fetch (`+timeSavedHours`, renamed
+  `statRows`) feeding BOTH pure seams; the aggregate drops the dead
+  hours column; the page takes the twin change; the client's memo
+  rides the same seam — one definition at every layer. The class
+  survey: `runs` (integer — exact, CLEAN) and the run-weighted rate
+  (a 50,000-shape search for toFixed(1) boundary flips found ZERO —
+  the large-magnitude integer-weighted products keep the display
+  stable; adjudicated CLEAN, documented). **(F2) the unpinned
+  tie-break contract (D111 — probed CORRECT 5/5, now gated):** the
+  chart's `topRuns` tie-break (`runs DESC, createdAt DESC` — newest
+  first among equals) verified at the top tie, the CHART_ROWS
+  boundary tie, the wire twin, and under a pause/resume refresh
+  cycle (status does not participate) — then pinned by
+  `tests/e2e/session28-tie-break.spec.ts` (the dedicated-user
+  pattern: a registered workspace with a deterministic 10-row tie
+  shape — the demo workspace is survivor-shaped mid-suite, the
+  Session-27 register discipline). **(F3) the CLS budget family
+  (D112 — the last unpinned milestone):** CLS ≤ 0.1 (the CWV "good"
+  threshold) on landing/login/authed-dashboard — measured
+  0.0028/0.0000/0.0000, 35x+ margins, preventive by design. ALSO
+  (test infrastructure, caught this session): **the e2e suite
+  outgrew `AUTH_RATE_LIMIT_MAX=50`** — the suite's ~45 auth flows
+  per run (38 signIn calls + the register round-trips sharing
+  login's bucket, the session23–28 specs each signing in) crossed
+  the pin mid-suite and 429'd the last files alphabetically
+  (session27/session28; probed: the isolated re-run on a fresh
+  server passed 3/3) — the Session-11 razor-edge pattern recurring
+  after 17 sessions of spec growth; raised to 100 (2x margin over
+  two consecutive runs on a reused server). +6 unit (the sumHours
+  seam pins incl. the DISCRIMINATING drift shape 48.5-not-48.49999…
+  and the x.5 boundary display pins), +6 e2e (3 tie-break + 3 CLS);
+  RED observed on the pre-fix build (5 structural unit failures —
+  the seam does not exist). Gate: 529 → **541 = 182 unit + 124 smoke
+  + 235 e2e**; the seam survey re-run GREEN (all six drift shapes
+  AGREE across the seams — the pre-fix divergences 48/50/53/37 vs
+  49/51/54/38 closed); the drift battery re-run GREEN (word parity
+  1.0000 ×8, mobile-nav byte-identical, D62 holds); 20 screenshots
+  GENUINELY refreshed (DB canonical before AND after — 6 rows / 5
+  active / 7,120 runs) with VLM ×5 PASS (the three first-run FAILs
+  were the CHECK PROMPTS' own contracts written from memory — the
+  login heading is "Welcome to SAAS Company", the 404 is the
+  reference's own LIGHT slate card, the menu's Get Started pill is
+  44px like every row — all adjudicated against the code before any
+  change; the S27 write-the-prompt-FROM-the-spec lesson now held).
+  DOCUMENTED: PAD ledger D110–D112, §7 counts, §11 key files, AGENTS
+  gotcha 42 + counts + the invariant line naming the exact hours
+  seam, CLAUDE session-28 context, README 541 badge + the hours-seam
+  row, SKILL lessons, remediation plan session28, session log 55.
+
 - `[NOTE]` **Session 27 remediation (2026-10-09)** — a stat-honesty +
   paint-budget audit (the S50 log's three suggested surfaces — the
   unpinned TTFB/FCP budget families, the composed-vs-charted
@@ -1847,6 +1923,9 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D107 | The JS-transfer budget pins | n/a (the reference is Base44-hosted; a runtime-budget layer) | `tests/e2e/performance-budget.spec.ts`'s transfer rows (Session 26 R2): landing/login/authed-dashboard SCRIPTS ≤ 400KB each, summed from a settled ResourceTiming `transferSize` read (`initiatorType === "script"`). Measured: landing 172KB/10 files, login 152KB/9, the authed dashboard 177KB/11 (the 2,214KB landing total is dominated by the 1,898KB hero video — the reference's own parity asset). Pre-fix, nothing pinned the script bytes — an accidental full-library import would have passed all 493 checks while doubling the site's JS (the S46/S48 performance-budget family: a budget measured but never pinned is a regression waiting to happen). The 2.3–2.6x margins are the S25 de-flake discipline (the budget catches GROSS regressions, not kilobytes); the pins are preventive tooling — GREEN on this build by design, their RED is a future regression | **Superset quality** (transfer-layer observability; Session 26) |
 | D108 | The success rate is the run-weighted workspace truth | n/a (the live has no dashboard — D62) | The pure `weightedSuccessRate()` seam in `src/lib/workflow.ts` (Session 27 R1): Σ(runs × successRate) / Σ(runs), null iff Σruns = 0 → the documented 100 mapping. Pre-fix the card labeled "Avg success rate" rendered Prisma's `_avg successRate` — the UNWEIGHTED mean over workflows (the average-of-averages fallacy): probed RED with the extreme shape (1 row: 12,000 runs @ 60% + 4 rows: 3 runs @ 100%), the card displayed 92.0% while the workspace's true rate is 60.0% — a 32-point divergence displayed beside "Total runs 12,012" (the run-share reading it invites). The fix rides the S21 stat-cards precedent extended to the weighting: the GET route's and the dashboard page's `Promise.all` gain the two-column rate-rows fetch feeding the shared seam (dropping `_avg`); the client's fallback memo weights identically over the visible rows; the meta field renames `avgSuccessRate` → `successRate` (name/value coherence on the wire — a field named "avg" carrying a weighted rate would be the S26 chart lie one layer down); the label renders "Success rate" (the S26 label-names-its-criterion law). The smoke's 105 volumetric probe rows change rate 99.5 → 50 so the wire pin DISCRIMINATES (unweighted would say 52.7, the weighted truth 93.1). Pinned by 6 unit pins (`workflow-ceiling.test.ts`) + 1 discriminating smoke pin + 4 e2e pins (`session27-stat-honesty.spec.ts`: the empty-workspace boundary, the wire↔card↔DOM coherence with the self-checking discrimination meta-assertion, the compose→chart client-refresh path, the delete→chart-drop path) | **Superset quality** (stat-honesty at any volume; Session 27) |
 | D109 | The paint-milestone budget pins | n/a (the reference is Base44-hosted; a runtime-budget layer) | `tests/e2e/performance-budget.spec.ts`'s paint rows (Session 27 R2): TTFB ≤ 500ms and FCP ≤ 1000ms on landing, login, and the authed dashboard (NavigationTiming `responseStart − requestStart`; PaintTiming `first-contentful-paint`), plus the authed-dashboard LCP ≤ 1000ms. Measured: TTFB 10/7/30ms, FCP 196/136/152ms, dashboard LCP 152ms — the unpainted corners of the S25/S26 budget families (DOM/LCP/transfer were pinned; the server-response and first-paint milestones were not — a route growing an N+1 query pattern or a render-blocking regression would have passed all 511 checks). The 16–70x and ~5–7x margins are the S25 generous-ceiling discipline; the pins are preventive tooling — GREEN on this build by design, their RED is a future regression | **Superset quality** (paint-layer observability; Session 27) |
+| D110 | The hours card's sum is ONE order-free definition | n/a (the live has no dashboard — D62) | The pure `sumHours()` seam in `src/lib/workflow.ts` (Session 28 R1): Σ`Math.round(timeSavedHours × 10)` accumulated in INTEGER TENTHS (associative — order-free by construction, the S22 close-by-construction pattern applied to float drift), answered as tenths/10 — the exact decimal-grid sum. Pre-fix the CLIENT's `listStats` fallback summed with a naive JS float reduce — ORDER-DEPENDENT at exactly-x.5 decimal shapes: [15.4, 17.9, 15.2] is 48.5 in decimal but 48.499999999999993 in the list's addition order, displaying 48 where the server's SQLite SUM (extended-precision) answered 48.5 and displayed 49 — four of six probed drift shapes diverged by 1 between the seams (the S22/S27 "one definition, no drift" law violated at the boundary). Every persisted timeSavedHours is on the 0.1 grid (POST hardcodes 0; PATCH accepts only name/description/category/status), so the grid snap is exact for every reachable state. The route's rate-rows fetch became the STAT-ROWS fetch (+timeSavedHours, renamed statRows) feeding both pure seams; the aggregate dropped the dead hours column; the page took the twin change; the client memo rides the same seam. The class survey: `runs` integer-exact (CLEAN); the run-weighted rate — a 50,000-shape search for toFixed(1) boundary flips found ZERO (adjudicated CLEAN). Pinned by 6 unit pins (the DISCRIMINATING drift shape 48.5-not-48.49999…, order-freedom across permutations, the seeded 160, the x.5 half-up display boundary) | **Superset quality** (hours-honesty at every seam; Session 28) |
+| D111 | The chart's tie-break contract is pinned | n/a (the live has no dashboard — D62) | `tests/e2e/session28-tie-break.spec.ts` (Session 28 R2): the `topRuns` tie-break — `runs DESC, createdAt DESC` ("newest first among equals, the list's own convention") — probed CORRECT at every shape (the top tie, the CHART_ROWS boundary tie where the newer of two equal-runs rows takes the last slot and the older drops, the wire twin, and under a live pause/resume refresh cycle: status does not participate in the ranking, by construction — PATCH never writes runs or createdAt), then gated with the dedicated-user pattern (a registered workspace with a deterministic 10-row tie shape: champion → 777×3 cluster → 600/500/400 fillers → the 96-run boundary pair → the 50 tail; the demo workspace is survivor-shaped mid-suite — the session23 deletions — so the spec owns its entire state; the user cascade-deleted in an afterAll). Pre-fix the behavior was UNPINNED: the seeded runs are all-distinct and every API-minted row carries runs: 0, so no spec ever asserted the order among equals | **Superset quality** (ranking determinism; Session 28) |
+| D112 | The CLS layout-stability budget pins | n/a (the reference is Base44-hosted; a runtime-budget layer) | `tests/e2e/performance-budget.spec.ts`'s CLS rows (Session 28 R3): CLS ≤ 0.1 (the Core Web Vitals "good" threshold itself) on landing, login, and the authed dashboard — measured 0.0028/0.0000/0.0000 (35x+ margins), the buffered layout-shift entries summed with hadRecentInput excluded, read after the entrances settle. The LAST unpinned milestone family (S25 pinned DOM/LCP; S26 the transfer bytes; S27 TTFB/FCP + the dashboard LCP). The noise floor is tiny by construction: the entrances are opacity/transform (no layout participation), the fonts are self-hosted with preload, the dashboard is server-rendered with its initial state. ALSO this session: the e2e suite outgrew `AUTH_RATE_LIMIT_MAX=50` (the ~45 auth flows per run crossed the pin mid-suite and 429'd the last files alphabetically — the Session-11 razor-edge pattern recurring after 17 sessions of spec growth; raised to 100 in `playwright.config.ts`, the webServer insurance pattern) | **Superset quality** (layout-stability observability; Session 28) |
 
 ### 5.5 Tailwind v4 Trap Log (enforced here)
 
@@ -1907,8 +1986,8 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
-| Unit (pure seams) | 18 files | 176 | `src/lib/*.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
-| Browser E2E | 27 specs | 229 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Unit (pure seams) | 18 files | 182 | `src/lib/*.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
+| Browser E2E | 28 specs | 235 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 124 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins
@@ -1919,7 +1998,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 
 ### 7.3 Coverage Thresholds
 
-- **Gate (mandatory before push):** `npm run lint` → `npm run typecheck` → `npm run test` (**176/176**) → `npm run build` → `./scripts/smoke-test.sh` (**124/124**) → `npm run test:e2e` (**229/229**). No hosted CI; the local gate is the only gate. The `typecheck` step is not optional: the build sets `ignoreBuildErrors`.
+- **Gate (mandatory before push):** `npm run lint` → `npm run typecheck` → `npm run test` (**182/182**) → `npm run build` → `./scripts/smoke-test.sh` (**124/124**) → `npm run test:e2e` (**235/235**). No hosted CI; the local gate is the only gate. The `typecheck` step is not optional: the build sets `ignoreBuildErrors`.
 - Line/branch coverage is not measured — the seam list is deliberately small and complete.
 
 ### 7.4 Conventions
@@ -2052,7 +2131,7 @@ TypeScript strict (with the template-era `noImplicitAny: false`); ESLint flat co
 | `src/lib/db-path.ts` + `tests/db-path.test.ts` | The SQLite URL-resolution seam + its contract (Pattern B) |
 | `src/lib/rate-limit.ts` | Pure fixed-window limiter (ADR-008) — the `AUTH_RATE_LIMIT_MAX` override (D66) + `generateRateLimit` (the per-USER LLM ceiling — D80) + `workflowRateLimit` (the per-USER workflow-creation ceiling, 30/15min default, `WORKFLOW_RATE_LIMIT_MAX` override — Session 21 D96) |
 | `src/lib/pricing.ts` | Plans, periods, the 20% annual discount (unit-tested) |
-| `src/lib/workflow.ts` + `src/lib/workflow-ceiling.test.ts` + `src/lib/workflow-rank.test.ts` | Status/category vocabularies, template + sanitizer (ADR-004) + the Session-21 list ceiling `MAX_WORKFLOW_LIST = 100` and the pure `statsFromAggregate()` normalizer (the honest server-side stat-card aggregates — D95) + the Session-26 ranking seam: `CHART_ROWS = 8` (the single constant the server loaders AND the client import — the cap and its aggregate can never drift apart) and `rankByRuns()` (the pure client-side FALLBACK: runs DESC, ties newest-first, non-mutating — 6 unit pins; D106)  + the Session-27 weighting seam: `weightedSuccessRate()` (Σ(runs × successRate) / Σ(runs), null iff Σruns = 0 — the run-weighted truth shared by the GET route, the page's initial paint, and the client fallback; the `WorkflowStats` field renames `avgSuccessRate` → `successRate` — name/value coherence on the wire — D108) |
+| `src/lib/workflow.ts` + `src/lib/workflow-ceiling.test.ts` + `src/lib/workflow-rank.test.ts` | Status/category vocabularies, template + sanitizer (ADR-004) + the Session-21 list ceiling `MAX_WORKFLOW_LIST = 100` and the pure `statsFromAggregate()` normalizer (the honest server-side stat-card aggregates — D95) + the Session-26 ranking seam: `CHART_ROWS = 8` (the single constant the server loaders AND the client import — the cap and its aggregate can never drift apart) and `rankByRuns()` (the pure client-side FALLBACK: runs DESC, ties newest-first, non-mutating — 6 unit pins; D106)  + the Session-27 weighting seam: `weightedSuccessRate()` (Σ(runs × successRate) / Σ(runs), null iff Σruns = 0 — the run-weighted truth shared by the GET route, the page's initial paint, and the client fallback; the `WorkflowStats` field renames `avgSuccessRate` → `successRate` — name/value coherence on the wire — D108) + the Session-28 hours seam: `sumHours()` (Σ`Math.round(hours × 10)` in integer tenths — associative, order-free, the exact decimal-grid sum shared by the GET route's statRows fetch, the page's twin, and the client's fallback memo — D110; the x.5 half-up display convention pinned) |
 | `src/lib/legal-content.ts` / `faq-content.ts` | Verbatim reference copy (content-as-code) |
 | `prisma/schema.prisma` / `prisma/seed.ts` | 4 models / idempotent demo workspace — the seed resolves its DATABASE_URL through the db-path selection seam BEFORE constructing the client and prints `seed-target:` (Session 24 D103: the seed always writes where the app reads) |
 | `scripts/smoke-test.sh` | 123-check production HTTP suite (pins its own `DATABASE_URL`; incl. the four security-header pins + the asset-caching pin + the PATCH name-contract pins + the lazy-img no-preload contract + the timing/race/gate/crash-path pins + the Session-20 method + payload guard pins + the Session-21 data-volume ceiling + creation-limiter pins + the Session-22 concurrency + cross-user-ownership pins + the Session-24 seed-placement pin + the Session-26 topRuns ranking-aggregate pins (the 111-row case that PROVES the server-side computation — the champion sits outside the newest-100 cap) — 105 probe rows seeded into the smoke DB) |
@@ -2061,7 +2140,8 @@ TypeScript strict (with the template-era `noImplicitAny: false`); ESLint flat co
 | `tests/e2e/session25-chart.spec.ts` | The runs-chart honesty + semantics pins (Session 25 D104–D105): the ≤8 every-workflow case (no note), the >8 caps-at-8 + honest-note case (surplus rows minted through the authenticated create API via in-page fetch — gotcha 30 — and deleted in a finally cleanup), and the list-semantics case (role=list/listitem, each row's adjacent exact value); suite-ordered AFTER session24-temporal.spec.ts (asserts against whatever rows survive — no hardcoded seed count); the note-wording pins updated Session 26 to the criterion-naming contract ("by runs") |
 | `tests/e2e/session26-chart-rank.spec.ts` | The chart's selection-criterion pins (Session 26 D106): (a) the first chart row is the TOP RUNNER with non-increasing values (RED pre-fix: the first row was the most RECENT); (b) the champion stays visible when newer runs=0 rows crowd the workspace (RED pre-fix: the minted rows crowded it out); (c) the top bar spans the full track width — the charted max renders 100% — AND the note names the criterion "Showing the top 8 of {N} workflows by runs." (RED pre-fix: 61.57% + "most recent"); (d) no note while the whole workspace fits; surplus rows minted through the authenticated create API and deleted in a finally; suite-ordered AFTER session25-chart.spec.ts (single worker, shared e2e.db) |
 | `tests/e2e/session27-stat-honesty.spec.ts` | The stat-honesty pins (Session 27 D108): (a) the empty-workspace boundary — a fresh registered user's first-run render ("No data yet." / "No workflows yet — compose your first one above." / stat cards 0/0/0/100.0% with the "Success rate" label — RED pre-fix on the label); (b) the rendered rate is the run-weighted truth — the card equals `meta.stats.successRate` at one decimal AND the DOM-derived weighted value, with the self-checking discrimination meta-assertion (weighted ≠ unweighted at one decimal — the S17 timing-ratio pattern; RED pre-fix: "Avg success rate" + 99.2% + the undefined field); (c) a UI compose updates the chart WITHOUT a reload (the `refresh()` → `meta.topRuns` client-consumption path session26 left unpinned); (d) a UI delete drops the row from the chart without a reload; minted rows cleaned up in a finally (the session25/26 survivor discipline); suite-ordered AFTER session26-chart-rank (single worker, shared e2e.db — session23-honesty has deleted two seeded rows by then, so expectations derive from the survivors) |
-| `tests/e2e/performance-budget.spec.ts` | The performance-budget pins (Session 25 R3 — the S46 hook): landing DOM ≤ 1200 (measured 860), landing LCP ≤ 1500ms (measured 388 — a buffered PerformanceObserver polled to settled, the §7.4 de-flake discipline), login LCP ≤ 800ms (measured 192), the authed dashboard DOM ≤ 500 (measured ~314); deliberately generous 2–4x margins — the budget catches GROSS regressions, not milliseconds; preventive pins (pass on the current build by design — their RED is a future regression) + the WORKFLOW_RATE_LIMIT_MAX=50 webServer insurance pin in `playwright.config.ts` (the AUTH/GENERATE pattern) + the Session-26 transfer rows (D107 — the S48 extension): landing/login/authed-dashboard SCRIPTS ≤ 400KB each (measured 172/152/177KB), summed from a settled ResourceTiming `transferSize` read — the bundle-bloat gate  + the Session-27 paint-milestone rows (D109 — the S50 extension): TTFB ≤ 500ms + FCP ≤ 1000ms on landing/login/authed-dashboard (NavigationTiming + PaintTiming; measured 7–30ms / 136–196ms) and the authed-dashboard LCP ≤ 1000ms (measured 152ms — the unpinned corner) |
+| `tests/e2e/session28-tie-break.spec.ts` | The tie-break pins (Session 28 D111): the chart's `runs DESC, createdAt DESC` contract — (a) the 777-run tie cluster renders NEWEST-first among equals; (b) the boundary tie: the NEWER of two 96-run rows takes the 8th chart slot, the older drops, with the note "Showing the top 8 of 10 workflows by runs."; (c) the tie order SURVIVES a pause/resume refresh cycle (status does not participate — PATCH never writes runs/createdAt). The dedicated-user pattern: a unique registered user + a deterministic 10-row workspace minted through a spec-scoped PrismaClient (the constructor datasource override, the absolute path; the API cannot mint nonzero runs and the demo workspace is survivor-shaped mid-suite — session23 deletes three seeded rows); the user cascade-deleted in an afterAll. Probed CORRECT 5/5 on the probe server BEFORE the pins were written (the pin is the surviving memory of the probe) |
+| `tests/e2e/performance-budget.spec.ts` | The performance-budget pins (Session 25 R3 — the S46 hook): landing DOM ≤ 1200 (measured 860), landing LCP ≤ 1500ms (measured 388 — a buffered PerformanceObserver polled to settled, the §7.4 de-flake discipline), login LCP ≤ 800ms (measured 192), the authed dashboard DOM ≤ 500 (measured ~314); deliberately generous 2–4x margins — the budget catches GROSS regressions, not milliseconds; preventive pins (pass on the current build by design — their RED is a future regression) + the WORKFLOW_RATE_LIMIT_MAX=50 webServer insurance pin in `playwright.config.ts` (the AUTH/GENERATE pattern) + the Session-26 transfer rows (D107 — the S48 extension): landing/login/authed-dashboard SCRIPTS ≤ 400KB each (measured 172/152/177KB), summed from a settled ResourceTiming `transferSize` read — the bundle-bloat gate  + the Session-27 paint-milestone rows (D109 — the S50 extension): TTFB ≤ 500ms + FCP ≤ 1000ms on landing/login/authed-dashboard (NavigationTiming + PaintTiming; measured 7–30ms / 136–196ms) and the authed-dashboard LCP ≤ 1000ms (measured 152ms — the unpinned corner) + the Session-28 CLS rows (D112 — the S53 extension): CLS ≤ 0.1 (the CWV "good" threshold) on landing/login/authed-dashboard (the buffered layout-shift entries summed, hadRecentInput excluded; measured 0.0028/0.0000/0.0000 — 35x+ margins) + the Session-28 AUTH_RATE_LIMIT_MAX raise 50 → 100 in `playwright.config.ts` (the suite's ~45 auth flows had outgrown the pin — the Session-11 razor-edge pattern recurring; the webServer insurance pattern) |
 | `src/lib/client-fetch.ts` + `src/lib/client-fetch.test.ts` | The client fetch timeout seam (Session 24 D101): `fetchWithTimeout()` — an AbortController + setTimeout wrapper (CLIENT_FETCH_TIMEOUT_MS = 20s) riding ALL five client fetch sites (the dashboard's apiFetch + logout, the login card, the newsletter footer, the demo form); a black-holed request rejects into the existing S12 network-fault catches. Unit pins: the under-timeout passthrough (no signal abort after settle), the over-timeout rejection against a REAL hung TCP socket (an inert mock cannot observe the abort), the underlying-signal abort propagation |
 | `src/lib/db-path.ts` (the Session-24 extension) + `tests/db-path.test.ts` | The CLI/seed URL selection seams (Session 24 D103): `parseEnvValue()` (quoted/unquoted/commented/CRLF) + `selectDatabaseUrl()` (the deterministic precedence: explicit process env → the repo's own .env → the documented default; absolute + non-SQLite passthrough — the PostgreSQL swap preserved) + the `resolveCliDatabaseUrl()` IO wrapper — the seed and the db:push/migrate/reset wrapper share the app's anchor resolution, and the placement is OBSERVABLE (`seed-target:` / `[db] DATABASE_URL=`) |
 | `prisma/seed.ts` + `scripts/prisma-with-db.ts` | The deterministic seed + CLI wrapper (Session 24 D103): the seed sets `process.env.DATABASE_URL = resolveCliDatabaseUrl()` BEFORE constructing its client (mirroring `src/lib/db.ts`) and prints `seed-target:`; `db:push`/`db:migrate`/`db:reset` route through the tsx wrapper (resolve → `npx prisma …` with the explicit env, stdio inherited for interactive migrate) |

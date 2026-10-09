@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { ok, fail, apiRoute, methodGuard, optionsGuard, bodyTooLarge } from "@/lib/api";
 import { requireSession } from "@/lib/api";
 import { cleanString, requiredString } from "@/lib/validation";
-import { WORKFLOW_STATUSES, isWorkflowStatus, MAX_WORKFLOW_LIST, CHART_ROWS, statsFromAggregate, weightedSuccessRate } from "@/lib/workflow";
+import { WORKFLOW_STATUSES, isWorkflowStatus, MAX_WORKFLOW_LIST, CHART_ROWS, statsFromAggregate, weightedSuccessRate, sumHours } from "@/lib/workflow";
 import { workflowRateLimit } from "@/lib/rate-limit";
 
 /** Session 20 F1: the method-mismatch layer answers the envelope too. */
@@ -39,6 +39,17 @@ export const OPTIONS = optionsGuard("GET, HEAD, OPTIONS, POST");
  * two-column rate-rows fetch feeding the pure weightedSuccessRate seam
  * (the S21 stat-cards precedent extended to the weighting — the same
  * one-pass cost as the aggregate scan it replaces).
+ *
+ * Session 28 R1 — the hours join the same single-definition law (D110):
+ * the stat-rows fetch (the renamed rate-rows fetch) gains
+ * `timeSavedHours` and the hours move OFF the Prisma `_sum` onto the
+ * pure `sumHours` seam — integer-tenths accumulation, order-free by
+ * construction. Probed: the CLIENT's fallback (a naive float reduce in
+ * list order) displayed 1 LOW at exactly-x.5 shapes where SQLite's
+ * extended-precision SUM displayed the half-up truth (48 vs 49 at
+ * [15.4, 17.9, 15.2]); one seam for route + page + client closes the
+ * drift class. `_sum: { runs }` stays (integer — exact); the hours
+ * column leaves the aggregate (one source, no dead twin).
  */
 export async function GET() {
   // Session 19 F1: the crash-path envelope.
@@ -47,7 +58,7 @@ export async function GET() {
   if (!guard.user) return guard.response;
 
   const where = { userId: guard.user.id };
-  const [workflows, total, active, agg, rateRows, topRuns] = await Promise.all([
+  const [workflows, total, active, agg, statRows, topRuns] = await Promise.all([
     db.workflow.findMany({
       where,
       orderBy: [{ createdAt: "desc" }],
@@ -57,13 +68,14 @@ export async function GET() {
     db.workflow.count({ where: { ...where, status: "active" } }),
     db.workflow.aggregate({
       where,
-      _sum: { runs: true, timeSavedHours: true },
+      _sum: { runs: true },
     }),
-    // Session 27 R1: the rate-rows fetch — the two columns the run-weighted
-    // success rate needs (the weighting math lives in the pure seam).
+    // Session 27 R1 + Session 28 R1: the stat-rows fetch — the three
+    // columns the honest stats need (the rate weighting + the exact
+    // decimal-grid hours; the math lives in the pure seams).
     db.workflow.findMany({
       where,
-      select: { runs: true, successRate: true },
+      select: { runs: true, successRate: true, timeSavedHours: true },
     }),
     // Session 26 R1: the chart's ranking aggregate — the top CHART_ROWS
     // by runs across the FULL workspace (ties: newest first, the list's
@@ -80,8 +92,8 @@ export async function GET() {
     total,
     active,
     agg._sum.runs ?? 0,
-    agg._sum.timeSavedHours ?? 0,
-    weightedSuccessRate(rateRows),
+    sumHours(statRows),
+    weightedSuccessRate(statRows),
   );
   return ok(workflows, 200, { meta: { total, stats, topRuns } });
   });

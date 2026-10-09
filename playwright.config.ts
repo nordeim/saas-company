@@ -58,7 +58,15 @@ export default defineConfig({
       // mockup-motion-parity + login-states ≈ 10 POSTs) share one IP and
       // one process with the in-memory auth limiter — raise the budget so
       // the razor-edge default (exactly 10) can't 429 mid-suite.
-      AUTH_RATE_LIMIT_MAX: "50",
+      // Session 28: the suite GREW to ~45 auth flows per run (38 signIn
+      // calls + the register round-trips that share login's bucket, the
+      // session23–session28 specs each signing in) — the 50 pin sat at
+      // the razor edge AGAIN, and the first Session-28 run 429'd the
+      // last files alphabetically (session27/session28 — probed: the
+      // isolated re-run on a fresh server passed 3/3). 100 covers two
+      // consecutive full runs on a reused server with 2x margin — the
+      // generous-ceiling discipline applied to the limiter budget.
+      AUTH_RATE_LIMIT_MAX: "100",
       // Session 16 F1: the LLM composer's per-user ceiling gets the same
       // insurance — the suite's ~2 real generate POSTs sit far below the
       // default 10, but a reused server across repeated local runs could

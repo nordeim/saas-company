@@ -112,11 +112,42 @@ export function weightedSuccessRate(
 }
 
 /**
+ * Session 28 R1 — the exact decimal-grid hours sum (D110): ONE
+ * order-free definition for the "Hours saved" card's hours at every
+ * seam. Probed RED at the seam level: the client's fallback summed
+ * timeSavedHours with a naive JS float reduce — ORDER-DEPENDENT at
+ * exactly-x.5 decimal shapes ([15.4, 17.9, 15.2] is 48.5 in decimal
+ * but 48.499999999999993 in the list's addition order, displaying 48
+ * where the server's SQLite SUM — extended-precision — answers 48.5
+ * and displays 49; probed across six drift shapes: the server 49/51/
+ * 54/38, the client fallback 48/50/53/37). The seam accumulates
+ * INTEGER TENTHS — associative, so order-free by construction (the
+ * S22 close-by-construction pattern applied to float drift) — and
+ * answers the exact decimal-grid sum. Every persisted timeSavedHours
+ * value is on the 0.1 grid (POST hardcodes 0; PATCH accepts only
+ * name/description/category/status — no API path writes hours; the
+ * seed uses halves and integers), so the grid snap is EXACT for every
+ * reachable workspace state — it can never corrupt a value.
+ *
+ * Pure and unit-tested (workflow-ceiling.test.ts); shared by the GET
+ * route's meta.stats, the dashboard page's initial paint, and the
+ * client's meta-less fallback (one definition, no drift between the
+ * seams — the S27 weightedSuccessRate pattern applied to the hours).
+ */
+export function sumHours(
+  rows: ReadonlyArray<{ timeSavedHours: number }>,
+): number {
+  const tenths = rows.reduce((n, r) => n + Math.round(r.timeSavedHours * 10), 0);
+  return tenths / 10;
+}
+
+/**
  * Normalize a Prisma aggregate into the stat-card shape. Pure and
  * unit-tested; shared by the GET /api/workflows route and the dashboard
  * page (one definition, no drift between the two seams).
  *
- * - `hours` rounds to the integer the card renders.
+ * - `hours` rounds to the integer the card renders (half-up at the x.5
+ *   boundary — the nearest-integer convention, pinned since Session 28).
  * - a null rate (the zero-run workspace — weightedSuccessRate's answer
  *   when Σruns = 0) maps to the 100 the client already displays for an
  *   empty workspace.
