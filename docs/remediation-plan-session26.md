@@ -229,5 +229,10 @@ verified CANONICAL before AND after).
       code constant)
 - [x] remediation plan ticked + session log `docs/session_49.md`
 - [x] worklog.md updated
-- [ ] commit on main + SSH wrapper push (wrapper-verified — the hash
+- [x] commit on main + SSH wrapper push (wrapper-verified — the hash
       recorded below post-push)
+
+**Pushed:** `198bab6` on `main` → `git@github.com:nordeim/saas-company.git`
+(via `docs/ssh_git_wrapper_v3.py` with an operator-supplied key — the
+fingerprint verified, the remote ref asserted equal to local HEAD by the
+wrapper, the operator key shredded after use).
