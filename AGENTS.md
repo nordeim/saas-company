@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (156 checks) | `npm run test` |
-| Browser E2E (197 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (200 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (156/156) → `npm run build` → `./scripts/smoke-test.sh` (117/117)
-→ `npm run test:e2e` (197/197) — 470 checks across three layers (boots the standalone server on :3100 against its own
+→ `npm run test:e2e` (200/200) — 473 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`, `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -490,6 +490,35 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    rewrites the FIRST 'c' anywhere in the path (a mktemp dir name) —
    pair files by explicit index.
 
+37. **The CLIENT dispatches failure classes too — and a stale client
+   snapshot can beat the truth (Session 23).** S13's law ("failure
+   CLASSES need distinct UI contracts") did not stop at the wire: S22
+   made the raced PATCH/DELETE answer the honest 404, but the client
+   catch still wore the retry-lie banner ("Try again" — every retry
+   404s forever) and kept the ghost row mounted. The client now
+   mirrors the truth: a 404 drops the row locally + re-syncs + the
+   polite `role="status"` announce (PATCH: "no longer in the
+   workspace"; DELETE: the IDEMPOTENT-SUCCESS "already removed"), the
+   `SessionExpired` early-return keeps 401s banner-free by
+   construction, and only the RETRYABLE classes (network faults)
+   keep the banner. The sibling trap: `refresh()` had no in-flight
+   ordering guard — two concurrent actions on DIFFERENT rows (busyId
+   only guards one row) fire two GETs, and a delayed stale snapshot
+   landing LAST resurrected the deleted row (probed deterministically
+   via route-delay); a `useRef` sequence counter drops any response
+   superseded by a newer refresh. Pin-authoring traps this session:
+   **Next.js's route announcer is itself a `role=alert` element
+   carrying the page title** — an unfiltered alert-count pin can never
+   pass; filter by text (the session-lifecycle pattern). And
+   survey-tooling (the gotcha-30 family): **a `page.route` mock's
+   `**/api/workflows` glob does NOT match `/api/workflows/[id]`** —
+   the capture script's error-boundary Pause-click escaped the mock
+   and landed on the dev DB (the seed checksum covers names/rows, not
+   statuses — two sessions closed "canonical" with paused rows);
+   cover the [id] routes in the regex and verify the dev DB logical
+   state (rows + active count + runs sum) before AND after capture
+   runs.
+
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +
@@ -505,7 +534,13 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   `meta` sibling of `data` carrying the capped list's TRUE total +
   honest aggregates + the Session-22 ownership-scoped atomic writes
   `updateMany`/`deleteMany` with `userId` in the WHERE — count 0 is the
-  honest 404, and the mutation race is closed by construction). No route
+  honest 404, and the mutation race is closed by construction). The
+  CLIENT mirrors the same honesty (Session 23): a PATCH/DELETE 404 drops
+  the ghost row + re-syncs + announces politely (never the retry-lie
+  banner — the S13 failure-class law extended to the client; a DELETE 404
+  is idempotent success), 401s stay banner-free via the `SessionExpired`
+  early-return, and `refresh()`'s sequence guard drops any response
+  superseded by a newer refresh (no stale-snapshot resurrection). No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks

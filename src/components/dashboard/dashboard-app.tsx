@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { WorkflowStats } from "@/lib/workflow";
@@ -42,7 +42,9 @@ export interface WorkflowRow {
 
 /** Session 13 F1: the 401 sentinel — thrown by apiFetch, caught by the
  * existing catch blocks so no unhandled rejection escapes (the redirect
- * is the feedback; the banner never renders for 401s). */
+ * is the feedback; the banner never renders for 401s — Session 23 R1.3
+ * makes that contract exact with an instanceof early-return in every
+ * catch). */
 class SessionExpired {}
 
 export function DashboardApp({
@@ -82,6 +84,8 @@ export function DashboardApp({
   // silence for a screen-reader user — the action landed but nothing
   // announced it.
   const [announce, setAnnounce] = useState("");
+  // Session 23 R2: the refresh() sequence source (see refresh).
+  const refreshSeq = useRef(0);
 
   // Session 21 R1: the stat cards read the SERVER aggregates when
   // available (TRUE at any volume — a capped list must never turn the
@@ -122,8 +126,15 @@ export function DashboardApp({
   }
 
   async function refresh() {
+    // Session 23 R2: the in-flight ordering guard. Every refresh takes the
+    // next sequence number; a response that was superseded by a NEWER
+    // refresh (a slow stale GET landing after a fresh one — probed: the
+    // deleted row RESURRECTED when the stale snapshot landed last) is
+    // dropped before any setState. The newest server truth always wins.
+    const seq = ++refreshSeq.current;
     const res = await apiFetch("/api/workflows");
     const payload = await res.json().catch(() => null);
+    if (seq !== refreshSeq.current) return;
     // Session 13 F2: shape-check the envelope — a {ok:true,data:null}
     // response must never reach setWorkflows (the stats memo's .filter
     // would crash the render; the error boundary is the net, this is
@@ -171,7 +182,10 @@ export function DashboardApp({
       setIdea("");
       await refresh();
       setAnnounce("Workflow created.");
-    } catch {
+    } catch (e) {
+      // Session 23 R1.3: the 401 already redirected — the banner contract
+      // belongs to the RETRYABLE classes only.
+      if (e instanceof SessionExpired) return;
       setError("Could not compose that workflow. Try again.");
     } finally {
       setComposing(false);
@@ -191,12 +205,31 @@ export function DashboardApp({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: w.status === "active" ? "paused" : "active" }),
       });
-      if (!res.ok) throw new Error("update failed");
+      if (!res.ok) {
+        // Session 23 R1.1: the honest-404 dispatch. S22 closed the server
+        // race by construction — a 404 here means the row was deleted out
+        // from under this tab (another tab/device). "Try again" would LIE
+        // (every retry 404s forever), and the ghost row would linger.
+        // Mirror the truth instead: drop the row locally, re-sync with the
+        // server, and announce politely — the S14 live region, not the
+        // S12 error banner (this is not an error; it is the truth catching
+        // up). The S13 401-sentinel's pattern: a failure class that must
+        // not wear the retry banner.
+        if (res.status === 404) {
+          setWorkflows((rows) => rows.filter((r) => r.id !== w.id));
+          setTotal((t) => Math.max(0, t - 1));
+          await refresh();
+          setAnnounce(`${w.name} is no longer in the workspace.`);
+          return;
+        }
+        throw new Error("update failed");
+      }
       await refresh();
       setAnnounce(
         w.status === "active" ? `Paused ${w.name}.` : `Resumed ${w.name}.`,
       );
-    } catch {
+    } catch (e) {
+      if (e instanceof SessionExpired) return; // Session 23 R1.3
       setActionError("Could not update that workflow. Try again.");
     } finally {
       setBusyId(null);
@@ -208,10 +241,23 @@ export function DashboardApp({
     setActionError("");
     try {
       const res = await apiFetch(`/api/workflows/${w.id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("delete failed");
+      if (!res.ok) {
+        // Session 23 R1.2: the idempotent-success contract. A 404 means the
+        // row is ALREADY gone — which is exactly what Delete asked for.
+        // Re-sync with the server and confirm politely; no banner.
+        if (res.status === 404) {
+          setWorkflows((rows) => rows.filter((r) => r.id !== w.id));
+          setTotal((t) => Math.max(0, t - 1));
+          await refresh();
+          setAnnounce(`${w.name} was already removed.`);
+          return;
+        }
+        throw new Error("delete failed");
+      }
       await refresh();
       setAnnounce(`Deleted ${w.name}.`);
-    } catch {
+    } catch (e) {
+      if (e instanceof SessionExpired) return; // Session 23 R1.3
       setActionError("Could not delete that workflow. Try again.");
     } finally {
       setBusyId(null);

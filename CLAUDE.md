@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (117) | 156 unit + 197 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (117) | 156 unit + 200 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -148,12 +148,46 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run test` → 156/156 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 117/117 PASS
-- [ ] `npm run test:e2e` → 197/197 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 200/200 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 23 (2026-10-09) remediation** — see
+  `docs/remediation-plan-session23.md`: a client-side failure-class
+  honesty audit (the CLIENT twin of S22's server race — the
+  "optimistic-UI semantics" candidate the Session-42 log suggested)
+  found and fixed two defects: **the missing honest-404 dispatch** —
+  S22 made the raced PATCH/DELETE answer the honest 404, but the
+  client's catch treated it like a network fault: the retry-lie
+  banner ("Could not update that workflow. Try again." — every retry
+  404s forever) plus the ghost row staying mounted (probed with two
+  browser contexts). The fix gives the 404 class its own UI contract
+  (the S13 401-sentinel's pattern): PATCH-404 → the row dropped
+  locally + a re-sync + the polite role=status announce ("… is no
+  longer in the workspace."); DELETE-404 → the idempotent-success
+  contract ("… was already removed."); plus the SessionExpired
+  early-return in every catch — D99. **The refresh() ordering guard**
+  — no in-flight guard: two concurrent actions on different rows
+  fired two refresh GETs, and a delayed stale snapshot landing last
+  RESURRECTED the deleted row (probed deterministically via
+  route-delay); now a useRef sequence counter drops any response
+  superseded by a newer refresh — D100. ALSO fixed (survey tooling,
+  gotcha-30 family): the capture script's error-boundary mock used
+  the glob `**/api/workflows` which does NOT match the [id] routes —
+  the mock's own Pause-click escaped to the real server and paused a
+  dev-DB row across two sessions (the seed checksum covers
+  names/rows, not statuses); the mock now covers [id], and the dev DB
+  is canonical with before/after verification. +3 e2e checks (the
+  session23-honesty suite — two-context ghost-row pins + the
+  delayed-stale resurrection pin; one pin bug caught BY the pins:
+  Next's route announcer is itself a role=alert element — filter
+  alert-count pins by text); gate: **473 checks** (156 unit + 117
+  smoke + 200 e2e); 20 screenshots refreshed (VLM ×5 — after
+  adjudicating the SIXTH check-prompt drift: a "missing 3 workflow
+  cards" verdict, disproven by the 900px viewport cut).
 
 - **Session 22 (2026-10-09) remediation** — see
   `docs/remediation-plan-session22.md`: a mutation-concurrency audit

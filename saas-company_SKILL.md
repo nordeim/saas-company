@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.21.0 · **Last updated:** 2026-10-09 (Session 22 remediation)
+> **Version:** 2.22.0 · **Last updated:** 2026-10-09 (Session 23 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -901,6 +901,41 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     FAIL verdict with an EMPTY deviations list is model noise; demand
     a NAMED deviation or adjudicate with deterministic evidence (the
     open-description probe + untouched bytes + the e2e suite).
+
+54. **The client dispatches failure classes too — mirror the server's
+    honesty downward (Session 23)**: S13's law ("failure CLASSES need
+    distinct UI contracts") does not stop at the wire. S22 made the
+    raced PATCH/DELETE answer the honest 404 — but the client's catch
+    still treated it like a network fault: the retry-lie banner
+    ("Try again" — every retry 404s forever) plus the ghost row staying
+    mounted. The fix gives the 404 its own CLIENT contract (the
+    401-sentinel's pattern): drop the row locally, re-sync, announce
+    politely (a raced DELETE is IDEMPOTENT SUCCESS — the row being gone
+    is what Delete asked for); only the RETRYABLE classes keep the
+    banner. The sibling defect: `refresh()` had no in-flight ordering
+    guard — two concurrent actions on different rows fire two GETs,
+    and a delayed stale snapshot landing LAST resurrected the deleted
+    row (probed deterministically via route-delay); a useRef sequence
+    counter drops any response superseded by a newer refresh. Pin
+    traps this session: **Next.js's route announcer is itself a
+    role=alert element carrying the page title** — an unfiltered
+    alert-count pin can never pass; filter by text (the
+    session-lifecycle pattern).
+
+55. **A mock's glob is narrower than you think — and a checksum that
+    covers names can miss statuses (Session 23)**: the standard
+    capture script's error-boundary mock used `page.route("**/api/
+    workflows")` — a glob that does NOT match `/api/workflows/[id]` —
+    so the mock's own Pause-click ESCAPED to the real server and
+    landed on the dev DB (twice: two sessions closed with "canonical"
+    checks while their own capture runs had paused rows — the seed
+    checksum covers rows/names, not STATUSES). Cover the [id] routes
+    in the mock's regex, and verify the dev DB's LOGICAL state (rows
+    + active count + runs sum) before AND after every capture run.
+    Companion this session: the VLM check-prompt drift family's SIXTH
+    member — a "missing 3 workflow cards" verdict on a 900px viewport
+    screenshot, disproven by the viewport cut (the cards extend below
+    the fold by design); state the VIEWPORT contract in the prompt.
 
 ## §13. Pitfalls to Avoid
 
