@@ -917,3 +917,18 @@ Stage Summary:
 - Gate raised 529 -> 541 checks; the production-readiness floor now covers the ARITHMETIC dimension of the cross-seam contract (a value computed at more than one seam must share order-free arithmetic, not just a formula).
 - Survey scripts persisted under research/ (gitignored scratch, the house convention): drift-battery-s28.mjs, audit-probe-s28.mjs, seam-survey-s28.mjs, capture-screenshots-s28.mjs, vlm-checks-s28.mjs.
 - Session 28 complete.
+
+---
+Task ID: 28-close
+Agent: Super Z (main)
+Task: Session 28 closing — the pushed-hash record + the transcript log
+
+Work Log:
+- Commit b8bae1f (33 files: the sumHours seam across route/page/client, the tie-break spec, the CLS pins, the auth-budget raise, the docs alignment, the 20 refreshed screenshots) pushed via the SSH wrapper with the explicit --remote; the wrapper verified remote main @ b8bae1f == local HEAD; the fetch re-verified independently.
+- The paramiko ssh shim rebuilt at /home/z/bin/ssh with the BIDIRECTIONAL stdin pump (git's receive-pack streams the pack through the channel — a read-only shim deadlocks the negotiation; the first dry-run hung until the pump existed).
+- Closing commit f7c6136: docs/session_56.md (the transcript log) + the pushed-hash record in docs/remediation-plan-session28.md; pushed and wrapper-verified (remote main @ f7c6136 == local HEAD).
+- Both operator keys (one per push) shredded after use; the wrapper's temp copies and known_hosts sidecars removed; the tree clean; no new branches.
+
+Stage Summary:
+- Session 28 fully closed: two commits on main (b8bae1f + f7c6136), both wrapper-verified pushes, the operator key destroyed after each use.
+- The gate stands at 541 checks (182 unit + 124 smoke + 235 e2e); the S29 candidates recorded in session_55/session_56 (the empty-to-first transition, the all-zero-runs maxRuns floor, the JSON-LD superset candidate).
