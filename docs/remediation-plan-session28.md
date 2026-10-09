@@ -267,5 +267,21 @@ design (their RED is a future regression).
       code constant)
 - [x] remediation plan ticked + session log `docs/session_55.md`
 - [x] worklog.md updated
-- [ ] commit on main + SSH wrapper push (wrapper-verified — the hash
+- [x] commit on main + SSH wrapper push (wrapper-verified — the hash
       recorded below post-push)
+
+**Pushed:** `b8bae1f` on `main` → `git@github.com:nordeim/saas-company.git`
+(via `docs/ssh_git_wrapper_v3.py` with an operator-supplied key — the
+fingerprint verified against the S1–S27 record
+(`SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU`), the dry-run with
+the explicit `--remote` confirmed the fast-forward `3ca82c1..b8bae1f`,
+the real push executed, and the wrapper asserted **remote main @
+`b8bae1f` == local HEAD** — wrapper-verified; the fetch re-verified the
+remote ref independently. The operator key shredded after use (both the
+wrapper's temp copy and the operator's file). No new branches —
+everything on `main`, per the operator contract. The shim note: the
+sandbox again had no OpenSSH binary — the paramiko ssh shim was rebuilt
+at `/home/z/bin/ssh` (the runbook's Appendix A recipe, now with the
+BIDIRECTIONAL stdin pump the push path needs — git's receive-pack
+streams the pack through the channel; a read-only shim deadlocks the
+negotiation).
