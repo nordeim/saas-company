@@ -66,6 +66,13 @@ export default defineConfig({
       // construction (the new 429-degrade pin route-FULFILLS its 429 and
       // never reaches the server at all).
       GENERATE_RATE_LIMIT_MAX: "50",
+      // Session 25 R3: the workflow-creation ceiling gets the same
+      // insurance — the session25-chart spec mints 6 rows through the
+      // create API per run, and a reused server across repeated local
+      // runs must not climb toward the default 30 budget mid-suite (the
+      // existing 429 pins are route-fulfilled and never reach the
+      // server — no pin conflicts).
+      WORKFLOW_RATE_LIMIT_MAX: "50",
     } as Record<string, string>,
   },
 });

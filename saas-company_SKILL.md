@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.23.0 · **Last updated:** 2026-10-09 (Session 24 remediation)
+> **Version:** 2.24.0 · **Last updated:** 2026-10-09 (Session 25 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -980,6 +980,52 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     fold (footerTop 1009 of a 1378px page) — always adjudicate a FAIL
     against the PINNED contract and the geometry before touching
     code.
+
+58. **Every ceiling must say what it hides — probe capped surfaces
+    with data that EXCEEDS the cap (Session 25)**: the runs chart
+    rendered `slice(0, 8)` silently — with a 12-row probe workspace it
+    showed 8 bars with NO note while the heading read "Runs by
+    workflow". The workflow LIST was fixed for exactly this lie in
+    Session 21 ("a ceiling that lies is worse than no ceiling") — but
+    the chart's ceiling never got the honesty because every probe and
+    every gate ran against the SEEDED 6-row workspace, which hides
+    every ceiling above 6. The survey discipline: for every capped
+    surface (list caps, chart slices, pagination windows), seed PAST
+    the cap and look for the missing note. The fix family: the same
+    S21-pattern note with the TRUE server-side total
+    ("Showing the 8 most recent of N workflows."). Companion
+    discoveries: the note's first draft used `text-white/40` — the
+    post-fix axe scan caught it at 3.5:1 on the dark card (and the
+    LIST's S21 note had carried the same latent violation for four
+    sessions, never rendered because it needs a >100-row workspace —
+    an axe scan only catches what RENDERS); and the chart's rows were
+    div soup — a screen reader read the texts but never announced
+    "list, 8 items" (the fix: a semantic `ul`/`li`, visually
+    identical under preflight).
+
+59. **A budget you measured but never pinned is a regression waiting
+    to happen (Session 25)**: the S21/S22 performance surveys measured
+    LCP/TTFB/DOM-node ceilings ad hoc — and nothing in the gate held
+    them, so a future change (a 5,000-node DOM, a blocking import, a
+    hero-asset regression) would have passed all 486 checks while
+    halving the site's speed. The fix: `tests/e2e/performance
+    -budget.spec.ts` pins landing DOM ≤ 1200 / landing LCP ≤ 1500ms /
+    login LCP ≤ 800ms / the authed dashboard DOM ≤ 500 — deliberately
+    GENEROUS 2–4x margins over the measured values, because the
+    budget's job is to catch GROSS regressions, not to chase
+    milliseconds (generous ceilings are the de-flake strategy, not a
+    weakness; sample LCP to settled with a buffered
+    PerformanceObserver — never a fixed-offset read). The meta-law
+    extends the S21 output-ceiling family from the WIRE to the RUNTIME
+    and the RENDER: cap the body, cap the list, and PIN the budget you
+    measured. Companion this session: the VLM check-prompt drift
+    family's NINTH and TENTH members — an invented "Watch demo"
+    secondary CTA + an omitted beta badge on the landing prompt, and
+    an invented "Sign in" heading + "NovaAI logo" on the login prompt
+    (the pinned contracts: the beta badge + Book a Demo + the hero
+    video, and "Welcome to SAAS Company" with the reference's own 'S'
+    chip) — write the check prompt FROM the spec's pinned assertions,
+    never from memory of what the page "should" look like.
 
 ## §13. Pitfalls to Avoid
 

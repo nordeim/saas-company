@@ -48,6 +48,13 @@ export interface WorkflowRow {
  * catch). */
 class SessionExpired {}
 
+/** Session 25 R1/R2: the runs-chart row ceiling — the single source for
+ * the chart's slice, its honest truncation note, and (indirectly) the
+ * e2e pins (`session25-chart.spec.ts`). When the workspace holds more
+ * workflows than this, the chart SAYS so (the S21 law: a ceiling that
+ * lies is worse than no ceiling). */
+const CHART_ROWS = 8;
+
 export function DashboardApp({
   user,
   initialWorkflows,
@@ -425,9 +432,12 @@ export function DashboardApp({
                 capped at MAX_WORKFLOW_LIST (newest first); when the
                 workspace is larger, SAY so instead of silently hiding
                 the rest (the stats above remain TRUE — they ride the
-                server-side aggregate, not this visible subset). */}
+                server-side aggregate, not this visible subset).
+                Session 25: text-white/50 (was /40 — the S10/D59 axe lesson,
+                caught live by this session's chart-note scan: white/40
+                composites to 3.5:1 on the dark card). */}
             {workflows.length > 0 && workflows.length < total && (
-              <p className="text-xs text-white/40 font-body">
+              <p className="text-xs text-white/50 font-body">
                 Showing the {workflows.length} most recent of {total} workflows.
               </p>
             )}
@@ -519,21 +529,41 @@ export function DashboardApp({
             {workflows.length === 0 ? (
               <p className="text-sm text-white/60 font-body">No data yet.</p>
             ) : (
-              <div className="space-y-4">
-                {workflows.slice(0, 8).map((w) => (
-                  <div key={w.id}>
-                    <div className="flex justify-between text-xs text-white/50 font-body mb-1.5">
-                      <span className="truncate pr-2">{w.name}</span>
-                      <span className="flex-shrink-0">{w.runs.toLocaleString()}</span>
-                    </div>
-                    <div className="h-2 rounded-full bg-white/10 overflow-hidden">
-                      <div
-                        className="h-full rounded-full bg-gradient-to-r from-primary to-accent"
-                        style={{ width: `${Math.max(4, (w.runs / maxRuns) * 100)}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
+              <div>
+                {/* Session 25 R1: the chart's honest truncation note — the
+                    S21 "a ceiling that lies is worse than no ceiling" law,
+                    found in the chart (probed RED: 12 workflows → 8 bars,
+                    silently). The chart caps at CHART_ROWS while the
+                    workspace holds more → SAY so, with the TRUE server-side
+                    total (the S21 R1 state, not the capped list length).
+                    text-white/50 (the S10/D59 axe lesson — white/40 composites
+                    to 3.5:1 on the dark card, below the 4.5:1 floor). */}
+                {workflows.length > CHART_ROWS && (
+                  <p className="text-xs text-white/50 font-body mb-4">
+                    Showing the {CHART_ROWS} most recent of {total} workflows.
+                  </p>
+                )}
+                {/* Session 25 R2: a semantic list — a screen reader announces
+                    "list, N items" instead of reading div soup (probed: the
+                    pre-fix rows were unannounced structure). Preflight resets
+                    the list styling: visually identical to the divs it
+                    replaces. */}
+                <ul className="space-y-4">
+                  {workflows.slice(0, CHART_ROWS).map((w) => (
+                    <li key={w.id}>
+                      <div className="flex justify-between text-xs text-white/50 font-body mb-1.5">
+                        <span className="truncate pr-2">{w.name}</span>
+                        <span className="flex-shrink-0">{w.runs.toLocaleString()}</span>
+                      </div>
+                      <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-primary to-accent"
+                          style={{ width: `${Math.max(4, (w.runs / maxRuns) * 100)}%` }}
+                        />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
           </section>

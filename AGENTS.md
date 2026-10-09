@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (164 checks) | `npm run test` |
-| Browser E2E (204 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (211 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (164/164) → `npm run build` → `./scripts/smoke-test.sh` (118/118)
-→ `npm run test:e2e` (204/204) — 486 checks across three layers (boots the standalone server on :3100 against its own
+→ `npm run test:e2e` (211/211) — 493 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`, `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -543,6 +543,28 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    parent `.env` (gotcha 1's vectors) silently redirected a whole
    first-run to a foreign database while login answered P2021.
 
+39. **Every ceiling must say what it hides — and pin the budgets you
+   measured (Session 25).** The runs chart rendered `slice(0, 8)`
+   silently: with a 12-row workspace it showed 8 bars with no note while
+   the heading read "Runs by workflow" — the same lie the workflow LIST
+   was fixed for in Session 21 ("a ceiling that lies is worse than no
+   ceiling"); the chart's ceiling never got the honesty because no probe
+   ever held >8 rows. Now `CHART_ROWS` + the S21-pattern note with the
+   TRUE total (D104) — and the survey discipline: probe EVERY capped
+   surface with data that EXCEEDS its cap (the seeded 6-row workspace
+   hides every ceiling above 6). The sibling law: performance budgets
+   measured ad hoc are REGRESSIONS WAITING — the S21/S22 LCP/DOM-node
+   ceilings now live in `tests/e2e/performance-budget.spec.ts` with 2–4x
+   margins (the budget catches GROSS regressions, not milliseconds —
+   generous ceilings are the de-flake strategy, not a weakness). And the
+   a11y twin: a chart's rows are a LIST — div soup never announces
+   "list, N items" to a screen reader (now `ul`/`li`, D105); when you
+   add a note to a dark card, reach for `text-white/50` FIRST — this
+   session's own first draft shipped `text-white/40` and the axe scan
+   caught it at 3.5:1 (the S10/D59 lesson: the scan only catches what
+   RENDERS — the LIST's S21 note carried the same latent violation for
+   four sessions because it needs a >100-row workspace to appear).
+
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +
@@ -569,7 +591,11 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   `fetchWithTimeout` (the 20s client ceiling — a hang converts into the
   network-fault banner + busy release, never an eternal spinner) and
   every action start clears BOTH error surfaces (a failure surface lives
-  exactly until the user's next action of ANY class). No route
+  exactly until the user's next action of ANY class) + the Session-25
+  observability layer: the runs chart's ceiling is honest (CHART_ROWS +
+  the S21-pattern note with the TRUE total, D104) with semantic list
+  rows (D105), and the measured performance ceilings (LCP/DOM budgets)
+  are PINNED in the e2e gate — `tests/e2e/performance-budget.spec.ts`. No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks

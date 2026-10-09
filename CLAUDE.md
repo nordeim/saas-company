@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (118) | 164 unit + 204 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (118) | 164 unit + 211 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -148,12 +148,42 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run test` → 164/164 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 118/118 PASS
-- [ ] `npm run test:e2e` → 204/204 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 211/211 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 25 (2026-10-09) remediation** — see
+  `docs/remediation-plan-session25.md`: a runs-chart honesty +
+  observability audit (the S46 log's two suggested surfaces — the
+  performance-budget hook and an a11y deep-dive on the runs chart —
+  surveyed then extended to their class) found and fixed two defects
+  and shipped the hook: **the chart truncation lie** — the runs chart
+  rendered `slice(0, 8)` silently (probed RED with a 12-row probe
+  workspace: 8 bars, no note, heading "Runs by workflow"); now
+  `CHART_ROWS` + the S21-pattern note "Showing the 8 most recent of
+  {total} workflows." with the TRUE server-side total — D104. **The
+  chart's missing list semantics** — the rows were div soup (a screen
+  reader never heard "list, 8 items"); now a semantic `ul`/`li` —
+  D105. Caught mid-execution BY the probe: the note's first draft used
+  `text-white/40` (3.5:1 — the axe scan flagged it; the LIST's S21
+  note carried the same latent violation, never rendered in any scan);
+  both notes now `text-white/50` (5.3:1). **The performance-budget
+  hook shipped** (`tests/e2e/performance-budget.spec.ts`): landing DOM
+  ≤ 1200 / landing LCP ≤ 1500ms / login LCP ≤ 800ms / authed dashboard
+  DOM ≤ 500 — the S21/S22 ceilings pinned with 2–4x margins + the
+  WORKFLOW_RATE_LIMIT_MAX=50 webServer insurance pin. Adjudicated
+  non-finding: the 4% bar floor (identical bars for a 20x difference —
+  the adjacent exact values are the honest contract). +7 e2e (3 chart
+  pins + 4 budget pins); gate: **493 checks** (164 unit + 118 smoke +
+  211 e2e); 20 screenshots refreshed (VLM ×5 — after adjudicating the
+  NINTH and TENTH check-prompt drifts: an invented "Watch demo" CTA /
+  omitted beta badge, and an invented "Sign in" heading / "NovaAI
+  logo" — the pinned contracts are the beta badge + Book a Demo +
+  hero video, and "Welcome to SAAS Company" with the reference's own
+  'S' chip).
 
 - **Session 24 (2026-10-09) remediation** — see
   `docs/remediation-plan-session24.md`: a temporal-and-placement-
