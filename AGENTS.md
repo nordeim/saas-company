@@ -19,16 +19,16 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (164 checks) | `npm run test` |
-| Browser E2E (211 checks; needs a build) | `npm run test:e2e` |
+| Unit tests (170 checks) | `npm run test` |
+| Browser E2E (218 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
-| End-to-end smoke suite (118 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
+| End-to-end smoke suite (123 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (164/164) → `npm run build` → `./scripts/smoke-test.sh` (118/118)
-→ `npm run test:e2e` (211/211) — 493 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (170/170) → `npm run build` → `./scripts/smoke-test.sh` (123/123)
+→ `npm run test:e2e` (218/218) — 511 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`, `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
@@ -565,6 +565,32 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    RENDERS — the LIST's S21 note carried the same latent violation for
    four sessions because it needs a >100-row workspace to appear).
 
+40. **A ranked surface must rank by its own title — and the cap can hide
+   the champion entirely (Session 26).** The runs chart under the heading
+   "Runs by workflow" charted `workflows.slice(0, 8)` — the 8 most
+   RECENT rows, mirroring the list: a 12-row workspace whose OLDEST row
+   carried 12,000 runs rendered the champion INVISIBLE with every bar a
+   4%–7.5% stub (the `maxRuns` denominator came from a row the chart
+   never displayed — the bar-length encoding carried no information
+   exactly when a runs ranking is meaningful). The survey discipline:
+   probe every RANKED surface with a workspace whose top row by the
+   ranking key is NOT the newest row (the seeded 6-row workspace hides
+   the question — recency and rank coincide). And the deeper trap found
+   while designing the fix: at >100 workflows the client's `workflows`
+   state is the CAPPED newest-100 list — every old high-run row sits
+   OUTSIDE the cap, so ANY client-side ranking ranks only the newest 100
+   (the smoke 111-row workspace: the champion sits in ZERO of the
+   newest-100 rows). An honest ranking over capped data must be
+   SERVER-SIDE — the envelope's `meta` sibling (the S21 stat-cards
+   precedent) carries `topRuns` across the FULL workspace; the client
+   keeps a pure fallback seam for the meta-less contract. The VLM twin:
+   a single-frame screenshot of an ANIMATED surface (the gradient
+   heading's 14s sweep) can catch a white-dominant instant — adjudicate
+   with a time-sampled probe before believing "missing" (the gotcha-15/24
+   single-frame family), and write the check prompt FROM the spec's
+   pinned assertions (the hero's video is the full-bleed BACKGROUND —
+   `section video` pinned by src — NOT a mockup card; twelfth drift).
+
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +
@@ -595,7 +621,13 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   observability layer: the runs chart's ceiling is honest (CHART_ROWS +
   the S21-pattern note with the TRUE total, D104) with semantic list
   rows (D105), and the measured performance ceilings (LCP/DOM budgets)
-  are PINNED in the e2e gate — `tests/e2e/performance-budget.spec.ts`. No route
+  are PINNED in the e2e gate — `tests/e2e/performance-budget.spec.ts` —
+  and the Session-26 ranking layer: the chart titled "Runs by workflow"
+  RANKS BY RUNS across the FULL workspace via the server-side
+  `meta.topRuns` aggregate (the capped client list can never rank
+  honestly at >100 rows — D106) with the pure `rankByRuns()` fallback
+  seam, and the script-TRANSFER bytes are pinned (scripts ≤ 400KB per
+  route — D107). No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks

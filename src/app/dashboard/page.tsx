@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import { DashboardApp } from "@/components/dashboard/dashboard-app";
 import { DashboardUnavailable } from "@/components/dashboard/dashboard-unavailable";
 import { routeMetadata } from "@/lib/seo";
-import { MAX_WORKFLOW_LIST, statsFromAggregate, type WorkflowStats } from "@/lib/workflow";
+import { MAX_WORKFLOW_LIST, CHART_ROWS, statsFromAggregate, type WorkflowStats, type RankedWorkflowRow } from "@/lib/workflow";
 
 // No live counterpart (the superset) — follow the app-wide per-route head
 // pattern (Session 6 F5).
@@ -41,12 +41,20 @@ export default async function DashboardPage() {
   // the first paint (a capped list without honest aggregates would
   // silently summarize the visible subset). The queries join the
   // EXISTING narrow try/catch — the S19 redirect-outside discipline.
+  //
+  // Session 26 R1 — the runs chart's RANKING aggregate joins the same
+  // Promise.all: the chart titled "Runs by workflow" ranks BY RUNS
+  // across the FULL workspace from the first paint. At >100 workflows
+  // the capped `workflows` list hides every old high-run row from any
+  // client-side computation — only the server can rank honestly (the
+  // S21 stat-cards precedent, extended to the ranking surface).
   let workflows;
   let totalWorkflows = 0;
   let initialStats: WorkflowStats = { active: 0, runs: 0, hours: 0, avgSuccessRate: 100 };
+  let initialTopRuns: RankedWorkflowRow[] = [];
   try {
     const where = { userId };
-    const [rows, total, active, agg] = await Promise.all([
+    const [rows, total, active, agg, topRuns] = await Promise.all([
       db.workflow.findMany({
         where,
         orderBy: [{ createdAt: "desc" }],
@@ -59,9 +67,16 @@ export default async function DashboardPage() {
         _sum: { runs: true, timeSavedHours: true },
         _avg: { successRate: true },
       }),
+      db.workflow.findMany({
+        where,
+        orderBy: [{ runs: "desc" }, { createdAt: "desc" }],
+        take: CHART_ROWS,
+        select: { id: true, name: true, runs: true },
+      }),
     ]);
     workflows = rows;
     totalWorkflows = total;
+    initialTopRuns = topRuns;
     initialStats = statsFromAggregate(
       total,
       active,
@@ -79,6 +94,7 @@ export default async function DashboardPage() {
       initialWorkflows={workflows}
       totalWorkflows={totalWorkflows}
       initialStats={initialStats}
+      initialTopRuns={initialTopRuns}
     />
   );
 }

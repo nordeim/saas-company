@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.24.0 · **Last updated:** 2026-10-09 (Session 25 remediation)
+> **Version:** 2.25.0 · **Last updated:** 2026-10-09 (Session 26 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–22)
+## §12. Lessons Learnt (Sessions 1–26)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -1026,6 +1026,51 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     video, and "Welcome to SAAS Company" with the reference's own 'S'
     chip) — write the check prompt FROM the spec's pinned assertions,
     never from memory of what the page "should" look like.
+
+60. **A ranked surface must rank by its own title — and the cap can
+    hide the champion entirely (Session 26)**: the runs chart under
+    "Runs by workflow" charted `workflows.slice(0, 8)` — the 8 most
+    RECENT rows (mirroring the list), not the top 8 BY RUNS. A 12-row
+    probe workspace whose OLDEST row carried 12,000 runs (13x the top
+    displayed row) rendered the champion INVISIBLE with every bar a
+    4%–7.5% stub — the `maxRuns` denominator came from a row the chart
+    never displayed, so the bar-length encoding carried no information
+    exactly when a runs ranking is meaningful. Two survey disciplines:
+    probe every RANKED surface with a workspace whose top row by the
+    ranking key is NOT the newest row (in the seeded 6-row workspace
+    recency and rank coincide — the question is invisible), and when a
+    ranked surface draws from CAPPED data, remember the cap itself can
+    exclude every high-ranked row (at >100 workflows the client state
+    is the capped newest-100 list — the smoke suite's own 111-row
+    workspace holds the champion in ZERO of the newest-100 rows). An
+    honest ranking over capped data must be SERVER-SIDE — the
+    envelope's `meta` sibling (the S21 stat-cards precedent) carries
+    `topRuns` across the FULL workspace, with a pure client-side
+    fallback seam (`rankByRuns()`) for the meta-less contract. And the
+    self-describing-note law extends: the truncation note now NAMES
+    the criterion ("Showing the top 8 of N workflows by runs.") — a
+    note that hides its own selection criterion is half-honest.
+
+61. **Adjudicate the VLM against MECHANISM, not against the frame
+    (Session 26)**: two more check-prompt drifts took the family to
+    twelve. The ELEVENTH: a single-frame screenshot of the ANIMATED
+    gradient heading caught a white-dominant instant (the violet band
+    is off-text ~86% of its 14s cycle — `background-size: 400%`), and
+    the VLM called the gradient "missing" — the adjudication was a
+    TIME-SAMPLED probe (8 distinct background positions over 3.2s
+    proved the animation RUNNING; the gotcha-15/24 single-frame
+    family: never adjudicate an animated surface from one frame).
+    The TWELFTH: the prompt itself invented a "dashboard mockup with
+    browser chrome" INSIDE the hero — the hero's video is the
+    full-bleed looping BACKGROUND (`section video`, pinned by src;
+    the spec's pin is a DOM attribute, not a viewport position), the
+    mockup is a separate below-the-fold section, and the "scroll
+    indicator" the VLM saw at the bottom is the hero's own by-design
+    element. The meta-law (now three sessions deep): write the check
+    prompt FROM the spec's pinned assertions — and when the VLM
+    reports a deviation, verify the CLAIM against the spec + a
+    geometry/time probe before believing either the verdict OR your
+    own prompt.
 
 ## §13. Pitfalls to Avoid
 

@@ -26,6 +26,31 @@ const LANDING_LCP_BUDGET_MS = 1500;
 const LOGIN_LCP_BUDGET_MS = 800;
 const DASHBOARD_DOM_BUDGET = 500;
 
+/** Session 26 R2 — the JS-TRANSFER budgets (the S48 log's third surface,
+ * the one performance layer still unpinned). Measured at authoring time
+ * (localhost standalone, ResourceTiming transferSize, settled):
+ * landing 172KB across 10 script files (the 2,214KB page total is
+ * dominated by the 1,898KB hero video — the reference's own parity
+ * asset, NOT JS); login 152KB/9; the authed dashboard 177KB/11.
+ * The 400KB ceiling is ~2.3–2.6x the measured values (the S25
+ * generous-margin discipline: the budget catches GROSS regressions — an
+ * accidental full-library import — not kilobytes). */
+const SCRIPT_TRANSFER_BUDGET_BYTES = 400 * 1024;
+
+/** The script bytes transferred for the current document, sampled to
+ * settled (the §7.4 poll discipline). */
+async function scriptTransferBytes(page: Page): Promise<number> {
+  return page.evaluate(() =>
+    performance
+      .getEntriesByType("resource")
+      .filter((r) => {
+        const res = r as PerformanceResourceTiming;
+        return res.initiatorType === "script" || /\.js(?:\?|$)/.test(res.name || "");
+      })
+      .reduce((n, r) => n + ((r as PerformanceResourceTiming).transferSize || 0), 0),
+  );
+}
+
 /** LCP sampled to settled (the §7.4 poll discipline — a buffered
  * PerformanceObserver read after a short settle window, never a
  * fixed-offset read). */
@@ -82,5 +107,42 @@ test.describe("performance budgets (Session 25 — the S46 hook)", () => {
     await page.waitForTimeout(400);
     const nodes = await page.evaluate(() => document.querySelectorAll("*").length);
     expect(nodes, `authed dashboard DOM nodes <= ${DASHBOARD_DOM_BUDGET} (measured ~314 at Session 22)`).toBeLessThanOrEqual(DASHBOARD_DOM_BUDGET);
+  });
+});
+
+test.describe("JS-transfer budgets (Session 26 R2 — the S48 third surface)", () => {
+  test("landing: script-transfer budget", async ({ page }) => {
+    await page.goto("/", { waitUntil: "load" });
+    await page.waitForTimeout(800); // entrances settle (prefetched chunks land)
+    const bytes = await scriptTransferBytes(page);
+    expect(
+      bytes,
+      `landing script transfer ${Math.round(bytes / 1024)}KB <= ${SCRIPT_TRANSFER_BUDGET_BYTES / 1024}KB (measured 172KB at authoring)`,
+    ).toBeLessThanOrEqual(SCRIPT_TRANSFER_BUDGET_BYTES);
+  });
+
+  test("login: script-transfer budget", async ({ page }) => {
+    await page.goto("/login", { waitUntil: "load" });
+    await page.waitForTimeout(600);
+    const bytes = await scriptTransferBytes(page);
+    expect(
+      bytes,
+      `login script transfer ${Math.round(bytes / 1024)}KB <= ${SCRIPT_TRANSFER_BUDGET_BYTES / 1024}KB (measured 152KB at authoring)`,
+    ).toBeLessThanOrEqual(SCRIPT_TRANSFER_BUDGET_BYTES);
+  });
+
+  test("dashboard (authed): script-transfer budget", async ({ page }) => {
+    await page.goto("/login");
+    await page.getByLabel("Email").fill(DEMO_EMAIL);
+    await page.getByLabel("Password").fill(DEMO_PASSWORD);
+    await page.getByRole("button", { name: "Sign in", exact: true }).click();
+    await expect(page).toHaveURL(/\/dashboard$/, { timeout: 15_000 });
+    await page.getByRole("heading", { name: "Workflows" }).waitFor();
+    await page.waitForTimeout(600);
+    const bytes = await scriptTransferBytes(page);
+    expect(
+      bytes,
+      `authed dashboard script transfer ${Math.round(bytes / 1024)}KB <= ${SCRIPT_TRANSFER_BUDGET_BYTES / 1024}KB (measured 177KB at authoring)`,
+    ).toBeLessThanOrEqual(SCRIPT_TRANSFER_BUDGET_BYTES);
   });
 });

@@ -3,7 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { WorkflowStats } from "@/lib/workflow";
+import { CHART_ROWS, rankByRuns, type RankedWorkflowRow, type WorkflowStats } from "@/lib/workflow";
 import {
   Activity,
   Check,
@@ -48,18 +48,17 @@ export interface WorkflowRow {
  * catch). */
 class SessionExpired {}
 
-/** Session 25 R1/R2: the runs-chart row ceiling — the single source for
- * the chart's slice, its honest truncation note, and (indirectly) the
- * e2e pins (`session25-chart.spec.ts`). When the workspace holds more
- * workflows than this, the chart SAYS so (the S21 law: a ceiling that
- * lies is worse than no ceiling). */
-const CHART_ROWS = 8;
+/** Session 25 R1/R2 → Session 26: the runs-chart row ceiling now lives
+ * in `src/lib/workflow.ts` (CHART_ROWS — shared by the server loaders'
+ * topRuns aggregate and this component, so the chart's cap and its
+ * server-side ranking can never drift apart). */
 
 export function DashboardApp({
   user,
   initialWorkflows,
   totalWorkflows,
   initialStats,
+  initialTopRuns,
 }: {
   user: { id: string; email: string; name: string };
   initialWorkflows: WorkflowRow[];
@@ -71,11 +70,27 @@ export function DashboardApp({
    *  the first paint (a capped list without honest aggregates would turn
    *  the stat cards into subset summaries). */
   initialStats: WorkflowStats;
+  /** Session 26 R1: the server-side runs ranking (the top CHART_ROWS by
+   *  runs across the FULL workspace — TRUE at any volume; at >100
+   *  workflows the capped list hides every old high-run row, so only the
+   *  server can rank honestly). The chart's heading promises "Runs by
+   *  workflow" — the content ranks BY RUNS (probed RED: the pre-fix
+   * chart mirrored the list's recency slice and left the champion
+   * INVISIBLE with every bar at the 4% floor). */
+  initialTopRuns: RankedWorkflowRow[];
 }) {
   const router = useRouter();
   const [workflows, setWorkflows] = useState<WorkflowRow[]>(initialWorkflows);
   const [total, setTotal] = useState(totalWorkflows);
   const [serverStats, setServerStats] = useState<WorkflowStats | null>(initialStats);
+  // Session 26 R1: the chart's ranked rows — the server's top-CHART_ROWS
+  // by runs (updated on every refresh from the envelope's meta.topRuns,
+  // shape-checked like stats — strictly optional so the error-boundary
+  // e2e mocks keep fulfilling with bare arrays). Null is unreachable in
+  // practice (the page always provides the initial ranking) but the
+  // typed optional keeps the fallback seam exercised for meta-less
+  // payloads (the rankByRuns client-side computation).
+  const [topRuns, setTopRuns] = useState<RankedWorkflowRow[] | null>(initialTopRuns);
   const [idea, setIdea] = useState("");
   const [composing, setComposing] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -119,7 +134,22 @@ export function DashboardApp({
       }
     : listStats;
 
-  const maxRuns = Math.max(1, ...workflows.map((w) => w.runs));
+  // Session 26 R1: the chart's ranked rows — the SERVER's top-CHART_ROWS
+  // by runs when the meta has provided them (TRUE at any volume — at
+  // >100 workflows the capped list hides every old high-run row),
+  // otherwise the client-side fallback (rankByRuns over the visible
+  // list — the meta-less mock contract; honest for the few-row worlds
+  // that contract describes). The heading's promise governs: a surface
+  // titled "Runs by workflow" RANKS BY RUNS.
+  const chartRows: RankedWorkflowRow[] = useMemo(
+    () => topRuns ?? rankByRuns(workflows, CHART_ROWS),
+    [topRuns, workflows],
+  );
+
+  // The charted max — by construction the first ranked row (the top
+  // bar renders the full track, 100%: the bar-length encoding carries
+  // information exactly because the max is displayed).
+  const maxRuns = Math.max(1, chartRows[0]?.runs ?? 0);
 
   // Session 13 F1: a 401 is NOT a network fault — retrying will 401
   // forever. "Try again" would lie; the honest contract is the server
@@ -158,11 +188,25 @@ export function DashboardApp({
     // error-boundary mocks fulfill with bare arrays and keep working
     // through the memo fallback below.
     if (res.ok && payload?.ok && payload.meta && typeof payload.meta === "object") {
-      const meta = payload.meta as { total?: unknown; stats?: Partial<WorkflowStats> };
+      const meta = payload.meta as { total?: unknown; stats?: Partial<WorkflowStats>; topRuns?: unknown };
       if (typeof meta.total === "number") setTotal(meta.total);
       if (meta.stats && typeof meta.stats.active === "number" && typeof meta.stats.runs === "number"
         && typeof meta.stats.hours === "number" && typeof meta.stats.avgSuccessRate === "number") {
         setServerStats(meta.stats as WorkflowStats);
+      }
+      // Session 26 R1: the ranking twin of the stats aggregate — the
+      // server's top-CHART_ROWS by runs across the FULL workspace.
+      // Shape-checked and strictly optional (the S21 meta contract:
+      // bare-array consumers keep working; null keeps the fallback).
+      if (Array.isArray(meta.topRuns)
+        && meta.topRuns.every(
+          (r): r is RankedWorkflowRow =>
+            !!r && typeof r === "object"
+            && typeof (r as RankedWorkflowRow).id === "string"
+            && typeof (r as RankedWorkflowRow).name === "string"
+            && typeof (r as RankedWorkflowRow).runs === "number",
+        )) {
+        setTopRuns(meta.topRuns);
       }
     }
   }
@@ -526,30 +570,34 @@ export function DashboardApp({
           {/* Runs chart */}
           <section aria-label="Runs by workflow" className="rounded-2xl border border-white/10 bg-white/[0.02] p-6">
             <h2 className="font-heading text-base font-semibold text-white mb-6">Runs by workflow</h2>
-            {workflows.length === 0 ? (
+            {chartRows.length === 0 ? (
               <p className="text-sm text-white/60 font-body">No data yet.</p>
             ) : (
               <div>
-                {/* Session 25 R1: the chart's honest truncation note — the
-                    S21 "a ceiling that lies is worse than no ceiling" law,
-                    found in the chart (probed RED: 12 workflows → 8 bars,
-                    silently). The chart caps at CHART_ROWS while the
-                    workspace holds more → SAY so, with the TRUE server-side
-                    total (the S21 R1 state, not the capped list length).
+                {/* Session 25 R1 + Session 26 R1: the chart's honest
+                    truncation note — the S21 "a ceiling that lies is worse
+                    than no ceiling" law — now NAMING THE RANKING CRITERION
+                    (the heading's promise governs: the chart ranks the top
+                    CHART_ROWS BY RUNS, not the most recent — probed RED:
+                    the recency mirror left the champion INVISIBLE with
+                    every bar at the 4% floor). The TRUE server-side total
+                    (the S21 R1 state, not the capped list length).
                     text-white/50 (the S10/D59 axe lesson — white/40 composites
                     to 3.5:1 on the dark card, below the 4.5:1 floor). */}
-                {workflows.length > CHART_ROWS && (
+                {total > CHART_ROWS && (
                   <p className="text-xs text-white/50 font-body mb-4">
-                    Showing the {CHART_ROWS} most recent of {total} workflows.
+                    Showing the top {CHART_ROWS} of {total} workflows by runs.
                   </p>
                 )}
                 {/* Session 25 R2: a semantic list — a screen reader announces
                     "list, N items" instead of reading div soup (probed: the
                     pre-fix rows were unannounced structure). Preflight resets
                     the list styling: visually identical to the divs it
-                    replaces. */}
+                    replaces. Session 26 R1: the rows are the RANKED rows
+                    (chartRows — the server's top-by-runs, or the fallback
+                    computation for meta-less payloads). */}
                 <ul className="space-y-4">
-                  {workflows.slice(0, CHART_ROWS).map((w) => (
+                  {chartRows.map((w) => (
                     <li key={w.id}>
                       <div className="flex justify-between text-xs text-white/50 font-body mb-1.5">
                         <span className="truncate pr-2">{w.name}</span>

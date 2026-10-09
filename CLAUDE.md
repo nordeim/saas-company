@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (118) | 164 unit + 211 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (123) | 170 unit + 218 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -145,15 +145,56 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 164/164 PASS
+- [ ] `npm run test` → 170/170 PASS
 - [ ] `npm run build` compiles clean
-- [ ] `./scripts/smoke-test.sh` → 118/118 PASS
-- [ ] `npm run test:e2e` → 211/211 PASS (needs the build first)
+- [ ] `./scripts/smoke-test.sh` → 123/123 PASS
+- [ ] `npm run test:e2e` → 218/218 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 26 (2026-10-09) remediation** — see
+  `docs/remediation-plan-session26.md`: a chart-ranking + transfer-budget
+  audit (the S48 log's three suggested surfaces — the chart's
+  top-8-by-runs vs recency question, the keyboard-focus sub-tab order
+  audit, and the JS-transfer budget — surveyed then extended to their
+  class) found and fixed one defect with a two-layer mechanism and
+  shipped the transfer-budget extension: **the chart's
+  selection-criterion lie** — the runs chart under "Runs by workflow"
+  charted the 8 most RECENT rows (`slice(0, 8)`, mirroring the list),
+  not the top 8 BY RUNS (probed RED with a 12-row workspace whose
+  OLDEST row carries 12,000 runs: the champion INVISIBLE, every bar a
+  4%–7.5% stub — the maxRuns denominator from a row the chart never
+  displayed); the DEEPER lie: at >100 workflows the client state is
+  the capped newest-100 list, so ANY client-side ranking ranks only
+  the newest 100 — the fix is SERVER-SIDE: `meta.topRuns` (the S21
+  stat-cards precedent extended to the ranking surface) + the page's
+  `initialTopRuns` prop + the pure `rankByRuns()` fallback seam
+  (`CHART_ROWS` moved to `src/lib/workflow.ts` — one constant for
+  server + client); `maxRuns` is the CHARTED max (the top bar renders
+  100%), the note names the criterion ("Showing the top 8 of {total}
+  workflows by runs."), the LIST keeps its own recency note — D106.
+  **The keyboard tab-order audit: CLEAN** (34 reachable + focus-styled
+  on `/`, 6/6 on /login, 27/28 on the dashboard — the 28th the
+  disabled Compose button, correctly skipped; the D63 shared item;
+  aria-pressed toggle buttons legitimate — a documented non-finding).
+  **The JS-transfer budget pins shipped** (the S48 suggestion):
+  landing/login/authed-dashboard scripts ≤ 400KB (measured 172/152/
+  177KB — 2.3–2.6x margins, preventive by design) — D107. +6 unit +
+  5 smoke (the 111-row topRuns wire pins — the champion sits outside
+  the newest-100 cap) + 7 e2e (4 ranking pins + 3 transfer pins); RED
+  observed pre-fix (unit 6/6; e2e: first row most-recent, champion
+  crowded out, top bar 61.57%); gate: **511 checks** (170 unit + 123
+  smoke + 218 e2e); 20 screenshots refreshed (VLM ×5 — after
+  adjudicating the ELEVENTH and TWELFTH check-prompt drifts: a
+  single-frame capture of the ANIMATED gradient heading read as
+  "missing gradient" (a time-sampled probe proved the 14s sweep
+  RUNNING), and the prompt invented a hero "dashboard mockup" — the
+  hero's video is the full-bleed BACKGROUND, the mockup a separate
+  below-fold section; write the check prompt FROM the spec's pinned
+  assertions).
 
 - **Session 25 (2026-10-09) remediation** — see
   `docs/remediation-plan-session25.md`: a runs-chart honesty +

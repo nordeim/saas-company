@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { ok, fail, apiRoute, methodGuard, optionsGuard, bodyTooLarge } from "@/lib/api";
 import { requireSession } from "@/lib/api";
 import { cleanString, requiredString } from "@/lib/validation";
-import { WORKFLOW_STATUSES, isWorkflowStatus, MAX_WORKFLOW_LIST, statsFromAggregate } from "@/lib/workflow";
+import { WORKFLOW_STATUSES, isWorkflowStatus, MAX_WORKFLOW_LIST, CHART_ROWS, statsFromAggregate } from "@/lib/workflow";
 import { workflowRateLimit } from "@/lib/rate-limit";
 
 /** Session 20 F1: the method-mismatch layer answers the envelope too. */
@@ -22,6 +22,14 @@ export const OPTIONS = optionsGuard("GET, HEAD, OPTIONS, POST");
  * subset summaries. Pre-fix, a 400-workflow user's GET answered a
  * 134.5KB body and the dashboard mounted 400 article cards (9,649 DOM
  * nodes) — linear growth with no ceiling anywhere.
+ *
+ * Session 26 R1 — the meta gains `topRuns` (the ranking twin of the S21
+ * stat aggregates): the chart titled "Runs by workflow" must RANK BY
+ * RUNS across the FULL workspace, and at >100 workflows the capped
+ * newest-100 `data` array hides every old high-run row from any
+ * client-side computation (the smoke suite's 111-row case: the champion
+ * "Anomaly scan on billing events" sits OUTSIDE the newest-100 cap —
+ * probed). The server is the only seam that can rank honestly.
  */
 export async function GET() {
   // Session 19 F1: the crash-path envelope.
@@ -30,7 +38,7 @@ export async function GET() {
   if (!guard.user) return guard.response;
 
   const where = { userId: guard.user.id };
-  const [workflows, total, active, agg] = await Promise.all([
+  const [workflows, total, active, agg, topRuns] = await Promise.all([
     db.workflow.findMany({
       where,
       orderBy: [{ createdAt: "desc" }],
@@ -43,6 +51,16 @@ export async function GET() {
       _sum: { runs: true, timeSavedHours: true },
       _avg: { successRate: true },
     }),
+    // Session 26 R1: the chart's ranking aggregate — the top CHART_ROWS
+    // by runs across the FULL workspace (ties: newest first, the list's
+    // own convention). The minimal row payload: the chart renders name
+    // + the exact runs value (the adjacent-exact-value contract).
+    db.workflow.findMany({
+      where,
+      orderBy: [{ runs: "desc" }, { createdAt: "desc" }],
+      take: CHART_ROWS,
+      select: { id: true, name: true, runs: true },
+    }),
   ]);
   const stats = statsFromAggregate(
     total,
@@ -51,7 +69,7 @@ export async function GET() {
     agg._sum.timeSavedHours ?? 0,
     agg._avg.successRate ?? null,
   );
-  return ok(workflows, 200, { meta: { total, stats } });
+  return ok(workflows, 200, { meta: { total, stats, topRuns } });
   });
 }
 

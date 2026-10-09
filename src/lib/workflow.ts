@@ -20,12 +20,70 @@ export function isWorkflowStatus(value: unknown): value is WorkflowStatus {
  */
 export const MAX_WORKFLOW_LIST = 100;
 
+/**
+ * Session 25 R1 (moved here Session 26): the runs-chart row ceiling —
+ * the single source for the chart's cap, its honest truncation note, and
+ * the e2e pins. When the workspace holds more workflows than this, the
+ * chart SAYS so (the S21 law: a ceiling that lies is worse than no
+ * ceiling). Session 26: the SERVER loaders (the GET route's topRuns
+ * query + the dashboard page's initial paint) import the same constant —
+ * the chart's cap and its server-side aggregate can never drift apart.
+ */
+export const CHART_ROWS = 8;
+
+/**
+ * Session 26 R1a — the chart's ordering seam (the heading's promise
+ * governs: a surface titled "Runs by workflow" RANKS BY RUNS). Probed
+ * RED on the probe-only server (:3190, db/probe-s26.db, gotcha-30): the
+ * pre-fix chart rendered the 8 most RECENT rows (mirroring the list) —
+ * a 12-row workspace whose OLDEST row carried 12,000 runs charted 8 stub
+ * bars (4%–7.5% of a max the chart never displayed) with the champion
+ * INVISIBLE.
+ *
+ * This is the CLIENT-SIDE FALLBACK (the meta-less contract — the e2e
+ * error-boundary mocks fulfill with bare arrays and must keep working).
+ * The TRUE top-8 rides the envelope's `meta.topRuns` sibling (the S21
+ * stat-cards precedent extended to the ranking surface): at >100
+ * workflows the client's `workflows` state is the CAPPED newest-100
+ * list, and every old high-run row sits OUTSIDE the cap — only the
+ * server can rank the full workspace.
+ *
+ * Ordering: runs DESC; ties broken by createdAt DESC (newest first among
+ * equals — the list's own convention). Pure, unit-tested
+ * (workflow-rank.test.ts), and non-mutating (the list keeps its own
+ * recency order — the two surfaces stay independent).
+ */
+export function rankByRuns<
+  T extends { id: string; name: string; runs: number; createdAt: Date | string },
+>(rows: readonly T[], limit: number): T[] {
+  return [...rows]
+    .sort(
+      (a, b) =>
+        b.runs - a.runs ||
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    )
+    .slice(0, limit);
+}
+
 /** The stat-card shape rendered by the dashboard (the honest aggregate). */
 export interface WorkflowStats {
   active: number;
   runs: number;
   hours: number;
   avgSuccessRate: number;
+}
+
+/**
+ * Session 26 R1 — the runs chart's ranked row (the meta.topRuns member):
+ * the minimal honest payload for a chart row (name + exact runs — the
+ * adjacent-exact-value contract that keeps the 4% visibility floor
+ * honest). Shared by the GET route's meta and the dashboard page's
+ * initial paint (one definition, no drift between the two seams).
+ */
+export interface RankedWorkflowRow {
+  id: string;
+  name: string;
+  runs: number;
 }
 
 /**

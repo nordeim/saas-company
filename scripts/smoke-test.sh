@@ -271,6 +271,20 @@ check "workflows list meta.total reports the TRUE count (111)" "111" "$(echo "$C
 check "workflows list meta.stats.active is the honest aggregate (75)" "75" "$(echo "$CAPPED" | field "['meta']['stats']['active']")"
 check "workflows list meta.stats.runs is the honest aggregate (8170)" "8170" "$(echo "$CAPPED" | field "['meta']['stats']['runs']")"
 check "workflows list meta.stats.hours is the honest aggregate (265)" "265" "$(echo "$CAPPED" | field "['meta']['stats']['hours']")"
+
+# Session 26 R1 — the chart's RANKING aggregate rides the same meta (the
+# S21 stat-cards precedent extended to the ranking surface). The 111-row
+# workspace is the case that PROVES the server-side computation: the
+# newest-100 list cap contains ZERO seeded rows (105 probe rows fill it
+# entirely), so the champion "Anomaly scan on billing events" (3,422 runs,
+# 31 days old) is INVISIBLE to any client-side ranking — only the server's
+# meta.topRuns can chart it. A client-side-computed topRuns would answer 8
+# probe rows (runs:10) here.
+check "meta.topRuns carries exactly 8 ranked rows" "8" "$(echo "$CAPPED" | python3 -c "import json,sys;print(len(json.load(sys.stdin)['meta']['topRuns']))")"
+check "meta.topRuns[0] is the workspace champion (outside the newest-100 cap)" "Anomaly scan on billing events" "$(echo "$CAPPED" | field "['meta']['topRuns'][0]['name']")"
+check "meta.topRuns[0].runs is the champion's true runs (3422)" "3422" "$(echo "$CAPPED" | field "['meta']['topRuns'][0]['runs']")"
+check "meta.topRuns[1].runs is the runner-up (2107 — Onboarding email orchestration)" "2107" "$(echo "$CAPPED" | field "['meta']['topRuns'][1]['runs']")"
+check "meta.topRuns[6].runs is the probe-row tail (10 — the seeded rows took the top)" "10" "$(echo "$CAPPED" | field "['meta']['topRuns'][6]['runs']")"
 CAPPED_CT=$(curl -s -o /dev/null -w '%{header_json}' -b /tmp/smoke-cookies.txt "$BASE/api/workflows" | python3 -c "import json,sys;h=json.load(sys.stdin);print(h.get('cache-control',[''])[0].lower())")
 check "capped list keeps the no-store directive" "private, no-store" "$CAPPED_CT"
 

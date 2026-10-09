@@ -13,6 +13,12 @@ import { DEMO_EMAIL, DEMO_PASSWORD } from "./helpers";
  *  the chart's own ceiling never got the same honesty. The fix: the
  *  same S21-pattern note with the TRUE server-side total.
  *
+ *  Session 26 R1 update: the chart now RANKS BY RUNS (the heading's
+ *  promise governs — the note names the criterion: "Showing the top 8
+ *  of {N} workflows by runs."; the ranking pins live in
+ *  session26-chart-rank.spec.ts). This spec keeps owning the CEILING
+ *  contract: the cap, the note's presence, and the list semantics.
+ *
  *  F3 — the chart's missing list semantics. The rows were div soup —
  *  a screen reader never announced "list, 8 items". The fix: a semantic
  *  ul/li (preflight resets the styling — visually identical).
@@ -68,8 +74,9 @@ test.describe("runs-chart honesty + semantics (Session 25)", () => {
     const chartItems = await section.locator("li").count();
     expect(chartItems).toBe(Math.min(articles, 8));
     // No truncation note while the whole workspace fits (the suite state
-    // never exceeds 8 — the session23 deletions leave ~3).
-    await expect(section.getByText(/Showing the 8 most recent/)).toHaveCount(0);
+    // never exceeds 8 — the session23 deletions leave ~3). Any wording —
+    // the criterion-naming note arrived in Session 26 ("top … by runs").
+    await expect(section.getByText(/Showing the/)).toHaveCount(0);
   });
 
   test("(b) the chart caps at 8 with the honest note when the workspace is larger", async ({ page }) => {
@@ -91,9 +98,11 @@ test.describe("runs-chart honesty + semantics (Session 25)", () => {
       expect(articlesAfter).toBeGreaterThanOrEqual(10);
       // The chart caps at 8 items…
       await expect(section.locator("li")).toHaveCount(8);
-      // …and SAYS so — the S21 honesty pattern, with the TRUE total.
-      await expect(section.getByText(/Showing the 8 most recent of \d+ workflows\./)).toBeVisible();
-      const noteText = await section.getByText(/Showing the 8 most recent/).innerText();
+      // …and SAYS so — the S21 honesty pattern with the TRUE total, naming
+      // the ranking criterion (Session 26 R1: the chart ranks BY RUNS —
+      // "top 8 … by runs", not "8 most recent").
+      await expect(section.getByText(/Showing the top 8 of \d+ workflows by runs\./)).toBeVisible();
+      const noteText = await section.getByText(/Showing the top 8/).innerText();
       expect(noteText).toContain(`of ${articlesAfter} workflows`);
     } finally {
       for (const name of surplus) await deleteRow(page, name);
