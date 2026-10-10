@@ -1186,3 +1186,17 @@ Stage Summary:
 - Gate raised 623 -> 639 checks (246 unit + 124 smoke + 269 e2e); the parity battery now runs TEN surfaces with the registry's three layers (head SET, DOM SET, DOM VALUE + id-refs) as the versioned adjudication layer.
 - Survey scripts persisted under research/ (gitignored scratch, the house convention): drift-battery-s35.mjs, focused-probe-s35.mjs, radius-scale-probe-s35.mjs, radius-elements-probe-s35.mjs, login-radius-probe-s35.mjs, aria-resolution-probe-s35.mjs, note-probe-s35.mjs, capture-screenshots-s35.mjs, vlm-checks-s35.mjs, db-state.mjs, and the VLM adjudication probes.
 - Session 35 complete.
+
+---
+Task ID: 35-close
+Agent: Super Z (main)
+Task: Session 35 closing — the pushed-hash record + the closing commit
+
+Work Log:
+- Commit 737c5de (43 files: the @theme radius pins + the login --muted pin + the legal-content note variant + the mounted-hidden FAQ panels/mobile-menu + the registry's three aria-* rules with the id-refs type + the GENERATE_SYSTEM_PROMPT seam + the session35-parity suite + the updated mobile-navigation/pages pins + the docs alignment across PAD/AGENTS [gotcha 48]/CLAUDE/README [the 639 badge]/SKILL v2.34.0 [lesson 74] + the remediation plan + the session log docs/session_70.md + the 20 refreshed screenshots) pushed via the SSH wrapper with the EXPLICIT --remote git@github.com:nordeim/saas-company.git (the wrapper's DEFAULT remote is the runbook's example repo task-management — the S31-recorded trap; the explicit flag held from the first dry-run); the wrapper verified remote main @ 737c5de == local HEAD; the fetch-independent HTTPS ls-remote agreed (737c5deefbec7c029fcc43323ff4e2d448558282).
+- The paramiko ssh shim re-deployed at /home/z/bin/ssh for this sandbox (python3.13 — the sandbox's default python3 lacks paramiko; paramiko 5.0.0 on 3.13); the operator key's fingerprint verified through paramiko's own key parse (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU) against the S1-S34 record BEFORE the push.
+- Both the wrapper's temp key copy and the operator's key file shredded after use; the tree clean; no new branches; zero zombie servers (the probe/battery/capture ports :3300-:3309 cleared and verified).
+
+Stage Summary:
+- Session 35 fully closed: the remediation commit 737c5de pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session35.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 639 checks (246 unit + 124 smoke + 269 e2e); the parity battery now runs TEN surfaces with the registry's three layers (head SET, DOM SET, DOM VALUE + id-refs) as the versioned adjudication layer; the S36 candidates recorded in docs/session_70.md (the interaction-surface column, the non-text-bearing style extension, the prompt-version pin at the route boundary).

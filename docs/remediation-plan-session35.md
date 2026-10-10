@@ -223,3 +223,17 @@ documented contract).
   — the mockup starts at ~1480px, below even a 1400px viewport;
   the direct-scroll probe first caught it mid-entrance, the
   gotcha-44 discipline re-applied).
+
+**Pushed:** `737c5de` on `main` → `git@github.com:nordeim/saas-company.git`
+(via `docs/ssh_git_wrapper_v3.py` with an operator-supplied key and the
+EXPLICIT `--remote git@github.com:nordeim/saas-company.git` — the S31
+discipline held from the first dry-run). The wrapper asserted **remote
+main @ `737c5de` == local HEAD** — wrapper-verified; the fetch-independent
+HTTPS ls-remote agreed
+(`737c5deefbec7c029fcc43323ff4e2d448558282`). The operator key's
+fingerprint verified against the S1–S34 record
+(`SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU`) BEFORE the push;
+the operator key shredded after use (both the wrapper's temp copy and
+the operator's file). No new branches — everything on `main`, per the
+operator contract. Zero zombie servers (the battery/capture/probe ports
+:3300-:3309 all cleared, verified by `ss -tlnp`).
