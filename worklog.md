@@ -1072,3 +1072,17 @@ Stage Summary:
 - Gate raised 575 -> 583 checks (205 unit + 124 smoke + 255 e2e); the parity battery now runs SEVEN surfaces; the production-readiness floor now covers the TAG-SET dimension of the parity contract (which tags exist, not just the values of the known ones) and the MEMBERSHIP-DISAGREEMENT dimension of the dashboard's two-window honesty contract.
 - Survey scripts persisted under research/ (gitignored scratch, the house convention): drift-battery-s32.mjs, focused-probe-s32.mjs, followup-probe-s32.mjs, capture-screenshots-s32.mjs.
 - Session 32 complete.
+
+---
+Task ID: 32-close
+Agent: Super Z (main)
+Task: Session 32 closing — the pushed-hash record + the closing commit
+
+Work Log:
+- Commit 6063668 (39 files: the twitter:url other-channel across seo.ts + every route caller + the layout's landing value, the login viewport themeColor + the imageAlt option, the not-found MutationObserver normalization, the head-metadata route-table extensions, the two session32 specs, the docs alignment, the 16 pixel-changed screenshots of the 20-shot refresh) pushed via the SSH wrapper with the EXPLICIT --remote git@github.com:nordeim/saas-company.git (the wrapper's DEFAULT remote is the runbook's example repo task-management — the S31-recorded trap; the explicit flag carried from the first dry-run this session); the wrapper verified remote main @ 6063668 == local HEAD; the fetch-independent HTTPS ls-remote agreed (60636688b723c575791be0ad952893172094e36f).
+- The paramiko ssh shim rebuilt at /home/z/bin/ssh for the reset sandbox (the Appendix-A implementation with the bidirectional stdin pump; paramiko 5.0.0 installed); placed on PATH per invocation; the operator key's fingerprint verified through paramiko's own key parse (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU) against the S1-S31 record BEFORE the push.
+- Both the wrapper's temp key copy and the operator's key file shredded after use; the tree clean; no new branches; zero zombie servers (the probe/capture servers killed by their own scripts; the battery and capture both verified DB canonical before and after).
+
+Stage Summary:
+- Session 32 fully closed: the remediation commit 6063668 pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session32.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 583 checks (205 unit + 124 smoke + 255 e2e); the parity battery now runs SEVEN surfaces (the head-tag SET column GREEN at first post-fix run); the S33 candidates recorded in docs/session_64.md (the DOM-attribute layer — itemprop/data-* unmeasured; the documented-superset registry for the battery's clone-only tags; the composer's concurrent-window limiter shape).
