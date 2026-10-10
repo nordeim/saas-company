@@ -269,3 +269,18 @@ session29-*, before typography-parity):
 - [x] worklog.md updated
 - [x] commit on main + SSH wrapper push (wrapper-verified — the hash
       recorded below post-push)
+
+**Pushed:** `f1df32a` on `main` → `git@github.com:nordeim/saas-company.git`
+(via `docs/ssh_git_wrapper_v3.py` with an operator-supplied key — the
+fingerprint verified against the S1–S29 record
+(`SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU`), the dry-run with
+the explicit `--remote` confirmed the fast-forward `09e89fc..f1df32a`,
+the real push executed, and the wrapper asserted **remote main @
+`f1df32a` == local HEAD** — wrapper-verified; the fetch-independent
+ls-remote assertion agreed). The operator key shredded after use (both
+the wrapper's temp copy and the operator's file). No new branches —
+everything on `main`, per the operator contract. The shim: the paramiko
+ssh shim REBUILT at `/home/z/bin/ssh` for the reset sandbox (the
+Appendix-A implementation with the bidirectional stdin pump — the S28
+lesson; placed on PATH per invocation; the fingerprint verified through
+paramiko's own key parse, the SHA256 over the wire-format blob).

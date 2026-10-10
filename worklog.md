@@ -998,3 +998,17 @@ Stage Summary:
 - Gate raised 554 -> 569 checks; the production-readiness floor now covers the REFERENCE-REDEPLOYMENT dimension of the parity contract (the battery column that catches the moving target) and the CAP-EDGE dimension of the dashboard's honesty contract.
 - Survey scripts persisted under research/ (gitignored scratch, the house convention): drift-battery-s30.mjs, live-jsonld-probe-s30.mjs, live-breadcrumbs-probe-s30.mjs, live-mobilenav-probe-s30.mjs, capture-screenshots-s30.mjs, run-e2e.sh.
 - Session 30 complete.
+
+---
+Task ID: 30-close
+Agent: Super Z (main)
+Task: Session 30 closing — the pushed-hash record + the closing commit
+
+Work Log:
+- Commit f1df32a (35 files: the JSON-LD parity extension across seo.ts/layout/page mounts/the five content routes + /demo, the evolved jsonld spec, the dual-ceiling spec, the docs alignment, the 20 refreshed screenshots) pushed via the SSH wrapper with the explicit --remote; the wrapper verified remote main @ f1df32a == local HEAD; the fetch-independent ls-remote assertion agreed.
+- The paramiko ssh shim REBUILT at /home/z/bin/ssh for the reset sandbox (the Appendix-A implementation with the bidirectional stdin pump — the S28 rebuild lesson; paramiko 5.0.0 installed into the venv python); placed on PATH per invocation; the operator key's fingerprint verified through paramiko's own key parse (SHA256 over the wire-format blob) against the S1-S29 record BEFORE the push.
+- Both the wrapper's temp key copy and the operator's key file shredded after use; the tree clean; no new branches.
+
+Stage Summary:
+- Session 30 fully closed: the remediation commit f1df32a pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session30.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 569 checks (200 unit + 124 smoke + 245 e2e); the S31 candidates recorded in docs/session_60.md (the JSON-LD surface's remaining refinements — sameAs/contactPoint only once real URLs exist; the battery's canonical/og-tag column; the CHART_ROWS 8/9 note-transition edge).
