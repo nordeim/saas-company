@@ -1034,3 +1034,16 @@ Work Log:
 Stage Summary:
 - Session 31 complete: the battery's sixth column (the session_60 candidate) validated on its FIRST run — two head drifts caught and fixed at parity (the live's 80-char description truncation matched through the ONE pageDescription seam; the 404's canonical/og:url pointed at the requested URL like the live's SPA head manager, never Next's internal route id); the chart's 8<->9 note-transition boundary pinned (the other session_60 candidate); the battery's live-burger selector hardened; the lesson encoded (SKILL 70: a proxy is not a measurement — the head's parity had ridden word parity as a proxy for 30 sessions while the truncation hid behind a prefix assertion).
 - Gate raised 569 -> 575 checks (201 unit + 124 smoke + 250 e2e); the parity battery now runs SIX surfaces; the production-readiness floor now covers the HEAD-EXACTNESS dimension of the parity contract (exact strings, exact lengths, exact tag sets — measured, never proxied).
+
+---
+Task ID: 31-close
+Agent: Super Z (main)
+Task: Session 31 closing — the pushed-hash record + the closing commit
+
+Work Log:
+- Commit bcbbef2 (19 files: the DESCRIPTION_APPENDIX_CAP seam + the not-found head effect + the head-metadata descExact pins + the two session31 specs + the docs alignment + the 5 changed screenshots) pushed via the SSH wrapper with the EXPLICIT --remote git@github.com:nordeim/saas-company.git (the wrapper's DEFAULT remote is the runbook's example repo task-management — the first dry-run against it was rejected as a non-fast-forward before the flag was applied; the corrected dry-run confirmed 037fe89..bcbbef2); the wrapper verified remote main @ bcbbef2 == local HEAD; the fetch-independent HTTPS ls-remote agreed.
+- The operator key's fingerprint verified through paramiko's own key parse against the S1-S30 record (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU) BEFORE the push; both the wrapper's temp key copy and the operator's key file shredded after use; the tree clean; no new branches; zero zombie servers.
+
+Stage Summary:
+- Session 31 fully closed: the remediation commit bcbbef2 pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session31.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 575 checks (201 unit + 124 smoke + 250 e2e); the parity battery now runs SIX surfaces; the S32 candidates recorded in docs/session_62.md (the per-route head-tag SET column — the twitter surface remains unmeasured; the JSON-LD refinements once real profile URLs exist; the 100-row chart/list membership-disagreement shape).

@@ -240,3 +240,18 @@ future sessions keep it — the column that caught F1/F2 on its first run.
 **Projection:** the gate grows by the R1 unit pins (+3-4) and the R2/R3
 e2e tests (+4) → ~576-577 total. The battery's sixth column joins the
 standing GREEN set at parity.
+
+**Pushed:** `bcbbef2` on `main` → `git@github.com:nordeim/saas-company.git`
+(via `docs/ssh_git_wrapper_v3.py` with an operator-supplied key and the
+EXPLICIT `--remote git@github.com:nordeim/saas-company.git` — the
+wrapper's DEFAULT remote is the runbook's example repo
+`task-management`, and the first dry-run attempt against it was rejected
+by GitHub as a non-fast-forward before the flag was applied; the
+corrected dry-run confirmed the fast-forward `037fe89..bcbbef2`, the
+real push executed, and the wrapper asserted **remote main @ `bcbbef2`
+== local HEAD** — wrapper-verified; the fetch-independent HTTPS
+ls-remote agreed). The operator key's fingerprint verified against the
+S1–S30 record (`SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU`)
+BEFORE the push; the operator key shredded after use (both the
+wrapper's temp copy and the operator's file). No new branches —
+everything on `main`, per the operator contract.
