@@ -1,12 +1,16 @@
 import { describe, expect, it } from "vitest";
 import {
   DEFAULT_DESCRIPTION,
+  breadcrumbStructuredData,
   faqStructuredData,
   landingStructuredData,
+  organizationStructuredData,
   pageDescription,
   pageTitle,
   routeMetadata,
   siteUrl,
+  softwareStructuredData,
+  websiteStructuredData,
 } from "./seo";
 import { PLANS } from "./pricing";
 import { FAQ_ITEMS } from "./faq-content";
@@ -164,6 +168,143 @@ describe("faqStructuredData — the FAQPage graph (content-as-code)", () => {
 
   it("survives the JSON round-trip", () => {
     const data = faqStructuredData();
+    expect(JSON.parse(JSON.stringify(data))).toEqual(data);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Session 30 R1 (D115) — the JSON-LD PARITY extension: the live reference
+// was redeployed shipping structured data on every route (the drift
+// battery's new JSON-LD column caught it — gotcha 7, the reference is a
+// moving target). The split builders below match the live's captured
+// mount shape (a minimal WebSite + a minimal Organization on EVERY route;
+// a BreadcrumbList on the content routes) while keeping the S29 supersets
+// (the SoftwareApplication with the PLANS-derived offers; the FAQPage) and
+// the stable @id anchors so the cross-script publisher links resolve.
+// ---------------------------------------------------------------------------
+
+describe("websiteStructuredData — the sitewide WebSite script (the live's shape + the anchor)", () => {
+  it("matches the live's minimal shape with the stable @id anchor and the publisher link", () => {
+    const data = websiteStructuredData();
+    expect(data["@context"]).toBe("https://schema.org");
+    expect(data["@type"]).toBe("WebSite");
+    expect(data.name).toBe("SAAS Company");
+    expect(data.url).toBe(siteUrl());
+    // The superset refinements (invisible to rendering, load-bearing for
+    // the cross-script linking): the anchor + the Organization publisher.
+    expect(String(data["@id"]).endsWith("/#website")).toBe(true);
+    expect((data.publisher as Record<string, unknown>)["@id"]).toBe(`${siteUrl()}/#organization`);
+  });
+
+  it("survives the JSON round-trip", () => {
+    const data = websiteStructuredData();
+    expect(JSON.parse(JSON.stringify(data))).toEqual(data);
+  });
+});
+
+describe("organizationStructuredData — the sitewide Organization script", () => {
+  it("matches the live's shape (name/url/logo) with the working self-hosted logo", () => {
+    const data = organizationStructuredData();
+    expect(data["@context"]).toBe("https://schema.org");
+    expect(data["@type"]).toBe("Organization");
+    expect(data.name).toBe("SAAS Company");
+    expect(data.url).toBe(siteUrl());
+    // The live's logo points at its own CDN-hosted favicon SVG; the
+    // clone's working equivalent is the self-hosted og-image (the D30
+    // working-asset pattern — the live's own og:image/favicon URLs 404).
+    expect(String(data.logo).endsWith("/og-image.png")).toBe(true);
+    expect(String(data["@id"]).endsWith("/#organization")).toBe(true);
+  });
+
+  it("survives the JSON round-trip", () => {
+    const data = organizationStructuredData();
+    expect(JSON.parse(JSON.stringify(data))).toEqual(data);
+  });
+});
+
+describe("softwareStructuredData — the landing's superset node (extracted from the S29 @graph)", () => {
+  it("keeps the PLANS-derived offers and the DEFAULT_DESCRIPTION (the one source of truth per fact)", () => {
+    const data = softwareStructuredData();
+    expect(data["@context"]).toBe("https://schema.org");
+    expect(data["@type"]).toBe("SoftwareApplication");
+    expect(data.name).toBe("NovaAI");
+    expect(data.description).toBe(DEFAULT_DESCRIPTION);
+    expect(data.applicationCategory).toBe("BusinessApplication");
+    expect(data.operatingSystem).toBe("Web");
+    expect((data.publisher as Record<string, unknown>)["@id"]).toBe(`${siteUrl()}/#organization`);
+    const derived = PLANS.filter((p) => p.monthlyPrice !== null);
+    const offers = data.offers as Array<{ name: string; price: string; priceCurrency: string }>;
+    expect(offers).toHaveLength(derived.length);
+    expect(offers.map((o) => o.price)).toEqual(["0", "49"]);
+    for (let i = 0; i < derived.length; i++) {
+      expect(offers[i].name).toBe(derived[i].name);
+      expect(offers[i].price).toBe(String(derived[i].monthlyPrice));
+      expect(offers[i].priceCurrency).toBe("USD");
+    }
+  });
+
+  it("agrees with the S29 @graph's SoftwareApplication node (the extraction lost nothing)", () => {
+    // The @graph's node carries no @context of its own (the graph root
+    // declares it once); a STANDALONE script must. Everything else must
+    // be identical — the extraction added the script-level @context and
+    // changed nothing.
+    const graphNode = (landingStructuredData()["@graph"] as Array<Record<string, unknown>>)[2];
+    const { "@context": _standalone, ...node } = softwareStructuredData();
+    expect(node).toEqual(graphNode);
+  });
+
+  it("survives the JSON round-trip", () => {
+    const data = softwareStructuredData();
+    expect(JSON.parse(JSON.stringify(data))).toEqual(data);
+  });
+});
+
+describe("breadcrumbStructuredData — the content routes' BreadcrumbList (the live's exact shape)", () => {
+  it("builds the Home → {page} trail with absolute item URLs through siteUrl()", () => {
+    const data = breadcrumbStructuredData("FAQ", "/faq");
+    expect(data["@context"]).toBe("https://schema.org");
+    expect(data["@type"]).toBe("BreadcrumbList");
+    const trail = data.itemListElement as Array<{
+      "@type": string;
+      position: number;
+      name: string;
+      item: string;
+    }>;
+    expect(trail).toHaveLength(2);
+    expect(trail[0]).toEqual({
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: `${siteUrl()}/`,
+    });
+    expect(trail[1]).toEqual({
+      "@type": "ListItem",
+      position: 2,
+      name: "FAQ",
+      item: `${siteUrl()}/faq`,
+    });
+  });
+
+  it("derives every content route's trail from the route's own metadata stem (content-as-code)", () => {
+    // The live-captured names: FAQ, Privacy, Terms, Accessibility, Refund
+    // Policy — the SAME stems the routes' routeMetadata() calls render.
+    const routes: Array<[string, string]> = [
+      ["FAQ", "/faq"],
+      ["Privacy", "/privacy"],
+      ["Terms", "/terms"],
+      ["Accessibility", "/accessibility"],
+      ["Refund Policy", "/refund-policy"],
+      ["Book a Demo", "/demo"],
+    ];
+    for (const [page, path] of routes) {
+      const trail = (breadcrumbStructuredData(page, path).itemListElement) as Array<{ name: string; item: string }>;
+      expect(trail[1].name).toBe(page);
+      expect(trail[1].item).toBe(`${siteUrl()}${path}`);
+    }
+  });
+
+  it("survives the JSON round-trip", () => {
+    const data = breadcrumbStructuredData("FAQ", "/faq");
     expect(JSON.parse(JSON.stringify(data))).toEqual(data);
   });
 });

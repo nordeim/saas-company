@@ -1,7 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Serif_Display, Playfair_Display } from "next/font/google";
 import { SmoothScroll } from "@/components/site/smooth-scroll";
-import { DEFAULT_DESCRIPTION, SITE_NAME } from "@/lib/seo";
+import { JsonLd } from "@/components/site/json-ld";
+import {
+  DEFAULT_DESCRIPTION,
+  SITE_NAME,
+  organizationStructuredData,
+  websiteStructuredData,
+} from "@/lib/seo";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -88,6 +94,15 @@ export default function RootLayout({
       <body>
         {/* The reference's Lenis smooth scrolling (window.lenis on the live) */}
         <SmoothScroll />
+        {/* Session 30 R1 (D115): the sitewide structured-data pair — the
+            live was redeployed shipping a minimal WebSite + Organization
+            script on EVERY route (the drift battery's JSON-LD column
+            caught it). One mount here covers every page route; the @id
+            anchors stay stable so the landing's SoftwareApplication
+            publisher link resolves across scripts. Invisible to the
+            word-parity battery (a script never renders into innerText). */}
+        <JsonLd data={websiteStructuredData()} />
+        <JsonLd data={organizationStructuredData()} />
         {children}
       </body>
     </html>

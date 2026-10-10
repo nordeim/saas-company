@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.28.0 · **Last updated:** 2026-10-10 (Session 29 remediation)
+> **Version:** 2.29.0 · **Last updated:** 2026-10-10 (Session 30 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1200,6 +1200,40 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     creates no resource-timing entry (the transfer budgets are
     immune), and has no box (CLS is immune) — re-verify the battery
     after the mount anyway (measured, not remembered).
+
+68. **The reference WILL redeploy under you — harden the parity
+    battery with a column per surface class, so the redeployment
+    surfaces as a MEASURED diff, not a stale doc claim (Session 30)**:
+    the S29 record said "the reference ships NO structured data"
+    (true at its measurement time); by S30 the live had REDEPLOYED
+    with a full JSON-LD layer (a minimal WebSite + Organization on
+    every route, BreadcrumbLists on the content routes) — caught
+    only because the rebuilt drift battery carried a NEW JSON-LD
+    mount column (the S29-suggested fifth surface). The law: every
+    parity claim has a LIFETIME measured in reference-deployments,
+    not sessions — when a surface class is worth one battery run, it
+    is worth a battery COLUMN (word parity, the mobile-nav panel,
+    the SEO surface, and now the structured-data mounts), so the
+    next redeployment is a diff against yesterday's capture, never
+    an argument with a stale ledger row. The adjudication pattern:
+    the historical row STAYS (it was true); the new row documents
+    the redeployment and the clone's parity+superset answer.
+
+69. **fullPage screenshots capture beyond-viewport content WITHOUT
+    scrolling — IO-gated entrances leave below-fold sections as
+    blank bands (Session 30)**: the first 20-shot refresh produced a
+    landing-full whose pricing/testimonials bands were empty black
+    (the IntersectionObserver-driven Reveal entrances never fired —
+    Playwright's captureBeyondViewport does NOT scroll), and the
+    section shots captured MID-ENTRANCE (the rAF entrances run
+    delay + 600–900ms AFTER the IO trigger — a screenshot right
+    after `scrollIntoViewIfNeeded` catches opacity ~0). The fix: a
+    SCROLL-THROUGH pass before the capture (viewport steps, ~140ms
+    pauses — every IO fires, every entrance settles) + a post-action
+    settle, and VERIFY THE BANDS (a VLM read or pixel-variance —
+    stdev ~0 means blank; the rendered page reads ~100+), never the
+    exit code alone (the gotcha-41 completion-line law's twin:
+    a "successful" capture can be visually empty).
 
 ## §13. Pitfalls to Avoid
 

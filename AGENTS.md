@@ -19,16 +19,16 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (190 checks) | `npm run test` |
-| Browser E2E (240 checks; needs a build) | `npm run test:e2e` |
+| Unit tests (200 checks) | `npm run test` |
+| Browser E2E (245 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
 | End-to-end smoke suite (124 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (190/190) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
-→ `npm run test:e2e` (240/240) — 554 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (200/200) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
+→ `npm run test:e2e` (245/245) — 569 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=100` — raised from 50 in Session 28
 when the suite's ~45 auth flows outgrew it — `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
@@ -662,6 +662,18 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     instead of running against split state; also applied to
     session28-tie-break retroactively), and always diagnose the FIRST
     failure in a run — the cascade after a worker restart is noise.
+44. **A `fullPage: true` screenshot captures beyond-viewport content
+    WITHOUT scrolling — the IntersectionObserver-driven Reveal
+    entrances never fire for below-fold sections, so they render as
+    blank dark bands (Session 30).** The first 20-shot refresh
+    produced a landing-full shot whose pricing/testimonials bands were
+    empty black and section shots captured mid-entrance (the rAF
+    entrances run delay + 600–900ms AFTER the IO trigger — a
+    screenshot immediately after `scrollIntoViewIfNeeded` catches
+    opacity ~0). The fix: a SCROLL-THROUGH pass before the capture
+    (viewport steps, ~140ms pauses — every IO fires, every entrance
+    settles) plus a post-action settle. Verify the captured bands with
+    a VLM read (or pixel-variance), never the exit code alone.
 
 ## Architecture invariants
 
@@ -711,14 +723,22 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   client fallback share ONE definition; a naive float reduce displayed
   1 low at exactly-x.5 shapes — D110) with the chart's tie-break
   (`runs DESC, createdAt DESC` — D111) and the CLS budgets (≤ 0.1 per
-  route — D112) pinned, and the Session-29 structured-data layer: the
-  landing and /faq serve valid schema.org JSON-LD through the PURE
-  builders in `src/lib/seo.ts` — every fact derived from its ONE
-  content source (the offers from PLANS with Enterprise's null price
-  omitted, never an invented 0; the FAQ entities VERBATIM from
-  FAQ_ITEMS — D113) — with the first-run boundary stories pinned (the
-  empty-to-FIRST transition, the all-zero chart's uniform floor, the
-  first-run expiry — D114). No route
+  route — D112) pinned, and the Session-29/30 structured-data layer: the
+  sitewide WebSite + Organization pair mounted ONCE in the root layout
+  (the live REDEPLOYED its own structured data — a minimal pair on every
+  route + BreadcrumbLists on the content routes; the drift battery's
+  JSON-LD column caught it — gotcha 7), the BreadcrumbList on the five
+  content routes + /demo (the crumb names ARE the routes' own metadata
+  stems), and the supersets — the SoftwareApplication with the
+  PLANS-derived offers on the landing (Enterprise's null price omitted,
+  never an invented 0), the FAQPage on /faq (entities VERBATIM from
+  FAQ_ITEMS) — all through the PURE builders in `src/lib/seo.ts`, every
+  fact derived from its ONE content source (D113 → D115) — with the
+  first-run boundary stories pinned (the empty-to-FIRST transition, the
+  all-zero chart's uniform floor, the first-run expiry — D114) and the
+  100/101-row dual-ceiling boundary (the list cap's own edge: NO note at
+  exactly 100, the honest note + the invisible oldest at 101, the stats
+  TRUE across the cap — D116). No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks

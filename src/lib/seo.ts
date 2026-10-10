@@ -159,3 +159,109 @@ export function faqStructuredData(): Record<string, unknown> {
     })),
   };
 }
+
+/**
+ * Session 30 R1 (D115) — the sitewide WebSite script. The live reference
+ * was REDEPLOYED shipping structured data on every route (the drift
+ * battery's new JSON-LD column caught it: a minimal WebSite + a minimal
+ * Organization everywhere, a BreadcrumbList on the content routes — gotcha
+ * 7, the reference is a moving target; the S29 "ships none" record was
+ * true at its measurement time). This builder matches the live's minimal
+ * `{name, url}` shape and keeps the stable @id anchor + the publisher
+ * link (invisible to rendering, load-bearing for the cross-script
+ * SoftwareApplication publisher resolution — schema.org links entities
+ * across scripts through shared @ids). Mounted ONCE in the root layout:
+ * every page route serves it (the live's own every-route reality).
+ */
+export function websiteStructuredData(): Record<string, unknown> {
+  const base = siteUrl();
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${base}/#website`,
+    name: SITE_NAME,
+    url: base,
+    publisher: { "@id": `${base}/#organization` },
+  };
+}
+
+/**
+ * Session 30 R1 (D115) — the sitewide Organization script (the live's
+ * shape: name/url/logo). The live's logo points at its own CDN-hosted
+ * favicon SVG; the clone's working equivalent is the self-hosted
+ * og-image (the D30 working-asset pattern — the live's own og:image and
+ * favicon URLs are dead). Mounted alongside websiteStructuredData() in
+ * the root layout.
+ */
+export function organizationStructuredData(): Record<string, unknown> {
+  const base = siteUrl();
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${base}/#organization`,
+    name: SITE_NAME,
+    url: base,
+    logo: `${base}/og-image.png`,
+  };
+}
+
+/**
+ * Session 30 R1 (D115) — the landing's superset node, extracted from the
+ * S29 @graph's SoftwareApplication (the extraction pin in seo.test.ts
+ * asserts the node is unchanged). The landing serves the live's
+ * sitewide pair PLUS this node: the offers still DERIVE from PLANS
+ * (Enterprise's null "Custom" price honestly omitted), the description
+ * is DEFAULT_DESCRIPTION, and the publisher resolves through the shared
+ * @id anchor the layout's Organization script carries.
+ */
+export function softwareStructuredData(): Record<string, unknown> {
+  const base = siteUrl();
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "@id": `${base}/#software`,
+    name: "NovaAI",
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    description: DEFAULT_DESCRIPTION,
+    url: base,
+    publisher: { "@id": `${base}/#organization` },
+    offers: PLANS.filter((plan) => plan.monthlyPrice !== null).map((plan) => ({
+      "@type": "Offer",
+      name: plan.name,
+      price: String(plan.monthlyPrice),
+      priceCurrency: "USD",
+    })),
+  };
+}
+
+/**
+ * Session 30 R1 (D115) — the content routes' BreadcrumbList, the live's
+ * exact captured shape: a two-element trail (Home → {page}) with absolute
+ * `item` URLs. The crumb names are the SAME stems the routes'
+ * routeMetadata() calls render (FAQ, Privacy, Terms, Accessibility,
+ * Refund Policy — live-captured; plus the clone-only "Book a Demo" for
+ * /demo, the superset route, for consistency). Mounted on the five
+ * content routes + /demo.
+ */
+export function breadcrumbStructuredData(page: string, path: string): Record<string, unknown> {
+  const base = siteUrl();
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: `${base}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: page,
+        item: `${base}${path}`,
+      },
+    ],
+  };
+}

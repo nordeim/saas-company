@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 190 unit + 240 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 200 unit + 245 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -145,15 +145,50 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 190/190 PASS
+- [ ] `npm run test` → 200/200 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 124/124 PASS
-- [ ] `npm run test:e2e` → 240/240 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 245/245 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 30 (2026-10-10) remediation** — see
+  `docs/remediation-plan-session30.md`: a reference-redeployment
+  audit + dual-ceiling-boundary pinning cycle. **THE HEADLINE: the
+  live reference REDEPLOYED a structured-data layer** (gotcha 7 —
+  the reference is a moving target; the D62/D113 "ships none"
+  record was true at ITS measurement time): the drift battery's NEW
+  JSON-LD mount column (the S29-suggested fifth surface, hardened
+  into the battery) caught `application/ld+json` on EVERY live route
+  — a minimal WebSite + Organization everywhere, a BreadcrumbList
+  (Home → {Page}) on the five content routes. The clone's answer
+  (D115): the sitewide pair mounted ONCE in the root layout
+  (`websiteStructuredData()` + `organizationStructuredData()`), the
+  BreadcrumbList on the five content routes + /demo
+  (`breadcrumbStructuredData(page, path)` — the crumb names ARE the
+  routes' own metadata stems, content-as-code), and the S29
+  supersets stand (`softwareStructuredData()` — the @graph's node
+  extracted, cross-linked through the shared @id anchors; the
+  FAQPage on /faq). **The dual-ceiling boundary pins (D116):**
+  `session30-dual-ceiling.spec.ts` (the dedicated-user pattern,
+  `.serial`, Prisma-minted) — at EXACTLY 100 rows the workspace fits
+  the list cap (NO list note — the `length < total` boundary); the
+  101st row (the OLDEST, a 500-run champion) caps the list at 100 +
+  the honest note, the oldest invisible, and the stats stay TRUE
+  across the cap (the full-workspace truth while the champion sits
+  OUTSIDE the list yet FIRST in the chart). **The capture lesson
+  (gotcha 44):** fullPage screenshots capture beyond-viewport
+  content WITHOUT scrolling — the IO-driven Reveal entrances never
+  fire for below-fold sections (blank dark bands); the fix is a
+  scroll-through pass + a post-action settle. Gate: **569 checks**
+  (200 unit + 124 smoke + 245 e2e); the drift battery GREEN (word
+  parity 1.0000 ×8 — the reference's COPY unchanged; the mobile nav
+  byte-identical 7 × 44px with a REAL tap — no Tailwind v4 bug; the
+  JSON-LD column at parity + superset); 20 screenshots refreshed;
+  VLM ×5 PASS.
 
 - **Session 29 (2026-10-10) remediation** — see
   `docs/remediation-plan-session29.md`: a JSON-LD superset +
