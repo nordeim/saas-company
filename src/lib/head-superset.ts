@@ -165,22 +165,32 @@ export function isDocumentedDomSuperset(
  * values" — with the multiset (values AND carrier counts) as the DEFAULT
  * comparison, because a value or a count drift on a shared attribute is
  * invisible to the SET column by construction. A registered rule here
- * downgrades ONE (attr, route) pair to a values-only comparison: the
- * distinct VALUE SET stays measured (a "closed"-vs-"collapsed" spelling
- * drift still surfaces), while the carrier-COUNT delta is the adjudicated
- * library-structure difference (the S32 "never simulate a library's
- * internals" law — the D125 wrapper adjudication one layer deeper).
+ * downgrades ONE (attr, route) pair's comparison:
+ *
+ *   - "values-only": the distinct VALUE SET stays measured (a
+ *     "closed"-vs-"collapsed" spelling drift still surfaces) while the
+ *     carrier-COUNT delta is the adjudicated library-structure difference
+ *     (the S32 "never simulate a library's internals" law — the D125
+ *     wrapper adjudication one layer deeper).
+ *   - "id-refs" (Session 35): the attribute's values are ID REFERENCES
+ *     whose spellings are per-library namespaces (the live's radix-:rN:
+ *     hydration ids vs the clone's stable semantic stems — the D125
+ *     record). The battery compares the FUNCTIONAL contract instead:
+ *     every reference must RESOLVE to a mounted element in its own
+ *     document at rest (a dangling aria-controls is a real a11y defect;
+ *     a resolved one in a different namespace is not). The namespace
+ *     spelling itself is never compared.
  */
 export interface DomValueRuleEntry {
-  /** The shared data-* attribute name, verbatim ("data-state"). */
+  /** The shared attribute name, verbatim ("data-state", "aria-controls"). */
   attr: string;
   /** "all" or the explicit route list (the battery's spellings). */
   routes: "all" | string[];
   /** Which side carries the EXTRA carriers (the structure being scoped). */
   side: "clone" | "live";
-  /** The comparison downgrade. Only "values-only" exists today. */
-  rule: "values-only";
-  /** Why the carrier-count delta is adjudicated (the probe evidence). */
+  /** The comparison downgrade: "values-only" or "id-refs". */
+  rule: "values-only" | "id-refs";
+  /** Why the downgrade is adjudicated (the probe evidence). */
   reason: string;
   /** The session that adjudicated it (the PAD ledger reference). */
   session: number;
@@ -205,11 +215,39 @@ export const DOM_VALUE_RULES: DomValueRuleEntry[] = [
       "Radix stamps data-orientation on the Root and every Item/Trigger/Content (measured: 4+ live carriers vs the clone's 1 container); the value (\"vertical\") is the contract, measured at parity on both sides",
     session: 34,
   },
+  {
+    attr: "aria-expanded",
+    routes: ["/faq"],
+    side: "clone",
+    rule: "values-only",
+    reason:
+      "Every carrier measures \"false\" at rest on both sides (the values are the contract, at parity); the clone's one extra carrier is its burger — the live's burger carries no aria-expanded (gotcha 47) while the clone's announces menu state, the functional superset. The carrier-count delta is scoped; a \"false\"-vs-\"true\" spelling drift still surfaces",
+    session: 35,
+  },
+  {
+    attr: "aria-controls",
+    routes: ["/faq"],
+    side: "clone",
+    rule: "id-refs",
+    reason:
+      "The values are per-library ID namespaces (the live's radix-:rN: hydration ids vs the clone's stable faq-panel-N stems — the D125 record) plus the clone's burger pointing at its mobile-menu (the gotcha-47 functional superset). The measured contract: every reference RESOLVES to a mounted element in its own document at rest — the live's Radix regions are mounted-hidden, and the clone's panels + mobile-menu are mounted-hidden since Session 35 (D132; the old unmount left every reference dangling). The battery compares resolution validity, never the namespace spelling",
+    session: 35,
+  },
+  {
+    attr: "aria-labelledby",
+    routes: ["/faq"],
+    side: "clone",
+    rule: "id-refs",
+    reason:
+      "The aria-controls twin (the panels' region→trigger back-references): the live's radix-:rN: hydration ids vs the clone's stable faq-trigger-N stems — the same D125 id-namespace record, shared since Session 35 mounted the clone's panels at rest (D132). Every reference RESOLVES to a mounted element on both sides; the battery compares resolution validity, never the namespace spelling",
+    session: 35,
+  },
 ];
 
-/** True when the (attr, route) pair's battery comparison is downgraded to
- * values-only (the distinct value set stays measured; the carrier-count
- * delta is the adjudicated structure). */
+/** True when the (attr, route) pair's battery comparison is downgraded
+ * (values-only: the distinct value set stays measured, the carrier-count
+ * delta is the adjudicated structure; id-refs: the resolution contract
+ * replaces the namespace-spelling comparison). */
 export function isDocumentedDomValueRule(
   attr: string,
   route: string,

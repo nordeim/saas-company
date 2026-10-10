@@ -200,12 +200,17 @@ export function Navbar() {
       </div>
 
       {/* Mobile dropdown — measured from the reference: black/95 + blur,
-          hairline bottom border, 44px rows, Get Started pill footer row. */}
-      {open && (
-        <div
-          id="mobile-menu"
-          className="md:hidden bg-black/95 backdrop-blur-xl border-b border-white/5"
-        >
+          hairline bottom border, 44px rows, Get Started pill footer row.
+          Session 35 D132: mounted-hidden at rest (the same contract the
+          live's Radix regions hold — the burger's aria-controls now
+          resolves to a mounted element instead of dangling while closed;
+          the `hidden` attribute keeps the rows out of innerText exactly
+          like the old conditional render did). */}
+      <div
+        id="mobile-menu"
+        hidden={!open}
+        className="md:hidden bg-black/95 backdrop-blur-xl border-b border-white/5"
+      >
           <div className="px-6 py-4 flex flex-col gap-2">
             {NAV_LINKS.map((link) => (
               <Link
@@ -232,8 +237,7 @@ export function Navbar() {
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
-        </div>
-      )}
+      </div>
     </nav>
   );
 }

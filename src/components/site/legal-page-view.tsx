@@ -29,11 +29,22 @@ export function LegalPageView({ page }: { page: LegalPage }) {
                     {section.h2}
                   </h2>
                 )}
-                {section.paras.map((para, j) => (
-                  <p key={j} className={j > 0 ? "mt-4" : undefined}>
-                    {para}
-                  </p>
-                ))}
+                {section.paras.map((para, j) => {
+                  // Session 35 D133: the live's one-off template note —
+                  // measured `mt-4 text-white/50 italic` (its accessibility
+                  // page's "*Note: …" editing instruction); every other
+                  // paragraph is the standard white/70 body text.
+                  const isNote = typeof para !== "string";
+                  const text = typeof para === "string" ? para : para.text;
+                  return (
+                    <p
+                      key={j}
+                      className={isNote ? "mt-4 text-white/50 italic" : j > 0 ? "mt-4" : undefined}
+                    >
+                      {text}
+                    </p>
+                  );
+                })}
                 {section.list && (
                   <ul
                     className={

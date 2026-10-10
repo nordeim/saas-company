@@ -72,7 +72,9 @@ test.describe("mobile navigation", () => {
     await burger.tap();
     await expect(nav.getByRole("button", { name: /close menu/i })).toBeVisible();
     await page.keyboard.press("Escape");
-    await expect(page.locator("#mobile-menu")).toHaveCount(0);
+    // Session 35 D132: the menu is MOUNTED-HIDDEN at rest (the live's Radix
+    // contract) — closed means hidden + attached, not absent.
+    await expect(page.locator("#mobile-menu")).toBeHidden();
   });
 
   // Session 13 F3: the disclosure pattern's focus contract — Escape close
@@ -89,7 +91,7 @@ test.describe("mobile navigation", () => {
     // Focus a menu link (as a keyboard user would have), then Escape.
     await page.locator("#mobile-menu a").first().focus();
     await page.keyboard.press("Escape");
-    await expect(page.locator("#mobile-menu")).toHaveCount(0);
+    await expect(page.locator("#mobile-menu")).toBeHidden();
 
     const active = await page.evaluate(() => ({
       tag: document.activeElement?.tagName ?? "none",
@@ -106,7 +108,7 @@ test.describe("mobile navigation", () => {
     await page.locator("#mobile-menu").getByRole("link", { name: "Pricing", exact: true }).tap();
 
     await expect(page).toHaveURL(/#pricing$/);
-    await expect(page.locator("#mobile-menu")).toHaveCount(0);
+    await expect(page.locator("#mobile-menu")).toBeHidden();
   });
 
   test("Log In routes to /login", async ({ page }) => {
@@ -131,8 +133,9 @@ test.describe("mobile navigation", () => {
     await page.setViewportSize({ width: 1200, height: 900 });
     await page.waitForTimeout(400);
 
-    // The panel unmounts and the body scroll-lock lifts.
-    await expect(page.locator("#mobile-menu")).toHaveCount(0);
+    // The panel hides (mounted-hidden, Session 35 D132) and the body
+    // scroll-lock lifts.
+    await expect(page.locator("#mobile-menu")).toBeHidden();
     const overflow = await page.evaluate(() => document.body.style.overflow);
     expect(overflow).toBe("");
   });

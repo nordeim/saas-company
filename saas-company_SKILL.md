@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.33.0 · **Last updated:** 2026-10-10 (Session 34 remediation)
+> **Version:** 2.34.0 · **Last updated:** 2026-10-11 (Session 35 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1353,6 +1353,39 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     selector is the `md:hidden` nav button — the live's burger
     carries NO `aria-expanded` (probe the element, never assume the
     attribute you would have written).
+
+74. **A style inventory is only as honest as its normalization
+    contract — and rendered-ness is a BOX question, not a display
+    question (Session 35)**: the battery's tenth surface (the
+    computed-STYLE inventory — the twice-deferred candidate, shipped
+    only after its contract was designed) caught THREE real drift
+    classes on its first run after 34 sessions of class-string
+    parity: the live's dark bundle ships a CUSTOM radius scale
+    (`rounded-sm` 8px, `rounded-lg` 12px — the tracking-scale family
+    one layer deeper; the SAME class strings, a different engine
+    scale), a light login `--muted` hidden under an opaque gradient
+    (the F5 inert-property family), and a one-off `text-white/50
+    italic` note paragraph. The contract that made the column
+    honest: COLORS compared as VALUE tuples (rgb/hex/hsl/oklab/
+    oklch all parse — gotcha 4's law at fleet scale), lengths with
+    0.5px tolerance plus the FULL-radius equivalence class (9999px ≡
+    33554432px — v3's rounded-full vs v4's `calc(infinity × 1px)`;
+    Chromium serializes the latter in SCIENTIFIC NOTATION,
+    "3.35544e+07px" — parse the float, never the string shape), a
+    semantic property whitelist EXCLUDING the animation-touched and
+    layout-engine properties, and the text-bearing element anchor
+    with an element-count guard. The twin trap: a child inside a
+    display:none SUBTREE still computes its OWN display ("block")
+    — `getClientRects().length === 0` is the rendered test, not
+    `getComputedStyle().display`. And the ARIA twin: an
+    aria-controls reference to an UNMOUNTED panel is DANGLING — the
+    live's Radix regions mount hidden at rest (the S4 "Radix
+    unmounts closed content" record described the pre-hydration
+    SPA shell, not the rendered DOM); compare ID-REF attributes by
+    RESOLUTION in each side's own document, never by the
+    per-library namespace spelling (the registry's `id-refs` rule
+    type — radix-:rN: vs faq-panel-N is structure, a dangling
+    reference is a defect).
 
 ## §13. Pitfalls to Avoid
 

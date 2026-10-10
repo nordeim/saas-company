@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Reveal } from "@/components/site/reveal";
 import { Navbar } from "@/components/site/navbar";
@@ -16,21 +16,47 @@ import { FAQ_ITEMS } from "@/lib/faq-content";
  * Session 4 parity audit: the live uses the Radix/shadcn pattern — the
  * panel carries data-state + `data-[state=open]:animate-accordion-down` /
  * `data-[state=closed]:animate-accordion-up` (0.2s ease-out height
- * keyframes against --radix-accordion-content-height), and CLOSED panels
- * are UNMOUNTED (absent from the DOM — Radix unmounts closed content,
- * which is why the live's collapsed answers never appear in its HTML).
+ * keyframes against --radix-accordion-content-height).
+ *
+ * Session 35 D132 — the closed-state mount contract re-measured in vivo
+ * (the battery's aria-* vocabulary caught every aria-controls reference
+ * DANGLING at rest): the live's Radix regions are MOUNTED-HIDDEN (every
+ * radix-:rN: id resolves to a role=region element with hidden=true — the
+ * old Session-4 "Radix unmounts closed content" record described the
+ * pre-hydration SPA shell, not the rendered DOM). The panels now render
+ * always, hidden at rest — the `hidden` attribute (display:none) keeps
+ * the answers out of innerText exactly like the live (the S4 word-parity
+ * 0.6052 artifact was CSS-COLLAPSED panels, which innerText includes;
+ * display:none it does not), and every aria-controls reference resolves.
  */
 export function FaqView() {
   const [open, setOpen] = useState<number | null>(null);
   const [closing, setClosing] = useState<number | null>(null);
   const timers = useRef<Array<ReturnType<typeof setTimeout>>>([]);
+  const panelRefs = useRef<Array<HTMLDivElement | null>>([]);
 
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
+
+  // Session 35: the height var must measure the panel AFTER hidden flips
+  // false — a mount-time ref reads scrollHeight 0 through display:none.
+  // The layout effect runs after the DOM commit and before paint, so the
+  // accordion-down keyframe reads the true height from its first frame.
+  useLayoutEffect(() => {
+    if (open !== null) {
+      const el = panelRefs.current[open];
+      if (el) {
+        el.style.setProperty(
+          "--radix-accordion-content-height",
+          `${el.scrollHeight}px`
+        );
+      }
+    }
+  }, [open]);
 
   function toggle(i: number) {
     if (open === i) {
       // Keep the panel mounted with data-state=closed so the accordion-up
-      // animation runs, then unmount it like Radix does.
+      // animation runs, then hide it (the mounted-hidden contract).
       setClosing(i);
       setOpen(null);
       timers.current.push(
@@ -65,7 +91,7 @@ export function FaqView() {
             <div className="space-y-3" data-orientation="vertical">
               {FAQ_ITEMS.map((item, i) => {
                 const isOpen = open === i;
-                const mounted = isOpen || closing === i;
+                const visible = isOpen || closing === i;
                 return (
                   /* The live wraps each item in an UNCLASSED motion div
                      (y=15, delay i*80ms, 400ms — measured). */
@@ -90,27 +116,22 @@ export function FaqView() {
                         <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
                       </button>
                     </h3>
-                    {mounted && (
-                      <div
-                        id={`faq-panel-${i}`}
-                        role="region"
-                        aria-labelledby={`faq-trigger-${i}`}
-                        data-state={isOpen ? "open" : "closed"}
-                        ref={(el) => {
-                          // Radix sets this var to the content height — the
-                          // keyframes animate against it.
-                          if (el) {
-                            el.style.setProperty(
-                              "--radix-accordion-content-height",
-                              `${el.scrollHeight}px`
-                            );
-                          }
-                        }}
-                        className="overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
-                      >
-                        <p className="pb-5 text-white/60 font-body leading-relaxed">{item.a}</p>
-                      </div>
-                    )}
+                    {/* Session 35 D132: mounted-hidden at rest (the live's
+                        Radix regions resolve at rest; the old unmount left
+                        every aria-controls reference dangling). */}
+                    <div
+                      id={`faq-panel-${i}`}
+                      role="region"
+                      aria-labelledby={`faq-trigger-${i}`}
+                      data-state={isOpen ? "open" : "closed"}
+                      hidden={!visible}
+                      ref={(el) => {
+                        panelRefs.current[i] = el;
+                      }}
+                      className="overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
+                    >
+                      <p className="pb-5 text-white/60 font-body leading-relaxed">{item.a}</p>
+                    </div>
                   </div>
                   </Reveal>
                 );

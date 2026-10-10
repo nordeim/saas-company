@@ -162,6 +162,18 @@
      Session 8 F2). Pin v3's value; shadow-lg/xl are unchanged v3->v4. */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
+  /* Session 35 D130 — the reference's dark bundle ships a CUSTOM radius
+     scale (the Session-7 tracking-scale family, gotcha 22): measured in
+     vivo, its `rounded-sm` renders 8px (the logo-cloud BRANTOX chip) and
+     its `rounded-lg` renders 12px (the five features AI chips, the 404's
+     Go Home button) where v4's defaults emit 4px/8px. The live's
+     rounded-xl (12px), 2xl (16px) and 3xl (24px) already match v4's
+     defaults — only these two steps drift. The battery's TENTH surface
+     (the computed-STYLE inventory, Session 35) caught it on its first
+     run after 34 sessions of class-string parity. */
+  --radius-sm: 8px;
+  --radius-lg: 12px;
+
   /* Animations (measured keyframe names from the reference bundle) */
   --animate-marquee: marquee 40s linear infinite;
   --animate-float: float 4s ease-in-out infinite;

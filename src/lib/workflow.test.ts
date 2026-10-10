@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import {
+  GENERATE_SYSTEM_PROMPT,
   SDK_TIMEOUT_MS,
   WORKFLOW_CATEGORIES,
   isWorkflowStatus,
@@ -148,6 +149,31 @@ describe("parseLlmWorkflow (Session 34 — the real-SDK output path)", () => {
     expect(
       parseLlmWorkflow(JSON.stringify({ name: "Valid name", description: "short", category: "Ops" })),
     ).toBeNull();
+  });
+});
+
+describe("GENERATE_SYSTEM_PROMPT (Session 35 — the SDK-prompt drift guard)", () => {
+  it("asks for minified JSON with the name/description/category shape (the route's exact prompt, extracted verbatim)", () => {
+    expect(GENERATE_SYSTEM_PROMPT).toBe(
+      'You turn one-line automation ideas into workflow definitions. Reply with ONLY minified JSON of shape {"name": string (<= 60 chars), "description": string (one sentence, <= 220 chars), "category": one of "Marketing" | "Sales" | "Engineering" | "Ops" | "Finance" | "Support"}. No prose, no markdown fences.',
+    );
+  });
+
+  it("the belt-and-braces invariant: the prompt's name limit (60) stays at or under the sanitizer's name clamp (120)", () => {
+    const promptNameLimit = Number(GENERATE_SYSTEM_PROMPT.match(/"name": string \(<= (\d+) chars\)/)?.[1] ?? 0);
+    expect(promptNameLimit).toBe(60);
+    // The clamp itself, measured through the seam (not a second magic number):
+    expect(sanitizeGeneratedWorkflow({ name: "x".repeat(200), description: "long enough description", category: "Ops" }, "")?.name.length).toBe(120);
+    expect(promptNameLimit).toBeLessThanOrEqual(120);
+  });
+
+  it("the belt-and-braces invariant: the prompt's description limit (220) stays at or under the sanitizer's description clamp (500)", () => {
+    const promptDescLimit = Number(GENERATE_SYSTEM_PROMPT.match(/"description": string \(one sentence, <= (\d+) chars\)/)?.[1] ?? 0);
+    expect(promptDescLimit).toBe(220);
+    expect(
+      sanitizeGeneratedWorkflow({ name: "Valid name", description: "d".repeat(600), category: "Ops" }, "")?.description.length,
+    ).toBe(500);
+    expect(promptDescLimit).toBeLessThanOrEqual(500);
   });
 });
 

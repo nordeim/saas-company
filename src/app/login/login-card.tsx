@@ -169,6 +169,16 @@ export function LoginCard() {
            here. INERT (every affected element has border-width 0) but
            pinned for the computed-parity matrix (Session 9 F5). */
         body { --color-border: #e5e7eb; }
+        /* Session 35 D131 — the reference's login bundle also defines a
+           LIGHT --muted (zinc-100, rgb(244,244,245)): its logo chip's
+           bg-muted computes the light value while this app's dark
+           --color-muted (#161616) showed through. INERT under the chip's
+           opaque from-slate-100 gradient (the --border pin above, the
+           Session-9 F5 computed-parity family) — the battery's
+           computed-STYLE inventory caught the property delta on its
+           first run; pinned here so a future edit that makes the color
+           visible (a transparent gradient stop) starts from parity. */
+        body { --color-muted: #f4f4f5; }
         /* The reference's login bundle pins html overscroll-behavior-y:
            none (measured: the live's /login html computes none while
            its landing computes auto — a login-scoped rule, not app-wide).

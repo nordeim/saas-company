@@ -28,9 +28,11 @@ test.describe("FAQ page", () => {
 
   // Session 4: the reference's accordion is the Radix/shadcn pattern — the
   // panel carries data-state + the measured accordion keyframes (0.2s
-  // ease-out height animation), and CLOSED panels are UNMOUNTED (absent
-  // from the DOM — the root cause of the old FAQ word-parity 0.6052
-  // artifact where the clone kept hidden answers in the DOM).
+  // ease-out height animation). Session 35 D132 re-measured the closed
+  // state in vivo: the live's panels are MOUNTED-HIDDEN (the old Session-4
+  // "unmounted" record described the pre-hydration SPA shell; the S4
+  // word-parity 0.6052 artifact was CSS-COLLAPSED panels, which innerText
+  // includes — display:none it does not).
   test("open panels carry the reference's animation classes", async ({ page }) => {
     await page.goto("/faq");
     const trigger = page.getByRole("button", { name: "Is my data secure with NovaAI?" });
@@ -59,18 +61,21 @@ test.describe("FAQ page", () => {
     expect(hasKeyframes).toBe(true);
   });
 
-  test("closed answers are unmounted from the DOM (live parity)", async ({ page }) => {
+  test("closed answers are mounted-hidden, out of innerText (live parity, Session 35 D132)", async ({ page }) => {
     await page.goto("/faq");
-    // Nothing is open on load — every answer is absent from the DOM, like
-    // the live (Radix unmounts closed content).
-    await expect(page.getByText(/SOC 2 Type II certified/)).toHaveCount(0);
-    await expect(page.getByText(/200\+ tools/)).toHaveCount(0);
-    // Open, then close — the answer animates out and unmounts again.
+    // Nothing is open on load — every answer is mounted-hidden (the live's
+    // Radix regions resolve at rest with hidden=true — re-measured in vivo
+    // Session 35; the old Session-4 "unmounted" record described the
+    // pre-hydration SPA shell). Hidden = display:none = excluded from
+    // innerText exactly like the live.
+    await expect(page.getByText(/SOC 2 Type II certified/)).toBeHidden();
+    await expect(page.getByText(/200\+ tools/)).toBeHidden();
+    // Open, then close — the answer animates out and hides again.
     const trigger = page.getByRole("button", { name: "Is my data secure with NovaAI?" });
     await trigger.click();
     await expect(page.getByText(/SOC 2 Type II certified/)).toBeVisible();
     await trigger.click();
-    await expect(page.getByText(/SOC 2 Type II certified/)).toHaveCount(0);
+    await expect(page.getByText(/SOC 2 Type II certified/)).toBeHidden();
   });
 });
 

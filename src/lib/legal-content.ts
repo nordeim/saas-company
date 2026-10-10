@@ -5,7 +5,12 @@
 
 export interface LegalSection {
   h2: string | null;
-  paras: string[];
+  /** Body paragraphs, in order. A plain string renders as the standard
+   *  white/70 body paragraph; the `{ text, note: true }` variant renders
+   *  the live's one-off template note (measured Session 35 D133: its
+   *  accessibility page carries exactly one `mt-4 text-white/50 italic`
+   *  paragraph — the "*Note: …" editing instruction). */
+  paras: Array<string | { text: string; note: true }>;
   /** Optional reference list rendered after the paragraphs (accessibility
    *  page parity): "disc" → list-disc list-inside mt-4 space-y-2,
    *  "none" → list-none mt-4 space-y-1 (the reference's exact classes). */
@@ -84,7 +89,10 @@ export const ACCESSIBILITY: LegalPage = {
       h2: null,
       paras: [
         "The purpose of the following template is to assist you in writing your accessibility statement. Please note that you are responsible for ensuring that your site's statement meets the requirements of the local law in your area or region.",
-        "*Note: This page currently has several sections. Once you complete editing the Accessibility Statement below, you need to delete this section.",
+        {
+          text: "*Note: This page currently has several sections. Once you complete editing the Accessibility Statement below, you need to delete this section.",
+          note: true,
+        },
         "To learn more about this, check out our article \"Accessibility: Adding an Accessibility Statement to Your Site\".",
       ],
     },

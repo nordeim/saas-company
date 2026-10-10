@@ -19,16 +19,16 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (241 checks) | `npm run test` |
-| Browser E2E (258 checks; needs a build) | `npm run test:e2e` |
+| Unit tests (246 checks) | `npm run test` |
+| Browser E2E (269 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
 | End-to-end smoke suite (124 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (241/241) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
-→ `npm run test:e2e` (258/258) — 623 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (246/246) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
+→ `npm run test:e2e` (269/269) — 639 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=100` — raised from 50 in Session 28
 when the suite's ~45 auth flows outgrew it — `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
@@ -739,6 +739,38 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     404 twin is `/does-not-exist-404`, or the registered robots entry
     reads as drift). The live's burger carries NO `aria-expanded` —
     the shared mobile-nav selector is the `md:hidden` nav button.
+48. **A computed-STYLE inventory needs its normalization contract —
+    and a rendered-ness check needs the BOX, not the computed display
+    (Session 35).** The battery's tenth surface (the twice-deferred
+    style-inventory candidate — shipped only after its contract was
+    designed) caught three real drift classes on its first run after
+    34 sessions of class-string parity: the live's dark bundle ships
+    a CUSTOM radius scale (`rounded-sm` 8px, `rounded-lg` 12px — the
+    tracking-scale family one layer deeper; pin `--radius-sm`/
+    `--radius-lg` in `@theme`), a light login `--muted` under an
+    opaque gradient (the F5 `--border` family — inert, pinned for
+    computed parity), and a one-off `text-white/50 italic` note
+    paragraph. The contract that made it honest: compare COLORS as
+    VALUE tuples (rgb/hex/hsl/oklab/oklch all parse — gotcha 4's law
+    at fleet scale), lengths with 0.5px tolerance plus the
+    FULL-radius equivalence class (9999px ≡ 33554432px — v3's
+    rounded-full vs v4's `calc(infinity × 1px)`; and Chromium
+    serializes the latter in SCIENTIFIC NOTATION: "3.35544e+07px" —
+    parse the float, never the string shape), a semantic property
+    whitelist EXCLUDING the animation-touched and layout-engine
+    properties, and the text-bearing element anchor with an
+    element-count guard. The twin trap: a child inside a
+    display:none SUBTREE still computes its OWN display ("block"),
+    so `getComputedStyle().display === "none"` misses every element
+    under a mounted-hidden ancestor — `getClientRects().length === 0`
+    is the rendered test (safe for fixed-position chrome too). And
+    the ARIA twin: an aria-controls reference to an UNMOUNTED panel
+    is DANGLING — the live's Radix regions mount hidden at rest
+    (the S4 "Radix unmounts closed content" record described the
+    pre-hydration SPA shell, not the rendered DOM); compare ID-REF
+    attributes by RESOLUTION in each side's own document, never by
+    the per-library namespace spelling (the registry's `id-refs`
+    rule type).
 
 ## Architecture invariants
 
@@ -824,18 +856,25 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   (the hydration-appended `/_not-found` copies removed — D122), with
   the 108-row chart/list membership disagreement pinned (chart ∩ list
   = ∅ at the S30 shape's extreme — D123). The drift battery now runs
-  NINE surfaces (word parity, mobile nav, SEO, JSON-LD mounts, the
+  TEN surfaces (word parity, mobile nav, SEO, JSON-LD mounts, the
   Session-31 canonical/og column, the Session-32 head-tag SET column
   that caught D120/D121/D122 on its first run, the Session-33
   DOM-attribute SET column that caught the dormant toaster / the Radix
-  marker / the nav-theme hooks on ITS first run — D124–D126, and the
+  marker / the nav-theme hooks on ITS first run — D124–D126, the
   Session-34 shared-attribute VALUE column that caught the /faq
-  Radix carrier-count delta on ITS first run — D127), with the
+  Radix carrier-count delta on ITS first run — D127, and the
+  Session-35 computed-STYLE inventory column — the twice-deferred
+  candidate shipped with its normalization contract — that caught the
+  custom radius scale / the login --muted / the italic note on ITS
+  first run — D130/D131/D133, plus the ninth column's aria-*
+  vocabulary extension that caught the dangling aria-controls contract
+  — D132), with the
   adjudicated sets VERSIONED in `src/lib/head-superset.ts` (the
   registry the battery READS: an unregistered clone-only head tag or
   DOM attribute — either side — surfaces as DRIFT instead of blending
-  into the "superset" reading; 15 → 22 unit pins hold the shape incl. the
-  Session-34 VALUE-level rules and the sixth head entry). No route
+  into the "superset" reading; 15 → 23 unit pins hold the shape incl. the
+  Session-34 VALUE-level rules, the sixth head entry, and the
+  Session-35 aria-* rules with the `id-refs` type). No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks

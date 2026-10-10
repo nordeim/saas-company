@@ -3,6 +3,7 @@ import { requireSession } from "@/lib/api";
 import { generateRateLimit } from "@/lib/rate-limit";
 import { requiredString } from "@/lib/validation";
 import {
+  GENERATE_SYSTEM_PROMPT,
   SDK_TIMEOUT_MS,
   parseLlmWorkflow,
   templateWorkflow,
@@ -77,8 +78,10 @@ export async function POST(request: Request) {
         messages: [
           {
             role: "system",
-            content:
-              'You turn one-line automation ideas into workflow definitions. Reply with ONLY minified JSON of shape {"name": string (<= 60 chars), "description": string (one sentence, <= 220 chars), "category": one of "Marketing" | "Sales" | "Engineering" | "Ops" | "Finance" | "Support"}. No prose, no markdown fences.',
+            // Session 35: the prompt lives in the versioned seam
+            // (src/lib/workflow.ts) — the belt-and-braces pair with the
+            // sanitizer's clamps is unit-pinned there.
+            content: GENERATE_SYSTEM_PROMPT,
           },
           { role: "user", content: idea.value },
         ],

@@ -240,6 +240,24 @@ export function parseLlmWorkflow(text: string): GeneratedWorkflow | null {
 }
 
 /**
+ * Session 35 R3 — the composer's system prompt as a versioned seam (the
+ * session_68 S35 candidate 3: "the SDK-prompt drift guard"). The route's
+ * prompt asks for <= 60-char names / <= 220-char descriptions while
+ * sanitizeGeneratedWorkflow clamps at 120/500 — an intentional
+ * belt-and-braces pair (the prompt asks TIGHTER than the clamp enforces,
+ * so a well-behaved model never needs the clamp and a misbehaving one is
+ * still bounded). The pair lived in an inline string + distant slice()
+ * calls: a future edit to either side would drift silently. The constant
+ * is the single source (the route imports it verbatim — the bytes the
+ * model sees are unchanged), and the unit pins hold BOTH the text and
+ * the invariant (prompt limits <= sanitizer clamps), so an edit to
+ * either side surfaces as a failing pin — a review question, not a
+ * silent drift.
+ */
+export const GENERATE_SYSTEM_PROMPT =
+  'You turn one-line automation ideas into workflow definitions. Reply with ONLY minified JSON of shape {"name": string (<= 60 chars), "description": string (one sentence, <= 220 chars), "category": one of "Marketing" | "Sales" | "Engineering" | "Ops" | "Finance" | "Support"}. No prose, no markdown fences.';
+
+/**
  * The SDK hang ceiling (Session-15 F3): ADR-004's "degrade, never fail"
  * covers SDK FAILURES but not SDK HANGS — a black-holed connection left
  * POST /api/workflows/generate blocked indefinitely with the composer's

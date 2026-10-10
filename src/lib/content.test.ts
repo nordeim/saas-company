@@ -41,6 +41,26 @@ describe("legal content", () => {
     }
   });
 
+  it("the accessibility page's template note is the ONE note-styled paragraph (Session 35 D133 — the live's one-off mt-4 text-white/50 italic)", () => {
+    const notes: string[] = [];
+    for (const [slug, page] of pages) {
+      for (const section of page.sections) {
+        for (const para of section.paras) {
+          if (typeof para !== "string") notes.push(`${slug}: ${para.text.slice(0, 30)}`);
+        }
+      }
+    }
+    expect(notes).toEqual([
+      "accessibility: *Note: This page currently has",
+    ]);
+    // Every other paragraph stays a plain string.
+    const total = pages.reduce(
+      (n, [, page]) => n + page.sections.reduce((m, s) => m + s.paras.length, 0),
+      0,
+    );
+    expect(total).toBeGreaterThan(20);
+  });
+
   it("shows the disclaimer caption on privacy/terms/refund-policy but NOT accessibility (reference parity)", () => {
     // The live reference renders the "A legal disclaimer" caption on three
     // of the four legal pages and omits it on the accessibility page.

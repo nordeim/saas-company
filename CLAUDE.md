@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 241 unit + 258 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 246 unit + 269 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -145,10 +145,10 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 241/241 PASS
+- [ ] `npm run test` → 246/246 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 124/124 PASS
-- [ ] `npm run test:e2e` → 258/258 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 269/269 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
@@ -224,6 +224,46 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   (241 unit + 124 smoke + 258 e2e); the drift battery **73/73 GREEN**
   on all NINE surfaces (the VALUE column reading \"values-only
   registered\" on /faq through the registry).
+
+- **Session 35 (2026-10-11) remediation** — see
+  `docs/remediation-plan-session35.md`: a computed-STYLE inventory +
+  aria-vocabulary + SDK-prompt-guard cycle (the session_68 S35
+  candidates). **THE HEADLINE: the drift battery's NEW TENTH SURFACE —
+  the computed-STYLE inventory column (the twice-deferred candidate,
+  shipped with its normalization contract: VALUE-level color parsing
+  [rgb/hex/hsl/oklab/oklch → tuples], 0.5px length tolerance + the
+  FULL-radius equivalence class [9999px ≡ 33554432px, the scientific-
+  notation serialization parsed as a float], the 14-property semantic
+  whitelist, the text-bearing element anchor with an element-count
+  guard, the rendered-ness BOX check [getClientRects — a child inside
+  a display:none subtree still computes its OWN display])** — it
+  caught THREE real drift classes on its first run after 34 sessions
+  of class-string parity: **(D130) the live's CUSTOM radius scale**
+  (rounded-sm 8px, rounded-lg 12px — pinned via `--radius-sm`/
+  `--radius-lg` in @theme, the tracking-scale family); **(D131) the
+  login's light `--muted`** (zinc-100 under the opaque gradient — the
+  F5 `--border` family, pinned in the login route style);
+  **(D133) the accessibility note's one-off `mt-4 text-white/50
+  italic`** (the content model's note variant). **(D132) the aria-*
+  vocabulary extension** (the ninth column's growth): every
+  aria-controls reference on the clone was DANGLING at rest (panels
+  + mobile-menu unmounted when closed) where the live's Radix
+  regions are MOUNTED-HIDDEN — the FAQ panels and the burger's
+  mobile-menu now mount hidden at rest (the `hidden` attribute keeps
+  the answers out of innerText exactly like the live; the stale S4
+  "Radix unmounts closed content" record described the SPA shell),
+  and the registry's VALUE layer gains the **id-refs rule type**
+  (aria-controls + aria-labelledby: the battery compares RESOLUTION
+  validity in each side's own document, never the per-library ID
+  namespace — DOM_VALUE_RULES now five entries). **(R3) the
+  SDK-prompt drift guard:** `GENERATE_SYSTEM_PROMPT` extracted as a
+  versioned seam with the belt-and-braces invariant pinned (the
+  prompt's 60/220 limits stay ≤ the sanitizer's 120/500 clamps —
+  parsed out of the prompt text, an edit to either side fails a
+  pin). Gate: **639 checks** (246 unit + 124 smoke + 269 e2e); the
+  drift battery **78/78 GREEN on all TEN surfaces**; VLM 5/5 (the
+  hero's below-fold flag adjudicated by the in-frame mockup shot —
+  the single-frame family).
 
 - **Session 32 (2026-10-10) remediation** — see
   `docs/remediation-plan-session32.md`: a head-tag-SET parity +

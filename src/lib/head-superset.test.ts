@@ -152,33 +152,50 @@ describe("isDocumentedDomSuperset — the DOM lookup truth table", () => {
   });
 });
 
-describe("DOM_VALUE_RULES — the two S34 value-level adjudications (the /faq carrier-count record)", () => {
-  it("carries exactly the two measured /faq entries, both live-side, both values-only", () => {
+describe("DOM_VALUE_RULES — the S34/S35 value-level adjudications", () => {
+  it("carries exactly the five measured entries: the two S34 /faq data-* pair (live-side, values-only) + the three S35 aria-* rules (clone-side)", () => {
     expect(
       DOM_VALUE_RULES.map((e) => `${e.side}:${e.attr}:${e.rule}:${Array.isArray(e.routes) ? e.routes.join(",") : e.routes}`).sort(),
-    ).toEqual(["live:data-orientation:values-only:/faq", "live:data-state:values-only:/faq"]);
+    ).toEqual([
+      "clone:aria-controls:id-refs:/faq",
+      "clone:aria-expanded:values-only:/faq",
+      "clone:aria-labelledby:id-refs:/faq",
+      "live:data-orientation:values-only:/faq",
+      "live:data-state:values-only:/faq",
+    ]);
   });
 
   it("carries the adjudication reason and session on every entry", () => {
     for (const e of DOM_VALUE_RULES) {
       expect(e.reason.length).toBeGreaterThan(20);
-      expect(e.session).toBe(34);
+      expect(e.session).toBeGreaterThanOrEqual(34);
     }
+  });
+
+  it("the id-refs rule type exists only on the two ID-reference attributes (the namespace comparison)", () => {
+    expect(DOM_VALUE_RULES.filter((e) => e.rule === "id-refs").map((e) => e.attr).sort()).toEqual(["aria-controls", "aria-labelledby"]);
   });
 });
 
 describe("isDocumentedDomValueRule — the value-rule lookup truth table", () => {
-  it("the two /faq attributes are values-only on /faq", () => {
+  it("the /faq attributes carry their rules on /faq", () => {
     expect(isDocumentedDomValueRule("data-state", "/faq")).toBe(true);
     expect(isDocumentedDomValueRule("data-orientation", "/faq")).toBe(true);
+    expect(isDocumentedDomValueRule("aria-expanded", "/faq")).toBe(true);
+    expect(isDocumentedDomValueRule("aria-controls", "/faq")).toBe(true);
+    expect(isDocumentedDomValueRule("aria-labelledby", "/faq")).toBe(true);
   });
 
   it("an unregistered route is never values-only — the drift the rule exists to scope", () => {
     expect(isDocumentedDomValueRule("data-state", "/")).toBe(false);
     expect(isDocumentedDomValueRule("data-orientation", "/login")).toBe(false);
+    expect(isDocumentedDomValueRule("aria-expanded", "/")).toBe(false);
+    expect(isDocumentedDomValueRule("aria-controls", "/privacy")).toBe(false);
+    expect(isDocumentedDomValueRule("aria-labelledby", "/terms")).toBe(false);
   });
 
   it("an unknown attribute is never values-only", () => {
     expect(isDocumentedDomValueRule("data-brand-new-attr", "/faq")).toBe(false);
+    expect(isDocumentedDomValueRule("aria-random-new-attr", "/faq")).toBe(false);
   });
 });
