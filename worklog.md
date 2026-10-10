@@ -957,3 +957,18 @@ Stage Summary:
 - Gate raised 541 -> 554 checks; the production-readiness floor now covers the STRUCTURED-DATA dimension of the SEO superset and the FIRST-RUN dimension of the dashboard's honesty contract.
 - Survey scripts persisted under research/ (gitignored scratch, the house convention): audit-probe-s29.mjs, jsonld-verify-s29.mjs, pixel-probe-s29.mjs, repro-s29.mjs, repro-s29b.mjs.
 - Session 29 complete.
+
+---
+Task ID: 29-close
+Agent: Super Z (main)
+Task: Session 29 closing — the pushed-hash record + the transcript log
+
+Work Log:
+- Commit 8a3b02e (26 files: the JSON-LD superset across seo.ts/json-ld.tsx/page mounts, the first-run + jsonld specs, the .serial hardening on session28-tie-break, the docs alignment, the 10 pixel-changed screenshots of the 20-shot refresh) pushed via the SSH wrapper with the explicit --remote; the wrapper verified remote main @ 8a3b02e == local HEAD; the fetch-independent ls-remote assertion passed.
+- The paramiko ssh shim survived at /home/z/bin/ssh (the S28 rebuild with the bidirectional stdin pump); placed on PATH per invocation; the operator key's fingerprint verified through paramiko's key parse (SHA256 over the wire-format blob) against the S1-S28 record BEFORE the push.
+- The push carried the operator's own local skills commit (0c56c25, the rebased 0f3f0c4) below the remediation commit — both on main, per the operator contract (no new branches).
+- Both the wrapper's temp key copy and the operator's key file shredded after use; the tree clean.
+
+Stage Summary:
+- Session 29 fully closed: the remediation commit 8a3b02e pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session29.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 554 checks (190 unit + 124 smoke + 240 e2e); the S30 candidates recorded in docs/session_58.md (the JSON-LD extensions — BreadcrumbList/sameAs; the 100/101-row dual-ceiling boundary walk; the drift battery's own fifth-surface hardening for future JSON-LD mounts).
