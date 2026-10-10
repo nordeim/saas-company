@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 200 unit + 245 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 201 unit + 250 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -145,15 +145,57 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 200/200 PASS
+- [ ] `npm run test` → 201/201 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 124/124 PASS
-- [ ] `npm run test:e2e` → 245/245 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 250/250 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 31 (2026-10-10) remediation** — see
+  `docs/remediation-plan-session31.md`: a head-layer parity +
+  chart-boundary pinning cycle. **THE HEADLINE: the drift battery's
+  NEW SIXTH COLUMN — the canonical/og surface — caught TWO head
+  drifts on its FIRST run** (the session_60 candidate's own
+  suggestion — word parity had stood in as the head's proxy for 30
+  sessions). **(F1) the live's content-route DESCRIPTION TRUNCATION
+  (D117):** the five content routes ship `"{Page} on SAAS Company. "
+  + DEFAULT_DESCRIPTION.slice(0, 80) + "."` as BOTH og:description
+  AND meta description — the description part HARD-CAPPED at 80
+  chars, cut MID-WORD ("…with an immersi."), the landing + /login
+  keeping the FULL 214-char default. Invisible to every standing
+  gate (the S6 map recorded the pattern, never the length; the
+  head-metadata e2e pinned only prefixes; word parity never sees
+  meta content). The fix: `DESCRIPTION_APPENDIX_CAP = 80` in
+  `pageDescription()` — the ONE seam (description + og + twitter
+  all follow); the unit pins flipped to the measured strings + the
+  derivation pins; the head-metadata e2e gains the EXACT `descExact`
+  pins. **(F2) the 404's canonical + og:url (D118):** the live
+  points both at the ACTUAL requested URL (the SPA head-manager
+  pattern); the clone had Next's default resolving against the
+  internal `/_not-found` route id — a URL that does not exist,
+  referenced by a canonical. The not-found page (a client
+  component) now sets both tags to `window.location` through a
+  one-shot effect (the S11 mount-gate family; no hydration surface;
+  Next's router rewrites the head on the Go Home transition).
+  Pinned by `session31-head-parity.spec.ts`. **(F3) the chart 8↔9
+  note transition (D119):** `session31-chart-edge.spec.ts` pins the
+  boundary the S28 tie-break spec walked past — at EXACTLY 8 rows
+  NO chart note (the `total > CHART_ROWS` edge); at 9 (the 9th row
+  TIED with the 8th, OLDER) the note appears, the older tied row
+  is the first-ever EXCLUDED, the LIST note still ABSENT at the
+  same workspace (the two honesty contracts side by side — the S30
+  mirror image), the stats carrying the full truth. **(F4) the
+  battery's live-burger selector:** the live's burger carries NO
+  aria attributes and its SVG has NO class — the LIVE side selects
+  by the LAST nav button (the clone keeps its labeled burger, the
+  a11y superset). Gate: **575 checks** (201 unit + 124 smoke + 250
+  e2e); the drift battery GREEN on all SIX surfaces (word parity
+  1.0000 ×8, mobile nav byte-identical 7 × 44, SEO clean, JSON-LD
+  parity + superset, the canonical/og column at parity).
 
 - **Session 30 (2026-10-10) remediation** — see
   `docs/remediation-plan-session30.md`: a reference-redeployment

@@ -2,7 +2,7 @@
 
 import { Home } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 
 /** 404 — the reference's slate-50 centered card with the Go Home button.
  * The sentence quotes the missing pathname in a medium-weight slate span
@@ -27,6 +27,27 @@ const getServerMounted = () => false;
 export default function NotFound() {
   const router = useRouter();
   const mounted = useSyncExternalStore(emptySubscribe, getMounted, getServerMounted);
+
+  // Session 31 R2 (D118): the 404's canonical + og:url point at the
+  // REQUESTED URL — the live's SPA head-manager pattern (measured by the
+  // drift battery's sixth column: the live ships
+  // canonical = og:url = the actual unknown path). Pre-fix, Next.js's
+  // default resolved both against the INTERNAL route id `/_not-found` —
+  // a URL that does not exist, pointed at by a canonical link. A client
+  // component cannot export `metadata`, so the tags are set through a
+  // one-shot effect (the same post-hydration-commit family as the
+  // pathname span below — a DOM side-effect outside React's render, so
+  // there is no hydration-mismatch surface). `location` is immutable on
+  // a terminal 404 view: the tags fill in and STAY. Navigating away via
+  // Go Home routes to a real route whose own metadata renders fresh
+  // (Next's client router rewrites the head on the transition) — the
+  // mutation never leaks past the 404.
+  useEffect(() => {
+    const url = window.location.origin + window.location.pathname + window.location.search;
+    document.querySelector('link[rel="canonical"]')?.setAttribute("href", url);
+    document.querySelector('meta[property="og:url"]')?.setAttribute("content", url);
+  }, []);
+
   const quoted = `"${mounted ? window.location.pathname.replace(/^\//, "") : ""}"`;
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-slate-50">

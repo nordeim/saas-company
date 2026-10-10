@@ -12,6 +12,13 @@ import { expect, test } from "@playwright/test";
  *                    description = "X on SAAS Company. {default}",
  *                    og:title = the page title, og:url = canonical = the route
  *
+ * Session 31 R1 (D117): the sixth column (the canonical/og battery
+ * surface) measured the live's descriptions EXACTLY — the content
+ * routes' description part is HARD-CAPPED at 80 chars (cut mid-word,
+ * trailing period: "…with an immersi."), while / and /login keep the
+ * FULL 214-char default. The exact strings are pinned below (the S6
+ * prefix-only pins could never see the cap).
+ *
  * plus og:image + twitter:image (the live's URLs are DEAD — the clone's
  * self-hosted /og-image.png is the working superset) and a manifest link.
  * The live ships NO theme-color meta and NO viewport-fit.
@@ -24,19 +31,27 @@ import { expect, test } from "@playwright/test";
 
 const DEFAULT_DESC_PREFIX = "Your intelligent AI assistant that streamlines complex";
 
+/** Session 31 R1 (D117): the live's measured EXACT descriptions — the
+ *  content routes' 80-char cap (mid-word, trailing period) and the
+ *  landing's full 214-char default. */
+const TRUNCATED_TAIL = "Your intelligent AI assistant that streamlines complex workflows with an immersi.";
+const DEFAULT_DESC_FULL =
+  "Your intelligent AI assistant that streamlines complex workflows with an immersive, interactive experience. Automate tasks, gain deeper insights, and boost productivity with a seamless, visually stunning interface.";
+
 const ROUTES: Array<{
   route: string;
   title: string;
   descPrefix: string;
+  descExact: string;
   ogTitle: string;
 }> = [
-  { route: "/", title: "SAAS Company", descPrefix: DEFAULT_DESC_PREFIX, ogTitle: "SAAS Company" },
-  { route: "/login", title: "SAAS Company", descPrefix: DEFAULT_DESC_PREFIX, ogTitle: "SAAS Company" },
-  { route: "/faq", title: "FAQ | SAAS Company", descPrefix: "FAQ on SAAS Company. Your intelligent", ogTitle: "FAQ | SAAS Company" },
-  { route: "/privacy", title: "Privacy | SAAS Company", descPrefix: "Privacy on SAAS Company. Your intelligent", ogTitle: "Privacy | SAAS Company" },
-  { route: "/terms", title: "Terms | SAAS Company", descPrefix: "Terms on SAAS Company. Your intelligent", ogTitle: "Terms | SAAS Company" },
-  { route: "/accessibility", title: "Accessibility | SAAS Company", descPrefix: "Accessibility on SAAS Company. Your intellig", ogTitle: "Accessibility | SAAS Company" },
-  { route: "/refund-policy", title: "Refund Policy | SAAS Company", descPrefix: "Refund Policy on SAAS Company. Your intellig", ogTitle: "Refund Policy | SAAS Company" },
+  { route: "/", title: "SAAS Company", descPrefix: DEFAULT_DESC_PREFIX, descExact: DEFAULT_DESC_FULL, ogTitle: "SAAS Company" },
+  { route: "/login", title: "SAAS Company", descPrefix: DEFAULT_DESC_PREFIX, descExact: DEFAULT_DESC_FULL, ogTitle: "SAAS Company" },
+  { route: "/faq", title: "FAQ | SAAS Company", descPrefix: "FAQ on SAAS Company. Your intelligent", descExact: `FAQ on SAAS Company. ${TRUNCATED_TAIL}`, ogTitle: "FAQ | SAAS Company" },
+  { route: "/privacy", title: "Privacy | SAAS Company", descPrefix: "Privacy on SAAS Company. Your intelligent", descExact: `Privacy on SAAS Company. ${TRUNCATED_TAIL}`, ogTitle: "Privacy | SAAS Company" },
+  { route: "/terms", title: "Terms | SAAS Company", descPrefix: "Terms on SAAS Company. Your intelligent", descExact: `Terms on SAAS Company. ${TRUNCATED_TAIL}`, ogTitle: "Terms | SAAS Company" },
+  { route: "/accessibility", title: "Accessibility | SAAS Company", descPrefix: "Accessibility on SAAS Company. Your intellig", descExact: `Accessibility on SAAS Company. ${TRUNCATED_TAIL}`, ogTitle: "Accessibility | SAAS Company" },
+  { route: "/refund-policy", title: "Refund Policy | SAAS Company", descPrefix: "Refund Policy on SAAS Company. Your intellig", descExact: `Refund Policy on SAAS Company. ${TRUNCATED_TAIL}`, ogTitle: "Refund Policy | SAAS Company" },
 ];
 
 for (const r of ROUTES) {
@@ -63,6 +78,10 @@ for (const r of ROUTES) {
 
     expect(head.title).toBe(r.title);
     expect(head.desc?.startsWith(r.descPrefix)).toBe(true);
+    // Session 31 R1 (D117): the EXACT measured string — the content
+    // routes' 80-char cap, the landing's full default. The prefix pin
+    // above stays (the S6 record); this pin carries the length truth.
+    expect(head.desc).toBe(r.descExact);
     expect(head.ogTitle).toBe(r.ogTitle);
     expect(head.ogDesc).toBe(head.desc); // og mirrors the description
     expect(head.twTitle).toBe(r.ogTitle);

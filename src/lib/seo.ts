@@ -19,14 +19,27 @@ export const DEFAULT_DESCRIPTION =
 
 /**
  * Build a content route's description the way the reference does:
- * `pageDescription("FAQ")` → "FAQ on SAAS Company. {default}".
+ * `pageDescription("FAQ")` → "FAQ on SAAS Company. {default, capped}".
  * `pageDescription(null)` → the default description (root + /login pattern).
+ *
+ * Session 31 R1 (D117): the live HARD-CAPS the description part at 80
+ * characters, cut MID-WORD with a trailing period — measured 2026-10-10
+ * by the drift battery's sixth column (the canonical/og surface): the
+ * five content routes' og:description + meta description all end
+ * "…with an immersi." (DEFAULT_DESCRIPTION.slice(0, 80) + "."), while
+ * the landing and /login keep the FULL 214-char default. The cap applies
+ * to the DESCRIPTION PART, never the combined total (the measured totals
+ * run 102/106/104/112/112 — they differ with the page-name length while
+ * the tail stays the identical 81 chars). The S6 map recorded the
+ * pattern but never the length; the prefix-only e2e pins never saw it.
  */
+export const DESCRIPTION_APPENDIX_CAP = 80;
+
 export function pageDescription(page: string | null): string {
   if (page === null) return DEFAULT_DESCRIPTION;
   const name = page.trim();
   if (!name) return DEFAULT_DESCRIPTION;
-  return `${name} on ${SITE_NAME}. ${DEFAULT_DESCRIPTION}`;
+  return `${name} on ${SITE_NAME}. ${DEFAULT_DESCRIPTION.slice(0, DESCRIPTION_APPENDIX_CAP)}.`;
 }
 
 /** The full og:title the live renders: "FAQ | SAAS Company" (or the site

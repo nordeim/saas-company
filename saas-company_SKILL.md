@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.29.0 · **Last updated:** 2026-10-10 (Session 30 remediation)
+> **Version:** 2.30.0 · **Last updated:** 2026-10-10 (Session 31 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1234,6 +1234,32 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     stdev ~0 means blank; the rendered page reads ~100+), never the
     exit code alone (the gotcha-41 completion-line law's twin:
     a "successful" capture can be visually empty).
+
+70. **A proxy is not a measurement — a parity claim inherits the
+    precision of the WEAKEST instrument behind it (Session 31)**:
+    the head layer's parity had "been verified" for 30 sessions —
+    but the actual chain was: word parity (never sees meta content)
+    stood in for the head; the S6 map recorded the description
+    PATTERN but never its LENGTH; the head-metadata e2e pinned only
+    `startsWith` prefixes. The live had been truncating its
+    content-route descriptions at 80 chars mid-word the whole time
+    ("…with an immersi.") while the clone shipped the full text —
+    invisible to every standing gate, caught on the FIRST run of
+    the battery's new canonical/og column (the session_60 candidate's
+    own suggestion: "the live's canonical pattern is currently
+    word-parity's proxy, not its own measured surface"). The law:
+    when a surface matters enough to claim parity on, MEASURE THE
+    SURFACE ITSELF — exact strings, exact lengths, exact tag sets —
+    because every layer of indirection between the claim and the
+    measurement is a place where drift hides (a prefix assertion
+    passes forever while the tail drifts; a word-parity 1.0000 says
+    NOTHING about `og:description`). The battery-column discipline
+    of lesson 68 is the instrument; this lesson is why the
+    instrument must read the ACTUAL surface, not a proxy for it.
+    The sibling catch the same column made: the 404's canonical
+    pointed at Next.js's INTERNAL route id (`/_not-found`) while
+    the live pointed at the requested URL — a bug by any standard,
+    hidden because nothing measured the 404's head at all.
 
 ## §13. Pitfalls to Avoid
 

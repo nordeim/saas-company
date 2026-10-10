@@ -19,16 +19,16 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (200 checks) | `npm run test` |
-| Browser E2E (245 checks; needs a build) | `npm run test:e2e` |
+| Unit tests (201 checks) | `npm run test` |
+| Browser E2E (250 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
 | End-to-end smoke suite (124 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (200/200) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
-→ `npm run test:e2e` (245/245) — 569 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (201/201) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
+→ `npm run test:e2e` (250/250) — 575 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=100` — raised from 50 in Session 28
 when the suite's ~45 auth flows outgrew it — `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
@@ -738,7 +738,19 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   all-zero chart's uniform floor, the first-run expiry — D114) and the
   100/101-row dual-ceiling boundary (the list cap's own edge: NO note at
   exactly 100, the honest note + the invisible oldest at 101, the stats
-  TRUE across the cap — D116). No route
+  TRUE across the cap — D116), and the Session-31 head-parity layer:
+  the content routes' descriptions carry the live's MEASURED truncation
+  (`DESCRIPTION_APPENDIX_CAP = 80` in `pageDescription()` — the
+  description part capped at 80 chars mid-word with a trailing period;
+  the landing + /login keep the full 214-char default; the exact
+  strings pinned in the head-metadata e2e — D117), the 404's canonical
+  + og:url point at the REQUESTED URL through the not-found page's
+  one-shot effect (never Next's internal `/_not-found` default — D118),
+  and the chart's 8↔9 note-transition boundary is pinned (the note
+  absent at exactly 8, appearing at 9 with the tie-break deciding the
+  first excluded row — D119). The drift battery now runs SIX surfaces
+  (word parity, mobile nav, SEO, JSON-LD mounts, and the Session-31
+  canonical/og column that caught D117/D118 on its first run). No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks

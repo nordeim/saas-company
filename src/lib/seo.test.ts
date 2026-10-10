@@ -17,21 +17,42 @@ import { FAQ_ITEMS } from "./faq-content";
 
 describe("pageDescription — the reference's per-route description template", () => {
   // The live emits "X on SAAS Company. {default description}" on the five
-  // content routes (measured 2026-10-07; docs/remediation-plan-session6.md F5).
-  it("wraps the page name around the default description", () => {
-    expect(pageDescription("FAQ")).toBe(`FAQ on SAAS Company. ${DEFAULT_DESCRIPTION}`);
-    expect(pageDescription("Privacy")).toBe(`Privacy on SAAS Company. ${DEFAULT_DESCRIPTION}`);
-    expect(pageDescription("Terms")).toBe(`Terms on SAAS Company. ${DEFAULT_DESCRIPTION}`);
-    expect(pageDescription("Accessibility")).toBe(`Accessibility on SAAS Company. ${DEFAULT_DESCRIPTION}`);
-    expect(pageDescription("Refund Policy")).toBe(`Refund Policy on SAAS Company. ${DEFAULT_DESCRIPTION}`);
+  // content routes (measured 2026-10-07; docs/remediation-plan-session6.md F5)
+  // — BUT the description part is HARD-CAPPED at 80 characters, cut
+  // mid-word with a trailing period (measured 2026-10-10 by the drift
+  // battery's sixth column — the canonical/og surface; the S6 map recorded
+  // the pattern, never the length; docs/remediation-plan-session31.md F1).
+  // The five measured strings, exactly:
+  it("wraps the page name around the TRUNCATED description (the live's measured cap)", () => {
+    expect(pageDescription("FAQ")).toBe("FAQ on SAAS Company. Your intelligent AI assistant that streamlines complex workflows with an immersi.");
+    expect(pageDescription("Privacy")).toBe("Privacy on SAAS Company. Your intelligent AI assistant that streamlines complex workflows with an immersi.");
+    expect(pageDescription("Terms")).toBe("Terms on SAAS Company. Your intelligent AI assistant that streamlines complex workflows with an immersi.");
+    expect(pageDescription("Accessibility")).toBe("Accessibility on SAAS Company. Your intelligent AI assistant that streamlines complex workflows with an immersi.");
+    expect(pageDescription("Refund Policy")).toBe("Refund Policy on SAAS Company. Your intelligent AI assistant that streamlines complex workflows with an immersi.");
   });
 
-  it("keeps the default description untouched for the root and /login", () => {
+  it("derives the truncated tail from DEFAULT_DESCRIPTION (slice(0, 80) + the period — never a re-typed literal)", () => {
+    const tail = `${DEFAULT_DESCRIPTION.slice(0, 80)}.`;
+    expect(tail).toBe("Your intelligent AI assistant that streamlines complex workflows with an immersi.");
+    expect(tail).toHaveLength(81);
+    expect(DEFAULT_DESCRIPTION).toHaveLength(214);
+    // The cap applies to the DESCRIPTION PART, never the combined total:
+    // the five routes' measured totals differ with the page-name length
+    // (102/106/104/112/112) while the tail is the identical 81 chars.
+    expect(pageDescription("FAQ")).toHaveLength(21 + 81);
+    expect(pageDescription("Privacy")).toHaveLength(25 + 81);
+    expect(pageDescription("Terms")).toHaveLength(23 + 81);
+    expect(pageDescription("Accessibility")).toHaveLength(31 + 81);
+    expect(pageDescription("Refund Policy")).toHaveLength(31 + 81);
+  });
+
+  it("keeps the FULL default description for the root and /login (the live's own exception — measured 214 on both)", () => {
     expect(pageDescription(null)).toBe(DEFAULT_DESCRIPTION);
+    expect(pageDescription(null)).toHaveLength(214);
   });
 
-  it("trims stray whitespace in the page name", () => {
-    expect(pageDescription("  FAQ ")).toBe(`FAQ on SAAS Company. ${DEFAULT_DESCRIPTION}`);
+  it("trims stray whitespace in the page name (the cap applies after the wrap)", () => {
+    expect(pageDescription("  FAQ ")).toBe("FAQ on SAAS Company. Your intelligent AI assistant that streamlines complex workflows with an immersi.");
   });
 });
 
@@ -50,7 +71,9 @@ describe("routeMetadata — the per-route head assembly", () => {
   it("builds a content route's metadata with the per-page pattern", () => {
     const m = routeMetadata("FAQ");
     expect(m.title).toBe("FAQ");
-    expect(m.description).toBe(`FAQ on SAAS Company. ${DEFAULT_DESCRIPTION}`);
+    // Session 31 R1 (D117): the measured truncated form (the live's
+    // 80-char cap on the description part — the sixth column's catch).
+    expect(m.description).toBe("FAQ on SAAS Company. Your intelligent AI assistant that streamlines complex workflows with an immersi.");
     expect(m.alternates?.canonical).toBe("./");
     expect(m.openGraph?.title).toBe("FAQ | SAAS Company");
     expect(m.openGraph?.url).toBe("./");
