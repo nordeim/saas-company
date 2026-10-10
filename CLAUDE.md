@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 205 unit + 255 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 220 unit + 258 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -145,15 +145,48 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 201/201 PASS
+- [ ] `npm run test` → 220/220 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 124/124 PASS
-- [ ] `npm run test:e2e` → 255/255 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 258/258 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 33 (2026-10-10) remediation** — see
+  `docs/remediation-plan-session33.md`: a DOM-attribute parity +
+  registry-versioning + concurrent-limiter-pinning cycle (the
+  session_64 S33 candidates). **THE HEADLINE: the drift battery's NEW
+  EIGHTH COLUMN — the DOM-attribute layer (the per-route body data-* +
+  microdata SET) — caught THREE instrumentation-set deltas on its
+  first run**, all ADJUDICATED with in-vivo probes at zero functional
+  delta: the live's DORMANT `data-rht-toaster` (react-hot-toast's
+  container on /login — 0 children at rest, the failed-login error
+  surfaces the inline banner exactly like the clone — D124), the
+  live's `data-radix-collection-item` (Radix's internal marker on the
+  FAQ triggers — the ARIA contract measured at parity both sides,
+  never simulate a library's internals — D125), and the clone's
+  `data-nav-theme` (the navbar theme-swap hooks — gotcha 14, the
+  behavior pinned GREEN — D126). **THE REGISTRY:** the adjudicated
+  sets join the VERSIONED repo file `src/lib/head-superset.ts` (the
+  five S32 head tags + the three S33 DOM entries with their sides),
+  read by the battery through a tsx eval — an UNREGISTERED clone-only
+  tag or DOM attribute (either side) surfaces as DRIFT; 15 unit pins
+  hold the shape. **THE CONCURRENT-LIMITER pins:** the
+  session33-concurrent-limiter trio pins the two-tab shape against the
+  per-USER generate bucket (the shared exhaustion — 50
+  counted-but-rejected attempts, then a concurrent pair both 429 +
+  Retry-After; the degrade-not-fail contract under concurrency — both
+  tabs' simultaneous UI composes create through the template draft;
+  the two-tab convergence). ALSO: the microdata layer measured NONE
+  on either side (the eighth column's other half); a ZOMBIE-SERVER
+  false-drift caught mid-session (the process-renamed `next-server
+  (v1…)` — gotcha 46: kill by PORT, never by argv). Gate: **602
+  checks** (220 unit + 124 smoke + 258 e2e); the drift battery
+  **117/117 GREEN** on all EIGHT surfaces (the registry reading
+  \"registered\" per route).
 
 - **Session 32 (2026-10-10) remediation** — see
   `docs/remediation-plan-session32.md`: a head-tag-SET parity +

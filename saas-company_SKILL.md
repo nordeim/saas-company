@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.31.0 · **Last updated:** 2026-10-10 (Session 32 remediation)
+> **Version:** 2.32.0 · **Last updated:** 2026-10-10 (Session 33 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1290,6 +1290,39 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     exact values → tag sets); the next generalization is already
     suggested by this session's shape (the DOM-attribute layer —
     `itemprop`/`data-*` attributes on body content, unmeasured).
+
+72. **An adjudicated superset that lives only in scratch is a
+    superset that can silently grow — version the registry (Session
+    33)**: through Session 32 the drift battery's adjudicated
+    clone-only head-tag set lived ONLY in the gitignored research/
+    scratch, rebuilt from memory every session — so a NEW clone-only
+    tag (a dependency upgrade's telemetry, a route's accidental
+    metadata) would have blended silently into the "superset"
+    reading, indistinguishable from the known adjudications. The
+    eighth column (the DOM-attribute SET — the session_64 candidate's
+    own suggested generalization) validated the compounding a third
+    time: its first run caught three instrumentation deltas (the
+    live's DORMANT react-hot-toast container — 0 children at rest,
+    the failed-login error surfaces the same inline banner the clone
+    ships; the live's Radix collection marker on the FAQ triggers —
+    with the ARIA contract measured at PARITY on both sides, the
+    marker is the library's internal registry, and simulating it on
+    a custom accordion would be a lie; the clone's own
+    `data-nav-theme` navbar hooks). The answer is the VERSIONED
+    registry (`src/lib/head-superset.ts`): every adjudication an
+    explicit reviewed entry (key, side, routes, reason, session)
+    with unit pins holding the SHAPE — the battery READS the file,
+    so anything unregistered surfaces as DRIFT. The session's two
+    supporting lessons: the DOM layer adjudicates BOTH directions
+    (live-only library instrumentation the clone must not simulate,
+    clone-only functional markers the live achieves its own way)
+    where the head layer's reference-wins law makes live-only always
+    drift; and a rebuilt Next standalone RENAMES its server process
+    to `next-server (v1…)` — argv greps and pkills go blind, so kill
+    zombies by PORT, and treat a sudden multi-surface drift right
+    after a rebuild as a zombie first (the stale server serves HTML
+    whose chunk references 404'd — unstyled pages whose innerText
+    concatenates words, the classic signature).
 
 ## §13. Pitfalls to Avoid
 

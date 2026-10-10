@@ -19,16 +19,16 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (205 checks) | `npm run test` |
-| Browser E2E (255 checks; needs a build) | `npm run test:e2e` |
+| Unit tests (220 checks) | `npm run test` |
+| Browser E2E (258 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
 | End-to-end smoke suite (124 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (205/205) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
-→ `npm run test:e2e` (255/255) — 583 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (220/220) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
+→ `npm run test:e2e` (258/258) — 602 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=100` — raised from 50 in Session 28
 when the suite's ~45 auth flows outgrew it — `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
@@ -697,6 +697,26 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     column (the seventh surface) is what caught the twitter:url gap the
     four-tag sixth column structurally could not see — measure WHICH
     tags exist, not just the values of the ones you know about.
+46. **A rebuilt Next standalone RENAMES its server process to
+    `next-server (v1…)` — argv-based process greps and pkills are
+    BLIND to it (Session 33).** The zombie-server family's newest
+    member: a probe server left holding :3270 (its PORT rode the
+    ENVIRONMENT through `setsid env PORT=… node …`, so `pkill -f
+    "PORT=3270"` matched nothing), then the rebuild replaced
+    `.next/standalone`'s chunks — the stale server served HTML whose
+    chunk references 404'd, so every page rendered UNSTYLED: innerText
+    lost its flex-layout whitespace ("FeaturesHow It Works" — the
+    gotcha-26 concatenated-words signature), the burger never opened
+    its panel, and the battery faked word-parity + mobile-nav drifts
+    on an otherwise-clean run. The laws: kill zombies by PORT (`ss
+    -tlnp` → the PID — the process NAME cannot be trusted after Next
+    renames it), and treat a sudden multi-surface drift right after a
+    rebuild as a ZOMBIE first, a regression second. Related the same
+    session: the battery's DOM-attribute SET column (the eighth
+    surface) is the tag-SET law's generalization to the body — and an
+    adjudicated superset that lives only in gitignored scratch is a
+    superset that can silently grow; the registry
+    (`src/lib/head-superset.ts`) is the versioned answer.
 
 ## Architecture invariants
 
@@ -782,9 +802,15 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   (the hydration-appended `/_not-found` copies removed — D122), with
   the 108-row chart/list membership disagreement pinned (chart ∩ list
   = ∅ at the S30 shape's extreme — D123). The drift battery now runs
-  SEVEN surfaces (word parity, mobile nav, SEO, JSON-LD mounts, the
-  Session-31 canonical/og column, and the Session-32 head-tag SET
-  column that caught D120/D121/D122 on its first run). No route
+  EIGHT surfaces (word parity, mobile nav, SEO, JSON-LD mounts, the
+  Session-31 canonical/og column, the Session-32 head-tag SET column
+  that caught D120/D121/D122 on its first run, and the Session-33
+  DOM-attribute SET column that caught the dormant toaster / the Radix
+  marker / the nav-theme hooks on ITS first run — D124–D126), with the
+  adjudicated sets VERSIONED in `src/lib/head-superset.ts` (the
+  registry the battery READS: an unregistered clone-only head tag or
+  DOM attribute — either side — surfaces as DRIFT instead of blending
+  into the "superset" reading; 15 unit pins hold the shape). No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks
