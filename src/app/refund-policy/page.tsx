@@ -5,7 +5,7 @@ import { breadcrumbStructuredData, routeMetadata } from "@/lib/seo";
 
 // The reference's per-route head pattern (Session 6 F5): "X | SAAS
 // Company" title + "X on SAAS Company. …" description + og:url/canonical.
-export const metadata = routeMetadata("Refund Policy");
+export const metadata = routeMetadata("Refund Policy", "/refund-policy");
 
 export default function RefundPolicyPage() {
   return (

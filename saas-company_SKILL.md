@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.30.0 · **Last updated:** 2026-10-10 (Session 31 remediation)
+> **Version:** 2.31.0 · **Last updated:** 2026-10-10 (Session 32 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1260,6 +1260,36 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     pointed at Next.js's INTERNAL route id (`/_not-found`) while
     the live pointed at the requested URL — a bug by any standard,
     hidden because nothing measured the 404's head at all.
+
+71. **A fix and its pin share the same blind spot until the pin
+    measures MORE than the fix touches — and frameworks write to the
+    DOM after your effects run (Session 32)**: the S31 404-canonical
+    fix mutated `document.querySelector`'s FIRST match in a one-shot
+    effect, and the e2e pin read the same first match — both sides of
+    the contract were blind to Next 16's client metadata resolution
+    APPENDING its own head copies AFTER the mount effects run. The
+    rendered 404 carried TWO canonical links and TWO og:url metas for
+    a full session: the first (mutated, correct) plus the appended
+    `/_not-found` copy (a URL that does not exist, referenced by a
+    canonical) — and every gate stayed green because the fix and the
+    pin shared the selector. Two laws: (a) pin the COUNTS
+    (`querySelectorAll().length`), never just the first match — a
+    duplicate-tag class is invisible to every first-match assertion
+    BY CONSTRUCTION; and (b) a DOM-normalizing effect on
+    framework-managed head tags needs a MutationObserver on
+    `document.head` to catch the late insertion (idempotent
+    re-normalization, disconnected on unmount). The session's other
+    head lesson: Next's Twitter metadata type carries NO `url` field —
+    the arbitrary-meta channel (`metadata.other: { "twitter:url": … }`)
+    is the emission path when the typed API lacks a tag the reference
+    ships. And the battery-column compounding: the S31 canonical/og
+    column measured FOUR tags' VALUES; the S32 head-tag SET column
+    measured WHICH tags exist — the twitter:url gap was structurally
+    invisible to the sixth column and caught by the seventh on its
+    first run. Each column generalizes the one before it (values →
+    exact values → tag sets); the next generalization is already
+    suggested by this session's shape (the DOM-attribute layer —
+    `itemprop`/`data-*` attributes on body content, unmeasured).
 
 ## §13. Pitfalls to Avoid
 

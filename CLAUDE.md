@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 201 unit + 250 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 205 unit + 255 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -148,12 +148,45 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run test` → 201/201 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 124/124 PASS
-- [ ] `npm run test:e2e` → 250/250 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 255/255 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 32 (2026-10-10) remediation** — see
+  `docs/remediation-plan-session32.md`: a head-tag-SET parity +
+  membership-boundary pinning cycle (the session_62 S32 candidates).
+  **THE HEADLINE: the drift battery's NEW SEVENTH COLUMN — the
+  per-route head-tag SET (which tags EXIST on each side) — caught
+  FOUR drifts on its first run** (the session_62 candidate's own
+  prediction: "the twitter surface remains unmeasured"). **(F1) the
+  live's `twitter:url` (D120):** shipped on EVERY live route (the
+  route's absolute URL), absent on the clone — Next's Twitter
+  metadata type has NO url field, so the emission rides
+  `metadata.other` through `routeMetadata(page, path)` (the value
+  derives from `siteUrl()` + path — one env var, one origin). **(F2)
+  the live's /login REDEPLOYMENT (D121):** /login now ships
+  `theme-color #000000` + the "Base44 link preview" image alts (ONLY
+  on /login; the gotcha-17 record updated) — the login layout
+  exports the viewport themeColor + passes routeMetadata's new
+  `imageAlt` option. **(F3) the 404's DUPLICATE canonical + og:url
+  (D122):** Next 16's client metadata resolution APPENDS its head
+  copies AFTER the mount effects run — the S31 first-match mutation
+  never saw the appended `/_not-found` copy (and the e2e pin read
+  first-match too); the fix normalizes ALL instances + a
+  MutationObserver catches the late insertion, and the new pins read
+  the COUNTS. **(F4) the clone's `next-size-adjust`:** ADJUDICATED a
+  Turbopack framework artifact (the `adjustFontFallback: false`
+  opt-out was tested and is INERT under Turbopack — reverted, no
+  dead config). **(F6) the 108-row MEMBERSHIP-DISAGREEMENT pins
+  (D123):** the S30 dual-ceiling shape at its extreme — the chart's
+  top-8-by-runs and the list's newest-100 share ZERO members, each
+  honest about its own criterion; the stats carry the full truth
+  (5,280/140). Gate: **583 checks** (205 unit + 124 smoke + 255
+  e2e); the drift battery GREEN on all SEVEN surfaces (the seventh
+  column at parity).
 
 - **Session 31 (2026-10-10) remediation** — see
   `docs/remediation-plan-session31.md`: a head-layer parity +

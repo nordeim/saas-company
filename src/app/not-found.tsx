@@ -42,10 +42,43 @@ export default function NotFound() {
   // Go Home routes to a real route whose own metadata renders fresh
   // (Next's client router rewrites the head on the transition) — the
   // mutation never leaks past the 404.
+  //
+  // Session 32 R3 (F3 — D122): the normalization covers ALL instances of
+  // each tag AND the LATE insertion. The static prerender ships one
+  // canonical + one og:url (resolved against `/_not-found`), and Next
+  // 16's client metadata resolution APPENDS its own copies AFTER the
+  // mount effect runs (measured: a first-match mutation applied at
+  // effect time while the appended `/_not-found` copy appeared between
+  // the effect and the first settle — the S31 one-shot effect never saw
+  // it; the battery's seventh column measured TWO of each where the
+  // live ships exactly one). The fix: normalize at mount — the first
+  // element of each tag mutates to the requested URL, the rest are
+  // REMOVED — and a MutationObserver on the head catches the late
+  // insertion and re-normalizes (idempotent; our own attribute writes
+  // do not fire it, and the removals it triggers settle on the next
+  // pass). The observer disconnects on unmount — the Go Home transition
+  // unmounts this component and Next's router rewrites the head for the
+  // real route, so the normalization never leaks past the 404. The
+  // rendered end-state is the live's exact trio shape: one canonical,
+  // one og:url, one twitter:url (the R1 tag — its inherited layout
+  // value is the bare origin, rewritten to the requested URL here).
   useEffect(() => {
     const url = window.location.origin + window.location.pathname + window.location.search;
-    document.querySelector('link[rel="canonical"]')?.setAttribute("href", url);
-    document.querySelector('meta[property="og:url"]')?.setAttribute("content", url);
+    const normalize = () => {
+      const norm = (selector: string, attr: string) => {
+        document.querySelectorAll(selector).forEach((el, i) => {
+          if (i === 0) (el as HTMLElement).setAttribute(attr, url);
+          else (el as HTMLElement).remove();
+        });
+      };
+      norm('link[rel="canonical"]', "href");
+      norm('meta[property="og:url"]', "content");
+      norm('meta[name="twitter:url"]', "content");
+    };
+    normalize();
+    const observer = new MutationObserver(() => normalize());
+    observer.observe(document.head, { childList: true });
+    return () => observer.disconnect();
   }, []);
 
   const quoted = `"${mounted ? window.location.pathname.replace(/^\//, "") : ""}"`;

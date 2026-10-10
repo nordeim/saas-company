@@ -4,7 +4,7 @@ import { breadcrumbStructuredData, faqStructuredData, routeMetadata } from "@/li
 
 // The reference's per-route head pattern (Session 6 F5): "FAQ | SAAS
 // Company" title + "FAQ on SAAS Company. …" description + og:url/canonical.
-export const metadata = routeMetadata("FAQ");
+export const metadata = routeMetadata("FAQ", "/faq");
 
 export default function FaqPage() {
   return (

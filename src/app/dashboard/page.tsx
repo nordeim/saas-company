@@ -8,7 +8,7 @@ import { MAX_WORKFLOW_LIST, CHART_ROWS, statsFromAggregate, weightedSuccessRate,
 
 // No live counterpart (the superset) — follow the app-wide per-route head
 // pattern (Session 6 F5).
-export const metadata = routeMetadata("Dashboard");
+export const metadata = routeMetadata("Dashboard", "/dashboard");
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {

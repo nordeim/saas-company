@@ -6,10 +6,27 @@ import {
   DEFAULT_DESCRIPTION,
   SITE_NAME,
   organizationStructuredData,
+  siteUrl,
   websiteStructuredData,
 } from "@/lib/seo";
 import "./globals.css";
 
+// Session 32 R4 (F4 — adjudicated a Turbopack framework artifact, see
+// docs/remediation-plan-session32.md): the battery's head-tag SET column
+// caught `<meta name="next-size-adjust" content="">` shipping on every
+// route (the live ships none). The tag is Next's empty-content telemetry
+// for the Google Aurora team — emitted whenever the next/font manifest
+// reports size-adjust fallback files, which the two Google serif faces
+// (the logo-cloud wordmarks) always produce. The documented opt-out
+// (`adjustFontFallback: false`) was TESTED and is INERT under this
+// repo's Turbopack build (a clean rebuild with the option still emits
+// the Times New Roman override metrics, the -s media files, and the
+// tag — the option is a webpack-pipeline lever Next 16.4's Turbopack
+// ignores). Adjudicated clone-only artifact, zero visual/SEO impact —
+// the same class as the framework's automatic `name:robots noindex` on
+// the 404. The alternative (moving the wordmarks off next/font onto
+// hand-rolled @font-face) would trade a telemetry tag for real
+// regression risk on the pinned wordmark typography — disproportionate.
 const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -64,6 +81,17 @@ export const metadata: Metadata = {
     title: SITE_NAME,
     description: DESCRIPTION,
     images: ["/og-image.png"],
+  },
+  // Session 32 R1 (F1 — D120): the landing's twitter:url — the live
+  // ships the tag on EVERY route (measured by the battery's seventh
+  // column), and the landing's own value is the bare origin (no
+  // trailing slash). Next's Twitter metadata type carries no url field,
+  // so the emission rides `metadata.other` (the arbitrary-meta channel —
+  // the same path routeMetadata() uses per route). The value derives
+  // from siteUrl(): the same origin source the JSON-LD builders and
+  // metadataBase read (one env var, one origin).
+  other: {
+    "twitter:url": siteUrl(),
   },
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],

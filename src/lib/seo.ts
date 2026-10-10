@@ -60,8 +60,29 @@ export function pageTitle(page: string | null): string {
  *
  * `page === null` (the root and /login) keeps the DEFAULT description and
  * the site-name title while still pinning canonical + og:url to the route.
+ *
+ * Session 32 R1 (F1 — D120): `path` names the route's own path — the
+ * twitter:url derivation (the live ships the tag on EVERY route,
+ * measured by the drift battery's seventh column; the value is the same
+ * URL as the route's canonical/og:url). Next's Twitter metadata type
+ * carries NO url field (verified against next's twitter-types.d.ts), so
+ * the emission rides `metadata.other` — the arbitrary-meta channel:
+ * `other: { "twitter:url": … }` renders `<meta name="twitter:url">`. The
+ * value DERIVES from siteUrl() + path (the SAME origin source the
+ * JSON-LD builders and metadataBase read — one env var, one origin,
+ * never a re-typed URL). The landing's own spelling is the bare origin
+ * (no trailing slash — measured on the live).
+ *
+ * Session 32 R2 (F2 — D121): `opts.imageAlt` carries the /login-only
+ * redeployed image alts (the live's own "Base44 link preview"
+ * boilerplate, measured — copied VERBATIM, the S31 exact-head
+ * precedent); absent by default (every other route ships no alt).
  */
-export function routeMetadata(page: string | null): Metadata {
+export function routeMetadata(
+  page: string | null,
+  path = "",
+  opts: { imageAlt?: string } = {},
+): Metadata {
   const description = pageDescription(page);
   const fullTitle = pageTitle(page);
   return {
@@ -74,14 +95,15 @@ export function routeMetadata(page: string | null): Metadata {
       url: "./",
       siteName: SITE_NAME,
       type: "website",
-      images: [{ url: "/og-image.png", width: 1200, height: 630, type: "image/png" }],
+      images: [{ url: "/og-image.png", width: 1200, height: 630, type: "image/png", ...(opts.imageAlt ? { alt: opts.imageAlt } : {}) }],
     },
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
       description,
-      images: ["/og-image.png"],
+      images: [{ url: "/og-image.png", ...(opts.imageAlt ? { alt: opts.imageAlt } : {}) }],
     },
+    other: { "twitter:url": `${siteUrl()}${path}` },
   };
 }
 

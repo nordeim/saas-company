@@ -5,7 +5,7 @@ import { breadcrumbStructuredData, routeMetadata } from "@/lib/seo";
 
 // The reference's per-route head pattern (Session 6 F5): "X | SAAS
 // Company" title + "X on SAAS Company. …" description + og:url/canonical.
-export const metadata = routeMetadata("Accessibility");
+export const metadata = routeMetadata("Accessibility", "/accessibility");
 
 export default function AccessibilityPage() {
   return (

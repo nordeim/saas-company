@@ -89,6 +89,62 @@ describe("routeMetadata — the per-route head assembly", () => {
     expect(m.description).toBe(DEFAULT_DESCRIPTION);
     expect(m.openGraph?.title).toBe("SAAS Company");
   });
+
+  // -------------------------------------------------------------------------
+  // Session 32 R1 (F1 — D120): the live ships twitter:url on EVERY route
+  // (the drift battery's seventh column — the head-tag SET — caught the
+  // clone shipping none). Next's Twitter metadata type carries no url
+  // field (verified against next's twitter-types.d.ts), so the emission
+  // rides metadata.other: `other: { "twitter:url": … }` renders
+  // <meta name="twitter:url" content=…>. The value DERIVES from siteUrl()
+  // + the route path — the SAME origin source the JSON-LD builders and
+  // metadataBase read (one env var, one origin, never a re-typed URL).
+  // -------------------------------------------------------------------------
+  it("derives twitter:url per route through siteUrl() (the other channel)", () => {
+    const m = routeMetadata("FAQ", "/faq");
+    expect((m.other as Record<string, string>)["twitter:url"]).toBe(`${siteUrl()}/faq`);
+
+    const login = routeMetadata(null, "/login");
+    expect((login.other as Record<string, string>)["twitter:url"]).toBe(`${siteUrl()}/login`);
+
+    // The root default: the bare origin, NO trailing slash — the live's
+    // own landing spelling (measured: https://saas-company.base44.app).
+    const root = routeMetadata(null);
+    expect((root.other as Record<string, string>)["twitter:url"]).toBe(siteUrl());
+  });
+
+  it("follows NEXT_PUBLIC_SITE_URL for the twitter:url derivation (one env var, one origin)", () => {
+    const saved = process.env.NEXT_PUBLIC_SITE_URL;
+    try {
+      process.env.NEXT_PUBLIC_SITE_URL = "https://clone.example.com";
+      const m = routeMetadata("Privacy", "/privacy");
+      expect((m.other as Record<string, string>)["twitter:url"]).toBe("https://clone.example.com/privacy");
+    } finally {
+      if (saved === undefined) delete process.env.NEXT_PUBLIC_SITE_URL;
+      else process.env.NEXT_PUBLIC_SITE_URL = saved;
+    }
+  });
+
+  // -------------------------------------------------------------------------
+  // Session 32 R2 (F2 — D121): the live's /login REDEPLOYED
+  // theme-color #000000 + og:image:alt + twitter:image:alt "Base44 link
+  // preview" (measured — ONLY on /login; every other route ships none of
+  // the three). The alt is the live's own boilerplate string, copied
+  // VERBATIM (the S31 mid-word-truncation precedent: the head is copied
+  // exactly, oddities included; an "improved" alt would be an invented
+  // string — the content-as-code law).
+  // -------------------------------------------------------------------------
+  it("spreads the optional imageAlt into BOTH image arrays when provided", () => {
+    const m = routeMetadata(null, "/login", { imageAlt: "Base44 link preview" });
+    expect((m.openGraph?.images as Array<{ url: string; alt?: string }>)[0].alt).toBe("Base44 link preview");
+    expect((m.twitter?.images as Array<{ url: string; alt?: string }>)[0].alt).toBe("Base44 link preview");
+  });
+
+  it("omits the image alt by default (the live ships alts ONLY on /login)", () => {
+    const m = routeMetadata("FAQ", "/faq");
+    expect((m.openGraph?.images as Array<{ url: string; alt?: string }>)[0].alt).toBeUndefined();
+    expect((m.twitter?.images as Array<{ url: string; alt?: string }>)[0].alt).toBeUndefined();
+  });
 });
 
 // ---------------------------------------------------------------------------
