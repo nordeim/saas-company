@@ -1148,3 +1148,17 @@ Stage Summary:
 - Gate raised 602 -> 623 checks (241 unit + 124 smoke + 258 e2e); the parity battery now runs NINE surfaces with the registry's three layers (head SET, DOM SET, DOM VALUE) as the versioned adjudication layer.
 - Survey scripts persisted under research/ (gitignored scratch, the house convention): drift-battery-s34.mjs, focused-probe-s34.mjs, capture-screenshots-s34.mjs, vlm-checks-s34.mjs, db-state.mjs.
 - Session 34 complete.
+
+---
+Task ID: 34-close
+Agent: Super Z (main)
+Task: Session 34 closing — the pushed-hash record + the closing commit
+
+Work Log:
+- Commit 65e428a (31 files: the registry's VALUE layer [DOM_VALUE_RULES + isDocumentedDomValueRule + the sixth head entry] with the 22-pin test file, the parseLlmWorkflow seam + the route rewire + 9 seam pins, the mocked-SDK route-boundary test file, the docs alignment across PAD/AGENTS [gotcha 47]/CLAUDE/README [the 623 badge]/SKILL v2.33.0 [lesson 73], the remediation plan + the session log docs/session_68.md, the 20 refreshed screenshots) pushed via the SSH wrapper with the EXPLICIT --remote git@github.com:nordeim/saas-company.git (the wrapper's DEFAULT remote is the runbook's example repo task-management — the S31-recorded trap; the explicit flag carried from the first dry-run this session); the wrapper verified remote main @ 65e428a == local HEAD; the fetch-independent HTTPS ls-remote agreed (65e428a6c659f03fd9e192d81d2c5badb8bc3626).
+- The paramiko ssh shim deployed at /home/z/bin/ssh for this sandbox (paramiko 5.0.0, the Appendix-A implementation with the bidirectional stdin pump); the operator key's fingerprint verified through paramiko's own key parse (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU) against the S1-S33 record BEFORE the push.
+- Both the wrapper's temp key copy and the operator's key file shredded after use; the tree clean; no new branches; zero zombie servers (the probe/battery/capture ports :3290-:3292 cleared and verified).
+
+Stage Summary:
+- Session 34 fully closed: the remediation commit 65e428a pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session34.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 623 checks (241 unit + 124 smoke + 258 e2e); the parity battery now runs NINE surfaces with the registry's three layers (head SET, DOM SET, DOM VALUE) as the versioned adjudication layer; the S35 candidates recorded in docs/session_68.md (the computed-STYLE inventory column with its normalization contract; the registry's aria-* extension; the composer's SDK-prompt drift guard).
