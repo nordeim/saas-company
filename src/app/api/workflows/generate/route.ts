@@ -4,7 +4,7 @@ import { generateRateLimit } from "@/lib/rate-limit";
 import { requiredString } from "@/lib/validation";
 import {
   SDK_TIMEOUT_MS,
-  sanitizeGeneratedWorkflow,
+  parseLlmWorkflow,
   templateWorkflow,
   withTimeout,
 } from "@/lib/workflow";
@@ -88,10 +88,12 @@ export async function POST(request: Request) {
       () => null as Awaited<ReturnType<typeof zai.chat.completions.create>> | null,
     );
     const text = completion?.choices[0]?.message?.content ?? "";
-    const jsonText = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
-    const parsed: unknown = JSON.parse(jsonText);
-    const sanitized = sanitizeGeneratedWorkflow(parsed, idea.value);
-    if (sanitized) generated = sanitized;
+    // Session 34: the fence-strip / parse / sanitize chain lives in the
+    // pure seam (parseLlmWorkflow, unit-pinned with LLM-shaped outputs);
+    // its THROWS-on-non-JSON contract preserves this catch's ownership of
+    // the malformed-output failure class.
+    const parsed = parseLlmWorkflow(text);
+    if (parsed) generated = parsed;
   } catch {
     // SDK unavailable or malformed — the deterministic template stands.
   }

@@ -73,6 +73,13 @@ export const HEAD_SUPERSET: HeadSupersetEntry[] = [
       "The working og-image's real MIME (image/png); the dead-og-image adjudication above (the D30 working-asset family)",
     session: 32,
   },
+  {
+    key: "rel:apple-touch-icon",
+    routes: ["/", "/faq", "/privacy", "/terms", "/accessibility", "/refund-policy", "/does-not-exist-404"],
+    reason:
+      "The Session-7 F8 working-asset superset (the live's own apple-touch-icon URL is dead media.base44.com storage — the D30 family), emitted app-wide through the layout's metadata.icons; the live injects the tag ONLY through its login bundle (on /login both sides carry it — parity there), so the seven non-login routes are the registered superset surface",
+    session: 34,
+  },
 ];
 
 /** True when `key` is an adjudicated clone-only tag on `route`
@@ -148,5 +155,66 @@ export function isDocumentedDomSuperset(
       e.attr === attr &&
       e.side === side &&
       (e.routes === "all" || e.routes.includes(route)),
+  );
+}
+
+/**
+ * Session 34 R1 — the VALUE-level layer's registry, the battery's ninth
+ * column. The S33 SET column answers "which attributes EXIST on each
+ * side"; the VALUE twin answers "do the SHARED attributes carry the same
+ * values" — with the multiset (values AND carrier counts) as the DEFAULT
+ * comparison, because a value or a count drift on a shared attribute is
+ * invisible to the SET column by construction. A registered rule here
+ * downgrades ONE (attr, route) pair to a values-only comparison: the
+ * distinct VALUE SET stays measured (a "closed"-vs-"collapsed" spelling
+ * drift still surfaces), while the carrier-COUNT delta is the adjudicated
+ * library-structure difference (the S32 "never simulate a library's
+ * internals" law — the D125 wrapper adjudication one layer deeper).
+ */
+export interface DomValueRuleEntry {
+  /** The shared data-* attribute name, verbatim ("data-state"). */
+  attr: string;
+  /** "all" or the explicit route list (the battery's spellings). */
+  routes: "all" | string[];
+  /** Which side carries the EXTRA carriers (the structure being scoped). */
+  side: "clone" | "live";
+  /** The comparison downgrade. Only "values-only" exists today. */
+  rule: "values-only";
+  /** Why the carrier-count delta is adjudicated (the probe evidence). */
+  reason: string;
+  /** The session that adjudicated it (the PAD ledger reference). */
+  session: number;
+}
+
+export const DOM_VALUE_RULES: DomValueRuleEntry[] = [
+  {
+    attr: "data-state",
+    routes: ["/faq"],
+    side: "live",
+    rule: "values-only",
+    reason:
+      "Radix stamps data-state on every accordion node (Item + Trigger + Content — measured: the live carries ~3x the clone's carriers, all \"closed\" at rest); the clone's custom accordion carries it on trigger + panel only. The VALUES are the functional contract (measured at parity at rest); the count delta is the D125 Radix-wrapper structure one layer deeper — never simulate library internals",
+    session: 34,
+  },
+  {
+    attr: "data-orientation",
+    routes: ["/faq"],
+    side: "live",
+    rule: "values-only",
+    reason:
+      "Radix stamps data-orientation on the Root and every Item/Trigger/Content (measured: 4+ live carriers vs the clone's 1 container); the value (\"vertical\") is the contract, measured at parity on both sides",
+    session: 34,
+  },
+];
+
+/** True when the (attr, route) pair's battery comparison is downgraded to
+ * values-only (the distinct value set stays measured; the carrier-count
+ * delta is the adjudicated structure). */
+export function isDocumentedDomValueRule(
+  attr: string,
+  route: string,
+): boolean {
+  return DOM_VALUE_RULES.some(
+    (e) => e.attr === attr && (e.routes === "all" || e.routes.includes(route)),
   );
 }

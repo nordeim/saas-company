@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 220 unit + 258 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 241 unit + 258 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -145,7 +145,7 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 220/220 PASS
+- [ ] `npm run test` → 241/241 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 124/124 PASS
 - [ ] `npm run test:e2e` → 258/258 PASS (needs the build first)
@@ -187,6 +187,43 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   checks** (220 unit + 124 smoke + 258 e2e); the drift battery
   **117/117 GREEN** on all EIGHT surfaces (the registry reading
   \"registered\" per route).
+
+- **Session 34 (2026-10-10) remediation** — see
+  `docs/remediation-plan-session34.md`: a VALUE-level parity +
+  real-SDK-output-path cycle (the session_66 S34 candidates).
+  **THE HEADLINE: the drift battery's NEW NINTH SURFACE — the
+  shared-attribute VALUE column (the measured VALUES of the shared
+  data-*/microdata attributes, previously only the SET was measured) —
+  caught the /faq carrier-count delta on its first run**: the live's
+  Radix Accordion stamps `data-state` + `data-orientation` on EVERY
+  accordion node (~3x the clone's carriers, all
+  \"closed\"/\"vertical\" at rest) where the clone's custom accordion
+  carries them on trigger + panel / container only — the VALUES at
+  parity, the counts the D125 wrapper structure one layer deeper
+  (D127). **THE REGISTRY'S VALUE LAYER:** `DOM_VALUE_RULES` +
+  `isDocumentedDomValueRule` in `src/lib/head-superset.ts` — a
+  registered (attr, route) pair downgrades the battery's comparison
+  from the multiset to the distinct VALUE SET (a spelling drift still
+  surfaces; the adjudicated carrier-count structure stays scoped).
+  **(D128) the apple-touch-icon registration:** the rebuilt head-tag
+  SET column (the semantic-head scope — the bundler's loading rels
+  excluded) surfaced the clone's app-wide `rel:apple-touch-icon`
+  against a live that injects it ONLY through its login bundle — the
+  Session-7 F8 working-asset superset REGISTERED (seven non-login
+  routes). **(D129) the composer's real-SDK output path:** the route's
+  inline fence-strip/parse/sanitize chain extracted as the pure seam
+  `parseLlmWorkflow()` (`src/lib/workflow.ts` — THROWS on non-JSON
+  [JSON.parse's contract preserved for the route's catch], null on
+  failed sanitization), pinned with 9 unit pins + 5 route-boundary
+  pins under a mocked SDK (the fenced response into the envelope, the
+  120/500 clamp under over-long output, prose/no-choices/{}
+  each degrading to the template). ALSO: the mobile nav re-measured
+  byte-identical 7 x 44px both sides (no Tailwind v4 bug — the live's
+  burger carries NO aria-expanded, the shared selector is the
+  md:hidden nav button); word parity 1.0000 x8. Gate: **623 checks**
+  (241 unit + 124 smoke + 258 e2e); the drift battery **73/73 GREEN**
+  on all NINE surfaces (the VALUE column reading \"values-only
+  registered\" on /faq through the registry).
 
 - **Session 32 (2026-10-10) remediation** — see
   `docs/remediation-plan-session32.md`: a head-tag-SET parity +

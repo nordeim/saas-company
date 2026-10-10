@@ -4,6 +4,8 @@ import {
   isDocumentedSuperset,
   DOM_ATTR_SUPERSET,
   isDocumentedDomSuperset,
+  DOM_VALUE_RULES,
+  isDocumentedDomValueRule,
 } from "./head-superset";
 
 /**
@@ -24,14 +26,15 @@ import {
  * records — D120–D123 and the focused-probe evidence.
  */
 
-describe("HEAD_SUPERSET — the five S32 adjudications", () => {
-  it("carries exactly the five adjudicated clone-only head tags", () => {
+describe("HEAD_SUPERSET — the five S32 adjudications + the S34 sixth", () => {
+  it("carries exactly the six adjudicated clone-only head tags", () => {
     expect(HEAD_SUPERSET.map((e) => e.key).sort()).toEqual([
       "name:next-size-adjust",
       "name:robots",
       "prop:og:image:height",
       "prop:og:image:type",
       "prop:og:image:width",
+      "rel:apple-touch-icon",
     ]);
   });
 
@@ -41,9 +44,23 @@ describe("HEAD_SUPERSET — the five S32 adjudications", () => {
     expect(robots!.routes).toEqual(["/does-not-exist-404"]);
   });
 
+  it("scopes the apple-touch-icon superset to the seven non-login routes (the live injects it through its login bundle — parity there)", () => {
+    const apple = HEAD_SUPERSET.find((e) => e.key === "rel:apple-touch-icon");
+    expect(apple).toBeDefined();
+    expect(apple!.routes).toEqual([
+      "/",
+      "/faq",
+      "/privacy",
+      "/terms",
+      "/accessibility",
+      "/refund-policy",
+      "/does-not-exist-404",
+    ]);
+  });
+
   it("scopes the other four to every route", () => {
     for (const e of HEAD_SUPERSET) {
-      if (e.key === "name:robots") continue;
+      if (e.key === "name:robots" || e.key === "rel:apple-touch-icon") continue;
       expect(e.routes).toBe("all");
     }
   });
@@ -69,6 +86,13 @@ describe("isDocumentedSuperset — the head lookup truth table", () => {
     expect(isDocumentedSuperset("name:robots", "/does-not-exist-404")).toBe(true);
     expect(isDocumentedSuperset("name:robots", "/")).toBe(false);
     expect(isDocumentedSuperset("name:robots", "/login")).toBe(false);
+  });
+
+  it("the apple-touch-icon is a documented superset on the seven non-login routes — and NOT on /login where the live carries it too", () => {
+    for (const route of ["/", "/faq", "/privacy", "/terms", "/accessibility", "/refund-policy", "/does-not-exist-404"]) {
+      expect(isDocumentedSuperset("rel:apple-touch-icon", route)).toBe(true);
+    }
+    expect(isDocumentedSuperset("rel:apple-touch-icon", "/login")).toBe(false);
   });
 
   it("an unknown tag is never documented", () => {
@@ -125,5 +149,36 @@ describe("isDocumentedDomSuperset — the DOM lookup truth table", () => {
   it("the side must match — a clone-only entry never excuses the live side (and vice versa)", () => {
     expect(isDocumentedDomSuperset("data-nav-theme", "live", "/")).toBe(false);
     expect(isDocumentedDomSuperset("data-rht-toaster", "clone", "/login")).toBe(false);
+  });
+});
+
+describe("DOM_VALUE_RULES — the two S34 value-level adjudications (the /faq carrier-count record)", () => {
+  it("carries exactly the two measured /faq entries, both live-side, both values-only", () => {
+    expect(
+      DOM_VALUE_RULES.map((e) => `${e.side}:${e.attr}:${e.rule}:${Array.isArray(e.routes) ? e.routes.join(",") : e.routes}`).sort(),
+    ).toEqual(["live:data-orientation:values-only:/faq", "live:data-state:values-only:/faq"]);
+  });
+
+  it("carries the adjudication reason and session on every entry", () => {
+    for (const e of DOM_VALUE_RULES) {
+      expect(e.reason.length).toBeGreaterThan(20);
+      expect(e.session).toBe(34);
+    }
+  });
+});
+
+describe("isDocumentedDomValueRule — the value-rule lookup truth table", () => {
+  it("the two /faq attributes are values-only on /faq", () => {
+    expect(isDocumentedDomValueRule("data-state", "/faq")).toBe(true);
+    expect(isDocumentedDomValueRule("data-orientation", "/faq")).toBe(true);
+  });
+
+  it("an unregistered route is never values-only — the drift the rule exists to scope", () => {
+    expect(isDocumentedDomValueRule("data-state", "/")).toBe(false);
+    expect(isDocumentedDomValueRule("data-orientation", "/login")).toBe(false);
+  });
+
+  it("an unknown attribute is never values-only", () => {
+    expect(isDocumentedDomValueRule("data-brand-new-attr", "/faq")).toBe(false);
   });
 });

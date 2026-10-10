@@ -217,6 +217,29 @@ export function sanitizeGeneratedWorkflow(
 }
 
 /**
+ * Session 34 — the real-SDK output path as a pure seam (the session_66
+ * S34 candidate 3: the sanitize-clamp behavior under a live LLM response,
+ * previously only the template fallback was pinned — the fence-strip /
+ * parse / sanitize chain lived inline in the generate route, invisible
+ * to every pin).
+ *
+ * The contract mirrors the route's inline chain EXACTLY (the conservative
+ * extraction): markdown fences (```json … ``` and bare ``` … ```) are
+ * stripped, the remainder is JSON.parse'd, and the parsed value rides
+ * sanitizeGeneratedWorkflow. THROWS on non-JSON text — JSON.parse's own
+ * contract, deliberately preserved so the route's existing catch owns
+ * that failure class (the S15 law: the caller's catch owns the failure
+ * class; the seam never swallows what the caller used to see). Returns
+ * null for valid JSON that fails sanitization — the route keeps the
+ * deterministic template in that case, exactly as before.
+ */
+export function parseLlmWorkflow(text: string): GeneratedWorkflow | null {
+  const jsonText = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
+  const parsed: unknown = JSON.parse(jsonText);
+  return sanitizeGeneratedWorkflow(parsed, text);
+}
+
+/**
  * The SDK hang ceiling (Session-15 F3): ADR-004's "degrade, never fail"
  * covers SDK FAILURES but not SDK HANGS — a black-holed connection left
  * POST /api/workflows/generate blocked indefinitely with the composer's

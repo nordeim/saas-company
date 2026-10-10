@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.32.0 · **Last updated:** 2026-10-10 (Session 33 remediation)
+> **Version:** 2.33.0 · **Last updated:** 2026-10-10 (Session 34 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1323,6 +1323,36 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     after a rebuild as a zombie first (the stale server serves HTML
     whose chunk references 404'd — unstyled pages whose innerText
     concatenates words, the classic signature).
+
+73. **An attribute's VALUES are the contract; its carrier COUNT is
+    library structure — compare the right one, and version the
+    downgrade (Session 34)**: the battery's ninth surface (the
+    shared-attribute VALUE column, the SET column's twin one layer
+    deeper) caught the /faq `data-state`/`data-orientation` delta on
+    its FIRST run — the live's Radix Accordion stamps both attributes
+    on EVERY accordion node (Item + Trigger + Content, ~3x the
+    clone's carriers) while the VALUES ("closed"/"vertical" at
+    rest) sat at parity on both sides. The multiset comparison
+    (values AND counts) conflates the functional contract (the
+    values an AT or a test reads) with the library's wrapper
+    structure (how many elements carry it) — and chasing multiset
+    parity would mean stamping phantom carriers on a custom
+    accordion, the "never simulate a library's internals" law
+    violated one layer below where it was first written. The answer
+    extends the registry's vocabulary: a `values-only` rule entry
+    (`DOM_VALUE_RULES`) downgrades ONE (attr, route) pair to the
+    distinct VALUE SET — a "closed"-vs-"collapsed" spelling drift
+    still surfaces — while the count delta stays an explicit,
+    reviewed, unit-pinned adjudication. The session's supporting
+    lessons: a REBUILT battery must re-derive its collectors from the
+    registry's own route spellings (the 404 twin is
+    `/does-not-exist-404`, or the registered robots entry reads as
+    drift) and scope (the head-tag SET column measures the SEMANTIC
+    head — the bundler's loading rels are chunk instrumentation,
+    byte-different by construction); and the shared mobile-nav
+    selector is the `md:hidden` nav button — the live's burger
+    carries NO `aria-expanded` (probe the element, never assume the
+    attribute you would have written).
 
 ## §13. Pitfalls to Avoid
 

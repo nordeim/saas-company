@@ -19,7 +19,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (220 checks) | `npm run test` |
+| Unit tests (241 checks) | `npm run test` |
 | Browser E2E (258 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
@@ -27,8 +27,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 | End-to-end smoke suite (124 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (220/220) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
-→ `npm run test:e2e` (258/258) — 602 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (241/241) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
+→ `npm run test:e2e` (258/258) — 623 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=100` — raised from 50 in Session 28
 when the suite's ~45 auth flows outgrew it — `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
@@ -717,6 +717,28 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     adjudicated superset that lives only in gitignored scratch is a
     superset that can silently grow; the registry
     (`src/lib/head-superset.ts`) is the versioned answer.
+47. **The SET column's twin measures VALUES — and a shared attribute's
+    carrier COUNT is library structure, not a value drift (Session
+    34).** The battery's ninth surface (the shared-attribute VALUE
+    column) caught the /faq `data-state`/`data-orientation` delta on
+    its first run: the live's Radix Accordion stamps both attributes
+    on EVERY accordion node (Item + Trigger + Content — ~3x the
+    clone's carriers) while the values themselves ("closed"/
+    "vertical" at rest) sat at parity. The law: compare the distinct
+    VALUE SET for a registered (attr, route) pair (`DOM_VALUE_RULES`
+    in the registry — a spelling drift like "closed"-vs-"collapsed"
+    still surfaces) and adjudicate the carrier-count delta as the
+    library's wrapper structure (the D125 "never simulate a library's
+    internals" law one layer deeper) — never stamp extra carriers to
+    chase multiset parity. Related the same session: the head-tag SET
+    column's scope is the SEMANTIC head — the bundler's loading rels
+    (preload/modulepreload/stylesheet/prefetch/preconnect/dns-prefetch)
+    are chunk-loading instrumentation, byte-different by construction
+    between Next and the live's rolldown; and a rebuilt battery must
+    re-derive its collectors from the registry's route spellings (the
+    404 twin is `/does-not-exist-404`, or the registered robots entry
+    reads as drift). The live's burger carries NO `aria-expanded` —
+    the shared mobile-nav selector is the `md:hidden` nav button.
 
 ## Architecture invariants
 
@@ -802,15 +824,18 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   (the hydration-appended `/_not-found` copies removed — D122), with
   the 108-row chart/list membership disagreement pinned (chart ∩ list
   = ∅ at the S30 shape's extreme — D123). The drift battery now runs
-  EIGHT surfaces (word parity, mobile nav, SEO, JSON-LD mounts, the
+  NINE surfaces (word parity, mobile nav, SEO, JSON-LD mounts, the
   Session-31 canonical/og column, the Session-32 head-tag SET column
-  that caught D120/D121/D122 on its first run, and the Session-33
+  that caught D120/D121/D122 on its first run, the Session-33
   DOM-attribute SET column that caught the dormant toaster / the Radix
-  marker / the nav-theme hooks on ITS first run — D124–D126), with the
+  marker / the nav-theme hooks on ITS first run — D124–D126, and the
+  Session-34 shared-attribute VALUE column that caught the /faq
+  Radix carrier-count delta on ITS first run — D127), with the
   adjudicated sets VERSIONED in `src/lib/head-superset.ts` (the
   registry the battery READS: an unregistered clone-only head tag or
   DOM attribute — either side — surfaces as DRIFT instead of blending
-  into the "superset" reading; 15 unit pins hold the shape). No route
+  into the "superset" reading; 15 → 22 unit pins hold the shape incl. the
+  Session-34 VALUE-level rules and the sixth head entry). No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks

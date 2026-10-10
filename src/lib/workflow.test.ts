@@ -3,6 +3,7 @@ import {
   SDK_TIMEOUT_MS,
   WORKFLOW_CATEGORIES,
   isWorkflowStatus,
+  parseLlmWorkflow,
   sanitizeGeneratedWorkflow,
   templateWorkflow,
   withTimeout,
@@ -75,6 +76,78 @@ describe("status vocabulary", () => {
 
   it("keeps the category list stable", () => {
     expect(WORKFLOW_CATEGORIES).toHaveLength(6);
+  });
+});
+
+describe("parseLlmWorkflow (Session 34 — the real-SDK output path)", () => {
+  it("passes a bare-JSON LLM response straight through the sanitizer", () => {
+    const w = parseLlmWorkflow('{"name":"Lead enrichment","description":"Enriches inbound leads and scores them.","category":"Sales"}');
+    expect(w).toEqual({
+      name: "Lead enrichment",
+      description: "Enriches inbound leads and scores them.",
+      category: "Sales",
+    });
+  });
+
+  it("strips markdown fences — the shape a real chat model actually emits", () => {
+    const w = parseLlmWorkflow(
+      '```json\n{"name":"Lead enrichment","description":"Enriches inbound leads and scores them.","category":"Sales"}\n```',
+    );
+    expect(w?.name).toBe("Lead enrichment");
+    expect(w?.category).toBe("Sales");
+  });
+
+  it("strips a bare fence (no json language tag) too", () => {
+    const w = parseLlmWorkflow(
+      '```\n{"name":"Lead enrichment","description":"Enriches inbound leads and scores them.","category":"Sales"}\n```',
+    );
+    expect(w?.name).toBe("Lead enrichment");
+  });
+
+  it("returns null for a valid-JSON object that fails sanitization (the template stands, no throw)", () => {
+    expect(parseLlmWorkflow("{}")).toBeNull();
+    expect(
+      parseLlmWorkflow(JSON.stringify({ name: "", description: "long enough description here.", category: "Ops" })),
+    ).toBeNull();
+  });
+
+  it("THROWS on empty or whitespace-only completions (JSON.parse's own contract, preserved for the route's catch)", () => {
+    expect(() => parseLlmWorkflow("")).toThrow();
+    expect(() => parseLlmWorkflow("   \n  ")).toThrow();
+  });
+
+  it("THROWS on non-JSON text — the route's catch owns that failure class (JSON.parse's contract, preserved)", () => {
+    expect(() => parseLlmWorkflow("not json at all")).toThrow();
+  });
+
+  it("returns null for valid JSON that is not an object (array/string/number/null)", () => {
+    expect(parseLlmWorkflow('["Lead enrichment"]')).toBeNull();
+    expect(parseLlmWorkflow('"just a string"')).toBeNull();
+    expect(parseLlmWorkflow("42")).toBeNull();
+    expect(parseLlmWorkflow("null")).toBeNull();
+  });
+
+  it("clamps an over-long LLM shape through the same sanitizer bounds (name 120, description 500)", () => {
+    const w = parseLlmWorkflow(
+      JSON.stringify({
+        name: "L".repeat(300),
+        description: "D".repeat(800),
+        category: "Support",
+      }),
+    );
+    expect(w?.name.length).toBe(120);
+    expect(w?.description.length).toBe(500);
+    expect(w?.category).toBe("Support");
+  });
+
+  it("falls back to Ops for unknown categories and rejects short descriptions — the sanitizer's contract, unchanged", () => {
+    const w = parseLlmWorkflow(
+      JSON.stringify({ name: "Valid name", description: "Long enough description here.", category: "Nonsense" }),
+    );
+    expect(w?.category).toBe("Ops");
+    expect(
+      parseLlmWorkflow(JSON.stringify({ name: "Valid name", description: "short", category: "Ops" })),
+    ).toBeNull();
   });
 });
 
