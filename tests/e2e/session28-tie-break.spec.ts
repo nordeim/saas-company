@@ -116,7 +116,15 @@ async function chartNames(page: Page): Promise<string[]> {
     .allInnerTexts();
 }
 
-test.describe("the topRuns tie-break (Session 28 R2 — probed CORRECT, now pinned)", () => {
+// .serial (Session 29 hardening): these tests share one minted workspace,
+// and Playwright RESTARTS the worker after a failed test — a reload
+// regenerates the module-level EMAIL (Date.now()) and re-runs beforeAll,
+// silently splitting the "shared" workspace across fresh users (the
+// Session-29 first-run spec's debugging story: one await bug in (a)
+// produced WRONG-LAYER secondary failures in (b)/(c) — chart counts and
+// empty-DB reads against a user that was never the one (a) composed for).
+// Serial fail-fast is the honest structure for state-sharing groups.
+test.describe.serial("the topRuns tie-break (Session 28 R2 — probed CORRECT, now pinned)", () => {
   test.beforeAll(async () => {
     await registerAndMint();
   });

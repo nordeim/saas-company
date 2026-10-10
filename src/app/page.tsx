@@ -1,5 +1,7 @@
 import { Navbar } from "@/components/site/navbar";
 import { Footer } from "@/components/site/footer";
+import { JsonLd } from "@/components/site/json-ld";
+import { landingStructuredData } from "@/lib/seo";
 import { Hero } from "@/components/sections/hero";
 import { DashboardPreview } from "@/components/sections/dashboard-preview";
 import { LogoCloud } from "@/components/sections/logo-cloud";
@@ -13,6 +15,7 @@ import { CtaSection } from "@/components/sections/cta";
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
+      <JsonLd data={landingStructuredData()} />
       <Navbar />
       <main>
         <Hero />

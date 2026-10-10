@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.27.0 · **Last updated:** 2026-10-09 (Session 28 remediation)
+> **Version:** 2.28.0 · **Last updated:** 2026-10-10 (Session 29 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–28)
+## §12. Lessons Learnt (Sessions 1–29)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -1162,6 +1162,44 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     gotcha-26/31 zombie family's fifth member: 233/235 failed with
     ERR_CONNECTION_REFUSED until the orphans were cleared and the
     suite re-ran clean).
+
+66. **Playwright restarts the worker after a failed test — a
+    state-sharing spec's module-level identifiers silently regenerate
+    (Session 29)**: the first-run spec's first authoring had ONE `await`
+    bug in test (a) (`expect(statValue(...))` receiving a Promise —
+    `expect(pending).toBe("0")` fails instantly); the failure restarted
+    the worker, the spec module RELOADED, the module-level
+    `Date.now()`-suffixed EMAIL regenerated, and `beforeAll` re-ran in
+    the new worker — registering a NEW user. Test (b) then ran against
+    an EMPTY workspace (chart 2 ≠ 3) and test (c) read ZERO rows for
+    "the" user — the secondary failures pointed at the WRONG layer
+    ("the wire says 2 rows, the file says 0" was the tell that the
+    STATE, not the code, had split). Two laws: (1) mark
+    state-sharing groups `test.describe.serial` — fail-fast is the
+    honest structure (the remaining tests SKIP instead of running
+    against split state; applied to session28-tie-break
+    retroactively); (2) always diagnose the FIRST failure in a run —
+    the cascade after a worker restart is noise, and chasing it sends
+    you hunting DB-identity bugs that do not exist.
+
+67. **Structured data is content — derive it, never re-type it
+    (Session 29)**: the JSON-LD superset (Organization + WebSite +
+    SoftwareApplication on the landing; FAQPage on /faq) lives or
+    dies by the content-as-code law — every fact derives from its
+    ONE content source at render time (the offers from the pricing
+    module — Free $0, Pro $49, Enterprise's null "Custom" price
+    OMITTED because an Offer without a price is invalid schema and
+    an invented 0 would be a lie; the FAQ entities VERBATIM from
+    the FAQ content module; the description from the SEO default),
+    and the PIN derives from the same modules (the first e2e spec
+    importing from src/): a pricing or FAQ edit that skips the
+    schema FLIPS the pin instead of drifting silently. And prove
+    the mount is invisible to every standing gate BEFORE authoring:
+    an inline `application/ld+json` script never renders into
+    `document.body.innerText` (the word-parity battery is immune),
+    creates no resource-timing entry (the transfer budgets are
+    immune), and has no box (CLS is immune) — re-verify the battery
+    after the mount anyway (measured, not remembered).
 
 ## §13. Pitfalls to Avoid
 

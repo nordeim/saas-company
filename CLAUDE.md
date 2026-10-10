@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 182 unit + 235 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 190 unit + 240 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -145,15 +145,61 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 182/182 PASS
+- [ ] `npm run test` → 190/190 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 124/124 PASS
-- [ ] `npm run test:e2e` → 235/235 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 240/240 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 29 (2026-10-10) remediation** — see
+  `docs/remediation-plan-session29.md`: a JSON-LD superset +
+    first-run-boundary audit (the S55/S56 logs' three suggested
+    surfaces — the empty-to-FIRST workspace transition, the
+    all-zero-runs chart floor, and the structured-data extension)
+    shipped one superset feature and gated two probed-correct
+    boundary families: **the JSON-LD structured-data superset** —
+    ZERO routes shipped `application/ld+json` (the reference ships
+    none either — pure superset); the pure builders in
+    `src/lib/seo.ts` (`landingStructuredData()` — Organization +
+    WebSite + SoftwareApplication with the PLANS-derived offers
+    [0, 49], Enterprise's null "Custom" price honestly OMITTED —
+    and `faqStructuredData()` — the FAQPage from FAQ_ITEMS
+    verbatim) render through `src/components/site/json-ld.tsx` on
+    the landing and /faq only; content-as-code governs every fact
+    (one source of truth per fact, never re-typed copy); the
+    word-parity/transfer/CLS budgets proven immune BEFORE
+    authoring (the script never renders into innerText, creates no
+    resource-timing entry, has no box) and the drift battery
+    re-verified GREEN ×8 after the mount. **The first-run boundary
+    pins** — the S29 probe walked one user live through 0 rows → 1
+    row/0 runs → 3 rows all-zero → one 500-run champion (9/9
+    verdicts, every shape COHERENT): `session29-first-run.spec.ts`
+    pins the empty-to-FIRST transition through the REAL UI compose
+    (cards 1/0/0/100.0% — the documented S21 null→100 convention,
+    "No data yet." expiring exactly when data arrives), the
+    all-zero chart's UNIFORM 4% floor bars (the top bar NOT
+    full-track — the adjudicated degenerate case: all rows tie at
+    zero, so equality is the honest encoding), and the first-run
+    expiry (the top bar becomes the full track, the rate stays
+    100.0% now MEASURED). **The mid-authoring tooling lesson
+    (gotcha 43):** one `await` bug in test (a) + Playwright's
+    worker-restart-after-failure = the spec module RELOADED, the
+    `Date.now()` EMAIL regenerated, beforeAll re-registered a NEW
+    user — (b)/(c) ran against split state with wrong-layer
+    secondary failures ("the wire and the file disagree" was the
+    tell); fixed with the await + `test.describe.serial` for
+    state-sharing groups (applied to session28-tie-break too).
+    `session29-jsonld.spec.ts` is the FIRST e2e spec importing from
+    src/ (FAQ_ITEMS/PLANS — the pin derives from the same sources
+    the schema renders from). Gate: **554 checks** (190 unit + 124
+    smoke + 240 e2e); 20 screenshots refreshed (VLM ×5: 4/5 + the
+    H1-gradient FAIL re-adjudicated with PIXEL EVIDENCE — 4,404
+    gradient-family pixels in the H1 zone, the drift-#11
+    single-frame sampling artifact, not a defect).
 
 - **Session 28 (2026-10-09) remediation** — see
   `docs/remediation-plan-session28.md`: an hours-seam-exactness +

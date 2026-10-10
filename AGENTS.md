@@ -19,17 +19,18 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (182 checks) | `npm run test` |
-| Browser E2E (235 checks; needs a build) | `npm run test:e2e` |
+| Unit tests (190 checks) | `npm run test` |
+| Browser E2E (240 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
 | End-to-end smoke suite (124 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (182/182) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
-→ `npm run test:e2e` (235/235) — 541 checks across three layers (boots the standalone server on :3100 against its own
-`db/e2e.db`, `AUTH_RATE_LIMIT_MAX=50`, `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
+`npm run test` (190/190) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
+→ `npm run test:e2e` (240/240) — 554 checks across three layers (boots the standalone server on :3100 against its own
+`db/e2e.db`, `AUTH_RATE_LIMIT_MAX=100` — raised from 50 in Session 28
+when the suite's ~45 auth flows outgrew it — `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
 what catches type errors; never skip it.
 
@@ -645,6 +646,23 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     the suite's size at authoring time is a razor edge at the suite's
     size two cycles later.
 
+43. **Playwright RESTARTS the worker after a failed test — a
+    state-sharing spec's module-level identifiers silently regenerate
+    (Session 29).** The first-run spec's first authoring had one `await`
+    bug in test (a) (`expect(statValue(...))` receiving a Promise —
+    `expect(pending).toBe("0")` fails instantly); the failure RESTARTED
+    the worker, the spec module RELOADED, the module-level
+    `Date.now()`-suffixed EMAIL regenerated, and `beforeAll` re-ran in
+    the new worker — registering a NEW user: test (b) then ran against
+    an EMPTY workspace (chart 2 ≠ 3) and test (c) read ZERO rows for
+    "the" user — the secondary failures pointed at the WRONG layer
+    ("the wire and the file disagree" was the tell that the STATE, not
+    the code, had split). Two laws: mark state-sharing groups
+    `test.describe.serial` (fail-fast — the remaining tests SKIP
+    instead of running against split state; also applied to
+    session28-tie-break retroactively), and always diagnose the FIRST
+    failure in a run — the cascade after a worker restart is noise.
+
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +
@@ -693,7 +711,14 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   client fallback share ONE definition; a naive float reduce displayed
   1 low at exactly-x.5 shapes — D110) with the chart's tie-break
   (`runs DESC, createdAt DESC` — D111) and the CLS budgets (≤ 0.1 per
-  route — D112) pinned. No route
+  route — D112) pinned, and the Session-29 structured-data layer: the
+  landing and /faq serve valid schema.org JSON-LD through the PURE
+  builders in `src/lib/seo.ts` — every fact derived from its ONE
+  content source (the offers from PLANS with Enterprise's null price
+  omitted, never an invented 0; the FAQ entities VERBATIM from
+  FAQ_ITEMS — D113) — with the first-run boundary stories pinned (the
+  empty-to-FIRST transition, the all-zero chart's uniform floor, the
+  first-run expiry — D114). No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks

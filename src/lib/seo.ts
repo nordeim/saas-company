@@ -9,6 +9,8 @@
  */
 
 import type { Metadata } from "next";
+import { PLANS } from "./pricing";
+import { FAQ_ITEMS } from "./faq-content";
 
 export const SITE_NAME = "SAAS Company";
 
@@ -67,5 +69,93 @@ export function routeMetadata(page: string | null): Metadata {
       description,
       images: ["/og-image.png"],
     },
+  };
+}
+
+/**
+ * Session 29 R1 — the canonical public origin as a single helper (the
+ * sitemap.ts/robots.ts source of truth, named): NEXT_PUBLIC_SITE_URL in
+ * production, the dev origin otherwise. The JSON-LD builders below read
+ * it so the structured-data URLs can never drift from the sitemap's.
+ */
+export function siteUrl(): string {
+  return process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+}
+
+/**
+ * Session 29 R1 (D113) — the landing's JSON-LD structured-data graph: a
+ * schema.org @graph of Organization + WebSite + SoftwareApplication,
+ * linked through stable @id anchors (the WebSite and the application
+ * both point at the Organization as publisher). The reference ships NO
+ * structured data (a Base44-hosted SPA — no parity constraint, the D62
+ * family): this is the SEO SUPERSET the production-ready clone adds.
+ *
+ * The content-as-code law governs every fact: the application
+ * description IS DEFAULT_DESCRIPTION (never a re-typed copy), and the
+ * offers DERIVE from `PLANS` (src/lib/pricing.ts) — each plan with a
+ * non-null monthlyPrice becomes an Offer at that price (Free $0, Pro
+ * $49); Enterprise's null price ("Custom") is OMITTED (an Offer without
+ * a price is invalid schema, and inventing a "0" would be a lie — the
+ * honest omission, like the pricing card's own "Custom" caption).
+ *
+ * Pure and unit-tested (seo.test.ts); rendered on the landing through
+ * src/components/site/json-ld.tsx.
+ */
+export function landingStructuredData(): Record<string, unknown> {
+  const base = siteUrl();
+  const organizationId = `${base}/#organization`;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": organizationId,
+        name: SITE_NAME,
+        url: base,
+        logo: `${base}/og-image.png`,
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${base}/#website`,
+        name: SITE_NAME,
+        url: base,
+        publisher: { "@id": organizationId },
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": `${base}/#software`,
+        name: "NovaAI",
+        applicationCategory: "BusinessApplication",
+        operatingSystem: "Web",
+        description: DEFAULT_DESCRIPTION,
+        url: base,
+        publisher: { "@id": organizationId },
+        offers: PLANS.filter((plan) => plan.monthlyPrice !== null).map((plan) => ({
+          "@type": "Offer",
+          name: plan.name,
+          price: String(plan.monthlyPrice),
+          priceCurrency: "USD",
+        })),
+      },
+    ],
+  };
+}
+
+/**
+ * Session 29 R1 (D113) — the FAQ route's JSON-LD: a schema.org FAQPage
+ * whose entities derive VERBATIM from FAQ_ITEMS (src/lib/faq-content.ts
+ * — the reference-captured copy; content integrity is the
+ * content-as-code law). Rendered on /faq through
+ * src/components/site/json-ld.tsx.
+ */
+export function faqStructuredData(): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQ_ITEMS.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
   };
 }

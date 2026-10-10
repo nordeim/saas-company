@@ -156,7 +156,15 @@ export function DashboardApp({
 
   // The charted max — by construction the first ranked row (the top
   // bar renders the full track, 100%: the bar-length encoding carries
-  // information exactly because the max is displayed).
+  // information exactly because the max is displayed). DEGENERATE CASE
+  // (Session 29, adjudicated): when EVERY charted row is 0 — a fresh
+  // workspace before its first run — the Math.max(1, …) floor keeps the
+  // denominator off division-by-zero and all bars ride the 4%
+  // visibility floor UNIFORM (probed: the top bar is NOT full-track
+  // here, and that is the honest encoding — all rows tie at zero, so
+  // equality is the truth; the "0" labels carry the value; full-width
+  // bars would falsely suggest maximal activity). Pinned by
+  // session29-first-run.spec.ts.
   const maxRuns = Math.max(1, chartRows[0]?.runs ?? 0);
 
   // Session 13 F1: a 401 is NOT a network fault — retrying will 401
