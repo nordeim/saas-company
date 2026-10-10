@@ -268,9 +268,25 @@ re-run GREEN.
       GENERATE_RATE_LIMIT_MAX)
 - [x] remediation plan ticked + session log `docs/session_66.md`
 - [x] worklog.md updated
-- [ ] commit on main + SSH wrapper push (wrapper-verified — the hash
+- [x] commit on main + SSH wrapper push (wrapper-verified — the hash
       recorded below post-push)
 
 **Projection:** the gate grows by the R1 unit pins (+6-8) and the R2
 e2e trio (+3) → ~592-594 total. The battery's eighth column joins
-the standing GREEN set with its three findings registered.
+the standing GREEN set with its three findings registered. (Measured:
+602 — the projection was LOW; the registry pins landed as a 15-test
+file, not the projected 6-8.)
+
+**Pushed:** `1c6743f` on `main` → `git@github.com:nordeim/saas-company.git`
+(via `docs/ssh_git_wrapper_v3.py` with an operator-supplied key and the
+EXPLICIT `--remote git@github.com:nordeim/saas-company.git` — the
+wrapper's DEFAULT remote is the runbook's example repo `task-management`,
+the S31-recorded trap; the explicit flag carried from the first dry-run
+this session, the S32 discipline). The wrapper asserted **remote
+main @ `1c6743f` == local HEAD** — wrapper-verified; the fetch-independent
+HTTPS ls-remote agreed (`1c6743f7736b8f9bf670fcb9f39bdd883ba8638b`).
+The operator key's fingerprint verified against the S1–S32 record
+(`SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU`) BEFORE the
+push; the operator key shredded after use (both the wrapper's temp copy
+and the operator's file). No new branches — everything on `main`, per
+the operator contract.
