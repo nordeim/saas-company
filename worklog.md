@@ -1345,3 +1345,17 @@ Stage Summary:
 - The reference moved mid-session (gotcha 7 in real time): the live's /dashboard now 404s (the S38 parity record stands as the versioned contract); the live's /demo soft-404s (the clone's working demo page the documented superset); the live's login redirects to / with an in-memory session.
 - Survey scripts persisted under research/ (gitignored scratch, the house convention): recon-s39.mjs, adj-zindex-s39.mjs, adj-stuck-s39.mjs, adj-periods-s39.mjs, adj-fine-periods-s39.mjs, adj-pairing-s39.mjs, adj-float-s39.mjs, adj-float-multi-s39.mjs, adj-float-inview-s39.mjs, adj-waapi-s39.mjs, adj-bundle-s39.mjs, adj-stack2-s39.mjs, adj-demo-s39.mjs, vlm-adj-menu-s39.mjs, db-state-s39.mjs, drift-battery-s39.mjs, capture-screenshots-s39.mjs, vlm-checks-s39.sh.
 - The S40 candidates: the reference-regression watch (the live's /dashboard and /checkout — re-probe whether they recover; if they do, re-run the full dashboard parity battery against the live), the z-index registry's promotion into the committed adjudication layer (a src/lib sibling of head-superset.ts if the stacking surface's registry grows), or the battery's fifteenth surface — the RESPONSIVE breakpoint inventory (the same element set at 390/768/1024/1440 — the computed geometry columns per breakpoint).
+
+---
+Task ID: 39-close
+Agent: Super Z (main)
+Task: Session 39 closing — the pushed-hash record + the closing commit
+
+Work Log:
+- Commit 4877cb4 (34 files: the D144 scroll-dot 1.7s→1.5s fix in both globals.css carriers + the four session39 spec files [20 pins] + the S38 ew-petal window hardening + the docs alignment across PAD [revision block, ledger D144-D145, §7 counts 247/124/322 = 693, §7.2, §11]/AGENTS [the fourteenth surface + gotcha 52]/CLAUDE/README [the 693 badge]/SKILL v2.38.0 [lesson 78] + the remediation plan session39 + the session log docs/session_78.md + the 20 refreshed screenshots + this worklog) pushed via the SSH wrapper with the EXPLICIT --remote git@github.com:nordeim/saas-company.git (the S31-recorded trap; the explicit flag held from the first dry-run); the wrapper verified remote main @ 4877cb4 == local HEAD; the fetch-independent HTTPS branch API agreed (4877cb4a016239dc4a2c96ddf905a861595dd713).
+- The paramiko ssh shim deployed fresh at /home/z/bin/ssh (the sandbox had reset — no ssh binary; paramiko 5.0.0 under python3.13, the shim shebang pointed there); the operator key's fingerprint verified through paramiko's own key parse (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU) against the S1-S38 record BEFORE the push.
+- Both the wrapper's temp key copy and the operator's key file shredded after use; the tree clean; no new branches; zero zombie servers (all probe/battery/capture ports :3300-:3315 swept and verified).
+
+Stage Summary:
+- Session 39 fully closed: the remediation commit 4877cb4 pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session39.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 693 checks (247 unit + 124 smoke + 322 e2e); the parity battery now runs FOURTEEN surfaces (24 checks across three phases) with the registry + the registered families as the versioned adjudication layers; the S40 candidates recorded in this worklog (the reference-regression watch on the live's /dashboard + /checkout, the z-index registry's promotion into a committed adjudication layer, the responsive breakpoint inventory).

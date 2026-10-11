@@ -207,3 +207,19 @@ All three candidate surfaces measured BEFORE the contracts were designed:
       (docs/session_78.md) + the worklog
 - [ ] The commit + the wrapper push (the explicit `--remote`, the
       fingerprint check, the key shredding)
+
+## The pushed-hash record (the closing discipline)
+
+- Remediation commit **4877cb4** pushed via the SSH wrapper with the
+  EXPLICIT `--remote git@github.com:nordeim/saas-company.git` (the S31
+  trap: the wrapper's DEFAULT remote is the runbook's example repo —
+  the explicit flag held from the first dry-run).
+- Wrapper-verified: remote main @ 4877cb4 == local HEAD; the
+  fetch-independent HTTPS branch API agreed
+  (4877cb4a016239dc4a2c96ddf905a861595dd713).
+- The operator key's fingerprint verified through paramiko's own key
+  parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU
+  — matches the S1–S38 record); both the wrapper's temp key copy and
+  the operator's key file shredded after use.
+- Zero zombies at close (all probe/battery/capture ports :3300–:3315
+  swept and cleared); the tree clean; no new branches.
