@@ -1265,3 +1265,17 @@ Stage Summary:
 - Gate raised 645 -> 656 checks (247 unit + 124 smoke + 285 e2e); the parity battery now runs TWELVE surfaces + the gradient layer (36 checks across four phases, zero drift).
 - Survey scripts persisted under research/ (gitignored scratch, the house convention): drift-battery-s37.mjs (phase-split + the port guard + the group kill), probe-trans-s37.mjs, probe-login-trans-s37.mjs, probe-shine-s37.mjs, probe-navlink*-s37.mjs, probe-cover*-s37.mjs, probe-timeline-s37.mjs, probe-sequence-s37.mjs, probe-pointer-s37.mjs, probe-vars*-s37.mjs, oklab-stops-probe-s37.mjs, repro-418-s37.mjs, bisect-418-s37.mjs, capture-screenshots-s37.mjs, recapture-pricing-s37.mjs, vlm-checks-s37.mjs, vlm-adj-s37.mjs.
 - The S38 candidates recorded in docs/session_74.md (the radial/conic gradient extension, the will-change companions, the font-family STACK inventory).
+
+---
+Task ID: 37-close
+Agent: Super Z (main)
+Task: Session 37 closing — the pushed-hash record + the closing commit
+
+Work Log:
+- Commit 3db744f (34 files: the D137 route-scoped login transition-colors override + the D138/D139 gradient utility overrides + the D140 slate-100/gray-50 @theme pins + the D141 sitemap policy + the three session37 spec files [11 pins] + the docs alignment across PAD/AGENTS [gotcha 50]/CLAUDE/README [the 656 badge]/SKILL v2.36.0 [lesson 76] + the remediation plan + the session log docs/session_74.md + the 20 refreshed screenshots + this worklog) pushed via the SSH wrapper with the EXPLICIT --remote git@github.com:nordeim/saas-company.git (the S31-recorded trap; the explicit flag held from the first dry-run); the wrapper verified remote main @ 3db744f == local HEAD; the fetch-independent HTTPS ls-remote agreed (3db744fafe5d22427bbc424f2deb373de49f53ac).
+- The paramiko ssh shim deployed fresh at /home/z/bin/ssh (the sandbox had reset — no ssh binary, no paramiko; paramiko 5.0.0 installed); the operator key's fingerprint verified through paramiko's own key parse (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU) against the S1-S36 record BEFORE the push.
+- Both the wrapper's temp key copy and the operator's key file shredded after use; the tree clean; no new branches; zero zombie servers (all probe/battery/capture ports :3300-:3345 swept and verified).
+
+Stage Summary:
+- Session 37 fully closed: the remediation commit 3db744f pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session37.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 656 checks (247 unit + 124 smoke + 285 e2e); the parity battery now runs TWELVE surfaces + the gradient layer (36 checks across four phases) with the registry's three layers as the versioned adjudication layer; the S38 candidates recorded in docs/session_74.md (the radial/conic gradient extension, the will-change companions, the font-family STACK inventory).
