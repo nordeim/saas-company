@@ -122,11 +122,11 @@ All three candidate surfaces measured BEFORE the contracts were designed:
 
 ## The pushed-hash record (the closing discipline)
 
-- Remediation commit **__HASH__** pushed via the SSH wrapper with the
+- Remediation commit **dcf9016** pushed via the SSH wrapper with the
   EXPLICIT `--remote git@github.com:nordeim/saas-company.git` (the S31
   trap: the wrapper's DEFAULT remote is the runbook's example repo —
   the explicit flag held from the first dry-run).
-- Wrapper-verified: remote main @ __HASH__ == local HEAD; the
+- Wrapper-verified: remote main @ dcf9016 == local HEAD; the
   fetch-independent HTTPS ls-remote agreed.
 - The operator key's fingerprint verified through paramiko's own key
   parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU

@@ -1420,3 +1420,19 @@ Stage Summary:
 - The capture-mutation trap encoded (a Playwright glob does not cross / — sub-path interception needs a REGEX route; the canonical DB restored to e7f6c011 and the captures re-run mutation-free).
 - Survey scripts persisted under research/ (gitignored scratch, the house convention): recon-s41.mjs, adj-s41.mjs, adj2-s41.mjs, adj3-s41.mjs, drift-battery-s41.mjs, capture-screenshots-s41.mjs, db-state-s41.mjs, vlm-checks-s41.sh.
 - The S42 candidates: the reference-regression watch continues (the four soft-404 routes — recovery re-probe), the responsive surface's ROUTE EXTENSION (/faq + the legal routes at the four widths), or the seventeenth surface — the PRINT/LAYOUT media surface (the @media print stylesheet contract) or the focus-order surface's route extension (the legal routes' long-content walks).
+
+---
+Task ID: 41-close
+Agent: Super Z (main)
+Task: Session 41 closing — the pushed-hash record + the closing commit
+
+Work Log:
+- Commit dcf9016 (26 files: the session41-focus-inventory spec [7 pins] + the docs alignment across PAD [revision block, §7 counts 247/124/336 = 707, §7.2, §11]/AGENTS [the sixteenth surface + gotcha 52f]/CLAUDE [the session-41 block]/README [the 707 badge + the FOCUS-ORDER parity paragraph + the checks table 336]/SKILL v2.40.0 [lesson 80 — the full-walk law + the capture-mutation trap + the light-page lesson] + the remediation plan session41 + the session logs docs/session_83.md + docs/session_84.md + the 20 refreshed screenshots + this worklog) pushed via the SSH wrapper with the EXPLICIT --remote git@github.com:nordeim/saas-company.git (the S31 trap: the wrapper's DEFAULT remote is the runbook's example repo — the explicit flag held from the first dry-run).
+- Wrapper-verified: remote main @ dcf9016 == local HEAD; the fetch-independent HTTPS ls-remote agreed (dcf9016d6f7fbcff39bee53ccfe79a5661dd9e54).
+- The paramiko ssh shim deployed fresh at /home/z/bin/ssh (the sandbox had reset — no ssh binary; paramiko 5.0.0 installed under python3.13 with --break-system-packages, the PEP-668 path; the shim shebang pointed at /usr/bin/python3.13).
+- The operator key's fingerprint verified through paramiko's own key parse (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU) against the S1-S40 record BEFORE the push; both the wrapper's temp key copy and the operator's key file shredded after use.
+- Zero zombies at close (the :3300/:3310 recon + battery servers group-killed at their own teardowns; the :3320 capture server the same; all ports swept); the tree clean; no new branches.
+
+Stage Summary:
+- Session 41 fully closed: the remediation commit dcf9016 pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session41.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 707 checks (247 unit + 124 smoke + 336 e2e); the parity battery now runs SIXTEEN surfaces (36 checks across two phases) with the route-watch registry (the FORM-checked /login) as the versioned adjudication layer for the live's soft-404 set; the S42 candidates recorded in this worklog (the reference-regression watch, the responsive route extension, the print/layout media surface or the focus-order route extension as the seventeenth).
