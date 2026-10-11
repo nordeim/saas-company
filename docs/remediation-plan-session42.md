@@ -116,6 +116,21 @@ designed:
 - [x] The commit + the wrapper push (the explicit `--remote`, the
       fingerprint check, the key shredding)
 
+## The pushed-hash record (the closing discipline)
+
+- Remediation commit **105dab5** pushed via the SSH wrapper with the
+  EXPLICIT `--remote git@github.com:nordeim/saas-company.git` (the S31
+  trap: the wrapper's DEFAULT remote is the runbook's example repo —
+  the explicit flag held from the first dry-run).
+- Wrapper-verified: remote main @ 105dab5 == local HEAD; the
+  fetch-independent HTTPS ls-remote agreed
+  (105dab56a69c39eafd7ec6a7a77d7246a0a4764a).
+- The operator key's fingerprint verified through paramiko's own key
+  parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU
+  — matches the S1-S41 record); both the wrapper's temp key copy and
+  the operator's key file shredded after use.
+- Zero zombies at close; the tree clean; no new branches.
+
 ## The measurement-law notes (this session's adjudications)
 
 - **The blind-spot scan law (adj-s42 A1).** A CSSOM scan for

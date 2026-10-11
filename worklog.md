@@ -1461,3 +1461,19 @@ Stage Summary:
 - The error-boundary capture mechanism documented (the boundary renders only through a mutation's refresh() ingesting the violating row — the initial dashboard state is server-rendered; the VLM standing check is the layer that catches capture-mechanism bugs).
 - Survey scripts persisted under research/ (gitignored scratch, the house convention): recon-s42.mjs, recon2-s42.mjs, adj-s42.mjs, drift-battery-s42.mjs, capture-screenshots-s42.mjs, db-state-s42.mjs, vlm-checks-s42.sh.
 - The S43 candidates: the reference-regression watch continues (the four soft-404 routes — recovery re-probe); the focus-order surface's ROUTE EXTENSION (the legal routes' long-content walks — /accessibility at 3,747px the longest tab order in the app); or the eighteenth surface — the CURSOR/caret surface (caret-color + the cursor contracts) or the FORM-AUTOFILL surface (autocomplete attributes + the :autofill styling).
+
+---
+Task ID: 42-close
+Agent: Super Z (main)
+Task: Session 42 closing — the pushed-hash record + the closing commit
+
+Work Log:
+- Commit 105dab5 (26 files: the session42-print-responsive spec [7 pins] + the docs alignment across PAD [revision block, §7 counts 247/124/343 = 714, §7.2, §11]/AGENTS [the seventeenth surface + the route-extension invariants]/CLAUDE [the session-42 block]/README [the 714 badge + the PRINT + RESPONSIVE parity paragraph + the checks table 343]/SKILL v2.41.0 [lesson 81 — the print-surface empty-set law] + the remediation plan session42 + the session logs docs/session_86.md + docs/session_87.md + the 20 refreshed screenshots + this worklog) pushed via the SSH wrapper with the EXPLICIT --remote git@github.com:nordeim/saas-company.git (the S31 trap: the wrapper's DEFAULT remote is the runbook's example repo — the explicit flag held from the first dry-run).
+- Wrapper-verified: remote main @ 105dab5 == local HEAD; the fetch-independent HTTPS ls-remote agreed (105dab56a69c39eafd7ec6a7a77d7246a0a4764a).
+- The paramiko ssh shim deployed fresh at /home/z/bin/ssh (the sandbox had reset — no ssh binary; paramiko 5.0.0 installed under python3.12 with --break-system-packages, the PEP-668 path; the shim shebang pointed at /usr/bin/env python3).
+- The operator key's fingerprint verified through paramiko's own key parse (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU) against the S1-S41 record BEFORE the push; both the wrapper's temp key copy and the operator's key file shredded after use.
+- Zero zombies at close (the :3330-:3334 recon/battery/capture servers group-killed at their own teardowns; all ports swept); the tree clean; no new branches.
+
+Stage Summary:
+- Session 42 fully closed: the remediation commit 105dab5 pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session42.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 714 checks (247 unit + 124 smoke + 343 e2e); the parity battery now runs SEVENTEEN surfaces (67 checks across three phases) with the route-watch registry as the versioned adjudication layer for the live's soft-404 set; the S43 candidates recorded in this worklog (the reference-regression watch, the focus-order route extension — the legal routes' long-content walks, or the cursor/caret or form-autofill surfaces as the eighteenth).
