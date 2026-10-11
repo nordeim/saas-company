@@ -419,55 +419,90 @@
   }
 }
 
+/* The navbar hover-shine's gradient travel — the LIVE's four-corner cycle
+ * (Session 38 D143, hover-sampled in vivo: the background-position visits
+ * (0% 50%) → (0% 0%) → (100% 50%) → (50% 100%) → (0% 50%), the natural
+ * extreme positions of a 135deg gradient — each segment a straight line in
+ * position space: the left edge, the y=x/2 diagonal, the x+y=150
+ * anti-diagonal, the y=x+50 diagonal). The old two-stop sweep (0% 50% →
+ * 100% 50% → back) traveled a different path under hover. */
 @keyframes gradientShift {
-  0%,
-  100% {
+  0% {
     background-position: 0% 50%;
+  }
+  25% {
+    background-position: 0% 0%;
   }
   50% {
     background-position: 100% 50%;
   }
+  75% {
+    background-position: 50% 100%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
-/* Logo mark petal choreography (the four spinning quarter-petals). */
+/* Logo mark petal choreography (the four sliding quarter-petals) — the
+ * LIVE's measured contract (Session 38 D142, extracted through the Web
+ * Animations API: el.getAnimations()[0].effect.getKeyframes()): each petal
+ * slides AXIS-ALIGNED along its own cardinal axis, amplitude 12.84px (user
+ * units), with the stop shape 0%: 0 → 30%: peak → 50%: peak (hold) → 80%:
+ * 0 → 100%: 0 (hold), the class shorthand's ease-in-out applying per
+ * segment. The function spellings are the live's own serializations —
+ * translateY(...) on the ns/sn petals, single-arg translate(...) on the
+ * ew/we — so the WAAPI keyframe strings compare byte-identically. */
 @keyframes logo-ns {
-  0%,
-  40%,
-  100% {
-    transform: translate(0, 0);
+  0% {
+    transform: translateY(0);
   }
+  30%,
   50% {
-    transform: translate(3px, -3px);
+    transform: translateY(12.84px);
+  }
+  80%,
+  100% {
+    transform: translateY(0);
   }
 }
 @keyframes logo-sn {
-  0%,
-  40%,
-  100% {
-    transform: translate(0, 0);
+  0% {
+    transform: translateY(0);
   }
+  30%,
   50% {
-    transform: translate(-3px, 3px);
+    transform: translateY(-12.84px);
+  }
+  80%,
+  100% {
+    transform: translateY(0);
   }
 }
 @keyframes logo-ew {
-  0%,
-  40%,
-  100% {
-    transform: translate(0, 0);
+  0% {
+    transform: translate(0);
   }
+  30%,
   50% {
-    transform: translate(3px, 3px);
+    transform: translate(-12.84px);
+  }
+  80%,
+  100% {
+    transform: translate(0);
   }
 }
 @keyframes logo-we {
-  0%,
-  40%,
-  100% {
-    transform: translate(0, 0);
+  0% {
+    transform: translate(0);
   }
+  30%,
   50% {
-    transform: translate(-3px, -3px);
+    transform: translate(12.84px);
+  }
+  80%,
+  100% {
+    transform: translate(0);
   }
 }
 .anim-logo-ns {
@@ -504,23 +539,27 @@
    byte-identical keyframes; Session 8 F8). These aliases give the footer
    instance the live's verbatim class strings. */
 /* Byte-identical choreography to the logo-* set (the live's css carries
-   both under different names — same translate values, same 3s timing,
-   same per-petal delays). */
+   both under different names — the same D142 axis-aligned ±12.84px
+   contract, same 3s timing, same per-petal delays). */
 @keyframes flogo-ns {
-  0%, 40%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(3px, -3px); }
+  0% { transform: translateY(0); }
+  30%, 50% { transform: translateY(12.84px); }
+  80%, 100% { transform: translateY(0); }
 }
 @keyframes flogo-sn {
-  0%, 40%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(-3px, 3px); }
+  0% { transform: translateY(0); }
+  30%, 50% { transform: translateY(-12.84px); }
+  80%, 100% { transform: translateY(0); }
 }
 @keyframes flogo-ew {
-  0%, 40%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(3px, 3px); }
+  0% { transform: translate(0); }
+  30%, 50% { transform: translate(-12.84px); }
+  80%, 100% { transform: translate(0); }
 }
 @keyframes flogo-we {
-  0%, 40%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(-3px, -3px); }
+  0% { transform: translate(0); }
+  30%, 50% { transform: translate(12.84px); }
+  80%, 100% { transform: translate(0); }
 }
 .anim-flogo-ns { animation: flogo-ns 3s ease-in-out infinite; }
 .anim-flogo-sn { animation: flogo-sn 3s ease-in-out infinite; }

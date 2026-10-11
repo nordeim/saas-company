@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (247 checks) | `npm run test` |
-| Browser E2E (285 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (302 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,8 +28,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (247/247) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
-→ `npm run test:e2e` (285/285) — 656 checks across three layers (Session 37: the
-session37 transition/gradient/sitemap suites +11; boots the standalone server on :3100 against its own
+→ `npm run test:e2e` (302/302) — 673 checks across three layers (Session 38: the
+session38 logo-petals/shine-parity/static-inventory suites +17; boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=100` — raised from 50 in Session 28
 when the suite's ~45 auth flows outgrew it — `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
@@ -840,6 +840,28 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     a retry, never a drift; record the `:hover/:focus/:active`
     matches with every reading). A drift line without its state
     signature is unadjudicable.
+51. **`animation-name` is library-blind (Session 38).** The live animates
+    its mockup/dots/skeletons through framer-motion INLINE WRITES — the
+    computed `animation-name` stays `none`; the clone reproduces the same
+    loops as CSS keyframes. An animation-name column would read ~16
+    phantom "clone-only carriers" (all library-internal — the D125 law
+    at the animation layer). The honest animation surface is
+    LIBRARY-AGNOSTIC: time-sample the computed values (the LOOP
+    inventory), and compare CSS-animation CONTRACTS (name, duration,
+    delay, keyframe stops) only where both sides HAVE CSS animations —
+    the Web Animations API's `el.getAnimations()[0].effect.getKeyframes()`
+    is the definitive extractor (exact offsets, exact transform
+    spellings — author the clone's keyframes with the LIVE's own
+    function spellings, e.g. single-arg `translate(-12.84px)`, or the
+    WAAPI strings never compare equal). Two measurement laws ride with
+    the surface: the LONG-SETTLE law (the live's framer entrance springs
+    RING for seconds after the scroll-through — a wrapper measured
+    cycling `o 0.804..1, ty 0.44..11.66` at +500ms and FULLY at rest
+    after 2.5s; sample only after a 2.5s settle or the ring
+    manufactures a phantom looper), and the WINDOW-COVERAGE law (a 4.6s
+    window cannot converge a 14s background-position cycle — compare
+    the family + movement evidence + the WAAPI duration, never a
+    jaccard across phases).
 
 ## Architecture invariants
 
@@ -945,7 +967,7 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   interactive element at REST, under REAL hover [page.mouse.move —
   gotcha 16], and under REAL keyboard focus [Tab — the focus-VISIBLE
   contract], through the S35 normalization contract) that caught the
-  `lab()` serialization family on ITS first run — D134/D135), AND the Session-37 extensions: the TWELFTH surface — the transition-timing contract (which props transition, at what duration/easing, per interactive; the `--tw-*` custom-property family stripped as inert-engine emission; the `--tw-*` strip measured, not assumed) that caught the live's login-bundle `-webkit-text-decoration-color` alias on ITS first run (D137); the style inventory's GRADIENT layer (every rendered element's computed background-image through the gradient contract — function family, direction grammar, stops as color tuples, the auto-spacing position equivalence class) that caught v4's `in oklab` interpolation directive — a REAL rendering difference — plus the stop-position emission and the last two unpinned `lab()` stop tokens (D138–D140); and the interaction surface's POINTER-MODALITY focus twin (the k-th interactive under a REAL held page.mouse.down()) — GREEN at parity through the three measurement laws (gotcha 50c), with the
+  `lab()` serialization family on ITS first run — D134/D135), AND the Session-37 extensions: the TWELFTH surface — the transition-timing contract (which props transition, at what duration/easing, per interactive; the `--tw-*` custom-property family stripped as inert-engine emission; the `--tw-*` strip measured, not assumed) that caught the live's login-bundle `-webkit-text-decoration-color` alias on ITS first run (D137); the style inventory's GRADIENT layer (every rendered element's computed background-image through the gradient contract — function family, direction grammar, stops as color tuples, the auto-spacing position equivalence class) that caught v4's `in oklab` interpolation directive — a REAL rendering difference — plus the stop-position emission and the last two unpinned `lab()` stop tokens (D138–D140); and the interaction surface's POINTER-MODALITY focus twin (the k-th interactive under a REAL held page.mouse.down()) — GREEN at parity through the three measurement laws (gotcha 50c), AND the Session-38 extension: the THIRTEENTH surface — the LOOP inventory (library-agnostic animation parity: every rendered element time-sampled over a ~4.6s window; a LOOPER is an element whose computed transform/opacity/background-position/stroke-dashoffset changes between samples, so CSS keyframes AND the live's framer-motion inline writes BOTH surface as cyclers; the record: class prefix, cycling property families, value ranges; plus the WAAPI layer pinning every CSS animation's name/duration/delay/keyframe stops exactly, with the clone's framer-reproduction names REGISTERED as the documented clone-only set) that caught the logo petal choreography (D142 — the live's petals slide AXIS-ALIGNED ±12.84px with the 0/30/50/80/100 peak-hold shape; the clone shipped a diagonal 3px jitter) and the hover-shine's gradientShift (D143 — the live's four-corner background-position cycle vs the clone's two-stop sweep) on ITS first run, with the
   adjudicated sets VERSIONED in `src/lib/head-superset.ts` (the
   registry the battery READS: an unregistered clone-only head tag or
   DOM attribute — either side — surfaces as DRIFT instead of blending

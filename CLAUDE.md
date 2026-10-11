@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 247 unit + 285 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 247 unit + 302 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -148,7 +148,7 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run test` → 247/247 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 124/124 PASS
-- [ ] `npm run test:e2e` → 285/285 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 302/302 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
@@ -224,6 +224,42 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   (241 unit + 124 smoke + 258 e2e); the drift battery **73/73 GREEN**
   on all NINE surfaces (the VALUE column reading \"values-only
   registered\" on /faq through the registry).
+
+- **Session 38 (2026-10-11) remediation** — see
+  `docs/remediation-plan-session38.md`: a loop-inventory +
+  static-inventory cycle (the session_74 S38 candidates, RE-SCOPED by
+  the recon's measurements — the three proposed surfaces all measured
+  EMPTY or at parity: radial/conic gradients ZERO carriers; the
+  will-change/backface/transform-style/isolation companions zero
+  non-default carriers on either side; the font-family STACKS four
+  byte-identical stacks). **THE HEADLINE: the drift battery's
+  THIRTEENTH SURFACE — the LOOP inventory** (library-agnostic
+  animation parity: time-sampled computed transform/opacity/
+  background-position/stroke-dashoffset — CSS keyframes AND the
+  live's framer inline writes both surface as cyclers; plus the WAAPI
+  layer pinning every CSS animation's name/duration/delay/keyframe
+  stops) — caught on its FIRST run **D142**: the logo petal
+  choreography (the live's petals slide AXIS-ALIGNED ±12.84px with
+  the 0/30/50/80/100 peak-hold shape, WAAPI-extracted; the clone
+  shipped a diagonal 3px jitter — amplitude 4.28x off, direction
+  rotated 45°) and **D143**: the hover-shine's gradientShift (the
+  live's FOUR-CORNER bg-position cycle (0% 50%) → (0% 0%) →
+  (100% 50%) → (50% 100%) → back, hover-sampled; the clone shipped
+  a two-stop sweep). Both fixed in globals.css with the live's
+  verbatim function spellings (WAAPI strings compare byte-identically).
+  **TOOLING (gotcha 51): animation-name is library-blind** (the live's
+  framer loops are inline writes — an animation-name column reads ~16
+  phantom clone-only carriers); the loop inventory is the honest
+  surface, with the LONG-SETTLE law (framer entrance springs RING for
+  seconds — 2.5s before sampling) and the WINDOW-COVERAGE law (a 4.6s
+  window cannot converge a 14s bg-pos cycle — family + movement
+  evidence + the WAAPI duration, never a phase jaccard). Gate:
+  **656 -> 673 checks** (247 unit + 124 smoke + 285 -> 302 e2e — the
+  session38 suites +17); the battery **52/52 GREEN, ZERO DRIFT**
+  across its three phases (loop 16 + r3 24 + extra 12); 20
+  screenshots refreshed (DB canonical before AND after); VLM 4/5 raw
+  -> 5/5 after the login 4px-strip flag re-adjudicated by
+  computed-level evidence.
 
 - **Session 37 (2026-10-11) remediation** — see
   `docs/remediation-plan-session37.md`: a transition-timing +

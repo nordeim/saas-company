@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.36.0 · **Last updated:** 2026-10-11 (Session 37 remediation)
+> **Version:** 2.37.0 · **Last updated:** 2026-10-11 (Session 38 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1456,6 +1456,45 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     :hover held throughout, else retry). Adjudicate every drift IN
     VIVO with the state signature attached; a drift line without it
     is unadjudicable.
+
+77. **`animation-name` is library-blind — sample the VALUES, and
+    author the fix in the reference's own function spellings
+    (Session 38)**: the live animates its mockup, dots, and skeleton
+    shapes through framer-motion INLINE WRITES — computed
+    `animation-name` stays `none` — while the clone reproduces the
+    same loops as CSS keyframes. An animation-name comparison reads
+    ~16 phantom "clone-only carriers", all library-internal. The
+    honest animation surface is the LOOP inventory: time-sample every
+    rendered element's computed transform/opacity/background-position/
+    stroke-dashoffset over a ~4.6s window (CSS keyframes and framer
+    writes both surface as cyclers), compare class prefixes, cycling
+    property families, and value ranges — then pin the CSS-animated
+    subset through the Web Animations API
+    (`el.getAnimations()[0].effect.getKeyframes()` — the EXACT
+    offsets, durations, delays, and transform strings). That surface
+    caught what thirty-seven sessions of static parity could not:
+    the logo petals (the live slides them AXIS-ALIGNED ±12.84px with
+    a 0/30/50/80/100 peak-hold shape; the clone shipped a diagonal
+    3px jitter — 4.28x off in amplitude, 45° rotated in direction)
+    and the hover-shine's gradient travel (a four-corner
+    background-position cycle vs a two-stop sweep — visible only
+    under hover, invisible to every rest-state surface). The fix
+    discipline: author the keyframes with the LIVE's verbatim
+    function spellings (`translateY(12.84px)` for the ns/sn petals,
+    single-arg `translate(-12.84px)` for the ew/we) or the WAAPI
+    strings never compare byte-identically. Two measurement laws ride
+    with the surface: the LONG-SETTLE law (framer entrance springs
+    RING for seconds after the scroll-through — a wrapper measured
+    cycling o 0.804..1 / ty 0.44..11.66 at +500ms, fully at rest
+    after 2.5s; sample only after a 2.5s settle) and the
+    WINDOW-COVERAGE law (a 4.6s window cannot converge a 14s
+    background-position cycle — compare the family + movement
+    evidence + the WAAPI duration, never a jaccard across phases:
+    measured 0.32-0.42 at TRUE parity). And the session's own
+    re-scoping lesson: of the three candidate surfaces proposed, all
+    three measured EMPTY or at parity — the surface the candidates
+    pointed AT (animation parity) held the real drift; measure before
+    you build, and let the measurement re-scope the plan.
 
 ## §13. Pitfalls to Avoid
 
