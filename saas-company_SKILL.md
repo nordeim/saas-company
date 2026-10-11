@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.40.0 · **Last updated:** 2026-10-12 (Session 41 remediation)
+> **Version:** 2.41.0 · **Last updated:** 2026-10-12 (Session 42 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1576,6 +1576,36 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     NONE of these; and a light page is not a broken page (the live's
     /login read 24 words and looked soft-404 to a word-count threshold
     — the route-watch must assert the FORM, not the word count).
+81. **The PRINT-surface empty-set law — scan the DOCUMENT layer, not
+    just the CSSOM; and a superset is never a visible OUTPUT change
+    (Session 42)**: the print media surface (the battery's
+    seventeenth) measured at FOUR layers — the CSSOM rule scan (zero
+    `@media print` rules either side) is NOT a complete inventory: a
+    `<link rel="stylesheet" media="print">` loads a sheet whose
+    TOP-LEVEL rules are ordinary (they apply only under print media),
+    invisible to a CSSMediaRule scan — the document layer (every
+    link/style element's `media` attribute + every adopted sheet's
+    `media.mediaText`) must be scanned alongside, or the surface's
+    empty-set reading is a blind-spot artifact. The render layer
+    closes the loop: `page.pdf({ format: "A4", printBackground: true })`
+    exercises the real print pipeline, and IDENTICAL page counts
+    across sides is the evidence a user would see (a sheet with no
+    print rules still PRINTS — landing 8 pages both sides, /faq 2,
+    /accessibility 3; the /demo 2-vs-1 delta the registered
+    working-superset route — the live soft-404s it). The adjudication
+    law: NO superset addition — print restyling would be a VISIBLE
+    deviation from the reference's printed output; the registered
+    superset families are functional features and invisible-at-rest
+    a11y, never output changes. The session's twin re-catch: the
+    burger measured through the SHARED `md:hidden` selector (gotcha
+    47 — an aria-attributes-keyed read shows the live's bare burger
+    "absent", a false drift); and the error-boundary CAPTURE needs
+    the spec's exact mechanism (fulfill ALL methods + the Pause click
+    that drives the mutation's refresh() into the BROKEN_ROW — a
+    route-registered GET alone never renders the boundary because the
+    initial dashboard state is server-rendered, not client-fetched —
+    the VLM standing check caught the healthy dashboard rendered
+    where the boundary belonged).
 
 
 ## §13. Pitfalls to Avoid

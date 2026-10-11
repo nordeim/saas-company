@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (247 checks) | `npm run test` |
-| Browser E2E (336 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (343 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,8 +28,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (247/247) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
-→ `npm run test:e2e` (336/336) — 707 checks across three layers (Session 41: the
-session41 focus-inventory suite +7; boots the standalone server on :3100 against its own
+→ `npm run test:e2e` (343/343) — 714 checks across three layers (Session 42: the
+session42-print-responsive suite +7; boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=100` — raised from 50 in Session 28
 when the suite's ~45 auth flows outgrew it — `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
@@ -1070,7 +1070,29 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   + returns focus to the burger, the live does NONE of these; plus
   the route-watch registry: NO RECOVERY, NO NEW REGRESSION — the
   soft-404 four unchanged, the /login checked by its FORM not its
-  word count [a light page is not a broken page]). No route
+  word count [a light page is not a broken page]) AND the Session-42
+  extension: the SEVENTEENTH surface — the print media surface
+  (measured at FOUR layers, paired clone-vs-live: the CSSOM rule
+  scan [zero `@media print` rules in any stylesheet, either side],
+  the DOCUMENT scan [zero `media`-attributed link/style elements —
+  the blind-spot layer: a `<link media="print">` sheet's top-level
+  rules are NOT CSSMediaRule, so the rule scan alone cannot see
+  them], the COMPUTED scan [zero style deltas on the key elements
+  under print emulation], and the RENDER layer [`page.pdf` A4 page
+  counts IDENTICAL across sides on 7 of 8 public routes — the /demo
+  delta clone-2 vs live-1 the REGISTERED working-superset route,
+  the live soft-404s it] — the EMPTY-SET contract at exact parity:
+  neither side ships any print styling, and the print render
+  matches; NO superset addition — print restyling would be a VISIBLE
+  deviation from the reference's printed output, and the registered
+  superset families are functional features and invisible-at-rest
+  a11y, never output changes) + the fifteenth surface's ROUTE
+  EXTENSION (/faq + the four legal routes at the four widths —
+  EXACT PARITY on every field: nav 56/72, the burger via the SHARED
+  `md:hidden` selector [gotcha 47 — the live's bare burger carries
+  no aria-controls, an aria-keyed read shows it "absent"], links
+  1/7, zero overflow, docH byte-identical per width per route).
+  No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks

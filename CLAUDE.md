@@ -225,6 +225,49 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   on all NINE surfaces (the VALUE column reading \"values-only
   registered\" on /faq through the registry).
 
+- **Session 42 (2026-10-12) remediation** — see
+  `docs/remediation-plan-session42.md`: a print-surface +
+  responsive-route-extension cycle (the worklog S41 candidates,
+  answered by the recon's measurements). **THE HEADLINE: the drift
+  battery's SEVENTEENTH SURFACE — the print media surface**, measured
+  at FOUR layers paired clone-vs-live: the CSSOM rule scan (zero
+  `@media print` rules in any stylesheet, either side), the DOCUMENT
+  scan (zero media-attributed link/style elements — the blind-spot
+  layer: a `<link media="print">` sheet's top-level rules are NOT
+  CSSMediaRule, so the rule scan alone cannot see them), the COMPUTED
+  scan (zero style deltas on the key elements under print emulation),
+  and the RENDER layer (the real print pipeline via `page.pdf` A4:
+  page counts IDENTICAL across sides on 7 of 8 public routes —
+  landing 8/8, /login 1/1, /faq 2/2, /privacy 2/2, /terms 2/2,
+  /accessibility 3/3, /refund-policy 2/2; the /demo delta clone-2 vs
+  live-1 is the REGISTERED working-superset route — the live
+  soft-404s it). **The empty-set contract at exact parity — neither
+  side ships any print styling, and the print render matches.** The
+  adjudicated decision: NO superset addition — print restyling would
+  be a VISIBLE deviation from the reference's printed output; the
+  registered superset families are functional features and
+  invisible-at-rest a11y, never output changes. **The fifteenth
+  surface's ROUTE EXTENSION: /faq + all four legal routes at the four
+  widths — EXACT PARITY on every field** (nav 56/72, the burger via
+  the SHARED `md:hidden` selector — gotcha 47 re-applied: the first
+  recon's aria-controls-keyed read showed the live's burger
+  "absent", a measurement artifact — links 1/7, zero overflow, docH
+  byte-identical per width per route; /privacy's h1 at 128px every
+  width). **The reference-regression watch: NO RECOVERY, NO NEW
+  REGRESSION** (the soft-404 four unchanged, the working eight at
+  exact word parity, the sitemap unchanged — the D141 policy sets).
+  TDD: the session42-print-responsive suite **7/7 GREEN on arrival**.
+  Gate: **707 -> 714 checks** (247 unit + 124 smoke + 336 -> 343 e2e
+  — the session42 suite +7); the battery **67/67 GREEN, ZERO DRIFT**
+  across three phases (print 14 + responsive 40 + route-watch 13);
+  20 screenshots refreshed (DB canonical before AND after — the
+  REGEX route-abort discipline held; the error-boundary capture
+  fixed in flight: the first run missed the Pause click that drives
+  the mutation's refresh() into the BROKEN_ROW, and the VLM standing
+  check caught the healthy dashboard rendered where the boundary
+  belonged); VLM 5/5 with ZERO flags + 2/2 supplementary (re-verified
+  after the fix).
+
 - **Session 41 (2026-10-12) remediation** — see
   `docs/remediation-plan-session41.md`: a focus-order +
   mobile-nav-verification cycle (the worklog S41 candidates, answered
