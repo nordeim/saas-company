@@ -225,6 +225,41 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   on all NINE surfaces (the VALUE column reading \"values-only
   registered\" on /faq through the registry).
 
+- **Session 41 (2026-10-12) remediation** — see
+  `docs/remediation-plan-session41.md`: a focus-order +
+  mobile-nav-verification cycle (the worklog S41 candidates, answered
+  by the recon's measurements). **THE HEADLINE: the drift battery's
+  SIXTEENTH SURFACE — the focus-order inventory** (the Tab sequence
+  as an ORDERED surface, paired clone-vs-live WITHIN a viewport: the
+  landing at 1440 [34 stops] and 390 [28], /login [6], /faq [28],
+  the open mobile menu [10] — every combo structurally IDENTICAL
+  across sides; the only deltas the registered records: the D-record
+  CTA-card href, the a11y-name supersets [logo/burger/newsletter —
+  the live's controls are UNNAMED], the gotcha-52e open-menu card
+  height). **The new law (gotcha 52f — the FULL-WALK law)**: the
+  first 390 walk read FIVE stops — the stall detector broke on three
+  CONSECUTIVE UNNAMED feature tabs sharing one key; the true walk is
+  28 stops both sides — consecutive unnamed controls are legitimate
+  stops, and the tab inventory is VIEWPORT-dependent on both sides
+  (pairs WITHIN a viewport, never across). **The behavioral trio,
+  measured directionally**: the clone locks scroll + closes on
+  Escape + returns focus to the burger — the live does NONE of
+  these (its post-Escape walk continues the menu rows); the burger's
+  a11y trio stands against the live's bare button. **The
+  reference-regression watch: NO RECOVERY, NO NEW REGRESSION** (the
+  soft-404 four unchanged; the /login word-count false flag
+  adjudicated — a light page is not a broken page, the watch now
+  asserts the FORM); the SEO surface re-verified (D141 sitemap,
+  RFC-9309 robots, per-route meta/canonical/og). TDD: the
+  session41-focus-inventory suite **7/7 GREEN on arrival**. Gate:
+  **700 -> 707 checks** (247 unit + 124 smoke + 329 -> 336 e2e —
+  the session41 suite +7); the battery **36/36 GREEN, ZERO DRIFT**
+  (focus-order 23 + route-watch 13); 20 screenshots refreshed (DB
+  canonical before AND after — the capture lesson: a Playwright GLOB
+  does not cross `/`, so the PATCH-abort needs a REGEX route or the
+  canonical DB dirties); VLM 5/5 with ZERO flags + 2/2 supplementary
+  (the banner + boundary states).
+
 - **Session 40 (2026-10-11) remediation** — see
   `docs/remediation-plan-session40.md`: a responsive-breakpoint +
   reference-regression-watch cycle (the worklog S40 candidates,

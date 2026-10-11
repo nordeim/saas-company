@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.39.0 · **Last updated:** 2026-10-11 (Session 40 remediation)
+> **Version:** 2.40.0 · **Last updated:** 2026-10-12 (Session 41 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1551,6 +1551,31 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     live's /pricing became the FOURTH soft-404 route (after /demo,
     /dashboard, /checkout); register the reference's own breakage,
     never chase it.
+80. **The FULL-WALK law — consecutive UNNAMED controls are legitimate
+    stops, never a stall signal (Session 41)**: the focus-order surface
+    (the Tab sequence as an ordered, paired clone-vs-live inventory)
+    read FIVE stops on its first 390 walk — a capture artifact: the
+    walk's stall detector broke on three icon-only feature tabs sharing
+    one tag|href|name key, reading a repeated key as a focus trap. The
+    true walk is 28 stops on BOTH sides. The law: a focus walk ends
+    ONLY on `<body>` — and the tab inventory is VIEWPORT-dependent on
+    both sides (34 stops at 1440 vs 28 at 390, the reference's own
+    responsive reordering: the desktop nav block vs the burger), so the
+    surface pairs WITHIN a viewport, never across. The session's parity
+    record: every combo (the landing at both widths, /login, /faq, the
+    open mobile menu) structurally identical across sides — the only
+    deltas the registered records (the D-record CTA href, the
+    a11y-name supersets: the live's logo/burger/newsletter controls are
+    UNNAMED). The session's second law — the CAPTURE-mutation trap: a
+    Playwright GLOB (`**/api/workflows*`) does NOT cross `/`, so a
+    PATCH to /api/workflows/<id> slipped past a glob abort and dirtied
+    the canonical DB mid-capture; interception that must cover
+    sub-paths uses a REGEX route. The session's third record: the
+    behavioral trio measured directionally — the clone locks scroll +
+    closes on Escape + returns focus to the burger where the live does
+    NONE of these; and a light page is not a broken page (the live's
+    /login read 24 words and looked soft-404 to a word-count threshold
+    — the route-watch must assert the FORM, not the word count).
 
 
 ## §13. Pitfalls to Avoid

@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (247 checks) | `npm run test` |
-| Browser E2E (329 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (336 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,8 +28,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (247/247) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
-→ `npm run test:e2e` (329/329) — 700 checks across three layers (Session 40: the
-session40 responsive-inventory suite +7; boots the standalone server on :3100 against its own
+→ `npm run test:e2e` (336/336) — 707 checks across three layers (Session 41: the
+session41 focus-inventory suite +7; boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=100` — raised from 50 in Session 28
 when the suite's ~45 auth flows outgrew it — `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
@@ -894,7 +894,13 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     `initial:{opacity:0,scale:.95} → whileInView:{opacity:1,scale:1}`)
     vs the clone's true 276×327, cascading +30px fictions into every
     section below; under dwell both sides settle at `transform: none`
-    with byte-identical rects.
+    with byte-identical rects. (f) The FULL-WALK law (Session 41): a
+    focus-order walk ends ONLY on `<body>` — consecutive UNNAMED
+    controls are legitimate stops, never a stall signal (the first
+    390 walk read FIVE stops because three icon-only feature tabs
+    share one tag|href|name key; the true walk is 28 stops on both
+    sides — and the tab inventory is VIEWPORT-dependent on both
+    sides, so the surface pairs WITHIN a viewport, never across).
 
 ## Architecture invariants
 
@@ -1049,7 +1055,22 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   — /pricing NEW in Session 40 alongside /demo, /dashboard, /checkout
   [D146, registered; the clone's routes the documented working
   supersets]; the live's sitemap unchanged [7 URLs], so the clone's
-  sitemap policy record stands). No route
+  sitemap policy record stands) AND the Session-41 extension: the
+  SIXTEENTH surface — the focus-order inventory (the Tab sequence as
+  an ordered surface, paired clone-vs-live WITHIN a viewport: the
+  landing at 1440 [34 stops] and 390 [28], /login [6], /faq [28], and
+  the open mobile menu [10] — every combo structurally IDENTICAL
+  across sides; the only deltas the registered records: the
+  D-record CTA-card href [/dashboard vs the live's /checkout], the
+  a11y-name supersets [the logo "NovaAI home", the burger "Open
+  menu", the newsletter input "Email address" / button "Subscribe"
+  — the live's controls are UNNAMED], and the gotcha-52e open-menu
+  card height [327 vs the live's unfired 311]; the behavioral trio
+  measured directionally: the clone locks scroll + closes on Escape
+  + returns focus to the burger, the live does NONE of these; plus
+  the route-watch registry: NO RECOVERY, NO NEW REGRESSION — the
+  soft-404 four unchanged, the /login checked by its FORM not its
+  word count [a light page is not a broken page]). No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks
