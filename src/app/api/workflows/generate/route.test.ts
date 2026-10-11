@@ -47,6 +47,7 @@ vi.mock("@/lib/rate-limit", async (importOriginal) => {
 });
 
 import { POST } from "./route";
+import { GENERATE_SYSTEM_PROMPT } from "@/lib/workflow";
 
 const REQ = (idea: string) =>
   new Request("http://localhost/api/workflows/generate", {
@@ -124,5 +125,22 @@ describe("POST /api/workflows/generate — the real-SDK output path (Session 34)
     expect(body.ok).toBe(true);
     expect(body.data.name).toBe("Ops rotation");
     expect(body.data.category).toBe("Ops");
+  });
+
+  it("sends the VERSIONED GENERATE_SYSTEM_PROMPT on the wire (the Session-36 route-boundary pin — a re-inlined or drifted prompt string fails here, not silently)", async () => {
+    // Session 36 R3: the S35 seam is unit-pinned for text + invariant,
+    // but nothing pinned that the WIRE carries the constant — the mocked
+    // SDK asserts outputs only. This pin reads what createCompletion
+    // RECEIVED and holds it to the imported seam constant (the same
+    // source the route imports — one source, no second text; a
+    // re-inlined route string or an edited constant both fail here).
+    createCompletion.mockImplementation(() => reply("{}"));
+    await POST(REQ("prompt pin"));
+    expect(createCompletion).toHaveBeenCalledTimes(1);
+    const call = createCompletion.mock.calls[0][0] as {
+      messages: Array<{ role: string; content: string }>;
+    };
+    const system = call.messages.find((m) => m.role === "system");
+    expect(system?.content).toBe(GENERATE_SYSTEM_PROMPT);
   });
 });

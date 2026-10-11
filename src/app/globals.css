@@ -102,17 +102,22 @@
      #9333ea — the avatar gradient endpoints; slate-700 rgb(49,65,88) vs
      #334155 — live-verified on the login Google button). Pin every
      DRIFTED token this app uses to the v3 hex (the live's own rendered
-     values). Exact matches (slate-50/100/200, gray-100/200, red-50,
-     green-50) are left on v4 defaults. The full drift table lives in
+     values). The remaining "exact matches" (slate-100, gray-100, red-50,
+     green-50) stay on v4 defaults; slate-50/200 + gray-200 were later
+     pinned for byte-stable serialization (the lab() spelling family —
+     Session 36's interaction surface). The full drift table lives in
      docs/remediation-plan-session9.md. */
   --color-slate-300: #cbd5e1;
   --color-slate-200: #e2e8f0; /* value-identical under v4's oklch default — pinned so the computed serialization is byte-stable (the login Google border renders the live's rgb string, not a lab() spelling) */
+  --color-slate-50: #f8fafc; /* Session 36 D135: the interaction surface caught this "exact match" left on v4's default serializing as lab(98.14…) under hover:bg-slate-50 (the login Google button + the 404 Go Home) — value-identical (maxDelta=0 probed in vivo), pinned for the same byte-stability as slate-200 above */
+  --color-gray-200: #e5e7eb; /* Session 36 D134: the features AI-chip's border-gray-200 — the same lab() spelling family (lab(91.62…) vs the live's rgb(229,231,235)), value-identical, pinned for byte-stable serialization */
   --color-slate-400: #94a3b8;
   --color-slate-500: #64748b;
   --color-slate-600: #475569;
   --color-slate-700: #334155;
   --color-slate-800: #1e293b;
   --color-slate-900: #0f172a;
+  --color-gray-100: #f3f4f6; /* Session 36 D136: the features chip-row's bg-gray-100 — the lab() family on a carrier NO battery anchor measures (a painted structural wrapper: not text-bearing, not a media-leaf); found by directed grep + in-vivo probe (lab(96.16…) vs the live's rgb(243,244,246)), value-identical, pinned for byte-stability */
   --color-gray-300: #d1d5db;
   --color-gray-600: #4b5563;
   --color-gray-700: #374151;

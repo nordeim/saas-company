@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 246 unit + 269 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 247 unit + 274 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -145,10 +145,10 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 246/246 PASS
+- [ ] `npm run test` → 247/247 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 124/124 PASS
-- [ ] `npm run test:e2e` → 269/269 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 274/274 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
@@ -224,6 +224,41 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   (241 unit + 124 smoke + 258 e2e); the drift battery **73/73 GREEN**
   on all NINE surfaces (the VALUE column reading \"values-only
   registered\" on /faq through the registry).
+
+- **Session 36 (2026-10-11) remediation** — see
+  `docs/remediation-plan-session36.md`: an interaction-surface +
+  container-style + prompt-boundary-pin cycle (the session_70 S36
+  candidates). **THE HEADLINE: the drift battery's NEW ELEVENTH
+  SURFACE — the interaction-surface column (the S6 hover-probe
+  discipline automated: the k-th rendered interactive element at
+  REST, under REAL hover [page.mouse.move — gotcha 16], and under
+  REAL keyboard Tab focus [the focus-VISIBLE contract], through the
+  S35 normalization contract)** — it caught the **`lab()`
+  serialization family** on its first run: the clone's v4-default
+  "exact match" tokens (Session 9's unpinned list — slate-50,
+  gray-200) computing to `lab(…)` spellings where the live ships
+  `rgb(…)`. Probed IN VIVO: VALUE-identical (maxΔ=0 through the
+  lab→sRGB conversion) — fixed per the slate-200 byte-stability
+  precedent (`--color-slate-50: #f8fafc`, `--color-gray-200:
+  #e5e7eb`, `--color-gray-100: #f3f4f6` — D136 the anchor-invisible
+  structural-wrapper carrier, found by directed grep + probe), with
+  the battery's parseColor growing lab()/lch() parsers (the gotcha-4
+  law one layer deeper — gotcha 49). The TENTH surface's
+  **non-text-bearing second anchor** (the painted media-leaf: icon
+  tiles, dots, skeleton shapes, avatars — 61 painted leaves on the
+  landing) ran GREEN on its maiden run, verified non-trivial. **R3:
+  the composer's prompt-version pin at the route boundary** — the
+  mocked-SDK route tests assert the WIRE carries the imported
+  GENERATE_SYSTEM_PROMPT constant (RED proven by mutation: a
+  re-inlined drifted prompt fails the pin). Gate: **639 → 645
+  checks** (247 unit + 124 smoke + 274 e2e); the drift battery
+  **102/102 GREEN, ZERO DRIFT across all ELEVEN surfaces**
+  (phase-split: 78 main + 8 hover + 8 focus + 8 extra — the sandbox
+  reaps long-detached runs); 20 screenshots refreshed (DB canonical
+  before AND after); VLM 5/5 with BOTH flags adjudicated by evidence
+  (the mockup PASS in-frame at its measured section; the "white
+  section" = the LIVE's own features band, confirmed by VLM-reading
+  the live's own full page).
 
 - **Session 35 (2026-10-11) remediation** — see
   `docs/remediation-plan-session35.md`: a computed-STYLE inventory +

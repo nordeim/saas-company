@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.34.0 · **Last updated:** 2026-10-11 (Session 35 remediation)
+> **Version:** 2.35.0 · **Last updated:** 2026-10-11 (Session 36 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1386,6 +1386,40 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     per-library namespace spelling (the registry's `id-refs` rule
     type — radix-:rN: vs faq-panel-N is structure, a dangling
     reference is a defect).
+
+75. **An interaction surface measures STATES, not elements — and a
+    carrier outside every anchor is invisible until you sweep the
+    TOKEN layer (Session 36)**: the battery's eleventh surface (the
+    k-th rendered interactive element measured at REST, under REAL
+    hover [page.mouse.move — gotcha 16; never a synthetic
+    mouseover], and under REAL keyboard Tab focus [the
+    focus-VISIBLE contract — a programmatic el.focus() never matches
+    :focus-visible on links/buttons], through the S35 normalization
+    contract, with the stable-poll read [two consecutive equal
+    samples or the 700ms cap — the settled-value confirmation, not a
+    fixed wait]) caught the `lab()` serialization family on its
+    first run: the clone's v4-default "exact match" tokens (Session
+    9's deliberately-unpinned list) computing to `lab(…)` spellings
+    where the live ships `rgb(…)` — VALUE-identical (maxΔ=0 through
+    the lab→sRGB conversion, probed in vivo). The two-layer fix:
+    parse lab()/lch() in the canonicalizer (rendering-identical
+    spellings compare EQUAL by construction — gotcha 4 one layer
+    deeper) AND pin the used value-identical tokens to the v3 hex
+    (the slate-200 byte-stability precedent — the computed
+    serialization renders the live's rgb string). The twin lesson
+    (D136): `bg-gray-100` rode a painted STRUCTURAL wrapper no
+    battery anchor measures (not text-bearing, not a media-leaf —
+    the D125 wrapper family excluded by design) — found only by
+    directed grep over the remaining unpinned tokens against the
+    app's actual class usage. Anchor-scoped surfaces see their
+    anchors; token-level byte-stability is an @theme concern. And
+    the tooling twin: a long battery must run PHASE-SPLIT (the
+    sandbox reaps long-detached runs — a silently-empty log with no
+    EXIT line is the signature), and the tenth surface's
+    non-text-bearing second anchor (the painted media-leaf — icon
+    tiles, dots, skeleton shapes, avatars) is only trustworthy once
+    you verify its anchor set is NON-TRIVIAL (61 painted leaves on
+    the landing — a vacuous GREEN is a lie).
 
 ## §13. Pitfalls to Avoid
 

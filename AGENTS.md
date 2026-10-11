@@ -19,16 +19,16 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (246 checks) | `npm run test` |
-| Browser E2E (269 checks; needs a build) | `npm run test:e2e` |
+| Unit tests (247 checks) | `npm run test` |
+| Browser E2E (274 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
 | End-to-end smoke suite (124 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (246/246) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
-→ `npm run test:e2e` (269/269) — 639 checks across three layers (boots the standalone server on :3100 against its own
+`npm run test` (247/247) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
+→ `npm run test:e2e` (274/274) — 645 checks across three layers (boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=100` — raised from 50 in Session 28
 when the suite's ~45 auth flows outgrew it — `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
@@ -772,6 +772,41 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     the per-library namespace spelling (the registry's `id-refs`
     rule type).
 
+
+49. **Chromium serializes some v4-default palette tokens through
+    `lab()` — and an anchor-scoped surface never sees a carrier
+    outside its anchor (Session 36).** The battery's eleventh surface
+    (the interaction-surface column — the S6 hover-probe discipline
+    automated: the k-th rendered interactive element measured at REST,
+    under REAL `page.mouse.move` [gotcha 16], and under REAL keyboard
+    Tab focus [the focus-VISIBLE contract — a programmatic
+    `el.focus()` never matches `:focus-visible` on links/buttons])
+    caught the clone's v4-default "exact match" tokens (Session 9's
+    deliberately-unpinned list) computing to `lab(…)` spellings where
+    the live ships `rgb(…)` — hover:bg-slate-50 on the login Google
+    button + the 404's Go Home, border-gray-200 on the features
+    AI-chip. Probed IN VIVO: the VALUES are rendering-identical
+    (maxΔ=0 through the lab→sRGB conversion) — the gotcha-4 law one
+    layer deeper, so the battery's `parseColor` grew `lab()`/`lch()`
+    parsers. But the FIX follows the Session-9 slate-200
+    byte-stability precedent instead: a USED value-identical token
+    gets PINNED to the v3 hex (`--color-slate-50: #f8fafc`,
+    `--color-gray-200: #e5e7eb`, `--color-gray-100: #f3f4f6`) so the
+    computed serialization is byte-stable. The twin trap (D136):
+    `bg-gray-100` rides a painted STRUCTURAL wrapper (the features
+    chip-row) that NO battery anchor measures — not text-bearing, not
+    a media-leaf (the D125 wrapper family is excluded by design) —
+    found only by directed grep over the remaining unpinned tokens +
+    an in-vivo probe. The law: anchor-scoped surfaces see their
+    anchors; token-level byte-stability is an @theme concern — sweep
+    the UNPINNED token list against the app's actual class usage, not
+    just what the surfaces catch. Related the same session: the
+    battery runs PHASE-SPLIT (main/hover/focus/extra — the sandbox
+    reaps long-detached runs; a silently-empty log with no EXIT line
+    is the signature), and a hover read should be a STABLE-POLL (two
+    consecutive equal samples or the 700ms cap — the S11
+    settled-value lesson automated), never a single sample.
+
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +
@@ -856,7 +891,7 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   (the hydration-appended `/_not-found` copies removed — D122), with
   the 108-row chart/list membership disagreement pinned (chart ∩ list
   = ∅ at the S30 shape's extreme — D123). The drift battery now runs
-  TEN surfaces (word parity, mobile nav, SEO, JSON-LD mounts, the
+  ELEVEN surfaces (word parity, mobile nav, SEO, JSON-LD mounts, the
   Session-31 canonical/og column, the Session-32 head-tag SET column
   that caught D120/D121/D122 on its first run, the Session-33
   DOM-attribute SET column that caught the dormant toaster / the Radix
@@ -868,7 +903,15 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   custom radius scale / the login --muted / the italic note on ITS
   first run — D130/D131/D133, plus the ninth column's aria-*
   vocabulary extension that caught the dangling aria-controls contract
-  — D132), with the
+  — D132, AND the Session-36 extensions: the style inventory's
+  non-text-bearing second anchor — the painted media-leaf (icon
+  tiles, dots, skeleton shapes, avatars; 61 painted leaves on the
+  landing, GREEN on its first run, verified non-trivial) — and the
+  ELEVENTH surface, the interaction-surface column (the k-th rendered
+  interactive element at REST, under REAL hover [page.mouse.move —
+  gotcha 16], and under REAL keyboard focus [Tab — the focus-VISIBLE
+  contract], through the S35 normalization contract) that caught the
+  `lab()` serialization family on ITS first run — D134/D135), with the
   adjudicated sets VERSIONED in `src/lib/head-superset.ts` (the
   registry the battery READS: an unregistered clone-only head tag or
   DOM attribute — either side — surfaces as DRIFT instead of blending
