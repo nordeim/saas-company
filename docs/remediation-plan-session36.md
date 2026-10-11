@@ -178,3 +178,23 @@ battery 78/78 GREEN across ten surfaces — `docs/session_70.md`).
   live's own full page: parity by construction).
 - **Pushed:** see the git log — main only, the SSH wrapper with the
   explicit `--remote git@github.com:nordeim/saas-company.git`.
+
+## The pushed-hash record
+
+The remediation commit **`565692d`** (27 files: the three @theme
+byte-stability pins + the battery's lab()/lch() canonicalizers + the
+route-boundary prompt pin + the session36-interaction-parity suite +
+the docs alignment across PAD/AGENTS [gotcha 49]/CLAUDE/README [the
+645 badge]/SKILL v2.35.0 [lesson 75] + the remediation plan + the
+session log docs/session_72.md + the refreshed screenshots) pushed via
+the SSH wrapper with the EXPLICIT `--remote
+git@github.com:nordeim/saas-company.git` (the wrapper's default remote
+is the runbook's example repo task-management — the S31-recorded trap;
+the explicit flag held from the first dry-run). The wrapper verified
+remote main @ 565692d == local HEAD; the fetch-independent HTTPS
+ls-remote agreed (565692dad7151270c0b5324ca658043d9c39149e). The
+operator key's fingerprint verified through paramiko's own key parse
+before the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU —
+the S1–S35 record); both the wrapper's temp key copy and the
+operator's key file shredded after use; the tree clean; no new
+branches; zero zombie servers.

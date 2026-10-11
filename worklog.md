@@ -1224,3 +1224,17 @@ Stage Summary:
 - The lesson encoded (SKILL 75 + AGENTS gotcha 49): an interaction surface measures STATES, not elements — and anchor-scoped surfaces see their anchors; token-level byte-stability is an @theme concern (sweep the unpinned token list against actual class usage, not just what the surfaces catch).
 - Gate raised 639 -> 645 checks (247 unit + 124 smoke + 274 e2e); the parity battery now runs ELEVEN surfaces (phase-split: 102 checks) with the registry's three layers as the versioned adjudication layer.
 - Survey scripts persisted under research/ (gitignored scratch, the house convention): drift-battery-s36.mjs (phase-split), container-counts-s36.mjs, painted-counts-s36.mjs, lab-drift-probe-s36.mjs, gray100-probe-s36.mjs, capture-screenshots-s36.mjs, vlm-checks-s36.mjs, vlm-adj-s36.mjs, vlm-mockup-adj2-s36.mjs, db-state.mjs.
+
+---
+Task ID: 36-close
+Agent: Super Z (main)
+Task: Session 36 closing — the pushed-hash record + the closing commit
+
+Work Log:
+- Commit 565692d (27 files) pushed via the SSH wrapper with the EXPLICIT --remote git@github.com:nordeim/saas-company.git (the S31-recorded trap; the explicit flag held from the first dry-run); the wrapper verified remote main @ 565692d == local HEAD; the fetch-independent HTTPS ls-remote agreed (565692dad7151270c0b5324ca658043d9c39149e).
+- The paramiko ssh shim re-used at /home/z/bin/ssh (deployed S35, python3.13); the operator key's fingerprint verified through paramiko's own key parse (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU) against the S1-S35 record BEFORE the push.
+- Both the wrapper's temp key copy and the operator's key file shredded after use; the tree clean; no new branches; zero zombie servers (the battery/probe ports :3300-:3308 cleared and verified).
+
+Stage Summary:
+- Session 36 fully closed: the remediation commit 565692d pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session36.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 645 checks (247 unit + 124 smoke + 274 e2e); the parity battery now runs ELEVEN surfaces (phase-split, 102 checks) with the registry's three layers as the versioned adjudication layer; the S37 candidates recorded in docs/session_72.md (the pointer-modality focus layer, the background-image gradient contract, the transition-timing surface).
