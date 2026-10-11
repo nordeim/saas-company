@@ -198,6 +198,15 @@ export function LoginCard() {
            h1 ui-sans-serif…, card 746px). Restore the inheritance on
            this route only. */
         h1, h2, h3, h4, h5, h6 { font-family: inherit; }
+        /* Session 37 D137 - the reference's LOGIN css bundle defines
+           .transition-colors with the legacy -webkit-text-decoration-color
+           alias (SEVEN properties) while its SPA bundle - and every other
+           route - ships SIX (the transition surface's first-run finding).
+           Visually inert (the alias resolves to the same Blink property);
+           pinned for byte-stable computed parity on this route only. */
+        .transition-colors {
+          transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;
+        }
         /* The reference's compiled space-y puts the gap on the FOLLOWING
            sibling (v3-style margin-top). Tailwind v4's margin-bottom on the
            preceding sibling is lost on the form's INLINE labels (vertical

@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.35.0 · **Last updated:** 2026-10-11 (Session 36 remediation)
+> **Version:** 2.36.0 · **Last updated:** 2026-10-11 (Session 37 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1420,6 +1420,42 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     tiles, dots, skeleton shapes, avatars) is only trustworthy once
     you verify its anchor set is NON-TRIVIAL (61 painted leaves on
     the landing — a vacuous GREEN is a lie).
+
+76. **An interpolation directive is a RENDERING difference, a stop
+    position is a VALUE difference — and a false drift costs more
+    than a missed one (Session 37)**: the battery's twelfth surface
+    (the transition-timing contract per interactive — which props
+    transition, at what duration/easing, the `--tw-*` custom-property
+    family stripped as inert-engine emission) caught the live's
+    login-bundle `.transition-colors` carrying the legacy
+    `-webkit-text-decoration-color` alias its own SPA bundle lacks —
+    the reference's css is ROUTE-BUNDLED, and a utility's emission
+    can differ per route (the fix is route-scoped, like the live's
+    own split). The style inventory's gradient layer caught the
+    deeper class: v4's `--tw-gradient-position: … in oklab`
+    interpolation directive is NOT a spelling family — oklab
+    interpolates a DIFFERENT MID-RAMP than the v3 default sRGB the
+    live ships (a real rendering difference; fix it, don't normalize
+    it) — while v4's explicit `0%/100%` stop positions ARE the
+    auto-spaced defaults (a value-identical emission; normalize, and
+    never invent positions), and the `lab()` stop spelling reached
+    the STOP layer no color-prop anchor sees (slate-100 + gray-50,
+    the last unpinned tokens — the anchor-invisibility law one layer
+    deeper: a gradient stop is not background-color). The color-mix
+    ALPHA stops (oklab spellings, maxDelta <= 0.044) are
+    value-identical — parse, don't chase. And the meta-lesson: the
+    pointer-modality twin's first THREE runs manufactured false drift
+    through tooling defects — a zombie standalone server serving a
+    stale build through the health check (the server FORKS: kill the
+    process GROUP, guard the port), an incremental build serving a
+    MIXED build after a route-scoped <style> edit (a hydration #418
+    with no code defect — rm -rf .next before any gate build), and
+    three measurement laws (scroll-settle — both sites animate
+    programmatic scrolls; atomicity — read geometry and press
+    back-to-back; the verified poll — a state reading counts only if
+    :hover held throughout, else retry). Adjudicate every drift IN
+    VIVO with the state signature attached; a drift line without it
+    is unadjudicable.
 
 ## §13. Pitfalls to Avoid
 

@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 247 unit + 274 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 247 unit + 285 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -148,7 +148,7 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run test` → 247/247 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 124/124 PASS
-- [ ] `npm run test:e2e` → 274/274 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 285/285 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
@@ -224,6 +224,43 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   (241 unit + 124 smoke + 258 e2e); the drift battery **73/73 GREEN**
   on all NINE surfaces (the VALUE column reading \"values-only
   registered\" on /faq through the registry).
+
+- **Session 37 (2026-10-11) remediation** — see
+  `docs/remediation-plan-session37.md`: a transition-timing +
+  gradient-layer + pointer-modality cycle (the session_72 S37
+  candidates). **THE HEADLINE: the drift battery's TWELFTH SURFACE —
+  the transition-timing contract** (which props transition, at what
+  duration/easing, per interactive; the `--tw-*` family stripped) —
+  caught **D137**: the live's LOGIN bundle ships `.transition-colors`
+  with the legacy `-webkit-text-decoration-color` alias (7 props)
+  where its SPA bundle ships 6 — fixed with a route-scoped style
+  override + 3 pins. **The gradient layer** (background-image through
+  the gradient contract) caught **D138** — v4's `in oklab`
+  interpolation directive, a REAL mid-ramp rendering difference —
+  fixed by overriding the five USED `bg-gradient-to-*` utilities;
+  **D139** — the explicit 0%/100% stop positions (value-identical,
+  the from/to ride the override, the via positions normalized);
+  **D140** — slate-100 + gray-50 `lab()` STOPS (the D134-D136 family
+  one layer deeper: the STOP layer no color-prop anchor sees), pinned
+  in the @theme; the color-mix alpha stops probed VALUE-IDENTICAL
+  (maxDelta <= 0.044) and normalized. **The pointer-modality focus
+  twin** (a REAL held mousedown — :focus without :focus-visible) ran
+  GREEN at parity after THREE measurement-artifact families were
+  disciplined (the scroll-settle, atomicity, and verified-poll laws —
+  gotcha 50c). **The extra phase** caught **D141**: the clone's
+  sitemap listed /login where the live's own policy omits it —
+  removed. **TOOLING (gotcha 50): the standalone server FORKS** (a
+  wrapper-only kill orphans a next-server child serving a STALE
+  build — the port guard + the group kill); **an incremental build
+  can serve a MIXED build** after route-scoped <style> edits (a
+  hydration #418 with NO code defect — rm -rf .next before any gate
+  build; the clean-rebuild bisect proved the CSS innocent). Gate:
+  **645 -> 656 checks** (247 unit + 124 smoke + 274 -> 285 e2e — the
+  session37 suites +11); the battery **36/36 GREEN, ZERO DRIFT**
+  across its four phases (pointer 8 + gradient 8 + transition 8 +
+  extra 12); 20 screenshots refreshed (DB canonical before AND
+  after); VLM 4/5 raw -> 5/5 after the login 4px-strip flag
+  adjudicated by computed-level evidence.
 
 - **Session 36 (2026-10-11) remediation** — see
   `docs/remediation-plan-session36.md`: an interaction-surface +

@@ -108,6 +108,7 @@
      Session 36's interaction surface). The full drift table lives in
      docs/remediation-plan-session9.md. */
   --color-slate-300: #cbd5e1;
+  --color-slate-100: #f1f5f9; /* Session 37 D140: the gradient layer caught this remaining "exact match" as the login main gradient's to-stop — lab(96.286…) vs the live's rgb(241,245,249), value-identical (the D134-D136 family one layer deeper: the STOP layer, invisible to every color-prop anchor), pinned for byte-stable serialization */
   --color-slate-200: #e2e8f0; /* value-identical under v4's oklch default — pinned so the computed serialization is byte-stable (the login Google border renders the live's rgb string, not a lab() spelling) */
   --color-slate-50: #f8fafc; /* Session 36 D135: the interaction surface caught this "exact match" left on v4's default serializing as lab(98.14…) under hover:bg-slate-50 (the login Google button + the 404 Go Home) — value-identical (maxDelta=0 probed in vivo), pinned for the same byte-stability as slate-200 above */
   --color-gray-200: #e5e7eb; /* Session 36 D134: the features AI-chip's border-gray-200 — the same lab() spelling family (lab(91.62…) vs the live's rgb(229,231,235)), value-identical, pinned for byte-stable serialization */
@@ -118,6 +119,7 @@
   --color-slate-800: #1e293b;
   --color-slate-900: #0f172a;
   --color-gray-100: #f3f4f6; /* Session 36 D136: the features chip-row's bg-gray-100 — the lab() family on a carrier NO battery anchor measures (a painted structural wrapper: not text-bearing, not a media-leaf); found by directed grep + in-vivo probe (lab(96.16…) vs the live's rgb(243,244,246)), value-identical, pinned for byte-stability */
+  --color-gray-50: #f9fafb; /* Session 37 D140: the gradient layer caught gray-50 as the features section's via-stop — lab(98.2596…) vs the live's rgb(249,250,251), value-identical, pinned for byte-stable stop serialization (the same STOP-layer family as slate-100 above) */
   --color-gray-300: #d1d5db;
   --color-gray-600: #4b5563;
   --color-gray-700: #374151;
@@ -236,6 +238,45 @@
      and it only fires where BOTH :focus and :focus-visible match. */
   input:focus:focus-visible {
     --tw-ring-color: var(--color-slate-400);
+  }
+  /* Session 37 D138/D139 — the gradient byte-parity overrides. Tailwind
+     v4's bg-gradient-to-* utilities emit `--tw-gradient-position: to
+     bottom right in oklab` — the oklab INTERPOLATION DIRECTIVE is a real
+     rendering difference (oklab interpolates a different mid-ramp than
+     the v3 default sRGB the live ships), and the stops string carries
+     the explicit `--tw-gradient-from-position: 0%` / `--tw-gradient-
+     to-position: 100%` the live's v3 bundle never emits. The five
+     directions below are the app's ACTUAL usage (swept: t / r / b / l /
+     br); each override re-declares the directive-free position value and
+     the position-free stops string (the via-stops chain is preserved —
+     via gradients keep their auto-spaced 0%/50%/100% positions, the
+     value-identical D139 equivalence class). This block wins the
+     cascade by ORDER (appended after the engine's generated utilities
+     in the same layer) exactly like the transition-colors override
+     above. The via-stops POSITION spellings that remain are value-
+     identical to the auto-spaced defaults — the battery's gradient
+     contract normalizes them; the color-mix ALPHA stops (oklab()
+     spellings) are value-identical too (maxDelta ≤ 0.044 probed in
+     vivo, research/oklab-stops-probe-s37.mjs). */
+  .bg-gradient-to-t {
+    --tw-gradient-position: to top;
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from), var(--tw-gradient-to));
+  }
+  .bg-gradient-to-r {
+    --tw-gradient-position: to right;
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from), var(--tw-gradient-to));
+  }
+  .bg-gradient-to-b {
+    --tw-gradient-position: to bottom;
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from), var(--tw-gradient-to));
+  }
+  .bg-gradient-to-l {
+    --tw-gradient-position: to left;
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from), var(--tw-gradient-to));
+  }
+  .bg-gradient-to-br {
+    --tw-gradient-position: to bottom right;
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from), var(--tw-gradient-to));
   }
 }
 

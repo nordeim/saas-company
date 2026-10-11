@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (247 checks) | `npm run test` |
-| Browser E2E (274 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (285 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (247/247) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
-→ `npm run test:e2e` (274/274) — 645 checks across three layers (boots the standalone server on :3100 against its own
+→ `npm run test:e2e` (285/285) — 656 checks across three layers (Session 37: the
+session37 transition/gradient/sitemap suites +11; boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=100` — raised from 50 in Session 28
 when the suite's ~45 auth flows outgrew it — `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
@@ -807,6 +808,39 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     consecutive equal samples or the 700ms cap — the S11
     settled-value lesson automated), never a single sample.
 
+50. **Three tooling traps that manufacture false readings (Session 37).
+    (a) The standalone server FORKS** — `node .next/standalone/server.js`
+    spawns a `next-server` child; killing only the wrapper ORPHANS the
+    child (reparented to init, PPID 1) and it keeps serving a STALE
+    build forever — and a naive health check then "passes" against the
+    zombie while every reading after it is a lie (measured: a
+    post-gradient-fix battery read `clone=0 gradient carriers` against
+    the zombie's pre-fix build). The discipline: spawn DETACHED (own
+    process group), kill the GROUP (`process.kill(-pid, "SIGKILL")`),
+    and GUARD the port (if :3300 answers a health check before you
+    spawned, a zombie holds it — fail loudly).
+    **(b) An incremental build can serve a MIXED build** after editing
+    a route-scoped `<style>` template (and possibly any
+    hydration-sensitive text): the HTML and the client chunk disagree
+    and the page throws React #418 (text mismatch) at LOAD with NO
+    code defect — it flunked 4-6 e2e specs per run and survived two
+    bisect rounds before the clean-rebuild control caught it. The
+    discipline: `rm -rf .next` before any gate build; an intermittent
+    #418 on an untouched route is the signature.
+    **(c) Interaction-state measurements need THREE laws** (each
+    manufactured its own false-drift class on the pointer twin's first
+    runs): the SCROLL-SETTLE law (both sites ANIMATE programmatic
+    scrolls — the clone's Lenis, the live's CSS scroll-behavior — so a
+    geometry read at +60ms is MID-ANIMATION and the mouse lands
+    off-target; poll scrollY to a stable pair first), the ATOMICITY
+    law (read geometry and press on the SAME side back-to-back — a gap
+    lets late layout shifts move the element out from under the
+    pointer), and the VERIFIED-POLL law (a state reading is accepted
+    only when `:hover` matched throughout the poll — anything else is
+    a retry, never a drift; record the `:hover/:focus/:active`
+    matches with every reading). A drift line without its state
+    signature is unadjudicable.
+
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +
@@ -911,7 +945,7 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   interactive element at REST, under REAL hover [page.mouse.move —
   gotcha 16], and under REAL keyboard focus [Tab — the focus-VISIBLE
   contract], through the S35 normalization contract) that caught the
-  `lab()` serialization family on ITS first run — D134/D135), with the
+  `lab()` serialization family on ITS first run — D134/D135), AND the Session-37 extensions: the TWELFTH surface — the transition-timing contract (which props transition, at what duration/easing, per interactive; the `--tw-*` custom-property family stripped as inert-engine emission; the `--tw-*` strip measured, not assumed) that caught the live's login-bundle `-webkit-text-decoration-color` alias on ITS first run (D137); the style inventory's GRADIENT layer (every rendered element's computed background-image through the gradient contract — function family, direction grammar, stops as color tuples, the auto-spacing position equivalence class) that caught v4's `in oklab` interpolation directive — a REAL rendering difference — plus the stop-position emission and the last two unpinned `lab()` stop tokens (D138–D140); and the interaction surface's POINTER-MODALITY focus twin (the k-th interactive under a REAL held page.mouse.down()) — GREEN at parity through the three measurement laws (gotcha 50c), with the
   adjudicated sets VERSIONED in `src/lib/head-superset.ts` (the
   registry the battery READS: an unregistered clone-only head tag or
   DOM attribute — either side — surfaces as DRIFT instead of blending
