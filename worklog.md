@@ -1305,3 +1305,17 @@ Stage Summary:
 - Gate raised 656 → 673 checks (247 unit + 124 smoke + 302 e2e); the parity battery now runs THIRTEEN surfaces (52 checks across three phases, zero drift).
 - Survey scripts persisted under research/ (gitignored scratch, the house convention): recon-s38.mjs, recon2-s38.mjs, probe-mockup-s38.mjs, probe-mockup2-s38.mjs, probe-mockup3-s38.mjs, probe-loops-s38.mjs, probe-ranges-s38.mjs, probe-logo-css-s38.mjs, probe-logo-css2-s38.mjs, probe-logo-keys-s38.mjs, probe-bgpos-s38.mjs, probe-bgpos2-s38.mjs, probe-wrapper-s38.mjs, probe-shine-keys-s38.mjs, vlm-adj-strip-s38.mjs, dbg-s38.mjs, drift-battery-s38.mjs, capture-screenshots-s38.mjs, vlm-checks-s38.mjs.
 - The S39 candidates: the loop inventory's PERIOD layer (the ranges are pinned, the periods only through the WAAPI durations — a sampled zero-crossing analysis could pin the framer loops' periods); the reduced-motion surface (prefers-reduced-motion: both sides' loop behavior under the media query — the clone's CSS honors it, the live's framer may not); or the battery's fourteenth surface — the Z-INDEX stacking inventory (the computed z-index + stacking-context creation on positioned elements).
+
+---
+Task ID: 38-close
+Agent: Super Z (main)
+Task: Session 38 closing — the pushed-hash record + the closing commit
+
+Work Log:
+- Commit a462734 (26 files: the D142 eight-petal keyframe rewrite + the D143 gradientShift five-stop corner cycle in globals.css + the three session38 spec files [17 pins] + the docs alignment across PAD [revision block, ledger D142-D143, section 7 counts 247/124/302 = 673, section 7.2, section 11]/AGENTS [the thirteenth surface + gotcha 51]/CLAUDE/README [the 673 badge]/SKILL v2.37.0 [lesson 77] + the remediation plan session38 + the session log docs/session_76.md + the refreshed screenshots + this worklog) pushed via the SSH wrapper with the EXPLICIT --remote git@github.com:nordeim/saas-company.git (the S31-recorded trap; the explicit flag held from the first dry-run); the wrapper verified remote main @ a462734 == local HEAD; the fetch-independent HTTPS ls-remote agreed (a46273487a30972de7e73e2510f7f495c7cb6ca5).
+- The paramiko ssh shim re-used at /home/z/bin/ssh (survived from S37); the operator key's fingerprint verified through paramiko's own key parse (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU) against the S1-S37 record BEFORE the push.
+- Both the wrapper's temp key copy and the operator's key file shredded after use; the tree clean; no new branches; zero zombie servers (all probe/battery/capture ports :3300-:3340 swept and verified).
+
+Stage Summary:
+- Session 38 fully closed: the remediation commit a462734 pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session38.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 673 checks (247 unit + 124 smoke + 302 e2e); the parity battery now runs THIRTEEN surfaces (52 checks across three phases) with the registry + the registered framer-reproduction names as the versioned adjudication layers; the S39 candidates recorded in this worklog (the loop periods layer, the reduced-motion surface, the z-index stacking inventory).

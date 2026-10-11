@@ -192,5 +192,22 @@ the drift battery 36/36 GREEN across four phases — `docs/session_74.md`).
       v2.37.0 lesson 77, .env.example verified in sync — no env vars
       touched, code-only) + the session log (docs/session_76.md) + the
       worklog
-- [ ] The commit + the wrapper push (the explicit `--remote`, the
+- [x] The commit + the wrapper push (the explicit `--remote`, the
       fingerprint check, the key shredding)
+
+
+## The pushed-hash record (the closing discipline)
+
+- Remediation commit **a462734** pushed via the SSH wrapper with the
+  EXPLICIT `--remote git@github.com:nordeim/saas-company.git` (the S31
+  trap: the wrapper's DEFAULT remote is the runbook's example repo —
+  the explicit flag held from the first dry-run).
+- Wrapper-verified: remote main @ a462734 == local HEAD; the
+  fetch-independent HTTPS ls-remote agreed
+  (a46273487a30972de7e73e2510f7f495c7cb6ca5).
+- The operator key's fingerprint verified through paramiko's own key
+  parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU
+  — matches the S1–S37 record); both the wrapper's temp key copy and
+  the operator's key file shredded after use.
+- Zero zombies at close (all probe/battery/capture ports :3300–:3340
+  swept and cleared); the tree clean; no new branches.
