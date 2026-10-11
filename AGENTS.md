@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (247 checks) | `npm run test` |
-| Browser E2E (322 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (329 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,8 +28,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (247/247) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
-→ `npm run test:e2e` (322/322) — 693 checks across three layers (Session 39: the
-session39 scroll-dot-period/stacking-inventory/reduced-motion-loops/period-parity suites +20; boots the standalone server on :3100 against its own
+→ `npm run test:e2e` (329/329) — 700 checks across three layers (Session 40: the
+session40 responsive-inventory suite +7; boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=100` — raised from 50 in Session 28
 when the suite's ~45 auth flows outgrew it — `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
@@ -885,7 +885,16 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     EVAL re-catch: `page.evaluate("async () => …")` does NOT
     auto-invoke in this Playwright version — `eval()` the string
     first or it returns `undefined` SILENTLY (the S37 trap, caught
-    twice again this session).
+    twice again this session). (e) The PER-BREAKPOINT DWELL clause
+    (Session 40): a viewport change re-renders and RE-ARMS the
+    below-fold `whileInView` entrances — every breakpoint re-measure
+    needs its own scroll-and-hold pass. The un-dwelled responsive
+    probe read the live's problem-section mockup card at 262×311 (its
+    UNFIRED initial `scale(.95)` — the bundle authors
+    `initial:{opacity:0,scale:.95} → whileInView:{opacity:1,scale:1}`)
+    vs the clone's true 276×327, cascading +30px fictions into every
+    section below; under dwell both sides settle at `transform: none`
+    with byte-identical rects.
 
 ## Architecture invariants
 
@@ -1020,7 +1029,27 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   authored contract, registered), plus the reduced-motion loop record
   (under `reduce` the live keeps 29 loopers cycling — framer writes
   AND its own CSS animations; the clone collapses to ZERO — the S14
-  a11y superset, now pinned at the loop level). No route
+  a11y superset, now pinned at the loop level), AND the Session-40
+  extension: the FIFTEENTH surface — the responsive breakpoint
+  inventory (the same element set measured at 390/768/1024/1440 on
+  the landing and /login, paired clone-vs-live, DWELL-loaded per the
+  new gotcha-52e law — a viewport change re-renders and re-arms the
+  below-fold entrances, so every breakpoint re-measure needs its own
+  scroll-and-hold pass, or the geometry reads pre-entrance fiction:
+  the live's problem-section card at its unfired scale(.95) — 262×311
+  vs the true resting 276×327, +30px cascading into every section
+  below; the record: nav height [56px @390 / 72px @≥768], burger
+  visibility, nav-link count, zero horizontal overflow, document
+  height, the paired element-set geometry per breakpoint — GREEN at
+  parity on both routes at all four widths with ZERO unregistered
+  geometry drift; the only asymmetry the clone's `<main>` landmark on
+  the LANDING [the registered a11y superset; on /login BOTH sides
+  carry main|min-h-screen.flex, identical sets]; plus the
+  reference-regression watch: the live's soft-404 set now FOUR routes
+  — /pricing NEW in Session 40 alongside /demo, /dashboard, /checkout
+  [D146, registered; the clone's routes the documented working
+  supersets]; the live's sitemap unchanged [7 URLs], so the clone's
+  sitemap policy record stands). No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks

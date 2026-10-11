@@ -225,6 +225,41 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   on all NINE surfaces (the VALUE column reading \"values-only
   registered\" on /faq through the registry).
 
+- **Session 40 (2026-10-11) remediation** — see
+  `docs/remediation-plan-session40.md`: a responsive-breakpoint +
+  reference-regression-watch cycle (the worklog S40 candidates,
+  re-scoped by the recon's measurements). **THE HEADLINE: the drift
+  battery's FIFTEENTH SURFACE — the responsive breakpoint inventory**
+  (the same element set measured at 390/768/1024/1440 on the landing
+  and /login, paired clone-vs-live, DWELL-loaded): nav height 56px
+  @390 / 72px @≥768 both sides; the burger below md / 7 desktop links
+  at ≥768; **zero horizontal overflow at every width both sides**;
+  document heights byte-identical per width (10092/7748/7544/7498
+  landing, 900 login); **ZERO real geometry drift at any breakpoint**
+  — the only asymmetry the clone's `<main>` landmark on the LANDING
+  (the registered a11y superset; on /login BOTH sides carry
+  main|min-h-screen.flex, identical sets). **The new law (gotcha
+  52e — the DWELL law is PER-BREAKPOINT)**: a viewport change
+  re-renders and RE-ARMS the below-fold entrances — the un-dwelled
+  first probe read the live's problem-section card at 262×311 (its
+  UNFIRED initial scale(.95); the bundle authors scale:.95 → 1) vs
+  the clone's true 276×327, +30px cascading fictions below; under
+  dwell both settle at `transform: none`. **The reference-regression
+  watch (D146)**: the live's soft-404 set grew to FOUR routes —
+  `/pricing` NEW this session (verified twice) alongside /demo,
+  /dashboard, /checkout; its sitemap UNCHANGED (7 URLs — /pricing
+  never listed, the clone's sitemap policy record stands); the
+  clone's /pricing the documented working-superset route. TDD: the
+  session40-responsive-inventory suite **7/7 GREEN on arrival** (the
+  parity session's registry-pins pattern; one standing pin hardened —
+  the S36 D135 hover-poll's 150ms hover-settle after a full-suite
+  load flake). Gate: **693 -> 700 checks** (247 unit + 124 smoke +
+  322 -> 329 e2e — the session40 suite +7); the battery **69/69
+  GREEN, ZERO DRIFT** across its two phases (responsive 56 + route
+  watch 13); 20 screenshots refreshed (DB canonical before AND
+  after); VLM 5/5 with ZERO flags (the known parity expectations
+  encoded in the prompts).
+
 - **Session 39 (2026-10-11) remediation** — see
   `docs/remediation-plan-session39.md`: a stacking-inventory +
   loop-period + reduced-motion cycle (the worklog S39 candidates,

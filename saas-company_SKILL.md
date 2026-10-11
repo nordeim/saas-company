@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.38.0 · **Last updated:** 2026-10-11 (Session 39 remediation)
+> **Version:** 2.39.0 · **Last updated:** 2026-10-11 (Session 40 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1526,6 +1526,31 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     the z/position values exactly). And the re-caught S37 trap,
     twice: `page.evaluate("async () => {...}")` does NOT auto-invoke —
     eval() the string first or it returns undefined SILENTLY.
+79. **The DWELL law is PER-BREAKPOINT — a viewport change re-arms the
+    entrances (Session 40)**: the responsive-breakpoint surface (the
+    same element set at 390/768/1024/1440, paired clone-vs-live)
+    measured the live's problem-section mockup card at 262×311 on the
+    first un-dwelled probe — its UNFIRED `whileInView` initial
+    `scale(.95)` — vs the clone's true resting 276×327, with +30px
+    y-fictions cascading into every section below (computed w/h read
+    276×327 while the bounding rect read 262×311 — the smoking gun:
+    a transform). The bundle read settled the contract
+    (`initial:{opacity:0,scale:.95} → whileInView:{opacity:1,scale:1}`
+    — the resting state is scale 1), and under the scroll-and-hold
+    dwell BOTH sides settled at `transform: none` with byte-identical
+    rects. The law: every breakpoint re-measure needs its OWN dwell
+    pass — the viewport change re-renders and re-arms the below-fold
+    entrances. The session's parity record: nav heights 56px @390 /
+    72px @≥768, the burger below md / 7 desktop links at ≥768, ZERO
+    horizontal overflow at every width, byte-identical document
+    heights per width, and ZERO real geometry drift at any breakpoint
+    — a clean parity surface whose only asymmetry was the clone's
+    `<main>` landmark on the LANDING (on /login BOTH sides carry
+    main|min-h-screen.flex — route-aware contracts, never blanket ones).
+    The session's second record: the reference kept regressing — the
+    live's /pricing became the FOURTH soft-404 route (after /demo,
+    /dashboard, /checkout); register the reference's own breakage,
+    never chase it.
 
 
 ## §13. Pitfalls to Avoid

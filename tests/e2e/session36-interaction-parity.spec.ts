@@ -47,14 +47,18 @@ test("the login Google button's hover bg renders the live's #f8fafc under a REAL
   });
   expect(box).not.toBeNull();
   await page.mouse.move(box!.x, box!.y);
-  // the stable-poll read: two consecutive equal samples or the 700ms cap
+  // the S40 hardening: under full-suite load the mousemove's hover state
+  // can lag behind the poll's first samples — the two-consecutive-equal
+  // early-return then locks the PRE-hover white. A 150ms hover-settle
+  // head start (plus the widened 1200ms cap) closes the race.
+  await page.waitForTimeout(150);
   const bg = await page.evaluate(async () => {
     const el = Array.from(document.querySelectorAll("button")).find((b) =>
       (b.textContent || "").includes("Google"),
     )!;
     const read = () => getComputedStyle(el).backgroundColor;
     let prev = read();
-    for (let i = 0; i < 14; i++) {
+    for (let i = 0; i < 24; i++) {
       await new Promise((r) => setTimeout(r, 50));
       const cur = read();
       if (cur === prev) return cur;
