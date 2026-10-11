@@ -115,7 +115,10 @@ test.describe("the logo petal choreography pins (Session 38 D142)", () => {
       const el = document.querySelector(".anim-logo-ew");
       if (!el) return null;
       let txMin = 1e9, txMax = -1e9, tyMin = 1e9, tyMax = -1e9;
-      for (let k = 0; k < 46; k++) {
+      // S39 hardening: the ew petal sits out the first 3s (delay 3000ms),
+      // so a short window that starts late can miss the first peak — the
+      // 6.5s window covers TWO full delayed cycles regardless of phase
+      for (let k = 0; k < 87; k++) {
         const m = getComputedStyle(el).transform.match(/matrix\(([^)]+)\)/);
         if (m) {
           const v = m[1].split(",").map(Number);

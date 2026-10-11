@@ -225,6 +225,45 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   on all NINE surfaces (the VALUE column reading \"values-only
   registered\" on /faq through the registry).
 
+- **Session 39 (2026-10-11) remediation** — see
+  `docs/remediation-plan-session39.md`: a stacking-inventory +
+  loop-period + reduced-motion cycle (the worklog S39 candidates,
+  re-scoped by the recon's measurements). **THE HEADLINE: the drift
+  battery's FOURTEENTH SURFACE — the z-index/stacking inventory**
+  (every rendered element with z-index ≠ auto OR position ≠ static,
+  DWELL-loaded — the new gotcha-52a law: the live's below-fold
+  entrances need HOLDING, not passing) — the raw signature diff
+  resolves ENTIRELY into REGISTERED families (the live's dormant
+  toaster shells ×2 families [z-[100] content routes + z-9999
+  data-rht-toaster on /login], the framer centering/residue
+  transforms ~51 vs ~20, the platform announcer, the dashboard
+  sticky-header superset [the live's top bar is STATIC — scrolls
+  away], the WCAG live region, the /demo superset route [the live
+  SOFT-404s it]). **The loop PERIOD layer caught D144**: the hero
+  scroll-dot bar (the live's OWN BUNDLE: `y:[0,8,0], duration:1.5` —
+  the clone shipped S8's coarse 1.7s estimate; fixed in both CSS
+  carriers). **D145 REGISTERED**: the live's chevron float is
+  suppressed by its own vestigial `whileInView:{y:0}` (authored
+  −15px, rendered 0.04–4.4px — an unstable race; the clone keeps the
+  AUTHORED contract per the D125/S14 precedent). **The live
+  /dashboard 404s as of S39** (a reference-side regression — the S38
+  parity record stands as the versioned contract). **TOOLING (gotcha
+  52): four measurement laws** — the DWELL law (entrances need
+  holding), the REAL-TIMESTAMP law (performance.now deltas, never
+  nominal index×interval — timer clamping under-reports ~10%; median
+  trough-gaps), the VARIANT-CONFLICT law (adjudicate rendered
+  amplitudes against the live's BUNDLE — whileInView/animate races
+  have no stable rendered contract), the EVAL re-catch
+  (page.evaluate(string) needs eval() first). Gate: **673 -> 693
+  checks** (247 unit + 124 smoke + 302 -> 322 e2e — the session39
+  suites +20); the battery **24/24 GREEN, ZERO DRIFT** across its
+  three phases (stack 8 + period 5 + extra 11); 20 screenshots
+  refreshed (DB canonical before AND after); VLM 5/5 after
+  adjudication (every flag a check-prompt expectation error or
+  live-own parity — the mobile-menu artifact verified IDENTICAL on
+  the live by side-by-side VLM comparison; gotcha 18's toaster
+  pointer-block re-caught IN THE WILD on the live's own burger).
+
 - **Session 38 (2026-10-11) remediation** — see
   `docs/remediation-plan-session38.md`: a loop-inventory +
   static-inventory cycle (the session_74 S38 candidates, RE-SCOPED by

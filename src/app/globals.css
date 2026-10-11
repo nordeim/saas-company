@@ -189,10 +189,12 @@
   --animate-organic-gradient: organic-gradient 14s ease-in-out infinite;
   --animate-organic-gradient-fast: organic-gradient 6s ease-in-out infinite;
   /* The hero scroll-indicator dot: the reference drives it with a JS
-     oscillation (rAF-sampled: translateY 0→~8px, ≈1.7s period, smooth
-     ease). Tailwind's animate-bounce bounces in place — this travels
-     down the pill like the live site. */
-  --animate-scroll-dot: scroll-dot 1.7s ease-in-out infinite;
+     oscillation (the live's own bundle: animate {y:[0,8,0]}, transition
+     {duration:1.5, repeat:∞} — S39 D144; the S8 "≈1.7s" rAF estimate
+     superseded by the real-timestamp trough-gap measurement [1498ms]
+     and the bundle read). Tailwind's animate-bounce bounces in place —
+     this travels down the pill like the live site. */
+  --animate-scroll-dot: scroll-dot 1.5s ease-in-out infinite;
   /* FAQ accordion — the live's Radix/shadcn keyframes (0.2s ease-out
      height animation against --radix-accordion-content-height; the panel
      sets the var from its own content height on mount). */
@@ -610,7 +612,7 @@
   }
 }
 .animate-scroll-dot {
-  animation: scroll-dot 1.7s ease-in-out infinite;
+  animation: scroll-dot 1.5s ease-in-out infinite;
 }
 
 /* The live's LOOPING framer animations (Session 10 F1/F2 — the configs

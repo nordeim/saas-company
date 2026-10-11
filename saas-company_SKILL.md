@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.37.0 · **Last updated:** 2026-10-11 (Session 38 remediation)
+> **Version:** 2.38.0 · **Last updated:** 2026-10-11 (Session 39 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1495,6 +1495,38 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     three measured EMPTY or at parity — the surface the candidates
     pointed AT (animation parity) held the real drift; measure before
     you build, and let the measurement re-scope the plan.
+78. **A rendered amplitude can be a library RACE — the authored bundle
+    is the only stable contract (Session 39)**: the live's problem-
+    section chevron carries BOTH `animate:{y:[0,-15,0]}` AND a
+    vestigial `whileInView:{y:0}` — the framer variant conflict
+    suppresses the authored float once the element enters view
+    (measured in-view amplitude 0.04-0.14px across loads, out-of-view
+    race artifacts up to 4.4px, NEVER the authored -15px). The
+    rendered value is UNPINNABLE — it differs per load. The session's
+    discipline: fetch the live's own JS bundle and read the AUTHORED
+    config (the definitive source: `animate:{y:[0,-15,0]},
+    transition:{duration:4, repeat:Infinity, ease:"easeInOut"}` —
+    byte-for-byte the clone's keyframes), register the reference's
+    conflict as a documented divergence, and keep the clone rendering
+    the AUTHORED contract. The session also caught a REAL period
+    drift the same way: the scroll-dot bar measured 1.5s live vs 1.7s
+    clone — the bundle confirmed `duration:1.5` — Session 8's coarse
+    rAF estimate had been 13% off for thirty-one sessions. Three more
+    measurement laws: the DWELL law (the live's below-fold entrances
+    need the element HELD in view ~450ms — a fast smooth-scroll pass
+    leaves them UNFIRED and every resting-state surface sampled after
+    reads pre-entrance fiction), the REAL-TIMESTAMP law (periods from
+    performance.now() deltas, never nominal index*interval — timer
+    clamping under-reports ~10%; same-direction crossings are ONE
+    period apart; a missed shallow trough merges cycles — take the
+    MEDIAN gap), and the stacking lesson (a z-index/position/
+    stacking-context inventory sees the CONTAINERS the text-anchor
+    surfaces cannot — but the live's framer residue transforms
+    manufacture ~31 phantom carriers: register the families, compare
+    the z/position values exactly). And the re-caught S37 trap,
+    twice: `page.evaluate("async () => {...}")` does NOT auto-invoke —
+    eval() the string first or it returns undefined SILENTLY.
+
 
 ## §13. Pitfalls to Avoid
 

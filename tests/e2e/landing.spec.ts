@@ -12,7 +12,7 @@ test.describe("landing page", () => {
     // The looping hero video is present.
     await expect(page.locator("section video").first()).toHaveAttribute("src", "/media/hero-ai-loop.mp4");
     // The scroll indicator travels down the pill like the reference (rAF-sampled
-    // on the live: translateY 0→~8px, ≈1.7s period) — animate-bounce bounced in place.
+    // on the live: translateY 0→8px, 1.5s period — the S39 D144 bundle-read contract)
     const dot = page.locator("section .absolute.bottom-8 .w-1.h-2");
     await expect(dot).toBeVisible();
     await expect(dot).toHaveClass(/animate-scroll-dot/);

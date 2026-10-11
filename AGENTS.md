@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (247 checks) | `npm run test` |
-| Browser E2E (302 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (322 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,8 +28,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (247/247) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
-→ `npm run test:e2e` (302/302) — 673 checks across three layers (Session 38: the
-session38 logo-petals/shine-parity/static-inventory suites +17; boots the standalone server on :3100 against its own
+→ `npm run test:e2e` (322/322) — 693 checks across three layers (Session 39: the
+session39 scroll-dot-period/stacking-inventory/reduced-motion-loops/period-parity suites +20; boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=100` — raised from 50 in Session 28
 when the suite's ~45 auth flows outgrew it — `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
@@ -862,6 +862,30 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     window cannot converge a 14s background-position cycle — compare
     the family + movement evidence + the WAAPI duration, never a
     jaccard across phases).
+52. **Four measurement laws for the resting/period surfaces (Session
+    39).** (a) The DWELL law: the live's below-fold `whileInView`
+    entrances require the element HELD in view (~450ms per section), not
+    transiently passed — a fast smooth-scroll pass leaves entrances
+    UNFIRED (an overview card read stuck at inline `opacity: 0;
+    transform: translateY(30px)` while a direct scroll-and-hold settles
+    it), and every resting-state surface sampled after (the stacking
+    inventory included) reads pre-entrance fiction. (b) The
+    REAL-TIMESTAMP law: a sampled period must use `performance.now()`
+    deltas, never the nominal `index × interval` — timer clamping
+    inflates the nominal clock ~10% and EVERY period under-reports;
+    same-direction crossings are ONE full period apart (never halve or
+    double them), and a missed shallow trough merges two cycles — use
+    the MEDIAN gap. (c) The VARIANT-CONFLICT law: the live's framer
+    elements can carry BOTH `whileInView` and `animate` writers on the
+    same property — the rendered value is an unstable race (the
+    chevron's authored `y:[0,−15,0]` measured at 0.04–4.4px across
+    loads, never −15); the authored config (read from the live's own
+    JS bundle) is the only stable contract — adjudicate rendered-
+    amplitude findings against the BUNDLE before fixing. (d) The
+    EVAL re-catch: `page.evaluate("async () => …")` does NOT
+    auto-invoke in this Playwright version — `eval()` the string
+    first or it returns `undefined` SILENTLY (the S37 trap, caught
+    twice again this session).
 
 ## Architecture invariants
 
@@ -973,7 +997,30 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   DOM attribute — either side — surfaces as DRIFT instead of blending
   into the "superset" reading; 15 → 23 unit pins hold the shape incl. the
   Session-34 VALUE-level rules, the sixth head entry, and the
-  Session-35 aria-* rules with the `id-refs` type). No route
+  Session-35 aria-* rules with the `id-refs` type), AND the Session-39
+  extension: the FOURTEENTH surface — the z-index/stacking inventory
+  (every rendered element with computed z-index ≠ auto OR position ≠
+  static, DWELL-loaded per gotcha 52a; the record: tag, class prefix,
+  position, z-index, the stacking-context creator flags; the raw
+  signature diff adjudicated against the REGISTERED families — the
+  live's dormant toaster shells [z-[100] ×2 on content routes +
+  data-rht-toaster z-9999 ×2 on /login, all empty], the framer
+  centering/residue transforms [~51 live carriers vs ~20 clone Reveal
+  end-states — the D125 family at the stacking layer], the clone's
+  platform next-route-announcer, the dashboard superset chrome [the
+  live's top bar is STATIC; the clone's sticky z-40 header the
+  documented workspace superset], the S14-F3 WCAG live region, the
+  /demo superset route [the live soft-404s it]) — GREEN at parity on
+  all eight routes with zero unregistered asymmetries; plus the loop
+  PERIOD layer (real-timestamp trough-gap analysis — gotcha 52b) that
+  caught D144 (the scroll-dot bar: the live's bundle-authored 1.5s vs
+  the clone's S8-estimated 1.7s — fixed) and the D145 variant-conflict
+  record (the live's authored y:[0,−15,0] suppressed by its own
+  vestigial whileInView:{y:0} — an unstable race; the clone keeps the
+  authored contract, registered), plus the reduced-motion loop record
+  (under `reduce` the live keeps 29 loopers cycling — framer writes
+  AND its own CSS animations; the clone collapses to ZERO — the S14
+  a11y superset, now pinned at the loop level). No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.
 - **Degrade-not-fail AI:** `/api/workflows/generate` asks
