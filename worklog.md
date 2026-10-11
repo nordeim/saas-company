@@ -1383,3 +1383,17 @@ Stage Summary:
 - One standing pin hardened (the S36 D135 hover-poll's 150ms hover-settle after a full-suite load flake); one battery check made route-aware (the main-landmark contract: +1 on the landing, parity on /login).
 - Survey scripts persisted under research/ (gitignored scratch, the house convention): recon-s40.mjs, recon2-s40.mjs, probe-responsive-s40.mjs, diff-responsive-s40.mjs, probe-cta-card-s40.mjs, probe-cta-deep-s40.mjs, probe-cta-transform-s40.mjs, bundle-problem-s40.mjs, probe-responsive-dwell-s40.mjs, probe-login-responsive-s40.mjs, probe-legal-routes-s40.mjs, adj-login-elements-s40.mjs, drift-battery-s40.mjs, capture-screenshots-s40.mjs, db-state-s40.ts, db-status-s40.ts.
 - The S41 candidates: the reference-regression watch continues (the live's four soft-404 routes — re-probe for recovery; if /pricing returns, re-run the pricing parity records), the responsive surface's ROUTE EXTENSION (/faq + the legal routes at the four widths), or the battery's sixteenth surface — the FOCUS-ORDER inventory (the Tab sequence as an ordered a11y surface) or the print/layout media surface.
+---
+Task ID: 40-close
+Agent: Super Z (main)
+Task: Session 40 closing — the pushed-hash record + the closing commit
+
+Work Log:
+- Commit bc81975 (26 files: the session40-responsive-inventory spec [7 pins] + the S36 D135 hover-poll hardening + the docs alignment across PAD [revision block, ledger D146, §7 counts 247/124/329 = 700, §7.2, §11]/AGENTS [the fifteenth surface + gotcha 52e]/CLAUDE/README [the 700 badge + the S40 rows + the stale verification-block counts fixed]/SKILL v2.39.0 [lesson 79] + the remediation plan session40 + the session logs docs/session_80.md + docs/session_81.md + the refreshed screenshots + this worklog) pushed via the SSH wrapper with the EXPLICIT --remote git@github.com:nordeim/saas-company.git (the S31-recorded trap; the explicit flag held from the first dry-run); the wrapper verified remote main @ bc81975 == local HEAD; the fetch-independent HTTPS ls-remote agreed (bc81975966720b54f93c2bf1b045db3cd60460cb — the branch API rate-limited this session, the git-protocol check the authoritative one).
+- The paramiko ssh shim deployed fresh at /home/z/bin/ssh (the sandbox had reset — no ssh binary; paramiko 5.0.0 under python3.13, the shim shebang pointed there; the default python3 is a venv 3.12 without paramiko — the S39-recorded interpreter pin honored).
+- The operator key's fingerprint verified through paramiko's own key parse (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU) against the S1-S39 record BEFORE the push.
+- Both the wrapper's temp key copy and the operator's key file shredded after use; the tree clean; no new branches; zero zombie servers (the :3300 probe server killed by PID; the battery's :3320 group-killed at its own teardown; all ports swept).
+
+Stage Summary:
+- Session 40 fully closed: the remediation commit bc81975 pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session40.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 700 checks (247 unit + 124 smoke + 329 e2e); the parity battery now runs FIFTEEN surfaces (69 checks across two phases) with the route-watch registry as the versioned adjudication layer for the live's soft-404 set; the S41 candidates recorded in this worklog (the reference-regression watch on the four soft-404 routes, the responsive surface's route extension, the focus-order inventory or the print/layout media surface as the sixteenth).
