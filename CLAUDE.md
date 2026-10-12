@@ -310,6 +310,36 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   86: the print-pipeline exposure law + the record
   re-verification law + the print-text instrument.
 
+- **Session 48 (2026-10-13) remediation** — see
+  `docs/remediation-plan-session48.md`: a BUILD-FIX + measurement +
+  versioning cycle. **THE HEADLINE: a BUILD-PIPELINE FONT DRIFT
+  (D167)** — the baseline gate RED on a code-untouched tree: Google's
+  css2 now dedupes every Playfair Display wght to one variable-font
+  URL, tripping Turbopack 16.4.0's exactly-one-entry assertion (16
+  module-not-found errors). FIXED with `weight: "variable"`
+  (rendering unchanged — the family at `font-weight:400 900`, the
+  wordmarks' 500/700 through the same variable file; the fix
+  regression-pinned against the served CSS). The 22nd surface's
+  route extensions (D168): /terms 400 / /accessibility 584 /
+  /refund-policy 295 / the 404 16 — all exact; /demo the registered
+  superset. **THE 23RD SURFACE (D169): the PDF LINK layer at FULL
+  PARITY on its first measurement** (the link censuses byte-identical
+  in set and multiplicity — the landing's 87 anchors incl. the 48
+  named destinations, /thank-you's single link, the /login + 404
+  empty sets; the instrument poppler's pdftohtml, cross-validated
+  against pymupdf). The /login + /demo entrance empty-set (D170) +
+  the D160 fourth re-verification (two instrumentation laws: the
+  aria-blind detector; the hydration-timing click). TDD: the build
+  failure the RED, the weight fix the GREEN; the session48 pins
+  11/11 on the first run. Gate: **777 -> 788 = 252 unit + 125 smoke
+  + 411 e2e**; the battery 30/30 GREEN ZERO DRIFT (the link-layer
+  column added); 21 screenshots (DB canonical, zero mutations — one
+  capture fix: the PATCH interception needs its own
+  /api/workflows/<id> pattern); VLM 8/8 (two flags adjudicated by
+  evidence, the 02 shot re-framed clean). Gotcha 58 / lesson 87:
+  the build-pipeline drift law + the mobile-nav instrumentation
+  laws + the link-layer instrument.
+
 - **Session 46 (2026-10-12) remediation** — see
   `docs/remediation-plan-session46.md`: a measurement +
   registration + versioning cycle (the worklog S45 candidates —

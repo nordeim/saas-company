@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.46.0 · **Last updated:** 2026-10-12 (Session 47 remediation)
+> **Version:** 2.47.0 · **Last updated:** 2026-10-13 (Session 48 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1782,6 +1782,36 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     delta that collapses to exactly the reference's number is
     the strongest possible confirmation the build reproduced the
     mechanism, not merely the arithmetic.
+
+87. **The build-pipeline drift law, the variable-weight fix, and the
+    link-layer instrument (Session 48)**: an EXTERNAL supplier can
+    break a pinned toolchain with ZERO local changes — Google's css2
+    changed its Playfair Display serving (every requested wght now
+    dedupes to ONE variable-font gstatic URL) and Next 16.4.0's
+    Turbopack font replacer asserts "exactly one entry" per URL
+    query, aborting the build on an untouched tree. THE DIAGNOSIS
+    PATH: read the actual error (all 16 failures at ONE font
+    module), curl the supplier's CURRENT css2 response (the four
+    @font-face blocks sharing one URL is the smoking gun), and fix
+    at the semantic layer — `weight: "variable"` for a variable
+    font (the discrete form re-trips the assertion; the "400 700"
+    range form is rejected by Turbopack's own validator). PIN the
+    rendered contract afterward (the served CSS's
+    `font-family:Playfair Display;font-weight:400 900` face) so the
+    NEXT supplier drift surfaces as a RED test. THE LINK-LAYER
+    INSTRUMENT: poppler's `pdftohtml -xml -stdout` extracts the
+    PDF's link annotations as `<a href>` elements — the same poppler
+    family as the pdftotext precedent, e2e-embeddable without a
+    python dependency; normalize the origins away and the internal
+    anchors to their #page targets, and the census is a deterministic
+    parity surface (cross-validate once against pymupdf's
+    get_links() — the annotation-rectangle view — before pinning the
+    text-run view). THE CAPTURE-GLOB TRAP: Playwright's
+    `page.route("**/api/workflows", ...)` does NOT match the PATCH
+    subpath `/api/workflows/<id>` — a mutation intended for local
+    fulfillment silently reaches the server; register the ID-level
+    pattern separately or the DB-canonical check catches it after
+    the damage.
 ## §13. Pitfalls to Avoid
 
 - Assuming `.env` wins over the shell environment (it doesn't — exported

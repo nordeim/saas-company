@@ -851,6 +851,102 @@
   registry-compounding lesson, remediation plan session33, session
   log 66.
 
+- `[NOTE]` **Session 48 remediation (2026-10-13)** — a
+  BUILD-FIX + measurement + versioning cycle (the worklog S47
+  candidates — the twenty-second surface's route extensions [the
+  print-text on the remaining routes + the entrance census on
+  /login + /demo] or the twenty-third surface [the print-to-PDF
+  link layer, the font-embedding layer, or the viewport-orientation
+  surface] + the standing reference-watch — answered by the recon;
+  see `docs/remediation-plan-session48.md`). **THE HEADLINE: A
+  BUILD-PIPELINE FONT DRIFT (D167) — the first session whose
+  baseline gate was RED on a code-untouched tree.** The pulled tree
+  FAILED `npm run build` with 16 Turbopack module-not-found errors,
+  all at the Playfair Display font module: Google's css2 endpoint
+  NOW dedupes every requested wght of Playfair Display to the SAME
+  variable-font gstatic URL (measured 2026-10-13: the 400/500/600/
+  700 @font-face blocks all reference one woff2), so
+  `weight: ["400","500","600","700"]` produced four @font-face src
+  lines sharing ONE URL query — and Next 16.4.0's Turbopack
+  NextFontGoogleFontFileReplacer asserts "next/font/google queries
+  have exactly one entry" per query. THE FIX: `weight: "variable"`
+  in `src/app/layout.tsx` (the semantically correct selection for a
+  variable font; the discrete-range form "400 700" is REJECTED by
+  Turbopack's own validator). RENDERING UNCHANGED, verified three
+  ways: the family still registers as "Playfair Display" (the built
+  CSS now `font-weight:400 900` over 4 subsets + the DM Serif pair
+  + the Vend Sans pair — 12 @font-face total), the wordmarks'
+  500/700 weights resolve through the same variable file, and the
+  typography-parity suite + the full gate pass on the fixed tree.
+  THE 22ND SURFACE'S ROUTE EXTENSIONS (D168): four more routes at
+  EXACT PDF word parity (/terms 400 = 400, /accessibility 584 =
+  584, /refund-policy 295 = 295, the 404 16 = 16) + /demo the
+  registered working superset (101 vs the live's 16-word SPA
+  shell) — the print-text layer now covers every public route.
+  **THE TWENTY-THIRD SURFACE (D169): the print-to-PDF LINK layer —
+  AT FULL PARITY ON ITS FIRST MEASUREMENT** (the registration
+  pattern, no build): the link-annotation censuses (origins
+  stripped, internal anchors normalized to their #page targets)
+  byte-identical in set AND multiplicity on 9 of 10 probed routes —
+  the landing's 87 `<a>` census ({#5: 24, #6: 19, /faq: 12, #4:
+  11, #7: 9, #1: 6, /refund-policy: 2, /terms: 1, /privacy: 1,
+  /accessibility: 1, /: 1}; the pymupdf cross-check reading the 48
+  named destinations at pricing×18 / features×9 / how-it-works×8 /
+  testimonials×8 + 5 unnamed), the content routes' nav+footer sets
+  (14-16 each), /thank-you EXACTLY ONE link (→ /), and the /login +
+  404 EMPTY SETS (the login bundle's bare card carries buttons, not
+  anchors); /demo the clone's 14 links vs the live's ZERO (the
+  registered superset). The instrument: poppler's
+  `pdftohtml -xml` (the same family as the S47 pdftotext precedent
+  — no python in the test layer), cross-validated against pymupdf.
+  THE /login + /demo ENTRANCE EMPTY-SET (D170): zero inline motion
+  carriers on either route, either side (the S42 empty-set
+  pattern). The D160 mobile-nav record re-verified for the FOURTH
+  consecutive session (the clone's burger opens at y20/y28/y36;
+  the live's y20/y28 still toaster-blocked, y36-only) — with TWO
+  instrumentation laws recorded (gotcha 58b): the aria-keyed panel
+  detector is BLIND on the live (its burger carries no
+  aria-expanded — the S41 superset record; the honest instrument is
+  the ROW-CONTRACT detector: the bg-black/95 + backdrop-blur
+  container passing the rendered-ness BOX check), and the live's
+  SPA attaches the burger's click handler at HYDRATION (a
+  domcontentloaded+700ms click silently no-ops; networkidle + a 1s
+  dwell is the minimum honest wait). The reference watch: the
+  working eight at byte-identical word parity, the sitemaps at the
+  registered sets, the live login -> /dashboard SPA-404 record
+  holding through the authenticated path. TDD: the build failure
+  itself the RED (16 errors), the weight fix the GREEN; the
+  session48-pdflinks-buildfix pins 11/11 GREEN on the first run
+  (the font-build regression pin — the served CSS's variable
+  registration — plus the print-text extensions + the link-layer
+  censuses + the entrance empty-set + the page counts). Gate:
+  **777 -> 788 = 252 unit + 125 smoke + 411 e2e**. The battery
+  (research/drift-battery-s48.mjs, rebuilt with the LINK-LAYER
+  column) 30/30 GREEN ZERO DRIFT across three phases (the
+  print-text paired incl. the new routes + the link censuses
+  paired + the entrance/route-watch paired; one in-flight
+  instrumentation fix: the settled-residue check needs the scroll
+  reveal first). 21 screenshots refreshed (DB canonical before AND
+  after — 1/6/7,120/5/1, zero mutations — one capture fix in
+  flight: the PATCH interception for the error-boundary shot needs
+  its own /api/workflows/<id> pattern, the glob `**/api/workflows`
+  satisfies at the LIST path only); VLM 8/8 (two flags adjudicated
+  by evidence — the pricing shot's top-edge slice the how-it-works
+  caption tails at the section boundary with horizontalOverflow
+  DOM-measured FALSE, and the mobile-menu shot's bottom-edge
+  "white fragment" the page content visible below the bounded
+  dropdown panel; the 02 shot re-framed clean for a zero-flag set).
+  DOCUMENTED: PAD (this block, the ledger D167-D170, the §7.1
+  counts refreshed from the stale Session-35-era table, the gate
+  line), AGENTS (the counts + gotcha 58 — the build-pipeline drift
+  law + the two mobile-nav instrumentation laws), CLAUDE (the
+  session-48 context), README (the 788 badge + the font-drift
+  story + the rows), SKILL v2.47.0 (lesson 87: the build-pipeline
+  drift + the variable-weight fix + the link-layer instrument),
+  .env.example verified in sync (no config surface touched), the
+  remediation plan session48, the session logs 104 + 105, the
+  worklog.
+
 - `[NOTE]` **Session 47 remediation (2026-10-12)** — a BUILD +
   measurement + versioning cycle (the worklog S46 candidates — the
   twenty-second surface [the print-to-PDF text layer, the
@@ -3295,6 +3391,10 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D164 | The LOGO-CLOUD WORDMARK ENTRANCES: the live wraps EACH of the 8 wordmark carriers (`div.text-white/60 …`) as a framer motion element with initial `opacity: 0` — an OPACITY-ONLY fade (no transform at any phase), per-element reveals, ~50ms stagger, ~400ms duration; the settled residue exactly `opacity: 1;` (no transform write); the CONTAINER static | Measured (adj-s47f/g/h — the DOM chain, the carrier census, the frame sampler): the S8 F1-EXTRA container record still true; the per-wordmark carriers were never surveyed. The clone gap CLOSED: the carriers are Reveal elements in the y=null mode, the motion div being the classed carrier itself | `tests/e2e/session47-print-text-entrances.spec.ts` (the 2 entrance pins), the battery's PH1b, the motion.ts unit pins | **The clone gap CLOSED — structural parity** (Session 47) |
 | D165 | The CTA WHOLE-BLOCK ENTRANCE: the live wraps the ENTIRE CTA content (the badge + the h2 + the copy + the pills) in ONE unclassed motion div (`opacity: 0; transform: translateY(30px)`, ~800ms easeOut); the clone animated only the badge (the S8 badge-only record WRONG for today's live — gotcha 7) | Measured (adj-s47f/g/h): the print-text delta proves the scope (the CTA tokens missing from the live's PDF — all inside the opacity-0 wrapper). The clone gap CLOSED: ONE whole-block Reveal (y=30, duration 800) replacing the badge-only Reveal; the h2 keeps only its --tw-leading pin | `tests/e2e/session47-print-text-entrances.spec.ts` (the 2 CTA pins), the battery's PH1b, the re-versioned motion-parity CTA test | **The clone gap CLOSED — structural parity** (Session 47) |
 | D166 | The OFFLINE route extension + the /faq concatenation artifact: the clone renders /faq 87 words / /privacy 321 / /login 23 + h1 under total request block where the live renders its 127/127/137-word SPA shells (the D159 superset extended to the content routes); the /faq 87-vs-101 styled delta is the CSS-abort CONCATENATION (the aborted stylesheet merges adjacent inline elements in innerText — the words all present); the clipboard census on /login + /demo at parity (null/auto/zero-carriers) | Measured paired (recon-s47 R3 + adj-s47a — the multiset diff proving the concatenation: "FeaturesHow", "WorksPricingTestimonialsFAQ" are the styled words merged) | `tests/e2e/session47-print-text-entrances.spec.ts` (the offline floors + the clipboard census), the battery's PH2 | **Registered platform superset (the D159 family extended)** (Session 47) |
+| D167 | The BUILD-PIPELINE FONT DRIFT: Google's css2 endpoint dedupes every requested wght of Playfair Display to the SAME variable-font gstatic URL (measured 2026-10-13), and Next 16.4.0's Turbopack NextFontGoogleFontFileReplacer asserts "exactly one entry" per URL query — `weight: ["400","500","600","700"]` aborts the production build with 16 module-not-found errors (an EXTERNAL supplier change under a pinned toolchain; the S46/S47 builds passed on the earlier CSS serving) | Fixed with `weight: "variable"` in `src/app/layout.tsx` (the correct variable-font selection; the range form "400 700" rejected by Turbopack's validator). Rendering unchanged: the family registers "Playfair Display" at `font-weight:400 900`, the wordmarks' 500/700 through the same variable file | `tests/e2e/session48-pdflinks-buildfix.spec.ts` (the 2 font pins: the served CSS's variable registration + the wordmark family chains) | **The build fix — rendering contract unchanged** (Session 48) |
+| D168 | The PRINT-TEXT ROUTE EXTENSIONS: /terms 400 = 400, /accessibility 584 = 584, /refund-policy 295 = 295, the 404 16 = 16 (all EXACT, pdftotext); /demo 101 vs the live's 16-word SPA shell — the registered working superset; the 22nd surface now covers every public route | Measured paired (recon-s48 PH2) | `tests/e2e/session48-pdflinks-buildfix.spec.ts` (the extension pins + the /demo floor), the battery's PH1 | **Exact parity + the registered superset** (Session 48) |
+| D169 | The PDF LINK LAYER (the 23rd surface): the link-annotation censuses byte-identical in set AND multiplicity on 9/10 routes — the landing's 87-anchor census (incl. the 48 named destinations: pricing×18, features×9, how-it-works×8, testimonials×8 + 5 unnamed), the content routes' nav+footer sets, /thank-you's single link (→ /), the /login + 404 EMPTY SETS; /demo the clone's 14 links vs the live's ZERO (the registered superset); the page counts paired (8/1/2/2/2/3/2/2/1) | Measured paired (recon-s48 PH3 with pymupdf cross-validated against poppler's pdftohtml -xml — the e2e-embeddable instrument) | `tests/e2e/session48-pdflinks-buildfix.spec.ts` (the 5 link-layer pins), the battery's PH2 | **Full parity on first measurement — registered** (Session 48) |
+| D170 | The /login + /demo ENTRANCE EMPTY-SET (zero inline motion carriers, both sides) + the D160 fourth-session re-verification (the clone's burger y20/y28/y36 all open; the live's y20/y28 toaster-blocked, y36-only) + the two instrumentation laws: the aria-keyed panel detector is live-blind (no aria-expanded on the live's burger — the row-contract detector is the honest instrument) and the live's SPA attaches click handlers at HYDRATION (domcontentloaded+700ms clicks silently no-op) | Measured paired (recon-s48 PH4/PH5 + adj-s48a/b) | `tests/e2e/session48-pdflinks-buildfix.spec.ts` (the entrance empty-set pin), the battery's PH3 | **Registered parity + the instrument laws** (Session 48) |
 
 
 
@@ -3357,9 +3457,9 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
-| Unit (pure seams) | 20 files | 246 | `src/lib/*.test.ts` + `src/app/api/workflows/generate/route.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
-| Browser E2E | 35 specs | 269 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
-| Production HTTP smoke | 1 | 124 | `scripts/smoke-test.sh` | bash + curl + python3 |
+| Unit (pure seams) | 20 files | 252 | `src/lib/*.test.ts` + `src/app/api/workflows/generate/route.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
+| Browser E2E | 57 specs | 411 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Production HTTP smoke | 1 | 125 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins
 

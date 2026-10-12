@@ -29,7 +29,20 @@ import "./globals.css";
 // regression risk on the pinned wordmark typography — disproportionate.
 const playfair = Playfair_Display({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  // Variable-font selection, not discrete weights (Session 48 build fix):
+  // Google's css2 endpoint now dedupes every requested wght to the SAME
+  // variable-font gstatic URL (measured 2026-10-13: the 400/500/600/700
+  // blocks all reference one woff2), and Next 16.4.0's Turbopack
+  // NextFontGoogleFontFileReplacer asserts "next/font/google queries
+  // have exactly one entry" per URL query — four @font-face src lines
+  // sharing one query abort the production build with 16 module-not-
+  // found errors. Selecting the variable axis (the "variable" weight,
+  // 400-900) returns ONE @font-face per subset covering every weight,
+  // so each URL query is unique again. Rendering is unchanged: the
+  // family still registers as "Playfair Display" and the wordmarks'
+  // 500/700 weights resolve through the same variable font file they
+  // always downloaded.
+  weight: "variable",
   variable: "--font-playfair",
   display: "swap",
 });

@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (400 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (411 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,12 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (400/400) — 777 checks across three layers (Session 47: the
+→ `npm run test:e2e` (411/411) — 788 checks across three layers (Session 48: the
+session48-pdflinks-buildfix suite +11 e2e — the font-build regression pins [the
+served CSS's Playfair variable registration, the D167 fix's contract] + the
+print-text route extensions [D168] + the TWENTY-THIRD SURFACE pins [the PDF
+link layer, D169 — the per-route link censuses through pdftohtml] + the
+entrance empty-set [D170]; Session 47: the
 session47-print-text-entrances suite +9 e2e — the twenty-second-surface pins
 [the print-text layer] + the entrance-build pins [the wordmark + CTA gaps
 closed] + the forced-colors empty-set + the offline route extensions; Session
@@ -1042,6 +1047,31 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     survived (re-verified true), the badge-only scope was wrong for
     today's live (the moving-target law: the reference is a
     redeployed app, and its motion scope changed under the record).
+
+58. **The build-pipeline drift law + the two mobile-nav instrumentation
+    laws (Session 48).** (a) An EXTERNAL supplier can break a pinned
+    toolchain with ZERO local changes: Google's css2 endpoint changed
+    its Playfair Display serving (every requested wght now dedupes to
+    ONE variable-font URL), and Next 16.4.0's Turbopack
+    NextFontGoogleFontFileReplacer asserts "exactly one entry" per
+    URL query — the pulled tree failed `npm run build` with 16
+    module-not-found errors at the font module. Diagnose through the
+    supplier's CURRENT responses (curl the css2 URL — the four
+    @font-face blocks sharing one gstatic URL is the smoking gun),
+    fix at the CORRECT semantic layer (`weight: "variable"` for a
+    variable font — the discrete form re-trips the assertion; the
+    range form "400 700" is rejected by Turbopack's own validator),
+    and PIN the rendered contract (the served CSS's variable
+    registration) so the next supplier drift surfaces as a RED test,
+    not a broken pipeline. (b) The mobile-nav instrument: an
+    aria-keyed panel detector is BLIND on the live (its burger
+    carries no aria-expanded — the S41 a11y-superset record); the
+    honest detector is the ROW-CONTRACT one (the bg-black/95 +
+    backdrop-blur container passing the rendered-ness BOX check).
+    And the live's SPA attaches click handlers at HYDRATION — a
+    click at domcontentloaded+700ms silently no-ops; networkidle +
+    a 1s dwell is the minimum honest wait before ANY live-side
+    interaction probe.
 
 ## Architecture invariants
 
