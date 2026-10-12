@@ -1503,3 +1503,19 @@ Stage Summary:
 - Gate raised 714 → 725 checks (248 unit + 125 smoke + 352 e2e); the parity battery now runs EIGHTEEN surfaces (41 checks across four phases, zero drift).
 - Survey scripts persisted under research/ (gitignored scratch, the house convention): recon-s43.mjs, adj-s43.mjs, adj2-s43.mjs, adj3-s43.mjs, drift-battery-s43.mjs, capture-screenshots-s43.mjs, db-state-s43.mjs, vlm-checks-s43.sh.
 - The S44 candidates: the reference-regression watch continues (the four soft-404 routes — recovery re-probe); the eighteenth surface's ROUTE EXTENSION (the /demo route's input-surface census); or the nineteenth surface — the VIEW-TRANSITION surface (the live's SPA route-change behavior), the SELECTION/clipboard surface, or the dynamic-route surface (query params + URL state contracts).
+
+---
+Task ID: 43-close
+Agent: Super Z (main)
+Task: Session 43 closing — the pushed-hash record + the closing commit
+
+Work Log:
+- Commit 999096e (27 files: the /thank-you route [src/app/thank-you/page.tsx] + the sitemap strict-superset update + the registry's fourth DOM entry [autocomplete] + the session43-thankyou-input-surface spec [9 pins] + the session37 sitemap-parity update + the smoke page loop +1 + the docs alignment across PAD [the revision block, the ledger D146-corrected + D147 + D148, §7 counts, §7.2, §11]/AGENTS [the counts + gotcha 53 + the invariants' Session-43 extension]/CLAUDE [the session-43 context]/README [the 725 badge + the /thank-you + input-surface story + the rows]/SKILL v2.42.0 [lesson 82 — the registered-design audit law] + the remediation plan session43 + the session logs docs/session_89.md + docs/session_90.md + the 21 screenshots [the standing 20 refreshed + the new 17-thank-you shot] + this worklog) pushed via the SSH wrapper with the EXPLICIT --remote git@github.com:nordeim/saas-company.git (the S31 trap: the wrapper's DEFAULT remote is the runbook's example repo — the explicit flag held from the first dry-run).
+- Wrapper-verified: remote main @ 999096e == local HEAD; the fetch-independent HTTPS ls-remote agreed (999096e2ab138dfa363a9d622fc8fbf87472478f).
+- The paramiko ssh shim survived the context restart at /home/z/bin/ssh (paramiko 5.0.0 present); the wrapper needed /home/z/bin on PATH (exported for the run).
+- The operator key's fingerprint verified through paramiko's own key parse (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU) against the S1-S42 record BEFORE the push; both the wrapper's temp key copy and the operator's key file shredded after use.
+- Zero zombies at close (the recon/battery/capture servers group-killed at their own teardowns; the :3344 probe server killed by PID; all ports swept); the tree clean; no new branches.
+
+Stage Summary:
+- Session 43 fully closed: the remediation commit 999096e pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session43.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 725 checks (248 unit + 125 smoke + 352 e2e); the parity battery now runs EIGHTEEN surfaces (41 checks across four phases) with the route-watch registry asserting BOTH sides' truth; the S44 candidates recorded in this worklog (the reference-regression watch, the eighteenth surface's route extension to /demo, or the nineteenth surface — the view-transition, selection/clipboard, or dynamic-route surfaces).
