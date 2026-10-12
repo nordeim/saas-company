@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (248 checks) | `npm run test` |
-| Browser E2E (383 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (391 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,10 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (248/248) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (383/383) — 756 checks across three layers (Session 45: the
+→ `npm run test:e2e` (391/391) — 764 checks across three layers (Session 46: the
+session46-clipboard-drag-offline suite +8 e2e — the twenty-first-surface pins
+[the clipboard empty-set, the drag contract, the offline render] + the burger
+clickability/panel/close-on-navigate pins; Session 45: the
 session45-traversal-media-video suite +13 e2e — the twentieth-surface pins
 [the traversal class, the media empty-set, the video contract] + the /login
 alternates census, and the registry's fifth DOM-attr entry; Session 44: the
@@ -985,6 +988,31 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     while the live's full reloads dump the user at 0 with no
     bfcache (D153, the registered platform superset).
 
+56. **The dormant-overlay affordance law + the survey-script zombie-port
+    law (Session 46).** (a) A visually invisible container with
+    `pointer-events: auto` sitting over an interactive control is a REAL
+    broken affordance, not a cosmetic one: the live's two dormant
+    react-hot-toast containers (`fixed top-0 z-[100]`, 32px tall, 0-1
+    children) cover the top two-thirds of its own burger icon at 390 —
+    real pointer clicks at the icon's upper/center points hit the
+    TOASTER and the menu never opens (D160, measured with the hit-target
+    map: `elementFromPoint` + the three-point click census; only the
+    y36 sliver works). Measure clickability as a MAP over the control's
+    box, never a single center click — a center-click test would have
+    read "broken" for a menu that opens at 2/3 of the icon, and a
+    JS-dispatched click would have read "fine" for an affordance real
+    users cannot press. (b) Every script that boots a standalone server
+    for a survey must clear the port by PID before AND after (the
+    gotcha-46 law applied to one's OWN runners): `kill $SERVER_PID`
+    kills only the `node server.js` parent — the server RENAMES itself
+    `next-server (v16.x)` and the renamed child SURVIVES, holds the
+    port, and silently answers every later "fresh" boot (EADDRINUSE in
+    the overwritten log; the scripts keep talking to a stale process
+    with a stale build and a foreign AUTH_SECRET — the S46 shot-14
+    false redirect-loop, diagnosed through the cookie-vs-page
+    divergence). Sweep `ss -tlnp` for the port and `kill -9` every PID
+    it reports.
+
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +
@@ -1246,7 +1274,24 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   entry]) + the nineteenth surface's ROUTE EXTENSION (the
   /login alternates census — 6/5/3 counts structurally
   identical across sides, the autocomplete within the
-  registered D148 family)
+                                    registered D148 family) AND the Session-46 extension: the
+                                    TWENTY-FIRST SURFACE — the clipboard/keyboard +
+                                    drag-and-drop + offline-render family (D157-D159:
+                                    the clipboard empty-set at rendered parity [the
+                                    live's inert .select-none rule — zero carriers
+                                    — the gotcha-6 rule-layer extension], the
+                                    testimonial strip's native-overflow contract
+                                    [structural + behavioral parity — no JS drag-pan
+                                    on either side, the grab cursor cosmetic on
+                                    both], the offline render platform superset
+                                    [the clone's 718-word full SSR landing vs the
+                                    live's 136-word SPA shell under total request
+                                    block]) + the BURGER CLICKABILITY record (D160:
+                                    the live's icon two-thirds blocked by its own
+                                    dormant toast containers — only the y36 sliver
+                                    responds; the clone fully clickable at every
+                                    point — the registered superset over the
+                                    reference's degraded affordance)
   No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.

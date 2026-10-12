@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.44.0 · **Last updated:** 2026-10-12 (Session 45 remediation)
+> **Version:** 2.45.0 · **Last updated:** 2026-10-12 (Session 46 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1731,7 +1731,37 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     Playwright's `APIResponse.status` is a METHOD — a property
     read yields the function, which JSON.stringify silently
     DROPS (a status sweep that reads `{}` is this trap, not "no
-    data"); call `.status()` or use raw fetch.
+    data");     call `.status()` or use raw fetch.
+
+85. **The hit-target map, the offline word-floor proxy, and the
+    survey-script zombie-port law (Session 46)**: measure a
+    control's clickability as a MAP over its box —
+    `document.elementFromPoint` at the icon's top/center/bottom +
+    a real three-point click census — never a single center click
+    (a center-only test reads "broken" for the live's burger that
+    opens at the bottom sliver) and never a JS-dispatched click
+    alone (it reads "fine" for an affordance real users cannot
+    press: the live's two dormant react-hot-toast containers,
+    `fixed top-0 z-[100]` with `pointer-events: auto`, cover the
+    top two-thirds of its own burger at 390 — D160). A visually
+    invisible overlay with live pointer-events is a REAL broken
+    affordance. THE OFFLINE WORD-FLOOR PROXY: the offline-render
+    contract is measured by blocking every non-document request
+    and counting the rendered words (the clone's SSR landing
+    floors at ≥700 — 718 measured — while the live's SPA shell
+    reads 136; the floor absorbs copy drift without pinning the
+    live's moving number). THE ZOMBIE-PORT LAW FOR SURVEY
+    SCRIPTS: every script that boots a standalone server must
+    clear the port by PID before AND after the run — `kill
+    $SERVER_PID` kills only the `node server.js` parent, the
+    renamed `next-server (v16.x)` child SURVIVES and silently
+    answers every later "fresh" boot with stale code, a foreign
+    AUTH_SECRET, and a divergent build (the S46 shot-14 false
+    redirect-loop: a valid session cookie passed the API's parse
+    while the zombie's stale page module 307'd — an
+    impossible-on-one-server divergence that took a curl probe +
+    an EADDRINUSE log line to diagnose). Sweep `ss -tlnp` for
+    the port, `kill -9` every reported PID.
 
 ## §13. Pitfalls to Avoid
 

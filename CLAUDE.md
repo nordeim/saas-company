@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (125) | 248 unit + 370 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (125) | 248 unit + 391 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -267,6 +267,51 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   check caught the healthy dashboard rendered where the boundary
   belonged); VLM 5/5 with ZERO flags + 2/2 supplementary (re-verified
   after the fix).
+
+- **Session 46 (2026-10-12) remediation** — see
+  `docs/remediation-plan-session46.md`: a measurement +
+  registration + versioning cycle (the worklog S45 candidates —
+  the twenty-first surface + the mobile-nav clickability
+  comparison [the operator's explicit focus] + the standing
+  route-watch — answered by the recon; every measured delta a
+  clone-superset or parity, NO clone gap to build against).
+  **THE TWENTY-FIRST SURFACE (D157-D159): the clipboard/keyboard
+  + drag-and-drop + offline-render family** — the clipboard
+  empty-set at RENDERED parity (oncopy/oncut/onpaste null both
+  sides, user-select auto both, zero ::selection rules both; the
+  live's single `.select-none` css rule INERT — zero carriers on
+  any probed route, the gotcha-6 family extended to the rule
+  layer). The drag-and-drop native-overflow contract at parity
+  (the testimonial strip structurally IDENTICAL — grab cursor,
+  auto overflow, 8 cards, scrollWidth 3208 — and behaviorally
+  identical: no JS drag-pan and no wheel-pan on either side; the
+  grab cursor cosmetic on both). The offline render the
+  REGISTERED PLATFORM SUPERSET (the clone's full 718-word SSR
+  landing under total request block vs the live's 136-word SPA
+  shell). **THE BURGER CLICKABILITY RECORD (D160 — the
+  headline):** the live's burger at 390 is TWO-THIRDS UNCLICKABLE
+  (two dormant react-hot-toast containers, `fixed top-0 z-[100]`,
+  `pointer-events: auto`, a 32px band, cover the icon's upper
+  2/3 — real clicks at y20/y28 hit the toaster; only the y36
+  sliver opens; the JS click opens the identical 7x44px panel —
+  the affordance, not the component, is degraded) while the
+  CLONE's burger opens at EVERY point (the registered superset,
+  on top of the S41 a11y trio). The live's /dashboard re-probed
+  THROUGH THE REFERENCE LOGIN: lands at /, /dashboard renders
+  the SPA 404 — the soft-404 record holds. TDD: the session46
+  pins 8/8 GREEN on the first run (a pure versioning session —
+  no registry growth, no src/ changes). Gate: **756 -> 764 =
+  248 unit + 125 smoke + 391 e2e**; the battery 28/28 GREEN
+  ZERO DRIFT (two in-flight instrumentation adjudications — the
+  inner-wrapper class read, the sitemap origin strip); 21
+  screenshots (DB canonical before and after — the
+  PATCH-fulfillment fix for the error-boundary shot); VLM 8/8
+  ZERO flags. Gotcha 56 / lesson 85: the dormant-overlay
+  affordance law (measure clickability as a MAP —
+  elementFromPoint + the multi-point click census) + the
+  survey-script zombie-port law (kill by PORT before AND after
+  every standalone boot — the renamed `next-server (v…)` child
+  outlives the parent and silently serves stale state).
 
 - **Session 45 (2026-10-12) remediation** — see
   `docs/remediation-plan-session45.md`: a measurement +
