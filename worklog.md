@@ -1544,3 +1544,19 @@ Stage Summary:
 - Gate raised 725 -> 743 checks (248 unit + 125 smoke + 370 e2e); the parity battery now runs NINETEEN surfaces (44 checks across three phases, zero drift).
 - Survey scripts persisted under research/ (gitignored scratch, the house convention): recon-s44.mjs, adj-s44.mjs, adj2-s44.mjs, adj3-s44.mjs, probe-features-s44.mjs, drift-battery-s44.mjs, capture-screenshots-s44.mjs, db-state-s44.mjs, vlm-checks-s44.sh.
 - The S45 candidates: the reference-regression watch continues (the four soft-404 routes — recovery re-probe); the nineteenth surface's ROUTE EXTENSIONS (the hash/query contracts on the content routes; the input census on /login's alternates); or the twentieth surface — the history/bfcache surface (back/forward navigation + scroll restoration), the media-query/pointer-coarse surface (touch vs mouse contracts), or the audio/video surface (the hero video's playback attributes + events).
+
+---
+Task ID: 44-close
+Agent: Super Z (main)
+Task: Session 44 closing — the pushed-hash record + the closing commit
+
+Work Log:
+- Commit c453887 (22 files: the case-canonicalization proxy [src/proxy.ts — Next 16's renamed middleware convention] + the session44-urlstate-selection-surface spec [18 pins, 4 RED on the missing proxy first] + the docs alignment across PAD [the revision block, the ledger D149-D152, section 7 counts, section 7.2, section 11 + the proxy row]/AGENTS [the counts + gotcha 54 + the invariants' Session-44 extension]/CLAUDE [the session-44 context + the stale stack-table counts FIXED]/README [the 743 badge + the case-canonicalization story + the rows]/SKILL v2.43.0 [lesson 83 — the unprobed-assumption law + the inverted-probe law + the negative-zero law + the true-fresh-load law] + the remediation plan session44 + the session logs 92 + 93 + the 12 refreshed screenshots + this worklog) pushed via the SSH wrapper with the EXPLICIT --remote git@github.com:nordeim/saas-company.git (the S31 trap: the wrapper's DEFAULT remote is the runbook's example repo — the explicit flag held from the first dry-run).
+- Wrapper-verified: remote main @ c453887 == local HEAD; the fetch-independent HTTPS ls-remote agreed (c4538879928d6a3699c753b187bce5ae9b7335f2).
+- The paramiko ssh shim survived the context restart at /home/z/bin/ssh (paramiko 5.0.0 present); the wrapper needed /home/z/bin on PATH (exported for the run).
+- The operator key's fingerprint verified through paramiko's own key parse (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU) against the S1-S43 record BEFORE the push; both the wrapper's temp key copy and the operator's key file shredded after use.
+- Zero zombies at close (the recon/adj/battery/capture servers group-killed at their own teardowns; the ports swept); the tree clean; no new branches.
+
+Stage Summary:
+- Session 44 fully closed: the remediation commit c453887 pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session44.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 743 checks (248 unit + 125 smoke + 370 e2e); the parity battery now runs NINETEEN surfaces (44 checks across three phases) with the route-watch registry asserting BOTH sides' truth; the S45 candidates recorded in this worklog (the reference-regression watch, the nineteenth surface's route extensions, or the twentieth surface — the history/bfcache, media-query/pointer-coarse, or audio/video surfaces).

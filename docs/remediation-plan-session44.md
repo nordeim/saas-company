@@ -243,4 +243,17 @@ case-canonicalization middleware**.
 
 ## The pushed-hash record (the closing discipline)
 
-- (to be recorded at the push)
+- Remediation commit **c453887** pushed via the SSH wrapper with the
+  EXPLICIT `--remote git@github.com:nordeim/saas-company.git` (the S31
+  trap: the wrapper's DEFAULT remote is the runbook's example repo —
+  the explicit flag held from the first dry-run).
+- Wrapper-verified: remote main @ c453887 == local HEAD; the
+  fetch-independent HTTPS ls-remote agreed
+  (c4538879928d6a3699c753b187bce5ae9b7335f2).
+- The operator key's fingerprint verified through paramiko's own key
+  parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU
+  — matches the S1-S43 record); both the wrapper's temp key copy and
+  the operator's key file shredded after use.
+- Zero zombies at close (all the session's probe/battery/capture
+  servers group-killed at their own teardowns; the ports swept); the
+  tree clean; no new branches.
