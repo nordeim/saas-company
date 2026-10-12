@@ -1710,3 +1710,19 @@ Stage Summary:
 - Gate raised 777 -> 788 checks (252 unit + 125 smoke + 411 e2e); the parity battery rebuilt with the LINK-LAYER column — 30 checks, zero drift.
 - Survey scripts persisted under research/ (gitignored scratch): recon-s48.mjs, adj-s48a/b/c.mjs, drift-battery-s48.mjs, capture-screenshots-s48.mjs, db-check-s48.ts, db-count-s48.ts, pdf-links-s48.py, phase4-verify-s48.sh, docs-align-s48.py + docs-align-s48b.py (+ the run-*.sh runners with the port-sweep discipline).
 - The S49 candidates: the reference-regression watch continues; the 23rd surface's ROUTE EXTENSIONS (the link census pinned beyond the floors on the remaining routes; the named-destination layer at the annotation granularity); or the twenty-fourth surface — the font-EMBEDDING layer (the subsetted faces both sides ship in the PDF: the fontspec census, the CID-subset names, the embedded bytes), the PDF metadata layer (the document properties), or the selection/clipboard behavior under print emulation.
+
+---
+Task ID: 48-close
+Agent: Super Z (main)
+Task: Session 48 closing — the pushed-hash record + the closing commit
+
+Work Log:
+- Commit 33098de (32 files: the font-build fix — src/app/layout.tsx [Playfair_Display weight "variable", the Google css2 weight-dedupe + the Turbopack 16.4.0 exactly-one-entry assertion, with the root-cause comment] + tests/e2e/session48-pdflinks-buildfix.spec.ts [11 pins — the font-build regression pins incl. the discrete-weight guard, the print-text route extensions, the link-layer censuses through pdftohtml, the entrance empty-set, the page counts] + the docs alignment across PAD [the revision block, the ledger D167-D170, the §7.1 counts refreshed from the stale S35-era table]/AGENTS [the counts + gotcha 58 — the build-pipeline drift law + the two mobile-nav instrumentation laws]/CLAUDE [the session-48 context]/README [the 788 badge + the font-drift story + the session48 suite row + the counts]/SKILL v2.47.0 [lesson 87 — the build-pipeline drift + the variable-weight fix + the link-layer instrument + the capture-glob trap] + the remediation plan session48 + the session logs 104 + 105 + the 21 refreshed screenshots + this worklog) pushed via the SSH wrapper with the EXPLICIT --remote git@github.com:nordeim/saas-company.git (the S31 trap held from the first dry-run — the dry-run confirming the fast-forward ef9604a..33098de against the correct remote).
+- Wrapper-verified: remote main @ 33098de == local HEAD; the fetch-independent HTTPS ls-remote agreed (33098def1158a9c4c84def2006781b01f514f16f).
+- The paramiko ssh shim re-deployed on the reset sandbox (/home/z/bin/ssh, python3.13 + paramiko 5.0.0 — the Appendix A implementation); the wrapper needed /home/z/bin on PATH (exported for the run).
+- The operator key's fingerprint verified through paramiko's own key parse (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — matches the S1-S47 record) BEFORE the push; both the wrapper's temp key copy and the operator's key file shredded after use.
+- Zero zombies at close (the port-sweep discipline held through every recon/adj/battery/capture/verify run — the gotcha-56b law; the ports swept clean); the tree clean; no new branches.
+
+Stage Summary:
+- Session 48 fully closed: the remediation commit 33098de pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session48.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 788 checks (252 unit + 125 smoke + 411 e2e); the parity battery now runs TWENTY-THREE surfaces (30 checks, zero drift) with the LINK-LAYER column joining the adjudication layers; the S49 candidates recorded in this worklog (the reference-regression watch, the 23rd surface's route extensions, or the 24th surface — the font-embedding layer, the PDF metadata layer, or the selection/clipboard behavior under print emulation).

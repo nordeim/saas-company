@@ -224,3 +224,24 @@ and the PAD's deviations ledger).
   the aria-keyed detector's live-blindness, and the hydration-timing
   click law (networkidle + dwell before ANY live-side interaction
   probe).
+
+## The pushed-hash record (the closing discipline)
+
+- Remediation commit **33098de** pushed via the SSH wrapper with the
+  EXPLICIT `--remote git@github.com:nordeim/saas-company.git` (the S31
+  trap: the wrapper's DEFAULT remote is the runbook's example repo —
+  the explicit flag held from the first dry-run, which confirmed the
+  fast-forward `ef9604a..33098de` against the correct remote).
+- Wrapper-verified: remote main @ 33098de == local HEAD; the
+  fetch-independent HTTPS ls-remote agreed
+  (33098def1158a9c4c84def2006781b01f514f16f).
+- The operator key's fingerprint verified through paramiko's own key
+  parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU
+  — matches the S1-S47 record); the operator's key file shredded after
+  use (the wrapper's own temp copy shredded at its teardown).
+- The paramiko ssh shim re-deployed on the reset sandbox
+  (/home/z/bin/ssh, python3.13 + paramiko 5.0.0 — the Appendix A
+  implementation, byte-for-byte).
+- Zero zombies at close (the port-sweep discipline held through every
+  recon/adj/battery/capture/verify run; the ports swept clean at the
+  end); the tree clean; no new branches.
