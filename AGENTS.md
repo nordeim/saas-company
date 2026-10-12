@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (248 checks) | `npm run test` |
-| Browser E2E (370 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (383 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,10 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (248/248) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (370/370) — 743 checks across three layers (Session 44: the
+→ `npm run test:e2e` (383/383) — 756 checks across three layers (Session 45: the
+session45-traversal-media-video suite +13 e2e — the twentieth-surface pins
+[the traversal class, the media empty-set, the video contract] + the /login
+alternates census, and the registry's fifth DOM-attr entry; Session 44: the
 session44-urlstate-selection-surface suite +18 e2e — the case-canonicalization
 proxy pins [4 RED on the missing proxy first] + the nineteenth-surface parity
 pins; Session 43: the session43-thankyou-input-surface suite +9 e2e + the
@@ -956,6 +959,32 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     scrolls; navigate from `about:blank` to measure the fresh-load
     class).
 
+55. **Three measurement laws + one platform quirk (Session 45).**
+    (a) The HEADLESS-SEEK-STALL law: a programmatic `currentTime`
+    seek on an autoplaying muted `<video>` in headless Chromium
+    NEVER resolves — the element reads `seeking: true, paused:
+    true` forever at the seek target, IDENTICALLY on the clone and
+    the live (probed both) — the video loop SEAM is unmeasurable
+    headlessly; pin the `loop` ATTRIBUTE + the advancing clock
+    instead, never the wrap behavior. (b) The React
+    muted-attribute SSR quirk: React NEVER serializes `muted` to
+    the `<video>` markup through server rendering — the live's
+    attribute-less HTML sets the property at mount (hydration-
+    timing-dependent autoplay); the clone's SSR `muted` attribute
+    is the robust contract (D154, registered — never remove it to
+    chase attribute parity). (c) The APIResponse.status METHOD
+    trap: Playwright's `APIResponse.status` is a METHOD — a
+    property read (`res.status`) yields the function itself,
+    which `JSON.stringify` silently DROPS (the recon's first
+    status sweep read `{}` — an empty object that looked like
+    "no data", not an error); call `.status()` or use raw fetch.
+    (d) The traversal-class instrument: the back/forward
+    navigation class is measured by the page `load`-event counter
+    + the window-mark survival (the D152 instruments extended) —
+    the clone's popstates restore scroll exactly (4620 -> 4620)
+    while the live's full reloads dump the user at 0 with no
+    bfcache (D153, the registered platform superset).
+
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +
@@ -1200,7 +1229,24 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   [zero rules, zero names]) + the eighteenth surface's ROUTE
   EXTENSION (the /demo input census — 22 pointer + 5 text + 0 other
   across 27 interactives, the autocomplete trio, the caret white;
-  clone-side pins, the live soft-404s /demo — D73).
+  clone-side pins, the live soft-404s /demo — D73). AND the Session-45
+  extension: the TWENTIETH SURFACE — the traversal/history +
+  media-capability + audio/video family (D153-D156 — the
+  traversal contract measured with the load-counter + mark
+  instruments: the clone's same-document popstates restore
+  the scroll EXACTLY while the live's cross-document
+  reloads dump it to 0 with no bfcache, the registered
+  platform superset; the media empty-set — zero
+  pointer/hover media rules either side, tap-highlight
+  transparent, touch-action auto; the hero-video contract
+  — 1920x1080 / 8s / autoplay+loop+playsInline / playing /
+  muted-prop / zero audio elements, with the muted
+  ATTRIBUTE the clone's registered robustness superset
+  [the React SSR quirk — the registry's FIFTH DOM-attr
+  entry]) + the nineteenth surface's ROUTE EXTENSION (the
+  /login alternates census — 6/5/3 counts structurally
+  identical across sides, the autocomplete within the
+  registered D148 family)
   No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.

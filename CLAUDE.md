@@ -268,6 +268,42 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   belonged); VLM 5/5 with ZERO flags + 2/2 supplementary (re-verified
   after the fix).
 
+- **Session 45 (2026-10-12) remediation** — see
+  `docs/remediation-plan-session45.md`: a measurement +
+  registration + versioning cycle (the worklog S44 candidates —
+  the twentieth surface + the nineteenth's route extension + the
+  standing route-watch — answered by the recon; every measured
+  delta a clone-superset or parity, NO clone gap to build
+  against). **THE TWENTIETH SURFACE (D153-D156): the
+  traversal/history + media-capability + audio/video family** —
+  THE TRAVERSAL HEADLINE: the live's back/forward are
+  cross-document full reloads (window mark lost, `back_forward`,
+  scroll DUMPED to 0, no bfcache pageshow — its full-load
+  route-changes [D152] cost a network reload per traversal)
+  while the clone's are same-document popstates (mark survives,
+  0 full loads, scroll restored EXACTLY 4620 -> 4620 through
+  Lenis, forward returning /faq rendered) — the REGISTERED
+  platform superset. The media empty-set (zero pointer/hover
+  media rules either side; tap-highlight transparent;
+  touch-action auto — the S42 print pattern). The hero-video
+  contract (both 1920x1080 / 8s / autoplay+loop+playsInline /
+  playing / muted-prop true / zero audio elements) with ONE
+  registered superset: the clone's SSR `muted` ATTRIBUTE vs the
+  live's property-only React quirk — the registry's FIFTH
+  DOM-attr entry (the more robust first-paint autoplay
+  contract). The route extension: the /login alternates census
+  (6/5/3 counts identical across sides; the autocomplete set
+  within the registered D148 family, the reason now naming the
+  forgot state). TDD: the session45 pins 13/13 GREEN (the
+  registry shape test RED first; two in-flight catches — the
+  module-scope `page` reference, and the HEADLESS-SEEK-STALL
+  law: a headless `currentTime` seek stalls forever IDENTICALLY
+  on both sides, so the loop seam is unmeasurable headlessly —
+  pin the loop attribute + the advancing clock). Gate: **743 ->
+  756 = 248 unit + 125 smoke + 383 e2e**; the battery 33/33
+  GREEN ZERO DRIFT across four phases; 21 screenshots (DB
+  canonical before and after); VLM 8/8 with ZERO flags.
+
 - **Session 44 (2026-10-12) remediation** — see
   `docs/remediation-plan-session44.md`: a case-canonicalization BUILD
   + nineteenth-surface + input-route-extension cycle (the worklog S43

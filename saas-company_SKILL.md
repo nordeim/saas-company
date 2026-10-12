@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.43.0 · **Last updated:** 2026-10-12 (Session 44 remediation)
+> **Version:** 2.44.0 · **Last updated:** 2026-10-12 (Session 45 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1697,6 +1697,41 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     one) and that Next's own trailing-slash 308 PRECEDES the proxy
     in the chain (the case+slash combo chains: /FAQ/ -> /FAQ ->
     /faq, two permanent hops).
+
+
+84. **The traversal-class instrument, the React muted-attribute
+    SSR quirk, and the headless-seek-stall law (Session 45)**:
+    the back/forward navigation class is measured by the D152
+    instruments EXTENDED to traversals — the page `load`-event
+    counter (0 through a same-document popstate) + the
+    window-mark survival test + the exact scroll-position
+    restoration read (the SCROLL-SETTLE law applied after the
+    goBack). The live's route links being full loads (D152)
+    makes its traversals CROSS-DOCUMENT reloads: the mark lost,
+    `back_forward`, the scroll dumped to 0, and `pageshow`'s
+    `persisted` never firing (no bfcache — a network reload per
+    back; its users lose their reading depth on every Back
+    click). The clone's client-side route changes make its
+    traversals popstates that restore the scroll EXACTLY
+    (4620 -> 4620, through Lenis) — the registered platform
+    superset (never "fix" toward the live's broken state).
+    THE REACT MUTED-ATTRIBUTE QUIRK: React NEVER serializes
+    `muted` to `<video>` markup through server rendering — the
+    reference's attribute-less HTML sets the property at mount,
+    making its muted-autoplay hydration-timing-dependent; the
+    clone's SSR `muted` attribute holds from first paint (the
+    more robust contract — registered, never removed for
+    attribute parity). THE HEADLESS-SEEK-STALL law: a
+    programmatic `currentTime` seek on an autoplaying muted
+    video in headless Chromium NEVER resolves — `seeking: true,
+    paused: true` forever at the seek target, IDENTICALLY on
+    both sides (probed clone + live) — the loop SEAM is
+    unmeasurable headlessly; pin the `loop` attribute + the
+    advancing clock instead. THE APIResponse.status TRAP:
+    Playwright's `APIResponse.status` is a METHOD — a property
+    read yields the function, which JSON.stringify silently
+    DROPS (a status sweep that reads `{}` is this trap, not "no
+    data"); call `.status()` or use raw fetch.
 
 ## §13. Pitfalls to Avoid
 

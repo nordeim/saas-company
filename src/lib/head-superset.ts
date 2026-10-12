@@ -146,8 +146,16 @@ export const DOM_ATTR_SUPERSET: DomAttrSupersetEntry[] = [
     side: "clone",
     routes: ["/login"],
     reason:
-      "The login pair's autoComplete (email + current-password, new-password in the signup alternate) — the S14-era deliberate functional superset the live ships none of (measured S43: its login inputs carry no autocomplete attributes); password-manager + browser-autofill assist, WCAG 1.3.5 identify-input-purpose; invisible at rest — the cursor/caret/census columns all read parity, and the newsletter inputs stay attribute-less on BOTH sides",
+      "The login card's autoComplete across ALL THREE states (email + current-password on default; email + new-password x2 on the sign-up alternate's password + confirm pair; email on the forgot alternate) — the S14-era deliberate functional superset the live ships none of (measured S43 + S45: its login inputs carry no autocomplete attributes in any state); password-manager + browser-autofill assist, WCAG 1.3.5 identify-input-purpose; invisible at rest — the cursor/caret/census columns all read parity, and the newsletter inputs stay attribute-less on BOTH sides",
     session: 43,
+  },
+  {
+    attr: "muted",
+    side: "clone",
+    routes: ["/"],
+    reason:
+      "The hero video's muted HTML ATTRIBUTE in the SSR markup (measured S45: the live's <video> carries NO muted attribute — its React runtime sets the property at mount, the React SSR quirk where muted never serializes through server rendering; the muted PROPERTY reads true on both sides and both videos play). The clone's attribute is the MORE ROBUST contract: the muted autoplay holds from first paint with no hydration-timing dependency — never remove it to chase attribute parity with the weaker contract (the gotcha-18 law)",
+    session: 45,
   },
 ];
 

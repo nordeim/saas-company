@@ -101,11 +101,12 @@ describe("isDocumentedSuperset — the head lookup truth table", () => {
   });
 });
 
-describe("DOM_ATTR_SUPERSET — the three S33 adjudications + the S43 fourth", () => {
-  it("carries exactly the four measured DOM-attribute entries with their sides", () => {
+describe("DOM_ATTR_SUPERSET — the three S33 adjudications + the S43 fourth + the S45 fifth", () => {
+  it("carries exactly the five measured DOM-attribute entries with their sides", () => {
     expect(DOM_ATTR_SUPERSET.map((e) => `${e.side}:${e.attr}`).sort()).toEqual([
       "clone:autocomplete",
       "clone:data-nav-theme",
+      "clone:muted",
       "live:data-radix-collection-item",
       "live:data-rht-toaster",
     ]);
@@ -117,12 +118,13 @@ describe("DOM_ATTR_SUPERSET — the three S33 adjudications + the S43 fourth", (
     expect(byAttr.get("data-rht-toaster")!.routes).toEqual(["/login"]);
     expect(byAttr.get("data-radix-collection-item")!.routes).toEqual(["/faq"]);
     expect(byAttr.get("autocomplete")!.routes).toEqual(["/login"]);
+    expect(byAttr.get("muted")!.routes).toEqual(["/"]); // the hero video's D154 superset
   });
 
   it("carries the adjudication reason and session on every entry", () => {
     for (const e of DOM_ATTR_SUPERSET) {
       expect(e.reason.length).toBeGreaterThan(20);
-      expect([33, 43]).toContain(e.session);
+      expect([33, 43, 45]).toContain(e.session);
     }
   });
 });
