@@ -101,9 +101,10 @@ describe("isDocumentedSuperset — the head lookup truth table", () => {
   });
 });
 
-describe("DOM_ATTR_SUPERSET — the three S33 adjudications", () => {
-  it("carries exactly the three measured DOM-attribute entries with their sides", () => {
+describe("DOM_ATTR_SUPERSET — the three S33 adjudications + the S43 fourth", () => {
+  it("carries exactly the four measured DOM-attribute entries with their sides", () => {
     expect(DOM_ATTR_SUPERSET.map((e) => `${e.side}:${e.attr}`).sort()).toEqual([
+      "clone:autocomplete",
       "clone:data-nav-theme",
       "live:data-radix-collection-item",
       "live:data-rht-toaster",
@@ -115,13 +116,22 @@ describe("DOM_ATTR_SUPERSET — the three S33 adjudications", () => {
     expect(byAttr.get("data-nav-theme")!.routes).toEqual(["/"]);
     expect(byAttr.get("data-rht-toaster")!.routes).toEqual(["/login"]);
     expect(byAttr.get("data-radix-collection-item")!.routes).toEqual(["/faq"]);
+    expect(byAttr.get("autocomplete")!.routes).toEqual(["/login"]);
   });
 
   it("carries the adjudication reason and session on every entry", () => {
     for (const e of DOM_ATTR_SUPERSET) {
       expect(e.reason.length).toBeGreaterThan(20);
-      expect(e.session).toBe(33);
+      expect([33, 43]).toContain(e.session);
     }
+  });
+});
+
+describe("isDocumentedDomSuperset — the autocomplete truth table (S43)", () => {
+  it("the clone's login autoComplete is documented on /login only", () => {
+    expect(isDocumentedDomSuperset("autocomplete", "clone", "/login")).toBe(true);
+    expect(isDocumentedDomSuperset("autocomplete", "clone", "/faq")).toBe(false);
+    expect(isDocumentedDomSuperset("autocomplete", "live", "/login")).toBe(false);
   });
 });
 

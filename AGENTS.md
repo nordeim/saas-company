@@ -19,17 +19,18 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (247 checks) | `npm run test` |
-| Browser E2E (343 checks; needs a build) | `npm run test:e2e` |
+| Unit tests (248 checks) | `npm run test` |
+| Browser E2E (352 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
-| End-to-end smoke suite (124 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
+| End-to-end smoke suite (125 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (247/247) → `npm run build` → `./scripts/smoke-test.sh` (124/124)
-→ `npm run test:e2e` (343/343) — 714 checks across three layers (Session 42: the
-session42-print-responsive suite +7; boots the standalone server on :3100 against its own
+`npm run test` (248/248) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
+→ `npm run test:e2e` (352/352) — 725 checks across three layers (Session 43: the
+session43-thankyou-input-surface suite +9 e2e + the autocomplete registry pin
++1 unit + the /thank-you smoke page +1; boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=100` — raised from 50 in Session 28
 when the suite's ~45 auth flows outgrew it — `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
@@ -901,6 +902,31 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     share one tag|href|name key; the true walk is 28 stops on both
     sides — and the tab inventory is VIEWPORT-dependent on both
     sides, so the surface pairs WITHIN a viewport, never across).
+53. **A "by design" record is a HYPOTHESIS about the reference's
+    intent — re-verifiable, and sometimes WRONG (Session 43).** Two
+    long-standing records fell to directed probes: (a) the S14 story
+    "the live's /thank-you newsletter-success route has no clone
+    equivalent by design" — the A2 probe (fill + submit the live's
+    footer newsletter form) showed the live's form does NOT navigate
+    to /thank-you at all (the submit stays at `/`, an inline fetch
+    flow — exactly the clone's own S14 inline-confirmation superset);
+    the page is the CHECKOUT-success destination, the live serves it
+    working (36 words, in its own sitemap), and the clone 404'd it —
+    the ONLY route where the clone soft-404'd what the live serves
+    working (D147: built at the measured parity contract). (b) The
+    S40/D146 record claimed "the clone's /pricing continues as a
+    fully working page — the documented superset route" — the git
+    history has NO `src/app/pricing/` (the route NEVER existed); the
+    clone's /pricing serves the honest real 404 and BOTH sides fail
+    that route (the pricing content lives in the landing's #pricing
+    section on both sides). The lesson: a registered design decision
+    is a claim about WHY a delta exists — when a new surface walks
+    over the territory, PROBE the claim before honoring the record
+    (a route extension exposed (a); a clone-side battery check
+    exposed (b), which three sessions of live-side-only route-watch
+    checks structurally could not). The route-watch now asserts BOTH
+    sides: the live's soft-404 set AND the clone's working-set truth
+    (the supersets are /demo + /dashboard only).
 
 ## Architecture invariants
 
@@ -1091,7 +1117,36 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   EXACT PARITY on every field: nav 56/72, the burger via the SHARED
   `md:hidden` selector [gotcha 47 — the live's bare burger carries
   no aria-controls, an aria-keyed read shows it "absent"], links
-  1/7, zero overflow, docH byte-identical per width per route).
+  1/7, zero overflow, docH byte-identical per width per route) AND
+  the Session-43 extension: the /thank-you WORKING-PARITY ROUTE
+  (D147 — the last route where the clone soft-404'd what the live
+  serves working, closed: the live's 36-word payment-success
+  interstitial built at the measured contract — the verbatim
+  classes on the already-pinned @theme tokens, `routeMetadata`
+  head with the byte-exact D117-truncated description, the
+  BreadcrumbList [Home, Thank You], NO nav/footer/landmarks, NO
+  toaster shell; the sitemap now the live's 7 + /demo = 8 URLs —
+  the STRICT superset, the D141 swap superseded; the A2 probe
+  disproved the S14 newsletter rationale — the live's newsletter
+  form does NOT navigate there, the page is the checkout-success
+  destination) + the EIGHTEENTH surface (D148 — the cursor/caret +
+  form-autofill contract: the cursor census identical on every
+  pairable route [pointer on links/buttons, text on entry
+  controls], the caret-color the auto-inherited currentColor both
+  sides, the :autofill/:-webkit-autofill rule scan ZERO both sides
+  [the empty-set contract], and the autocomplete census — the
+  live ships NONE anywhere while the clone carries the REGISTERED
+  S14-era login pair [email + current-password — the registry's
+  fourth DOM entry: the invisible-at-rest functional superset,
+  password-manager + browser-autofill assist, WCAG 1.3.5; the
+  newsletter inputs stay attribute-less on BOTH sides]) + the
+  sixteenth surface's ROUTE EXTENSION (the four legal routes'
+  walks at 1440 [22 stops] + /privacy at 390 [16 stops] —
+  structurally identical across sides, the only deltas the
+  registered S41 a11y-name supersets) + the D146 record
+  CORRECTED (the clone's /pricing NEVER existed — both sides fail
+  that route honestly; the working superset routes are /demo +
+  /dashboard only; gotcha 53).
   No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.

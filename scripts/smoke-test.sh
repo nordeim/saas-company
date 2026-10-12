@@ -587,7 +587,10 @@ rm -f /tmp/smoke-big-login.json
 # newsletter+demo section; the third server's bucket is fresh.)
 
 echo "== smoke: pages =="
-for PATH_ROUTE in / /login /demo /faq /privacy /terms /accessibility /refund-policy; do
+# Session 43: /thank-you joins the page loop — the live's own
+# payment-success route, now built at measured parity (the S43 story:
+# the last route where the clone soft-404'd what the live serves working).
+for PATH_ROUTE in / /login /demo /faq /thank-you /privacy /terms /accessibility /refund-policy; do
   CODE=$(curl -s -o /dev/null -w '%{http_code}' "$BASE$PATH_ROUTE")
   check "page $PATH_ROUTE serves 200" "200" "$CODE"
 done

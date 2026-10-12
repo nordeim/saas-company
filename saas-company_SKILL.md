@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.41.0 · **Last updated:** 2026-10-12 (Session 42 remediation)
+> **Version:** 2.42.0 · **Last updated:** 2026-10-12 (Session 43 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1606,6 +1606,48 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     initial dashboard state is server-rendered, not client-fetched —
     the VLM standing check caught the healthy dashboard rendered
     where the boundary belonged).
+
+82. **The registered-design audit law — a "by design" record is a
+    HYPOTHESIS about the reference's intent, and the route-watch
+    must assert BOTH sides (Session 43)**: two long-standing records
+    fell to directed probes the moment a new surface walked their
+    territory. (a) The S14 story "the live's /thank-you
+    newsletter-success route has no clone equivalent by design" —
+    the A2 probe (fill + submit the LIVE's footer newsletter form)
+    showed the live's form does NOT navigate to /thank-you at all
+    (the submit stays at `/`, an inline fetch flow — exactly the
+    clone's own S14 inline-confirmation superset); the page is the
+    CHECKOUT-success destination, the live serves it working (36
+    words, in its own sitemap), and the clone 404'd it — the ONLY
+    route where the clone soft-404'd what the live serves working
+    (D147: built at the measured parity contract — every class
+    verbatim from the adj2 tree dump, the `pageDescription` seam
+    reproducing the live's description byte-exactly, the sitemap
+    becoming the live's 7 + /demo = the STRICT superset). (b) The
+    S40/D146 record claimed "the clone's /pricing continues as a
+    fully working page — the documented superset route" — the git
+    history has NO `src/app/pricing/` (the route NEVER existed);
+    both sides fail that route (the clone's the honest real 404),
+    and THREE sessions of route-watch checks could not catch the
+    error because the battery only asserted the LIVE's soft-404
+    set — the clone-side working-set claim rode unprobed. The laws:
+    a registered design decision is a CLAIM about why a delta
+    exists — when a new surface (a route extension, a clone-side
+    check) walks over its territory, PROBE the claim before
+    honoring the record; and a route-watch registry that asserts
+    only one side's truth is structurally blind to the other
+    side's record errors — assert BOTH sides (the live's soft-404
+    set AND the clone's working set: /demo + /dashboard). The
+    measurement twins: the word-count route-watch is a DESKTOP
+    measurement (a battery phase that follows a 390 walk inherits
+    the stale viewport — /faq reads 90 words at 390 vs 101 at 1440
+    on BOTH sides — set the viewport at the phase start); and the
+    eighteenth surface (cursor/caret + form-autofill) is the
+    input-purpose twin of the interaction surface — the cursor
+    census pairs, the caret-color inherits currentColor, and the
+    autocomplete census REGISTERS the clone's login pair as the
+    invisible functional superset (WCAG 1.3.5) the live ships
+    none of.
 
 
 ## §13. Pitfalls to Avoid

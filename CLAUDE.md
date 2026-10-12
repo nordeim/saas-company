@@ -268,6 +268,65 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   belonged); VLM 5/5 with ZERO flags + 2/2 supplementary (re-verified
   after the fix).
 
+- **Session 43 (2026-10-12) remediation** — see
+  `docs/remediation-plan-session43.md`: a working-parity route
+  build + eighteenth-surface + focus-route-extension cycle (the
+  worklog S42 candidates answered by the recon's measurements,
+  PLUS the route extension's discovery). **THE HEADLINE: the
+  /thank-you working-parity route (D147) — the LAST route where
+  the clone soft-404'd what the live serves working, CLOSED.**
+  The focus-order route extension's paired walk exposed the
+  structural delta (the clone's `button||Go Home` — the 404 CTA —
+  vs the live's `a|/|Back to Home`), and the adj-s43 probes
+  escalated it: the live serves a REAL 36-word payment-success
+  interstitial there (bare-centered — no nav, no footer, no
+  landmarks; the circle-check-big icon at green-500; the
+  Back-to-Home anchor pill; the full head contract with the
+  D117-truncated description the pageDescription seam reproduces
+  byte-exactly; the JSON-LD trio incl. the BreadcrumbList [Home,
+  Thank You]; in the live's own sitemap at weekly/0.8). **The A2
+  probe DISPROVED the S14 rationale** (the live's newsletter form
+  does NOT navigate to /thank-you — the submit stays at `/`, an
+  inline fetch flow; the "newsletter-success route" comment was a
+  misidentification — the page is the checkout-success
+  destination). BUILT at the measured contract:
+  `src/app/thank-you/page.tsx` (the live's verbatim classes on
+  the already-pinned @theme tokens), the sitemap now the live's
+  7 + /demo = 8 URLs (the STRICT superset — the D141 swap
+  superseded), the smoke page loop + the battery route-watch
+  flipped from the 404-by-design to the words-match. **The
+  EIGHTEENTH surface (D148): the cursor/caret + form-autofill
+  contract** — the cursor census identical on every pairable
+  route (pointer/text counts: / 32+1, /login 4+2, /faq 27+1),
+  the caret-color the auto-inherited currentColor both sides,
+  the :autofill rules ZERO both sides (the empty-set contract),
+  and the autocomplete census: the live ships NONE anywhere
+  while the clone carries the S14-era login pair — now
+  REGISTERED as the registry's fourth DOM entry (the
+  invisible-at-rest functional superset: password-manager +
+  browser-autofill assist, WCAG 1.3.5). **The route extension:
+  the four legal routes' walks at 1440 (22 stops) + /privacy at
+  390 (16 stops) — structurally identical across sides** (the
+  legal bodies carry no tab stops; the only deltas the
+  registered S41 a11y-name supersets). **The D146 record
+  CORRECTED**: "the clone's /pricing continues as a fully
+  working page" was an ERROR — the git history has NO
+  src/app/pricing (the route never existed); both sides fail
+  that route honestly (the pricing content lives in the
+  landing's #pricing section on both sides); the battery's
+  route-watch now asserts both sides' truth (the working
+  supersets are /demo + /dashboard only). Gotcha 53: a "by
+  design" record is a HYPOTHESIS about the reference's intent —
+  re-verifiable, and sometimes WRONG. TDD: the session43 pins
+  9/9 GREEN (4 RED on the missing route first). Gate: **714 ->
+  725 checks** (248 unit + 125 smoke + 352 e2e); the battery
+  **41/41 GREEN, ZERO DRIFT** across four phases (thankyou 9 +
+  input-surface 11 + focus-ext 5 + route-watch 16); 21
+  screenshots (the standing 20 + the new 17-thank-you shot; DB
+  canonical before AND after); VLM 8/8 with ZERO flags (the
+  standing five + the banner + the boundary + the thank-you
+  page).
+
 - **Session 41 (2026-10-12) remediation** — see
   `docs/remediation-plan-session41.md`: a focus-order +
   mobile-nav-verification cycle (the worklog S41 candidates, answered

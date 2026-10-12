@@ -103,7 +103,8 @@ export function isDocumentedSuperset(key: string, route: string): boolean {
  * direction; the pins (head-superset.test.ts) hold the shape.
  */
 export interface DomAttrSupersetEntry {
-  /** The data-* attribute name, verbatim ("data-nav-theme"). */
+  /** The DOM attribute name, verbatim ("data-nav-theme",
+   *  "autocomplete"). */
   attr: string;
   /** Which side ships it. */
   side: "clone" | "live";
@@ -139,6 +140,14 @@ export const DOM_ATTR_SUPERSET: DomAttrSupersetEntry[] = [
     reason:
       "Radix Accordion's internal collection-registration marker on the live's FAQ triggers; the ARIA contract is at parity on both sides (aria-expanded/aria-controls/role=region/aria-labelledby/data-state + byte-identical trigger classes — measured), and stamping a custom accordion with a Radix registry marker it does not belong to would be simulated instrumentation",
     session: 33,
+  },
+  {
+    attr: "autocomplete",
+    side: "clone",
+    routes: ["/login"],
+    reason:
+      "The login pair's autoComplete (email + current-password, new-password in the signup alternate) — the S14-era deliberate functional superset the live ships none of (measured S43: its login inputs carry no autocomplete attributes); password-manager + browser-autofill assist, WCAG 1.3.5 identify-input-purpose; invisible at rest — the cursor/caret/census columns all read parity, and the newsletter inputs stay attribute-less on BOTH sides",
+    session: 43,
   },
 ];
 
