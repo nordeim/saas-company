@@ -234,4 +234,17 @@ both sides' truth)
 
 ## The pushed-hash record (the closing discipline)
 
-- (to be recorded at close)
+- Remediation commit **653b497** pushed via the SSH wrapper with the
+  EXPLICIT `--remote git@github.com:nordeim/saas-company.git` (the S31
+  trap: the wrapper's DEFAULT remote is the runbook's example repo —
+  the explicit flag held from the first dry-run).
+- Wrapper-verified: remote main @ 653b497 == local HEAD; the
+  fetch-independent HTTPS ls-remote agreed
+  (653b497c20150d4e0cc9f803e7fd91b53538eff9).
+- The operator key's fingerprint verified through paramiko's own key
+  parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU
+  — matches the S1-S45 record); the operator's key file shredded after
+  use (the wrapper's own temp copy shredded at its teardown).
+- Zero zombies at close (the port-sweep discipline held through every
+  recon/adj/battery/capture/debug run; the ports swept clean at the
+  end); the tree clean; no new branches.

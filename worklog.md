@@ -1627,3 +1627,19 @@ Stage Summary:
 - THE ZOMBIE-PORT LAW (gotcha 56b / lesson 85): kill by PORT before AND after every standalone boot — the renamed next-server child outlives the node parent and silently serves stale state (the shot-14 false redirect-loop, diagnosed through the impossible API-vs-page cookie divergence).
 - Survey scripts persisted under research/ (gitignored scratch, the house convention): recon-s46.mjs, adj-s46.mjs, adj2-s46.mjs, adj3-s46.mjs, adj4-s46.mjs, adj5-s46.mjs, adj6-s46.mjs, drift-battery-s46.mjs, capture-screenshots-s46.mjs, db-state-s46.mjs, vlm-checks-s46.sh, docs-align-s46.py (+ the run-*.sh runners with the port-sweep discipline).
 - The S47 candidates: the reference-regression watch continues (the live's toast layer + the soft-404 four + the working eight); the twenty-first surface's ROUTE EXTENSIONS (the offline render on the content routes; the clipboard census on /login + /demo); or the twenty-second surface — the print-to-PDF text layer beyond the page counts, the focus-visible ring surface, or the forced-colors surface.
+
+---
+Task ID: 46-close
+Agent: Super Z (main)
+Task: Session 46 closing — the pushed-hash record + the closing commit
+
+Work Log:
+- Commit 653b497 (25 files: the session46-clipboard-drag-offline spec [8 pins — the clipboard empty-set, the drag contract, the offline render, the burger clickability + panel + close-on-navigate] + the docs alignment across PAD [the revision block, the ledger D157-D160, section 7 counts, the gate line]/AGENTS [the counts + gotcha 56 + the invariants' Session-46 extension]/CLAUDE [the session-46 context + the stale stack-table count fixed]/README [the 764 badge + the clickability story + the rows + the stale verification/testing counts fixed]/SKILL v2.45.0 [lesson 85 — the hit-target map instrument + the offline word-floor proxy + the survey-script zombie-port law] + the remediation plan session46 + the session logs 98 + 99 + the 15 refreshed screenshots [6 byte-identical deterministic renders] + this worklog) pushed via the SSH wrapper with the EXPLICIT --remote git@github.com:nordeim/saas-company.git (the S31 trap: the wrapper's DEFAULT remote is the runbook's example repo — the explicit flag held from the first dry-run).
+- Wrapper-verified: remote main @ 653b497 == local HEAD; the fetch-independent HTTPS ls-remote agreed (653b497c20150d4e0cc9f803e7fd91b53538eff9).
+- The paramiko ssh shim REDEPLOYED for the reset workspace (/home/z/bin/ssh from the runbook's Appendix A; paramiko 5.0.0); the wrapper needed /home/z/bin on PATH (exported for the run).
+- The operator key's fingerprint verified through paramiko's own key parse (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU) against the S1-S45 record BEFORE the push; the operator's key file shredded after use.
+- Zero zombies at close (the port-sweep discipline held through every recon/adj/battery/capture/debug run — the gotcha-56b law applied from its own discovery onward; the ports swept clean); the tree clean; no new branches.
+
+Stage Summary:
+- Session 46 fully closed: the remediation commit 653b497 pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session46.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 764 checks (248 unit + 125 smoke + 391 e2e); the parity battery now runs TWENTY-ONE surfaces (28 checks across two phases) with the route-watch registry asserting BOTH sides' truth; the S47 candidates recorded in this worklog (the reference-regression watch, the twenty-first surface's route extensions, or the twenty-second surface — the print-to-PDF text layer, the focus-visible ring, or the forced-colors surfaces).
