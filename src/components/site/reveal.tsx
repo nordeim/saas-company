@@ -41,8 +41,11 @@ export function Reveal({
   delay?: number;
   /** ms of animation (the live: 300–800 per element). */
   duration?: number;
-  /** Initial translateY offset (the live: 15–60 per element). */
-  y?: number;
+  /** Initial translateY offset (the live: 15–60 per element); `null`
+   *  = the OPACITY-ONLY entrance (Session 47: the live's logo-cloud
+   *  wordmark carriers carry `opacity: 0` with NO transform key at any
+   *  phase — the mode reproduces the byte-exact inline styles). */
+  y?: number | null;
   as?: "div" | "section" | "span" | "p" | "h1" | "h2";
   /** "inview" waits for intersection (once); "mount" starts after mount. */
   mode?: "inview" | "mount";
@@ -66,7 +69,9 @@ export function Reveal({
 
     const settle = () => {
       el.style.opacity = "1";
-      el.style.transform = "none";
+      // the opacity-only family writes NO transform (the live's settled
+      // wordmarks carry exactly `opacity: 1` — S47 probe G)
+      if (y !== null) el.style.transform = "none";
       setPhase("done");
     };
     const start = () => {
@@ -76,7 +81,7 @@ export function Reveal({
         const p = revealProgress(now - t0, { delay, duration });
         const s = revealState(p, y);
         el.style.opacity = String(s.opacity);
-        el.style.transform = s.transform;
+        if (s.transform !== undefined) el.style.transform = s.transform;
         if (p < 1) {
           raf = requestAnimationFrame(tick);
         } else {
@@ -122,8 +127,12 @@ export function Reveal({
 
   const motionStyle: CSSProperties =
     phase === "done"
-      ? { opacity: 1, transform: "none" }
-      : { opacity: 0, transform: `translateY(${y}px)` };
+      ? y === null
+        ? { opacity: 1 }
+        : { opacity: 1, transform: "none" }
+      : y === null
+        ? { opacity: 0 }
+        : { opacity: 0, transform: `translateY(${y}px)` };
 
   return (
     <Tag

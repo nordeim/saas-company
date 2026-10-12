@@ -19,16 +19,20 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `npm run start` |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
-| Unit tests (248 checks) | `npm run test` |
-| Browser E2E (391 checks; needs a build) | `npm run test:e2e` |
+| Unit tests (252 checks) | `npm run test` |
+| Browser E2E (400 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
 | End-to-end smoke suite (125 checks) | `./scripts/smoke-test.sh` (needs `npm run build` first) |
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
-`npm run test` (248/248) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (391/391) — 764 checks across three layers (Session 46: the
+`npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
+→ `npm run test:e2e` (400/400) — 777 checks across three layers (Session 47: the
+session47-print-text-entrances suite +9 e2e — the twenty-second-surface pins
+[the print-text layer] + the entrance-build pins [the wordmark + CTA gaps
+closed] + the forced-colors empty-set + the offline route extensions; Session
+46: the
 session46-clipboard-drag-offline suite +8 e2e — the twenty-first-surface pins
 [the clipboard empty-set, the drag contract, the offline render] + the burger
 clickability/panel/close-on-navigate pins; Session 45: the
@@ -1013,6 +1017,32 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     divergence). Sweep `ss -tlnp` for the port and `kill -9` every PID
     it reports.
 
+57. **The print-pipeline exposure law + the record re-verification law
+    (Session 47).** (a) An un-revealed below-fold entrance is INVISIBLE
+    to every dwell-loaded surface — the style inventories, the loop
+    censuses, and the word-parity checks all read POST-SETTLE truth
+    (innerText INCLUDES opacity-0 text) — and to the print pipeline it
+    is invisible BY OPPOSITE: `page.pdf` paints only settled content,
+    so an entrance-layer gap surfaces as tokens MISSING from the PDF.
+    The print-text layer (pdftotext on the page.pdf output) is the one
+    instrument that sees the un-revealed set — it exposed TWO entrance
+    gaps (the per-wordmark fades + the CTA whole-block wrapper) that
+    39 sessions of dwell-loaded surfaces structurally could not. The
+    naive PDF stream regex is blind to Chromium's CID-subset font
+    encodings (/faq read 14 words through it) — poppler's pdftotext is
+    the honest extractor. And a parity delta that COLLAPSES to zero
+    after the gap build (291 -> 251 = the live's 251) is the strongest
+    confirmation the build reproduced the reference's mechanism —
+    predict the convergence BEFORE building, then measure it. (b) A
+    "by design" record is a HYPOTHESIS about the reference — when a
+    new surface walks over its territory, PROBE the record (gotcha
+    53's extension): the S8 F1-EXTRA "the live animates ONLY the
+    badge pill" and "the wordmark cloud is NOT a motion element"
+    records both fell to the S47 print probe — the container record
+    survived (re-verified true), the badge-only scope was wrong for
+    today's live (the moving-target law: the reference is a
+    redeployed app, and its motion scope changed under the record).
+
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +
@@ -1291,7 +1321,25 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
                                     dormant toast containers — only the y36 sliver
                                     responds; the clone fully clickable at every
                                     point — the registered superset over the
-                                    reference's degraded affordance)
+                                    reference's degraded affordance) AND the Session-47
+                                    extension: the TWENTY-SECOND SURFACE — the
+                                    print-to-PDF text layer + the entrance build it
+                                    exposed (D161-D166: the focus-visible ring at
+                                    rendered parity [the rule-census delta the
+                                    library-structure layer]; the forced-colors
+                                    empty-set [zero rules both sides, identical
+                                    substitution, stable geometry]; the print-text
+                                    layer at exact parity [26/104/344/36 on the
+                                    content routes + the landing's post-build 251
+                                    convergence — the un-revealed set unpainted on
+                                    both sides]; the wordmark + CTA entrance gaps
+                                    CLOSED [the live's per-wordmark opacity-only
+                                    fades with the ~50ms stagger + the whole-block
+                                    CTA wrapper at y=30 — the S8 records
+                                    re-verified through the print probe, gotcha
+                                    57]; the offline route extension [the D159
+                                    superset on the content routes + the /faq
+                                    concatenation artifact adjudicated])
   No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.

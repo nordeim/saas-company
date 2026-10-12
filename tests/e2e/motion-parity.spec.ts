@@ -209,7 +209,7 @@ test.describe("entrance behavior (Session-8 F1)", () => {
       .toBe("opacity: 1; transform: none;");
   });
 
-  test("the CTA animates ONLY the badge — the H2 carries no motion", async ({ page }) => {
+  test("the CTA's WHOLE content block animates as ONE wrapper (Session 47 D165 — the h2's PARENT carries the motion)", async ({ page }) => {
     await page.goto("/");
     await page.evaluate(async () => {
       const h2 = [...document.querySelectorAll("h2")].find((h) => /stop managing/i.test(h.textContent || ""));
@@ -219,18 +219,31 @@ test.describe("entrance behavior (Session-8 F1)", () => {
     const state = await page.evaluate(() => {
       const h2 = [...document.querySelectorAll("h2")].find((h) => /stop managing/i.test(h.textContent || ""));
       const badge = h2?.parentElement?.querySelector("div[class*='rounded-full'][class*='border-violet']");
+      const wrapper = h2?.parentElement;
       return {
         h2Style: h2?.getAttribute("style") || null,
         badgeOwnStyle: badge?.getAttribute("style") || null,
         // the live's motion element is the badge's unclassed PARENT wrapper
         badgeWrapperStyle: badge?.parentElement?.getAttribute("style") || null,
+        // Session 47 (D165): the WHOLE block (badge + h2 + copy + pills)
+        // rides ONE wrapper — the h2's own parent
+        h2ParentStyle: wrapper?.getAttribute("style") || null,
+        h2ParentChildren: wrapper?.children.length ?? 0,
+        wrapperCarriesThePill: !!wrapper?.querySelector("a[href='#pricing']"),
+        wrapperCarriesTheCopy: /competitors are already automating/i.test(wrapper?.textContent || ""),
       };
     });
-    // the H2 carries only the --tw-leading pin (F4) — no motion state
+    // the H2 carries only the --tw-leading pin (F4) — no motion state of its own
     expect(state.h2Style).not.toContain("opacity");
     expect(state.h2Style).not.toContain("transform");
     expect(state.badgeOwnStyle).toBeNull();
+    // the settled wrapper residue is the live's exact framer write
     expect(state.badgeWrapperStyle).toBe("opacity: 1; transform: none;");
+    expect(state.h2ParentStyle).toBe("opacity: 1; transform: none;");
+    // ONE wrapper carries the badge, the h2, the copy, and the pill
+    expect(state.h2ParentChildren).toBe(4);
+    expect(state.wrapperCarriesThePill).toBe(true);
+    expect(state.wrapperCarriesTheCopy).toBe(true);
   });
 
   test("the logo-cloud wordmark container is NOT animated (the live's is static)", async ({ page }) => {

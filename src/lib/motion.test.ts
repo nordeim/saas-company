@@ -87,3 +87,33 @@ describe("revealState — the per-frame inline style values", () => {
     expect(keys).toEqual(["opacity", "transform"]);
   });
 });
+
+describe("revealState — the OPACITY-ONLY mode (y = null — Session 47, the live's wordmark family)", () => {
+  // The live's logo-cloud wordmark carriers are framer motion elements
+  // whose initial inline style is EXACTLY `opacity: 0` — no transform key
+  // at all (measured S47 probe G: `style="opacity: 0;"`), and whose
+  // settled residue is EXACTLY `opacity: 1` (no `transform: none` write).
+  // The print-text surface exposed the gap: un-revealed below-fold
+  // entrances vanish from the PDF, and the clone's static wordmarks were
+  // the only landing tokens painted that the live's were not.
+
+  it("renders the initial (pre-reveal) state with NO transform key", () => {
+    expect(revealState(0, null)).toEqual({ opacity: 0 });
+  });
+
+  it("renders the settled state exactly like the live (opacity: 1, NO transform residue)", () => {
+    expect(revealState(1, null)).toEqual({ opacity: 1 });
+  });
+
+  it("interpolates mid-flight as eased opacity only", () => {
+    const mid = revealState(0.5, null);
+    expect(mid.opacity).toBeCloseTo(0.684643, 4);
+    expect(Object.keys(mid)).toEqual(["opacity"]);
+  });
+
+  it("never emits a transform at any phase (the key invariant)", () => {
+    for (const p of [0, 0.25, 0.5, 0.75, 1]) {
+      expect(Object.keys(revealState(p, null))).not.toContain("transform");
+    }
+  });
+});

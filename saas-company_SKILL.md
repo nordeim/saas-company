@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.45.0 · **Last updated:** 2026-10-12 (Session 46 remediation)
+> **Version:** 2.46.0 · **Last updated:** 2026-10-12 (Session 47 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1763,6 +1763,25 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     an EADDRINUSE log line to diagnose). Sweep `ss -tlnp` for
     the port, `kill -9` every reported PID.
 
+86. **The print-text instrument, the CID-blind regex, and the
+    convergence-prediction pattern (Session 47)**: the print
+    pipeline (`page.pdf`) paints only SETTLED content — an
+    un-revealed below-fold entrance (initial `opacity: 0`) never
+    paints, so its tokens are MISSING from the PDF's extracted
+    text. pdftotext (poppler) on the page.pdf output is therefore
+    the one instrument that sees the un-revealed entrance set —
+    39 sessions of dwell-loaded surfaces (style inventories, loop
+    censuses, word parity — innerText INCLUDES opacity-0 text)
+    structurally could not. THE CID TRAP: a naive regex over the
+    PDF's content streams reads ~0-14 words on Chromium PDFs —
+    the text is CID-subset-encoded; use the real extractor. THE
+    CONVERGENCE-PREDICTION PATTERN: when a parity delta's root
+    cause is a missing mechanism on your side, PREDICT the exact
+    post-build convergence BEFORE building (the clone's landing
+    PDF would move 291 -> the live's 251), then measure it — a
+    delta that collapses to exactly the reference's number is
+    the strongest possible confirmation the build reproduced the
+    mechanism, not merely the arithmetic.
 ## §13. Pitfalls to Avoid
 
 - Assuming `.env` wins over the shell environment (it doesn't — exported

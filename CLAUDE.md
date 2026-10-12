@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (125) | 248 unit + 391 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (125) | 252 unit + 400 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -267,6 +267,48 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   check caught the healthy dashboard rendered where the boundary
   belonged); VLM 5/5 with ZERO flags + 2/2 supplementary (re-verified
   after the fix).
+
+- **Session 47 (2026-10-12) remediation** — see
+  `docs/remediation-plan-session47.md`: a BUILD + measurement +
+  versioning cycle (the worklog S46 candidates — the
+  twenty-second surface + the 21st's route extensions + the
+  standing route-watch). **THE HEADLINE: the print-to-PDF text
+  layer (the 22nd surface, D163) exposed TWO REAL ENTRANCE-LAYER
+  CLONE GAPS — the first clone-gap build since S43.** Four of
+  five probed routes at EXACT PDF-text parity (/login 26, /faq
+  104, /privacy 344, /thank-you 36) but the landing read clone
+  291 vs live 251 — the root cause: print paints only SETTLED
+  content, and the live's below-fold framer entrances stay
+  opacity-0 at print time. **GAP 1 (D164):** the live wraps EACH
+  of the 8 logo-cloud wordmark carriers as a framer motion
+  element with initial `opacity: 0` — an OPACITY-ONLY fade (no
+  transform), ~50ms stagger, ~400ms duration — the clone shipped
+  them static (the S8 F1-EXTRA record measured the CONTAINER,
+  which is static; the per-wordmark carriers were never
+  surveyed). **GAP 2 (D165):** the live wraps the ENTIRE CTA
+  content block in ONE unclassed motion div (y=30, ~800ms) — the
+  clone animated only the badge (the S8 badge-only record wrong
+  for today's live, gotcha 7). THE BUILD: `Reveal` gained the
+  OPACITY-ONLY mode (`y={null}` — no transform key at any phase;
+  the settled write `opacity: 1` only), the 8 carriers became
+  per-element entrances (the motion div IS the classed carrier),
+  and the CTA restructured to the whole-block wrapper. **THE
+  CONVERGENCE CONFIRMED: the clone's landing PDF moved 291 ->
+  251 = the live's 251** (the un-revealed set unpainted on both
+  sides). ALSO: the focus-visible ring at rendered parity (D161),
+  the forced-colors empty-set (D162), the offline route extension
+  (D166 — the /faq 87-vs-101 delta adjudicated as the CSS-abort
+  concatenation artifact), the clipboard census on /login +
+  /demo, and the D160 burger record re-verified (NO CHANGE on
+  the live). TDD: the motion y-null pins RED first (4 unit),
+  then the build; the session47 pins 9/9 (two pin-transcription
+  catches in flight). Gate: **764 -> 777 = 252 unit + 125 smoke
+  + 400 e2e**; the battery 17/17 GREEN ZERO DRIFT on the FIRST
+  run; 21 screenshots (DB canonical, zero mutations — the
+  capture script gaining the gotcha-44 scroll-through pass the
+  new entrances require); VLM 8/8 ZERO flags. Gotcha 57 / lesson
+  86: the print-pipeline exposure law + the record
+  re-verification law + the print-text instrument.
 
 - **Session 46 (2026-10-12) remediation** — see
   `docs/remediation-plan-session46.md`: a measurement +

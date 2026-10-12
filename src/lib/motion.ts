@@ -69,12 +69,22 @@ export function revealProgress(
  * `translateY(<(1 - eased) * y>px)`. The settled state is EXACTLY the
  * live's framer residue: `opacity: 1; transform: none;` (verified on the
  * live's settled problem card — no transition-delay, no will-change).
+ *
+ * Session 47 — the OPACITY-ONLY mode (`y = null`): the live's logo-cloud
+ * wordmark carriers animate opacity ALONE (their initial inline style is
+ * `opacity: 0` with NO transform key, their settled residue `opacity: 1`
+ * with no `transform: none` write — measured S47 probe G). The mode keeps
+ * the transform key out of every phase so the clone's inline styles stay
+ * byte-identical to the live's carriers at rest and settled.
  */
 export function revealState(
   progress: number,
-  y: number,
-): { opacity: number; transform: string } {
+  y: number | null,
+): { opacity: number; transform?: string } {
   const eased = easeOut(progress);
+  if (y === null) {
+    return progress >= 1 ? { opacity: 1 } : { opacity: eased };
+  }
   if (progress >= 1) return { opacity: 1, transform: "none" };
   return {
     opacity: eased,
