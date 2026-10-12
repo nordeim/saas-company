@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.42.0 · **Last updated:** 2026-10-12 (Session 43 remediation)
+> **Version:** 2.43.0 · **Last updated:** 2026-10-12 (Session 44 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1649,6 +1649,54 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     invisible functional superset (WCAG 1.3.5) the live ships
     none of.
 
+
+83. **The unprobed-assumption law — a route's RENDER is a separate
+    measurement from its STATUS; and three instrument laws that
+    manufactured false readings (Session 44)**: the recon's /FAQ
+    probe measured the live's HTTP 200 (the SPA anything-answers
+    family) and the battery's first draft ASSUMED a rendered
+    SPA-404 by analogy to the soft-404 four — an UNPROBED
+    assumption. The adj3 probe disproved it: the live serves THE
+    FAQ PAGE ITSELF at /FAQ (101 words, the FAQ title) — its SPA
+    router matches case-INSENSITIVELY for every working content
+    route (/Faq, /FaQ, /THANK-YOU, /Privacy, /TERMS,
+    /Accessibility, /Refund-Policy; only /LOGIN — the live's
+    separate Base44 auth page — stays case-sensitive). The clone
+    404'd every variant — the S43 /thank-you family again, and the
+    D149 proxy existed only because the assumption finally got
+    probed (the case-canonicalizing 308: any case variant of a
+    known route redirects to the lowercase canonical, the query
+    preserved, unknown routes keeping the honest 404 — the
+    honest-status family: duplicate 200s become one canonical
+    URL). THE INSTRUMENT LAWS: (a) the INVERTED-PROBE law — a
+    same-document navigation test that compares a window mark
+    against a comparator DESTRUCTURED UNDER THE WRONG NAME reads
+    `undefined === undefined` — TRUE on the full-load side (the
+    mark is gone with the document) and FALSE on the client-nav
+    side (a string never equals undefined) — exactly backwards;
+    the decisive route-change instrument is the page `load`-event
+    counter (fires ONLY on full document loads), paired with the
+    mark. (b) The NEGATIVE-ZERO law — `Math.round()` on a
+    sub-pixel-negative rect top (a Lenis settle at -0.0001px)
+    returns `-0`, and Playwright's `toBe` uses `Object.is` where
+    `-0 !== 0` — normalize geometry reads with
+    `Math.abs(Math.round(...))`. (c) The TRUE-FRESH-LOAD law — a
+    `goto` from another hash on the same origin is a SAME-DOCUMENT
+    hash-change the SPA's hashchange handler scrolls; navigate
+    from `about:blank` to measure the fresh-load class (the live
+    NEVER scrolls a true fresh load — its SPA shell lacks the
+    anchor at parse time, the element mounting at t~500-800ms
+    after the native hash-jump window closes; the clone's SSR
+    anchor scrolls from t~325ms — the registered functional
+    superset: deep links to page sections WORK). Riding along:
+    the SETTLE-every-read law (every post-click geometry read
+    needs the scroll-settle poll — the read at +0ms is
+    mid-animation) and the Next-16 discovery that the middleware
+    convention is DEPRECATED (renamed `proxy.ts` with `export
+    function proxy` — the same API; use the modern name from day
+    one) and that Next's own trailing-slash 308 PRECEDES the proxy
+    in the chain (the case+slash combo chains: /FAQ/ -> /FAQ ->
+    /faq, two permanent hops).
 
 ## §13. Pitfalls to Avoid
 

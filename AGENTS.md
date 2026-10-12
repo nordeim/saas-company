@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (248 checks) | `npm run test` |
-| Browser E2E (352 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (370 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,9 +28,11 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (248/248) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (352/352) — 725 checks across three layers (Session 43: the
-session43-thankyou-input-surface suite +9 e2e + the autocomplete registry pin
-+1 unit + the /thank-you smoke page +1; boots the standalone server on :3100 against its own
+→ `npm run test:e2e` (370/370) — 743 checks across three layers (Session 44: the
+session44-urlstate-selection-surface suite +18 e2e — the case-canonicalization
+proxy pins [4 RED on the missing proxy first] + the nineteenth-surface parity
+pins; Session 43: the session43-thankyou-input-surface suite +9 e2e + the
+autocomplete registry pin +1 unit + the /thank-you smoke page +1; boots the standalone server on :3100 against its own
 `db/e2e.db`, `AUTH_RATE_LIMIT_MAX=100` — raised from 50 in Session 28
 when the suite's ~45 auth flows outgrew it — `GENERATE_RATE_LIMIT_MAX=50`). There is no hosted CI; the local gate is the only gate.
 `next.config.ts` sets `ignoreBuildErrors` — the explicit `typecheck` step is
@@ -928,6 +930,32 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     sides: the live's soft-404 set AND the clone's working-set truth
     (the supersets are /demo + /dashboard only).
 
+54. **Three measurement laws that manufactured false readings (Session
+    44).** (a) The UNPROBED-ASSUMPTION law: the recon's /FAQ probe
+    measured the live's HTTP 200 and the battery's first draft ASSUMED
+    a rendered SPA-404 (the soft-404 family analogy) — the adj3 probe
+    showed the live serves THE FAQ PAGE ITSELF there (its SPA router
+    matches case-insensitively) — a route's RENDER is a separate
+    measurement from its STATUS; never assert content behavior from a
+    status-code analogy (the D149 build existed only because the
+    assumption finally got probed). (b) The INVERTED-PROBE law: a
+    same-document navigation test that compares a window mark against a
+    comparator DESTRUCTURED UNDER THE WRONG NAME reads `undefined ===
+    undefined` — TRUE on the full-load side (the mark is gone) and
+    FALSE on the client-nav side (a string never equals undefined) —
+    exactly backwards; the decisive route-change instrument is the page
+    `load`-event counter (fires ONLY on full document loads), paired
+    with the mark. (c) The NEGATIVE-ZERO law: `Math.round()` on a
+    sub-pixel-negative rect top (a Lenis settle at -0.0001px) returns
+    `-0`, and Playwright's `toBe` uses `Object.is` where `-0 !== 0` —
+    normalize geometry reads with `Math.abs(Math.round(...))`. Riding
+    along: the SETTLE-every-read law (every post-click geometry read
+    needs the scroll-settle poll — the read at +0ms is mid-animation)
+    and the TRUE-FRESH-LOAD law (a `goto` from another hash on the
+    same origin is a SAME-DOCUMENT hash-change the SPA's handler
+    scrolls; navigate from `about:blank` to measure the fresh-load
+    class).
+
 ## Architecture invariants
 
 - **Layering:** route handlers (`src/app/api/**`) own validation +
@@ -1146,7 +1174,33 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
   registered S41 a11y-name supersets) + the D146 record
   CORRECTED (the clone's /pricing NEVER existed — both sides fail
   that route honestly; the working superset routes are /demo +
-  /dashboard only; gotcha 53).
+  /dashboard only; gotcha 53). AND the Session-44 extension: the
+  CASE-CANONICALIZATION PROXY (D149 — `src/proxy.ts`, Next 16's
+  renamed middleware convention: any case variant of a known page
+  route 308s to the lowercase canonical, the query preserved, the
+  /api + /_next paths excluded, unknown routes + static assets passed
+  through to the honest 404 — the live's case-insensitive SPA router
+  serves duplicate 200s at every casing; the clone serves the single
+  canonical URL; /LOGIN /DEMO /DASHBOARD variants redirect too, the
+  live fails all three — the superset) + the NINETEENTH surface
+  (D150-D152 — the URL-state + navigation-class +
+  selection/view-transition contracts: the hash-click parity on all
+  four nav targets both sides; the fresh-load hash record — the live
+  NEVER scrolls on a true fresh load [its SPA shell lacks the anchor
+  at parse; only same-document hash CHANGES scroll — the about:blank
+  discipline] while the clone's SSR anchor scrolls [the registered
+  functional superset: deep links to sections WORK]; the query-param
+  tolerance with clean canonical + og:url on both sides; the
+  trailing-slash record [live 200-at-both vs clone 308]; the
+  route-change class [the live FULL-LOADS its route links — footer
+  /faq + Log In — while the clone does client-side transitions
+  everywhere: the platform superset, measured with the load-event
+  counter]; the selection empty-set [zero ::selection rules,
+  user-select all-auto, both sides] + the view-transition empty-set
+  [zero rules, zero names]) + the eighteenth surface's ROUTE
+  EXTENSION (the /demo input census — 22 pointer + 5 text + 0 other
+  across 27 interactives, the autocomplete trio, the caret white;
+  clone-side pins, the live soft-404s /demo — D73).
   No route
   returns bare JSON — including on the crash paths AND the
   method-mismatch paths AND the raced paths.

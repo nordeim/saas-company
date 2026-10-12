@@ -33,7 +33,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (124) | 247 unit + 302 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (125) | 248 unit + 370 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -148,7 +148,7 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run test` → 247/247 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 124/124 PASS
-- [ ] `npm run test:e2e` → 302/302 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 370/370 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
@@ -267,6 +267,51 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   check caught the healthy dashboard rendered where the boundary
   belonged); VLM 5/5 with ZERO flags + 2/2 supplementary (re-verified
   after the fix).
+
+- **Session 44 (2026-10-12) remediation** — see
+  `docs/remediation-plan-session44.md`: a case-canonicalization BUILD
+  + nineteenth-surface + input-route-extension cycle (the worklog S43
+  candidates, re-scoped by the adjudication's discovery).
+  **THE HEADLINE (D149): the case-canonicalization PROXY** — the
+  recon's /FAQ probe read the live's HTTP 200 and the battery's first
+  draft ASSUMED a rendered SPA-404; the adj3 probe DISPROVED the
+  assumption: the live serves THE FAQ PAGE ITSELF at /FAQ — its SPA
+  router matches case-INSENSITIVELY for every working content route
+  (/Faq, /FaQ, /THANK-YOU, /Privacy, /TERMS, /Accessibility,
+  /Refund-Policy; only /LOGIN — the live's separate Base44 auth page —
+  stays case-sensitive), and the clone 404'd every variant (the S43
+  /thank-you family again). BUILT `src/proxy.ts` (Next 16's RENAMED
+  middleware convention — `middleware.ts` is deprecated in 16; the
+  modern name used from day one): any case variant of a known page
+  route 308s to the lowercase canonical (query preserved; /api +
+  /_next excluded by the matcher; unknown routes + static assets pass
+  through to the honest 404; /LOGIN /DEMO /DASHBOARD variants redirect
+  too — the live fails all three, the clone's superset). **THE
+  NINETEENTH SURFACE (D150-D152): the URL-state + navigation-class +
+  selection/view-transition contracts** — the hash-click parity (all
+  four nav targets settle identically both sides); the fresh-load hash
+  record (the live NEVER scrolls on a TRUE fresh load — its SPA shell
+  lacks the anchor at parse time; only same-document hash CHANGES
+  scroll, the about:blank discipline separating the classes — while
+  the clone's SSR anchor scrolls: the registered functional superset,
+  deep links to sections WORK); the query-param tolerance (canonical +
+  og:url stay clean on both sides); the trailing-slash record (live
+  200-at-both vs clone 308); the route-change class (the live
+  FULL-LOADS its route links — footer /faq + Log In, its logo click
+  same-document, its own inconsistency — vs the clone's client-side
+  transitions everywhere: the platform superset, measured with the
+  page load-event counter); the selection + view-transition empty-sets
+  (zero ::selection rules, user-select all-auto, zero @view-transition
+  rules/names — both sides). **THE ROUTE EXTENSION**: the eighteenth
+  surface's /demo input census (22 pointer + 5 text + 0 other; the
+  autocomplete trio; the caret white). TDD: the session44 pins 18/18
+  GREEN (4 RED on the missing proxy first); three in-flight
+  measurement-law catches (the NEGATIVE-ZERO law, the
+  SETTLE-every-read law, the A3 inverted-probe bug — gotcha 54). Gate:
+  **725 -> 743 checks** (248 unit + 125 smoke + 370 e2e); the battery
+  **44/44 GREEN, ZERO DRIFT** across three phases (urlstate 26 +
+  demo-input 3 + route-watch 15); 21 screenshots (DB canonical before
+  and after); VLM 8/8 with ZERO flags.
 
 - **Session 43 (2026-10-12) remediation** — see
   `docs/remediation-plan-session43.md`: a working-parity route
