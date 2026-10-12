@@ -208,3 +208,20 @@ DOM-attr entry), and the autocomplete reason's forgot-state extension.
   anything-answers family) — NO RECOVERY, NO NEW REGRESSION (the
   rendered word parity byte-identical on the working eight;
   sitemaps at the registered sets: the live 7, the clone 8).
+
+## The pushed-hash record (the closing discipline)
+
+- Remediation commit **a9e02fd** pushed via the SSH wrapper with the
+  EXPLICIT `--remote git@github.com:nordeim/saas-company.git` (the S31
+  trap: the wrapper's DEFAULT remote is the runbook's example repo —
+  the explicit flag held from the first dry-run).
+- Wrapper-verified: remote main @ a9e02fd == local HEAD; the
+  fetch-independent HTTPS ls-remote agreed
+  (a9e02fd136fe1968786edf307ead0948df9f3c32).
+- The operator key's fingerprint verified through paramiko's own key
+  parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU
+  — matches the S1-S44 record); both the wrapper's temp key copy and
+  the operator's key file shredded after use.
+- Zero zombies at close (the recon/battery/capture/probe servers
+  group-killed at their own teardowns; the :3367 probe zombie killed by
+  PID; the ports swept); the tree clean; no new branches.

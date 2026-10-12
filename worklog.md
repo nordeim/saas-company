@@ -1584,3 +1584,19 @@ Stage Summary:
 - Gate raised 743 -> 756 checks (248 unit + 125 smoke + 383 e2e); the parity battery now runs TWENTY surfaces (33 checks across four phases, zero drift — green on the first run).
 - Survey scripts persisted under research/ (gitignored scratch, the house convention): recon-s45.mjs, drift-battery-s45.mjs, capture-screenshots-s45.mjs, db-state-s45.mjs, vlm-checks-s45.sh, docs-align-s45.py.
 - The S46 candidates: the reference-regression watch continues; the twentieth surface's ROUTE EXTENSIONS (the traversal contract on /thank-you + the legal routes); or the twenty-first surface — the clipboard/keyboard-shortcut surface, the drag-and-drop surface (the testimonial strip), or the network-failure/offline surface.
+
+---
+Task ID: 45-close
+Agent: Super Z (main)
+Task: Session 45 closing — the pushed-hash record + the closing commit
+
+Work Log:
+- Commit a9e02fd (20 files: the session45-traversal-media-video spec [13 pins — the traversal class, the media empty-set, the video contract, the /login alternates census] + the registry's fifth DOM-attr entry [the muted attribute — the React SSR quirk record] with the autocomplete reason extended to the forgot state + the docs alignment across PAD [the revision block, the ledger D153-D156, section 7 counts, section 7.2, the gate line]/AGENTS [the counts + gotcha 55 + the invariants' Session-45 extension]/CLAUDE [the session-45 context]/README [the 756 badge + the traversal-superset story + the rows]/SKILL v2.44.0 [lesson 84 — the traversal-class instrument + the React muted-attribute SSR quirk + the headless-seek-stall law + the APIResponse.status method trap] + the remediation plan session45 + the session logs 95 + 96 + the 7 refreshed screenshots + this worklog) pushed via the SSH wrapper with the EXPLICIT --remote git@github.com:nordeim/saas-company.git (the S31 trap: the wrapper's DEFAULT remote is the runbook's example repo — the explicit flag held from the first dry-run).
+- Wrapper-verified: remote main @ a9e02fd == local HEAD; the fetch-independent HTTPS ls-remote agreed (a9e02fd136fe1968786edf307ead0948df9f3c32).
+- The paramiko ssh shim survived the context restart at /home/z/bin/ssh (paramiko 5.0.0 present); the wrapper needed /home/z/bin on PATH (exported for the run).
+- The operator key's fingerprint verified through paramiko's own key parse (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU) against the S1-S44 record BEFORE the push; both the wrapper's temp key copy and the operator's key file shredded after use.
+- Zero zombies at close (the recon/battery/capture/probe servers group-killed at their own teardowns; the :3367 probe zombie killed by PID; the ports swept); the tree clean; no new branches.
+
+Stage Summary:
+- Session 45 fully closed: the remediation commit a9e02fd pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session45.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 756 checks (248 unit + 125 smoke + 383 e2e); the parity battery now runs TWENTY surfaces (33 checks across four phases) with the route-watch registry asserting BOTH sides' truth; the S46 candidates recorded in this worklog (the reference-regression watch, the twentieth surface's route extensions, or the twenty-first surface — the clipboard/keyboard-shortcut, drag-and-drop, or network-failure/offline surfaces).
