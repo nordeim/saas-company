@@ -268,3 +268,20 @@ both sides' truth)
 - **The gate: 764 -> 777** (252 unit + 125 smoke + 400 e2e — the
   session47 suite +9: 2 wordmark entrance + 2 CTA + 2 print-text + 1
   forced-colors + 2 route-extension pins; the motion unit pins +4).
+
+## The pushed-hash record (the closing discipline)
+
+- Remediation commit **8e65f42** pushed via the SSH wrapper with the
+  EXPLICIT `--remote git@github.com:nordeim/saas-company.git` (the S31
+  trap: the wrapper's DEFAULT remote is the runbook's example repo — the
+  explicit flag held from the first dry-run).
+- Wrapper-verified: remote main @ 8e65f42 == local HEAD; the
+  fetch-independent HTTPS ls-remote agreed
+  (8e65f420af8d9fa99c1384facace9d690870e010).
+- The operator key's fingerprint verified through paramiko's own key
+  parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU
+  — matches the S1-S46 record); the operator's key file shredded after
+  use (the wrapper's own temp copy shredded at its teardown).
+- Zero zombies at close (the port-sweep discipline held through every
+  recon/adj/battery/capture/verify run; the ports swept clean at the
+  end); the tree clean; no new branches.
