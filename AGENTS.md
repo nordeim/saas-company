@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (411 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (420 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,13 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (411/411) — 788 checks across three layers (Session 48: the
+→ `npm run test:e2e` (420/420) — 797 checks across three layers (Session 49: the
+session49-fontembedding-metadata suite +9 e2e — the TWENTY-FOURTH SURFACE pins [the
+font-embedding censuses with the deterministic counts + the emb/sub/uni contract +
+the /demo superset floor] + the PDF-metadata pins [Title/Creator/Producer/Pages
+with the per-render dates + file sizes normalized BY CONSTRUCTION] + the 23rd
+surface's route extensions [the four content-route link censuses + the
+named-destination tables through pdfinfo -dests]; Session 48: the
 session48-pdflinks-buildfix suite +11 e2e — the font-build regression pins [the
 served CSS's Playfair variable registration, the D167 fix's contract] + the
 print-text route extensions [D168] + the TWENTY-THIRD SURFACE pins [the PDF
@@ -1072,6 +1078,23 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     click at domcontentloaded+700ms silently no-ops; networkidle +
     a 1s dwell is the minimum honest wait before ANY live-side
     interaction probe.
+
+
+59. **The silently-dead capture-interaction law (Session 49).** A
+    screenshot script's interaction that never matches — a
+    `getByRole(...).click().catch(() => {})` whose regex fits NOTHING
+    on the page — fails SILENTLY and ships a degraded standing shot
+    (the S49 find: the FAQ capture click targeted "What is NovaAI?",
+    a question that does not exist — the real first question is "Is
+    my data secure with NovaAI?" — so the standing 07 shot had
+    shipped WITHOUT an expanded panel since the script's
+    introduction, unnoticed because the VLM prompts never asked for
+    an expanded row). The law: every capture interaction must either
+    carry its own DOM proof (assert the expanded state before the
+    shot — the S49 re-capture does) or drop the `.catch()` swaddle
+    so a dead locator FAILS the capture run. Same family as the
+    capture-glob trap (gotcha 58/lesson 87): a silently-dead branch
+    in an instrumentation script is worse than no branch at all.
 
 ## Architecture invariants
 

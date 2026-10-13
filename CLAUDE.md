@@ -310,6 +310,38 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   86: the print-pipeline exposure law + the record
   re-verification law + the print-text instrument.
 
+- **Session 49 (2026-10-13) remediation** — see
+  `docs/remediation-plan-session49.md`: a measurement + registration
+  + versioning cycle (the worklog S48 candidates — the 23rd
+  surface's route extensions AND the twenty-fourth surface, both
+  delivered). **THE 24TH SURFACE (D171): the font-EMBEDDING layer
+  at FULL PARITY on its first measurement** (poppler's pdffonts over
+  fresh paired renders, subset prefixes stripped; the per-route
+  family×count×type×encoding censuses byte-identical on 9/10
+  routes; /demo the registered superset; emb/sub/uni yes/yes/yes
+  everywhere; the counts deterministic across three independent
+  render sessions — stability PROVEN before pinning). **The PDF
+  METADATA layer (D172): parity** with the per-render noise
+  (CreationDate/ModDate/File size) normalized out BY CONSTRUCTION.
+  **The 23rd surface's route extensions (D173)**: the four
+  content-route link censuses + the named-destination tables
+  (pdfinfo -dests) at parity. The standing watch: zero drift; the
+  D160 mobile-nav record + the live login SPA-404 record both
+  re-verified for the fifth consecutive session. TWO INSTRUMENT
+  LAWS: the pdffonts parser column trap (the TYPE column carries a
+  space — "CID TrueType" — so a per-column \S+ regex silently
+  returns an EMPTY census and empty-equals-empty reads as false
+  parity; split on 2+ spaces) and the silently-dead
+  capture-interaction law (the FAQ capture click's regex never
+  matched a real question and the .catch() swallowed it — gotcha
+  59). The session49 pins 9/9 GREEN on the first run. Gate:
+  **788 -> 797 = 252 unit + 125 smoke + 420 e2e**; the battery
+  50/50 ZERO DRIFT (the font-embedding + metadata column added);
+  21 screenshots (DB canonical, zero mutations); VLM 8/8 (the two
+  flags adjudicated by evidence: the 01 the prompt's own wrong
+  headline quote, the 07 the capture bug — fixed + re-captured with
+  DOM proof).
+
 - **Session 48 (2026-10-13) remediation** — see
   `docs/remediation-plan-session48.md`: a BUILD-FIX + measurement +
   versioning cycle. **THE HEADLINE: a BUILD-PIPELINE FONT DRIFT

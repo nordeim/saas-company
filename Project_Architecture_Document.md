@@ -851,6 +851,89 @@
   registry-compounding lesson, remediation plan session33, session
   log 66.
 
+- `[NOTE]` **Session 49 remediation (2026-10-13)** — a
+  measurement + registration + versioning cycle (the worklog S48
+  candidates — the 23rd surface's route extensions [the link censuses
+  beyond the floors + the named-destination layer] or the
+  twenty-fourth surface [the font-embedding layer, the PDF metadata
+  layer, or the selection/clipboard under print] + the standing
+  reference-watch — answered by the recon; the best-judgment scope
+  took BOTH). **THE TWENTY-FOURTH SURFACE (D171): the font-EMBEDDING
+  layer — AT FULL PARITY ON ITS FIRST MEASUREMENT** (the S45/S48
+  registration pattern: pin, no build). The instrument: poppler's
+  `pdffonts` over the SAME fresh paired renders (never stale PDFs
+  across instrument versions), the subset prefixes
+  (`^[A-Z]{6}+`) stripped as per-render Skia artifacts. The censuses
+  (family x subset count x type x encoding) byte-identical on 9/10
+  probed routes: the landing `VendSans-Light 10x Type 3/Custom`;
+  /faq, /privacy, /terms, /refund-policy `7x` each; /accessibility
+  `8x`; /thank-you `4x`; the 404 `5x`; /login `DejaVuSans 2x +
+  DejaVuSans-Bold 1x CID TrueType/Identity-H` (the login card's
+  system-ui stack falling back to the headless DejaVu — identical on
+  both sides, the computed-family parity independently confirmed at
+  the print layer); /demo the clone's `7x` vs the live's `5x` — the
+  REGISTERED working superset. The embedding contract holds
+  everywhere (`emb=yes sub=yes uni=yes` for every face on every route
+  on both sides); the type split lawful and stable (webfonts -> Type
+  3/Custom; system fonts -> CID TrueType/Identity-H); the counts
+  DETERMINISTIC across three independent render sessions (the S48
+  stale renders, the S49 fresh renders, and the dedicated stability
+  probe) — safe to pin. No Playfair/DM Serif faces in ANY route's
+  PDF: the wordmarks are below-fold un-revealed entrances at print
+  time (the S47 convergence record independently re-confirmed).
+  **THE PDF METADATA LAYER (D172) — the 24th surface's measured
+  sibling: parity on 9/10 routes** with `CreationDate`/`ModDate`
+  (per-render timestamps) and `File size` (a derived byte count, not
+  an information-dictionary property) normalized out BY CONSTRUCTION:
+  Title (the print-time document title = the page's `<title>`, the
+  head-parity surface re-confirmed at the metadata layer), Creator
+  "Chromium", Producer "Skia/PDF m153", Pages (the S42 records),
+  Tagged/Form/JavaScript/Encrypted, PDF version 1.4, the A4 page
+  size — all identical; /demo the registered superset (Title "Book a
+  Demo | SAAS Company" vs the shell's "SAAS Company"; Pages 2/1).
+  **THE 23RD SURFACE'S ROUTE EXTENSIONS (D173)**: the four unpinned
+  content-route link censuses at FULL PARITY (the pdftohtml censuses
+  byte-identical in set AND multiplicity, page counts paired) + the
+  named-destination layer at annotation AND table granularity (the
+  landing's link-NAME census `{pricing:18, features:9,
+  how-it-works:8, testimonials:8, unnamed:5}` via pymupdf — the
+  recon cross-validation instrument; the document-level dest TABLE
+  via poppler's `pdfinfo -dests` — the e2e-embeddable instrument:
+  the landing `{p1 unnamed, features@p4, how-it-works@p5, pricing@p6,
+  testimonials@p7}`, the content routes the single unnamed p1 each).
+  THE STANDING WATCH: the working eight at byte-identical word parity
+  (739/101/335/390/566/285/36/24), the soft-404 statuses at the
+  registered family, the sitemaps at the registered sets; the D160
+  mobile-nav record re-verified for the FIFTH consecutive session
+  (the clone's burger opens y21/y28/y35 — the 397px panel, 6 links;
+  the live's y21/y28 still toaster-blocked, y35-only); the live
+  login -> /dashboard SPA-404 record holding. ONE INSTRUMENTATION LAW
+  learned in flight (the parser column trap): pdffonts' TYPE column
+  can carry a space ("CID TrueType") — a per-column `\S+` regex
+  silently returns an EMPTY census and an empty-equals-empty
+  comparison reads as false PARITY; the honest column split is on
+  2+ spaces with the flag triplet handled as a unit. ONE LATENT
+  CAPTURE BUG found + fixed (the lesson-87 family): the screenshot
+  script's FAQ click regex never matched any question ("What is
+  NovaAI?" is not one) and the `.catch(() => {})` swallowed it — the
+  standing 07 shot had shipped without an expanded panel since the
+  script's introduction; caught by the targeted VLM prompt, fixed to
+  the real first question, the re-capture DOM-proven
+  (aria-expanded=true + the visible panel) and VLM-verified. TDD:
+  the session49 pins 9/9 GREEN on the first run. Gate: **788 -> 797
+  = 252 unit + 125 smoke + 420 e2e**. The battery (drift-battery-s49)
+  50/50 GREEN ZERO DRIFT across four phases (the FONT-EMBEDDING +
+  METADATA column added); 21 screenshots (DB canonical before AND
+  after, zero mutations); VLM 8/8 (the two first-pass flags
+  adjudicated by evidence — the 01 the prompt's own wrong headline
+  quote, the 07 the capture bug above). DOCUMENTED: PAD (this block,
+  the ledger D171-D173, the 7.1 counts), AGENTS (the counts + gotcha
+  59 — the silently-dead capture-interaction law), CLAUDE (the
+  session-49 context), README (the 797 badge + the 24th-surface
+  story + the counts + the stale smoke-row count fixed), SKILL
+  v2.48.0 (lesson 88), the remediation plan session49 (ticked), the
+  session log 107, the worklog.
+
 - `[NOTE]` **Session 48 remediation (2026-10-13)** — a
   BUILD-FIX + measurement + versioning cycle (the worklog S47
   candidates — the twenty-second surface's route extensions [the
@@ -3395,6 +3478,9 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D168 | The PRINT-TEXT ROUTE EXTENSIONS: /terms 400 = 400, /accessibility 584 = 584, /refund-policy 295 = 295, the 404 16 = 16 (all EXACT, pdftotext); /demo 101 vs the live's 16-word SPA shell — the registered working superset; the 22nd surface now covers every public route | Measured paired (recon-s48 PH2) | `tests/e2e/session48-pdflinks-buildfix.spec.ts` (the extension pins + the /demo floor), the battery's PH1 | **Exact parity + the registered superset** (Session 48) |
 | D169 | The PDF LINK LAYER (the 23rd surface): the link-annotation censuses byte-identical in set AND multiplicity on 9/10 routes — the landing's 87-anchor census (incl. the 48 named destinations: pricing×18, features×9, how-it-works×8, testimonials×8 + 5 unnamed), the content routes' nav+footer sets, /thank-you's single link (→ /), the /login + 404 EMPTY SETS; /demo the clone's 14 links vs the live's ZERO (the registered superset); the page counts paired (8/1/2/2/2/3/2/2/1) | Measured paired (recon-s48 PH3 with pymupdf cross-validated against poppler's pdftohtml -xml — the e2e-embeddable instrument) | `tests/e2e/session48-pdflinks-buildfix.spec.ts` (the 5 link-layer pins), the battery's PH2 | **Full parity on first measurement — registered** (Session 48) |
 | D170 | The /login + /demo ENTRANCE EMPTY-SET (zero inline motion carriers, both sides) + the D160 fourth-session re-verification (the clone's burger y20/y28/y36 all open; the live's y20/y28 toaster-blocked, y36-only) + the two instrumentation laws: the aria-keyed panel detector is live-blind (no aria-expanded on the live's burger — the row-contract detector is the honest instrument) and the live's SPA attaches click handlers at HYDRATION (domcontentloaded+700ms clicks silently no-op) | Measured paired (recon-s48 PH4/PH5 + adj-s48a/b) | `tests/e2e/session48-pdflinks-buildfix.spec.ts` (the entrance empty-set pin), the battery's PH3 | **Registered parity + the instrument laws** (Session 48) |
+| D171 | The FONT-EMBEDDING LAYER (the 24th surface): the per-route family×subset-count×type×encoding censuses byte-identical on 9/10 probed routes — the landing VendSans-Light 10× Type 3/Custom; /faq /privacy /terms /refund-policy 7× each; /accessibility 8×; /thank-you 4×; the 404 5×; /login DejaVuSans 2× + DejaVuSans-Bold 1× CID TrueType/Identity-H (the system-ui fallback identical both sides); /demo the clone's 7× vs the live's 5× (the registered superset); emb/sub/uni = yes/yes/yes everywhere; the counts deterministic across three independent render sessions; no serif faces in any PDF (the below-fold entrance record) | Measured paired (recon-s49 PH3 + the stability probe; poppler's pdffonts, subset prefixes stripped — the parser column law: split on 2+ spaces, never per-column \S+) | `tests/e2e/session49-fontembedding-metadata.spec.ts` (the 5 font pins), the battery's PH4 | **Full parity on first measurement — registered** (Session 49) |
+| D172 | The PDF METADATA LAYER (the 24th surface's sibling): Title/Creator/Producer/Pages + the document flags identical on 9/10 routes with CreationDate/ModDate/File size normalized out BY CONSTRUCTION (the parse drops them); /demo the registered superset (Title "Book a Demo \| SAAS Company" vs "SAAS Company"; Pages 2/1) — the head-parity surface independently re-confirmed at the metadata layer (Title = the page's own `<title>`) | Measured paired (recon-s49 PH3; poppler's pdfinfo) | `tests/e2e/session49-fontembedding-metadata.spec.ts` (the 2 metadata pins), the battery's PH4 | **Registered parity** (Session 49) |
+| D173 | The 23RD SURFACE'S ROUTE EXTENSIONS: the four unpinned content-route link censuses at FULL PARITY (byte-identical in set AND multiplicity: /terms {/faq:7, #1:6, /privacy:1, /terms:1, /accessibility:1, /refund-policy:2}; /privacy; /accessibility; /refund-policy — page counts paired 2/2/3/2) + the named-destination layer (the landing's link-NAME census pricing×18/features×9/how-it-works×8/testimonials×8/unnamed×5 via pymupdf [recon-recorded]; the dest TABLES via pdfinfo -dests [spec-pinned]: the landing's four named + p1, the content routes' single unnamed p1) | Measured paired (recon-s49 PH2 + named-dests-s49.py) | `tests/e2e/session49-fontembedding-metadata.spec.ts` (the 2 extension pins), the battery's PH2 (the dest-table column extension) | **Full parity — registered + pinned** (Session 49) |
 
 
 
@@ -3458,7 +3544,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 20 files | 252 | `src/lib/*.test.ts` + `src/app/api/workflows/generate/route.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
-| Browser E2E | 57 specs | 411 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Browser E2E | 58 specs | 420 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 125 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins

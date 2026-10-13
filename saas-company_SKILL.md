@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.47.0 · **Last updated:** 2026-10-13 (Session 48 remediation)
+> **Version:** 2.48.0 · **Last updated:** 2026-10-13 (Session 49 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1812,6 +1812,38 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     fulfillment silently reaches the server; register the ID-level
     pattern separately or the DB-canonical check catches it after
     the damage.
+
+88. **The empty-census parser trap + the font-embedding instrument +
+    the dead-click capture law (Session 49)**: when a CLI tool's
+    output feeds a census comparison, a parser that matches NOTHING
+    returns an EMPTY census — and empty-equals-empty reads as
+    PARITY. The S49 find: pdffonts' TYPE column carries a space
+    ("CID TrueType"), so a per-column `\S+` regex silently parsed
+    zero rows and the first font-embedding comparison "passed"
+    empty. THE LAW: prove the parser against a KNOWN-NONEMPTY
+    output before trusting any census it produces (the dry-run
+    probe on a saved PDF), and split columns on the tool's actual
+    delimiters (2+ spaces for pdffonts — the "yes yes yes" flag
+    triplet and the "obj gen" pair stay single/2-spaced units).
+    THE FONT-EMBEDDING INSTRUMENT: poppler's pdffonts over FRESH
+    paired page.pdf renders (never stale PDFs across instrument
+    versions), the `^[A-Z]{6}+` subset prefixes stripped as
+    per-render Skia artifacts, the family×count×type×encoding
+    census the comparable contract — with the counts PROVEN
+    deterministic across independent render sessions before any
+    absolute pin (the stability probe: three measurements agreeing
+    exactly). The webfont/system type split is lawful and stable
+    (@font-face webfonts -> Type 3/Custom; system-stack fonts ->
+    CID TrueType/Identity-H), and a route that paints NO webfont
+    faces is a FINDING to root-cause (the /login system-ui stack;
+    the below-fold wordmarks), never noise to normalize away. THE
+    DEAD-CLICK CAPTURE LAW: a screenshot script interaction whose
+    locator matches nothing fails SILENTLY under `.catch(() => {})`
+    and ships a degraded standing shot for sessions (the FAQ
+    capture click targeted a question that does not exist) — every
+    capture interaction must carry its own DOM proof or fail loud
+    (gotcha 59).
+
 ## §13. Pitfalls to Avoid
 
 - Assuming `.env` wins over the shell environment (it doesn't — exported
