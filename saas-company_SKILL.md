@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.48.0 · **Last updated:** 2026-10-13 (Session 49 remediation)
+> **Version:** 2.49.0 · **Last updated:** 2026-10-13 (Session 50 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1843,6 +1843,38 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     capture click targeted a question that does not exist) — every
     capture interaction must carry its own DOM proof or fail loud
     (gotcha 59).
+89. **The leading-space row-filter law + the image-layer instrument +
+    the animated-glow jitter (Session 50)**: the lesson-88
+    empty-census family's THIRD sighting — pdfimages -list's data
+    rows are right-aligned with LEADING SPACES, so a
+    `!line.startsWith(" ")` filter silently returns an EMPTY census
+    and empty-equals-empty reads as false PARITY (the first S50
+    parse reported "zero images on every route" while the landing
+    carries 13). THE LAW: validate every tabular parser against
+    the instrument's OWN raw output on a known-nonempty input
+    BEFORE trusting any census it produces — print the raw output
+    first, then write the filter (drop the header + the dashed
+    rule; split on whitespace runs). THE IMAGE-LAYER INSTRUMENT:
+    poppler's pdfimages -list over the same fresh paired page.pdf
+    renders, the census key `page:type:WxH:color/comp/bpc:enc:
+    interp:ppi` SORTED (the emission order is a per-render
+    object-allocation artifact; the object/ID + size/ratio columns
+    content-derived — all normalized out), with the STATIC rasters
+    pinned exact and the ANIMATED rasters bucketed at ±1px (the
+    pulsing glow's rasterized box is frame-dependent: the live
+    measured 710x288 AND 710x289 — the S38 loop-value range law at
+    the raster layer). THE RASTERIZATION LAW (what the census
+    MEASURES): Chromium's print pipeline embeds as image XObjects
+    exactly the content it cannot express vectorially — video
+    frames, background-clip:text gradient text, gradient-bordered/
+    alpha-composited pills, and blurred glows/shadows — while
+    regular text, SVG icons, and CSS shapes stay vector; a route
+    that paints ZERO images is a FINDING to attribute (the content
+    routes' all-vector graphics), never noise. And the
+    STATE-TRACKED RASTER record: a card's decorative background
+    raster re-rasterizes per UI state at the card's rendered
+    height — the census is a per-STATE contract, not a per-route
+    one (the /login alternates: 2696/1833/1533).
 
 ## §13. Pitfalls to Avoid
 

@@ -310,6 +310,37 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   86: the print-pipeline exposure law + the record
   re-verification law + the print-text instrument.
 
+- **Session 50 (2026-10-13) remediation** — see
+  `docs/remediation-plan-session50.md`: a registration + versioning
+  cycle (the worklog S49 candidates — the twenty-fifth surface AND
+  the 24th surface's route extensions, both delivered). **THE 25TH
+  SURFACE (D174): the PDF XObject/IMAGE layer at FULL PARITY on its
+  first honest measurement** (poppler's pdfimages over fresh paired
+  renders; the sorted structural census — page/type/dimensions/
+  colorspace/comp/bpc/enc/interp/ppi — with the per-render object
+  order and the content-derived byte sizes normalized out; the
+  landing 13 images [the hero VIDEO frame 1920x1080 icc 92ppi, the
+  H1 GRADIENT-TEXT raster 2025x534 rgb+smask, the CTA pill pair, the
+  badge pill, four blurred glows], /login 6, every content route the
+  EMPTY SET; the ±1px animated-glow jitter bucketed; determinism
+  proven across renders; the RASTERIZATION LAW VLM-attributed:
+  video frames, background-clip:text gradients, alpha-composited
+  pills, and blurred glows rasterize — everything else stays
+  vector). **The 24th surface's route extensions (D175): the /login
+  alternates' print story at parity** (fonts DejaVu 2+1, metadata,
+  link empty-sets, print text 19/25, image censuses — with the
+  STATE-TRACKED RASTER record: the card-background raster
+  re-rasterizes per state at the card's height 2696/1833/1533). The
+  standing watch: zero drift; the D160 mobile-nav record + the live
+  login SPA-404 record both re-verified for the SIXTH consecutive
+  session. ONE INSTRUMENT LAW: the leading-space row-filter trap
+  (pdfimages' right-aligned data rows — gotcha 60, the lesson-88
+  family's third sighting). The session50 pins 9/9 GREEN on the
+  first run. Gate: **797 -> 806 = 252 unit + 125 smoke + 429 e2e**;
+  the battery 66/66 ZERO DRIFT (the image-layer + alternates
+  columns added); 21 screenshots (DB canonical, zero mutations);
+  VLM 8/8.
+
 - **Session 49 (2026-10-13) remediation** — see
   `docs/remediation-plan-session49.md`: a measurement + registration
   + versioning cycle (the worklog S48 candidates — the 23rd

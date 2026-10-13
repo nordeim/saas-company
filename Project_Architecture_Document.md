@@ -851,6 +851,24 @@
   registry-compounding lesson, remediation plan session33, session
   log 66.
 
+- `[NOTE]` **Session 50 remediation (2026-10-13)** — a measurement +
+  registration + versioning cycle (the worklog S49 candidates — see
+  `docs/remediation-plan-session50.md`): **the TWENTY-FIFTH SURFACE
+  (D174)** — the PDF XObject/IMAGE layer — measured at FULL PARITY on
+  its first honest run (poppler's pdfimages; the sorted structural
+  census with the object order + content-derived sizes normalized
+  out; the landing 13 / /login 6 / the content routes the empty set;
+  the video-frame + gradient-text + pill + glow attribution; the ±1px
+  animated-glow jitter bucket; the determinism probe), **the 24th
+  surface's route extensions (D175)** — the /login alternates' print
+  story at parity incl. the state-tracked raster heights — and **the
+  leading-space row-filter law (D176)** — the lesson-88 empty-census
+  family's third sighting, caught by the raw-output verification
+  discipline before any pin was written. The D160 mobile-nav record
+  + the live login SPA-404 record re-verified for the sixth
+  consecutive session. Gate 797 -> 806 (252 unit + 125 smoke + 429
+  e2e); the battery 66/66 zero drift; 21 screenshots + VLM 8/8.
+
 - `[NOTE]` **Session 49 remediation (2026-10-13)** — a
   measurement + registration + versioning cycle (the worklog S48
   candidates — the 23rd surface's route extensions [the link censuses
@@ -3481,6 +3499,9 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D171 | The FONT-EMBEDDING LAYER (the 24th surface): the per-route family×subset-count×type×encoding censuses byte-identical on 9/10 probed routes — the landing VendSans-Light 10× Type 3/Custom; /faq /privacy /terms /refund-policy 7× each; /accessibility 8×; /thank-you 4×; the 404 5×; /login DejaVuSans 2× + DejaVuSans-Bold 1× CID TrueType/Identity-H (the system-ui fallback identical both sides); /demo the clone's 7× vs the live's 5× (the registered superset); emb/sub/uni = yes/yes/yes everywhere; the counts deterministic across three independent render sessions; no serif faces in any PDF (the below-fold entrance record) | Measured paired (recon-s49 PH3 + the stability probe; poppler's pdffonts, subset prefixes stripped — the parser column law: split on 2+ spaces, never per-column \S+) | `tests/e2e/session49-fontembedding-metadata.spec.ts` (the 5 font pins), the battery's PH4 | **Full parity on first measurement — registered** (Session 49) |
 | D172 | The PDF METADATA LAYER (the 24th surface's sibling): Title/Creator/Producer/Pages + the document flags identical on 9/10 routes with CreationDate/ModDate/File size normalized out BY CONSTRUCTION (the parse drops them); /demo the registered superset (Title "Book a Demo \| SAAS Company" vs "SAAS Company"; Pages 2/1) — the head-parity surface independently re-confirmed at the metadata layer (Title = the page's own `<title>`) | Measured paired (recon-s49 PH3; poppler's pdfinfo) | `tests/e2e/session49-fontembedding-metadata.spec.ts` (the 2 metadata pins), the battery's PH4 | **Registered parity** (Session 49) |
 | D173 | The 23RD SURFACE'S ROUTE EXTENSIONS: the four unpinned content-route link censuses at FULL PARITY (byte-identical in set AND multiplicity: /terms {/faq:7, #1:6, /privacy:1, /terms:1, /accessibility:1, /refund-policy:2}; /privacy; /accessibility; /refund-policy — page counts paired 2/2/3/2) + the named-destination layer (the landing's link-NAME census pricing×18/features×9/how-it-works×8/testimonials×8/unnamed×5 via pymupdf [recon-recorded]; the dest TABLES via pdfinfo -dests [spec-pinned]: the landing's four named + p1, the content routes' single unnamed p1) | Measured paired (recon-s49 PH2 + named-dests-s49.py) | `tests/e2e/session49-fontembedding-metadata.spec.ts` (the 2 extension pins), the battery's PH2 (the dest-table column extension) | **Full parity — registered + pinned** (Session 49) |
+| D174 | The PDF XOBJECT/IMAGE LAYER (the 25th surface): the per-route sorted structural censuses byte-identical across sides — the landing 13 (the hero VIDEO frame 1920x1080 icc 92ppi; the H1 GRADIENT-TEXT raster 2025x534 rgb+smask; the CTA pill PAIR 1047x105 rgb+smask ×2; the badge pill 1165x103 rgb+smask; the blurred glows 626x204 + 710x28[89] gray jpeg on p1, 541x160 + 625x245 on p4), /login 6 (1168x168, 1765x2696, 329x329, 413x413 gray jpeg + 754x676 rgb+smask), every other route the EMPTY SET (their graphics stay VECTOR at print); the object order + content-derived sizes normalized out; the ±1px animated-glow jitter bucketed; determinism proven across renders; the RASTERIZATION LAW: video frames, background-clip:text gradients, alpha-composited pills, and blurred glows rasterize — everything else stays vector (VLM-attributed) | Measured paired (recon-s50 PH3 + the stability probe; poppler's pdfimages — the leading-space row law: never filter rows on leading spaces) | `tests/e2e/session50-imagelayer-alternates.spec.ts` (the 6 image pins), the battery's PH4 | **Full parity on first honest measurement — registered** (Session 50) |
+| D175 | The 24TH SURFACE'S ROUTE EXTENSIONS: the /login ALTERNATES' print story — the sign-up + forgot states' FONT censuses (DejaVuSans 2× + DejaVuSans-Bold 1× CID TrueType/Identity-H — the default state's system-stack census), METADATA (Title "SAAS Company", Pages 1, the standard family), LINK empty-sets (buttons, not anchors — the D169 law extended to the states), PRINT TEXT (19/19 sign-up, 25/25 forgot), and IMAGE censuses (2+2) all at parity — with the STATE-TRACKED RASTER record: the tall card-background raster re-rasterizes per state at the card's rendered height (1765x2696 default / 1765x1833 sign-up / 1765x1533 forgot; the title-area raster 1168x168 → 1168x156) | Measured paired (recon-s50 PH2 + the stability probe's alternates extension) | `tests/e2e/session50-imagelayer-alternates.spec.ts` (the 3 alternate pins), the battery's PH4 | **Full parity — registered + pinned** (Session 50) |
+| D176 | THE LEADING-SPACE ROW-FILTER LAW: pdfimages -list's right-aligned data rows carry LEADING SPACES — a `!line.startsWith(" ")` filter silently returns an EMPTY census and empty-equals-empty reads as false PARITY (the first S50 parse reported zero images on every route; the raw-output verification discipline caught it — the landing carries 13). The lesson-88 empty-census family's THIRD sighting (pdffonts' two-word TYPE column, the dead capture click, now the right-aligned rows). Its measured sibling: the ANIMATED-GLOW RASTER JITTER — a pulsing element's rasterized box carries ±1px frame-dependence (the live measured 710x288 and 710x289), so raster censuses pin static content exactly and bucket the animated rasters | Caught in flight (the recon's own raw-output verification) | The spec's `imageRows` parser comment + the jitter bucket; AGENTS gotcha 60; SKILL lesson 89 | **Instrument law — encoded** (Session 50) |
 
 
 
@@ -3544,7 +3565,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 20 files | 252 | `src/lib/*.test.ts` + `src/app/api/workflows/generate/route.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
-| Browser E2E | 58 specs | 420 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Browser E2E | 59 specs | 429 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 125 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins

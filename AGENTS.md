@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (420 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (429 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,14 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (420/420) — 797 checks across three layers (Session 49: the
+→ `npm run test:e2e` (429/429) — 806 checks across three layers (Session 50: the
+session50-imagelayer-alternates suite +9 e2e — the TWENTY-FIFTH SURFACE pins [the
+per-route image-XObject censuses through pdfimages — the landing's 13 sorted
+structural keys with the animated-glow ±1px bucket, the /login card's 6, the
+content routes' empty sets; the video-frame contract; the rasterization-law
+floor; the order-invariance + determinism law] + the /login ALTERNATES' print
+story [the fonts/metadata/link-empty-sets/print-text censuses + the image
+censuses with the state-tracked raster heights]; Session 49: the
 session49-fontembedding-metadata suite +9 e2e — the TWENTY-FOURTH SURFACE pins [the
 font-embedding censuses with the deterministic counts + the emb/sub/uni contract +
 the /demo superset floor] + the PDF-metadata pins [Title/Creator/Producer/Pages
@@ -1095,6 +1102,23 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     so a dead locator FAILS the capture run. Same family as the
     capture-glob trap (gotcha 58/lesson 87): a silently-dead branch
     in an instrumentation script is worse than no branch at all.
+
+60. **The leading-space row-filter law (Session 50 — the lesson-88
+    family's third sighting).** `pdfimages -list`'s data rows are
+    right-aligned with LEADING SPACES — a `!line.startsWith(" ")`
+    filter silently returns an EMPTY census, and an empty-equals-empty
+    comparison reads as false PARITY (the first S50 parse reported
+    "zero images on every route" while the landing actually carries
+    13). The same family as pdffonts' "CID TrueType" two-word column
+    (S49) and the dead capture click (S49): every tabular instrument's
+    parser must be validated against the instrument's OWN raw output
+    before any empty reading is trusted — print the raw output on a
+    known-nonempty input first. And its sibling measured in the same
+    pass: the ANIMATED-GLOW RASTER JITTER — a pulsing element's
+    rasterized box carries ±1px frame-dependence (the live measured
+    710x288 and 710x289 across renders), so raster censuses pin static
+    content exactly but bucket the animated rasters (the S38 loop-value
+    range law at the raster layer).
 
 ## Architecture invariants
 
