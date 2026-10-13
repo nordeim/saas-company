@@ -176,4 +176,27 @@ surfaces, 30 checks, zero drift — `docs/session_105.md`).
 - [x] F3 the full gate
 - [x] F4 the screenshots + the VLM standing checks
 - [x] F5 the docs alignment
-- [ ] F6 the commit + the wrapper push
+- [x] F6 the commit + the wrapper push — done (297d9b5, wrapper-verified; the record below)
+
+## The pushed-hash record (the closing discipline)
+
+- Remediation commit **297d9b5** pushed via the SSH wrapper with the
+  EXPLICIT `--remote git@github.com:nordeim/saas-company.git` (the
+  S31 trap: the wrapper's DEFAULT remote is the runbook's example
+  repo — the explicit flag held from the first dry-run, which
+  confirmed the fast-forward `06e968e..297d9b5` against the correct
+  remote).
+- Wrapper-verified: remote main @ 297d9b5 == local HEAD; the
+  fetch-independent HTTPS ls-remote agreed
+  (297d9b5956f95f004d6ec55f8113ee9b54f69b75).
+- The operator key's fingerprint verified through paramiko's own key
+  parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU
+  — matches the S1-S48 record); the operator's key file shredded
+  after use (the wrapper's own temp copy shredded at its teardown).
+- The paramiko ssh shim survived at /home/z/bin/ssh (python3.13 +
+  paramiko 5.0.0 — the Appendix A implementation); the wrapper needed
+  /home/z/bin on PATH (exported for the run).
+- Zero zombies at close (the port-sweep discipline held through every
+  recon/battery/capture/adjudication run — one zombie listener after
+  the stability probe swept clean by the second pass); the tree
+  clean; no new branches.

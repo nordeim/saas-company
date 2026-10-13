@@ -1750,3 +1750,18 @@ Stage Summary:
 - Gate raised 788 -> 797 checks (252 unit + 125 smoke + 420 e2e); the parity battery now runs TWENTY-FOUR surfaces (50 checks, zero drift).
 - Survey scripts persisted under research/ (gitignored scratch): recon-s49.mjs, named-dests-s49.py, reparse-s49.mjs, stability-s49.mjs, drift-battery-s49.mjs, capture-screenshots-s49.mjs, recapture-faq-s49.mjs, adjudicate-s49.mjs, db-state-s49.js, docs-align-s49.py, vlm-checks-s49.sh, run-e2e-s49.sh (+ the run-recon/run-battery runners with the port-sweep discipline).
 - The S50 candidates: the reference-regression watch continues; the 24th surface's ROUTE EXTENSIONS (the font census + metadata on the /login alternates + the sign-up/forgot states; the dashboard's authenticated print story); or the twenty-fifth surface — the PDF's XObject/image layer (the embedded image census: dimensions, formats, compression), the annotation/appearance-stream layer beyond links (form fields, widgets), or the print-time VIDEO frame contract (which frame the poster/video element paints at print).
+
+---
+Task ID: 49-close
+Agent: Super Z (main)
+Task: Session 49 closing — the pushed-hash record + the closing commit
+
+Work Log:
+- Commit 297d9b5 (22 files: the session49 registration — tests/e2e/session49-fontembedding-metadata.spec.ts [9 pins — the font-embedding censuses with the stability-proven deterministic counts, the embedding contract, the /demo superset floor, the metadata censuses with the per-render noise normalized by construction, the four content-route link censuses, the named-destination tables] + the docs alignment across PAD [the S49 revision block, the ledger D171-D173, the 7.1 counts]/AGENTS [the counts + gotcha 59 — the silently-dead capture-interaction law]/CLAUDE [the session-49 context]/README [the 797 badge + the 24th-surface story + the session49 suite row + the counts + the stale 123 smoke-row count fixed to 125]/SKILL v2.48.0 [lesson 88 — the empty-census parser trap + the font-embedding instrument + the dead-click capture law] + the remediation plan session49 + the session log 107 + the 16 refreshed screenshots + this worklog) pushed via the SSH wrapper with the EXPLICIT --remote git@github.com:nordeim/saas-company.git (the S31 trap held from the first dry-run — the dry-run confirming the fast-forward 06e968e..297d9b5 against the correct remote).
+- Wrapper-verified: remote main @ 297d9b5 == local HEAD; the fetch-independent HTTPS ls-remote agreed (297d9b5956f95f004d6ec55f8113ee9b54f69b75).
+- The operator key's fingerprint verified through paramiko's own key parse (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — matches the S1-S48 record) BEFORE the push; the operator's key file shredded after use (the wrapper's own temp copy shredded at its teardown).
+- Zero zombies at close (the port-sweep discipline held; one zombie after the stability probe swept clean by the second pass); the tree clean; no new branches.
+
+Stage Summary:
+- Session 49 fully closed: the remediation commit 297d9b5 pushed and wrapper-verified, the pushed-hash recorded in docs/remediation-plan-session49.md, this worklog updated, the operator key destroyed after use.
+- The gate stands at 797 checks (252 unit + 125 smoke + 420 e2e); the parity battery now runs TWENTY-FOUR surfaces (50 checks, zero drift) with the FONT-EMBEDDING + METADATA column joining the adjudication layers; the S50 candidates recorded in this worklog (the reference-regression watch, the 24th surface's route extensions, or the 25th surface — the PDF XObject/image layer, the annotation layer beyond links, or the print-time video frame contract).
