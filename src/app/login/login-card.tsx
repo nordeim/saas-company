@@ -242,39 +242,50 @@ export function LoginCard() {
             <div className="flex flex-col items-center text-center space-y-6 sm:space-y-8">
 
               {resetEmail !== null ? (
-                /* ---------- The reference's reset-success view (measured):
-                     back-full is NOT here — heading block, green alert,
-                     full-width back button, wrapped in space-y-4 sm:space-y-6. */
-                <div className="w-full space-y-4 sm:space-y-6">
-                  <div className="text-center space-y-3 sm:space-y-4">
-                    <div className="space-y-2">
-                      <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
-                        Check your email
-                      </h2>
-                      <p className="text-slate-600 text-sm sm:text-base">
-                        We&apos;ve sent password reset instructions to
-                        <br />
-                        <span className="font-medium text-slate-900">{resetEmail}</span>
-                      </p>
+                /* ---------- The reference's reset-success view (measured
+                     Session 5; the S51 print probe extended the record):
+                     the w-full wrapper + the inner space-y stack, the
+                     MAIL-ICON BADGE above the heading block (the S51
+                     find — the print story's state-tracked raster exposed
+                     the missing 80px: the card 318 -> 398, the raster
+                     1359 -> 1609; the badge is the slate-100 circle with
+                     the lucide Mail at text-slate-700), the green alert,
+                     the full-width back button. */
+                <div className="w-full">
+                  <div className="space-y-4 sm:space-y-6">
+                    <div className="text-center space-y-3 sm:space-y-4">
+                      <div className="mx-auto w-14 h-14 sm:w-16 sm:h-16 bg-slate-100 rounded-full flex items-center justify-center">
+                        <Mail className="h-7 w-7 sm:h-8 sm:w-8 text-slate-700" />
+                      </div>
+                      <div className="space-y-2">
+                        <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+                          Check your email
+                        </h2>
+                        <p className="text-slate-600 text-sm sm:text-base">
+                          We&apos;ve sent password reset instructions to
+                          <br />
+                          <span className="font-medium text-slate-900">{resetEmail}</span>
+                        </p>
+                      </div>
                     </div>
+                    <AlertBanner tone="green">
+                      Please check your email for the password reset link. It may take a few
+                      minutes to arrive.
+                    </AlertBanner>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setResetEmail(null);
+                        setMode("signin");
+                        setError("");
+                        setNotice("");
+                      }}
+                      className={BACK_FULL}
+                    >
+                      <ArrowLeft className="h-4 w-4" />
+                      Back to sign in
+                    </button>
                   </div>
-                  <AlertBanner tone="green">
-                    Please check your email for the password reset link. It may take a few
-                    minutes to arrive.
-                  </AlertBanner>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setResetEmail(null);
-                      setMode("signin");
-                      setError("");
-                      setNotice("");
-                    }}
-                    className={BACK_FULL}
-                  >
-                    <ArrowLeft className="h-4 w-4" />
-                    Back to sign in
-                  </button>
                 </div>
               ) : mode === "signin" ? (
                 /* ---------- The default sign-in state (verified parity since

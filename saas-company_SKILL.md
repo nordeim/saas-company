@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.49.0 · **Last updated:** 2026-10-13 (Session 50 remediation)
+> **Version:** 2.50.0 · **Last updated:** 2026-10-13 (Session 51 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1875,6 +1875,38 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     raster re-rasterizes per UI state at the card's rendered
     height — the census is a per-STATE contract, not a per-route
     one (the /login alternates: 2696/1833/1533).
+90. **The vector-layer instrument + the color-value adjudication +
+    the binary-stream law (Session 51)**: the TWENTY-SIXTH SURFACE —
+    the PDF's content-stream OPERATOR census — is measured through
+    `qpdf --json --json-stream-data=inline` (one call, every stream
+    + dict as JSON). THE BINARY-STREAM LAW: a PDF's binary streams
+    can carry the literal "N 0 obj" byte sequence, so a text-regex
+    object-boundary parse over a `qpdf --qdf` file finds FALSE
+    starts inside the binary and silently truncates every preceding
+    object (the lesson-88 family's FOURTH sighting) — never parse
+    PDF object boundaries by text regex; the JSON path is
+    length-bounded by construction. THE CENSUS: the form XObjects'
+    {BBox, operator-family} records SORTED (the per-render resource
+    names normalized out) + the per-page content families
+    (path/paint/clip/gs/xform/xobj/color/text). THE
+    COLOR-VALUE ADJUDICATION: an RG/rg count delta is
+    unadjudicable from counts — extract the r-g-b operands and
+    compare the quantized VALUE SETS (1/32 per channel: the
+    ≤0.5/255 lab() serialization family merges robustly, the real
+    palette stays distinct; 1/64 straddles a rounding boundary);
+    matching sets + count deltas = pure re-establishment frequency
+    (the paint-order family, D125 at the operator layer). THE
+    TEXT-RUN SEGMENTATION record: BT/Tf/Tm/ET count deltas with
+    identical words (D163) and fonts (D171) = the same text in
+    different glyph-run blocks — register, never chase. THE
+    ENTRANCE-FRAME RASTER BUCKET: a below-fold mockup card's print
+    raster is entrance-frame-dependent (the live measured
+    1481x832 AND 1494x838, the ppi varying with it) — the S38
+    range law at the raster layer. And the RESET-BADGE LESSON: the
+    print story's state-tracked raster EXPOSED a real DOM gap the
+    word counts could not see (the missing 80px badge with the
+    words identical at 31 = 31) — a print-layer size delta with
+    matching text is a GEOMETRY gap until proven otherwise.
 
 ## §13. Pitfalls to Avoid
 

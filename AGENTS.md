@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (429 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (440 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,22 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (429/429) — 806 checks across three layers (Session 50: the
+→ `npm run test:e2e` (440/440) — 817 checks across three layers (Session 51: the
+session51-vectorlayer-reset-badge suite +11 e2e — the TWENTY-SIXTH
+SURFACE pins [the PDF's content-stream operator census through
+`qpdf --json --json-stream-data=inline` — the form XObjects' BBox +
+operator-family counts and the per-page content families, with the
+color-VALUE census adjudication (the 1/32-quantized distinct sets +
+the white re-establishment record) and the /demo superset floor] + the
+RESET-BADGE build pins [the /login reset-success state's missing
+mail-icon badge — the slate-100 circle + the lucide Mail, the card
+318 -> 398, the state-tracked raster 1359 -> 1609] + the /login ERROR
+state's parity [the 2927 raster] + the dashboard's authenticated
+print contract [292 words, 2 pages, VendSans-Light 9x, the empty
+image + link sets, 34 forms]; the DM Serif italic-cut fix re-versioned
+the session48 font pin — the live's css2 URL ships no ital axis, its
+italic wordmark is the browser's synthesized oblique, so the clone
+loads the regular cut only; Session 50: the
 session50-imagelayer-alternates suite +9 e2e — the TWENTY-FIFTH SURFACE pins [the
 per-route image-XObject censuses through pdfimages — the landing's 13 sorted
 structural keys with the animated-glow ±1px bucket, the /login card's 6, the
@@ -1119,6 +1134,33 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     710x288 and 710x289 across renders), so raster censuses pin static
     content exactly but bucket the animated rasters (the S38 loop-value
     range law at the raster layer).
+61. **The binary-stream parser law + the color-value adjudication
+    (Session 51).** (a) A PDF's binary streams (the embedded fonts,
+    the jpegs) can carry the literal byte sequence "N 0 obj" — a
+    text-regex object-boundary parse over a `qpdf --qdf` file finds
+    FALSE object starts inside the binary, silently truncating every
+    preceding object's region (the prototype's form censuses read
+    10-154 byte fragments; the lesson-88 empty-census family's FOURTH
+    sighting, caught by the raw-output discipline before any census
+    was trusted). The robust instrument: `qpdf --json
+    --json-stream-data=inline` — every stream arrives length-bounded
+    and base64-encoded in the JSON, no text heuristics; `qpdf` (12.x)
+    joins poppler as the e2e gate's second external binary
+    prerequisite. (b) The COLOR-VALUE adjudication: an operator-count
+    delta in the `RG`/`rg` (color-set) family is UNADJUDICABLE from
+    counts alone — extract the actual r-g-b operands and census the
+    VALUES (quantized at 1/32 per channel: the ≤0.5/255 lab()
+    serialization family merges robustly [the 1/64 quantization
+    straddles a rounding boundary — .9608 -> 61 vs .961 -> 62 despite
+    a 0.05/255 difference], the palette's real colors stay distinct).
+    If the value SETS match, the count delta is pure re-establishment
+    frequency (the paint-order family — the D125 law at the
+    print-operator layer). (c) The ENTRANCE-FRAME raster bucket: a
+    below-fold mockup card's print raster is entrance-frame-dependent
+    (the live measured 1481x832 AND 1494x838 across renders, the ppi
+    varying with it — 180 vs 191) — the S38 range law at the raster
+    layer, bucketed like the animated-glow ±1px but at the mockup's
+    scale range.
 
 ## Architecture invariants
 

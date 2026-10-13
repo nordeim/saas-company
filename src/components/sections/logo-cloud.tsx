@@ -54,9 +54,11 @@ export function LogoCloud() {
               <span className="font-body font-light text-[9px] tracking-[0.35em] uppercase">KVORAT</span>
             </div>
           </Reveal>
-          {/* Thrune — aperture + serif (the live's DM Serif Display cut,
-              italic — its inline style measured on the live; the face is
-              loaded via next/font with the italic variant included) */}
+          {/* Thrune — aperture + serif (the live's DM Serif Display cut;
+              its italic class renders the browser's SYNTHESIZED OBLIQUE
+              over the regular file — the live's css2 URL ships no ital
+              axis, so the clone loads the regular cut only and lets the
+              italic synthesize identically; Session 51) */}
           <Reveal className={CARRIER} y={null} duration={400} delay={150}>
             <div className="flex items-center gap-2">
               <Aperture className="w-5 h-5" strokeWidth={1} />

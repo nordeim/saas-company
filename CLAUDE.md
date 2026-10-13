@@ -310,6 +310,52 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   86: the print-pipeline exposure law + the record
   re-verification law + the print-text instrument.
 
+- **Session 51 (2026-10-13) remediation** — see
+  `docs/remediation-plan-session51.md`: a measurement + BUILD +
+  registration cycle (the worklog S50 candidates — ALL THREE
+  delivered: the twenty-sixth surface, the 25th surface's route
+  extensions, and the dashboard's authenticated print story). **THE
+  26TH SURFACE (D177): the PDF VECTOR/SCRATCH LAYER at STRUCTURAL
+  PARITY** (the content-stream operator census through
+  `qpdf --json --json-stream-data=inline`; the form XObjects' BBox +
+  operator-family censuses — byte-identical on the stable routes —
+  and the per-page content families, with the delta families
+  ROOT-CAUSED: the color-VALUE census adjudication [the distinct
+  quantized sets identical; the count deltas pure re-establishment
+  frequency + the ≤0.5/255 lab() family], the text-run segmentation
+  [the same words in different glyph-run blocks], and the
+  emission-structure family [background-rect segmentation +
+  glyph-run splitting — the D125 law at the operator layer]). **THE
+  25TH SURFACE'S ROUTE EXTENSIONS (D178): the /login ERROR state at
+  full parity on its first measurement (the 2927 state-tracked
+  raster) AND the RESET-SUCCESS state's MISSING MAIL-ICON BADGE
+  BUILT** — the FIRST CLONE-GAP BUILD SINCE S47 (the print story's
+  state-tracked raster exposed the missing 80px: the live's
+  slate-100 circle + the lucide Mail above the heading; the card
+  318 -> 398, the raster 1359 -> 1609, converging exactly). **THE
+  DM SERIF ITALIC-CUT FIX (D179)**: the live's css2 URL ships no
+  ital axis — its italic wordmark is the browser's synthesized
+  oblique over the regular file; the clone now loads the regular
+  cut only (the print font census converged; the session48 pin
+  re-versioned with the italic-absence guard). **THE DASHBOARD'S
+  AUTHENTICATED PRINT STORY REGISTERED (D179)**: 292 words, 2
+  pages, VendSans-Light 9x, the empty image set (the all-vector
+  dashboard), the empty link set, 34 forms. **THE BINARY-STREAM
+  PARSER LAW (D180)**: the qdf text-parse's false-object-boundary
+  trap (the lesson-88 family's fourth sighting) + the qpdf-json
+  instrument + the 1/32 color quantization + the entrance-frame
+  raster bucket. The standing watch: zero drift; the D160
+  mobile-nav record + the live login SPA-404 record both
+  re-verified for the SEVENTH consecutive session. The session51
+  pins 11/11 GREEN (the badge pins RED first, then the build).
+  Gate: **806 -> 817 = 252 unit + 125 smoke + 440 e2e**; the
+  battery 113/113 ZERO DRIFT (the VECTOR + ALTERNATES-EXT columns
+  added); 21 screenshots (DB canonical, zero mutations); VLM 8/8
+  (the one flag adjudicated by evidence: the 4px top bar below
+  full-shot VLM visibility, proven by DOM + pixel-clip). Gotcha
+  61 / lesson 90: the binary-stream parser law + the color-value
+  adjudication + the entrance-frame bucket.
+
 - **Session 50 (2026-10-13) remediation** — see
   `docs/remediation-plan-session50.md`: a registration + versioning
   cycle (the worklog S49 candidates — the twenty-fifth surface AND

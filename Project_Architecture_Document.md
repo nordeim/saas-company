@@ -851,6 +851,50 @@
   registry-compounding lesson, remediation plan session33, session
   log 66.
 
+- `[NOTE]` **Session 51 remediation (2026-10-13)** — a measurement +
+  build + registration cycle (the worklog S50 candidates — ALL THREE
+  delivered in one pass; see `docs/remediation-plan-session51.md`):
+  **the TWENTY-SIXTH SURFACE (D177) — the PDF VECTOR/SCRATCH LAYER**
+  (the content-stream operator census through `qpdf --json
+  --json-stream-data=inline`; the form XObjects' BBox + operator-family
+  counts and the per-page content families, paired clone-vs-live) at
+  STRUCTURAL PARITY with the delta families ROOT-CAUSED: the form
+  censuses byte-identical on the stable routes (/faq 12/12, /login
+  6-of-7 + the card form's text-segmentation record), the page-content
+  structural families at near parity with the deterministic
+  emission-structure deltas adjudicated (the background-rect
+  segmentation + glyph-run splitting — the D125 law at the
+  print-operator layer), and the state-tracking families
+  (color/text) root-caused through THE COLOR-VALUE CENSUS — the
+  distinct quantized value sets IDENTICAL on both sides (the same
+  palettes at print; the count deltas pure white re-establishment
+  frequency + the ≤0.5/255 lab() serialization family); **the 25th
+  surface's route extensions (D178) — the /login ERROR state at full
+  parity on its first measurement (the 2927 state-tracked raster) AND
+  the RESET-SUCCESS state's MISSING MAIL-ICON BADGE BUILT** (the first
+  clone-gap build since the S47 entrances: the print story's
+  state-tracked raster exposed the missing 80px — the live's
+  slate-100 circle + the lucide Mail above the heading; the card 318
+  -> 398, the raster 1359 -> 1609, the print story converging
+  exactly) + THE DM SERIF ITALIC-CUT FIX (the live's css2 URL ships
+  no ital axis — its italic Thrune wordmark renders the browser's
+  SYNTHESIZED OBLIQUE over the regular file; the clone had loaded the
+  true italic variant, embedding a different glyph set at print —
+  now the regular cut only, the print font census converged); **the
+  dashboard's authenticated print story (D179) REGISTERED** (the
+  clone-side contract — the live's /dashboard is the SPA 404: 292
+  words, 2 pages, VendSans-Light 9x, the EMPTY image set [the
+  all-vector dashboard], the EMPTY link set, 34 forms); and **the
+  binary-stream parser law (D180)** — the qdf text-parse's
+  false-object-boundary trap (the lesson-88 family's fourth
+  sighting) + the qpdf-json instrument. The D160 mobile-nav record +
+  the live login SPA-404 record both re-verified for the seventh
+  consecutive session. Gate 806 -> 817 (252 unit + 125 smoke + 440
+  e2e); the battery 113/113 zero drift (the VECTOR + ALTERNATES-EXT
+  columns added); 21 screenshots + VLM 8/8 (the one first-pass flag
+  adjudicated by evidence: the 4px slate gradient top bar below the
+  VLM's full-shot visibility, proven present by DOM + pixel-clip).
+
 - `[NOTE]` **Session 50 remediation (2026-10-13)** — a measurement +
   registration + versioning cycle (the worklog S49 candidates — see
   `docs/remediation-plan-session50.md`): **the TWENTY-FIFTH SURFACE
@@ -3502,6 +3546,10 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D174 | The PDF XOBJECT/IMAGE LAYER (the 25th surface): the per-route sorted structural censuses byte-identical across sides — the landing 13 (the hero VIDEO frame 1920x1080 icc 92ppi; the H1 GRADIENT-TEXT raster 2025x534 rgb+smask; the CTA pill PAIR 1047x105 rgb+smask ×2; the badge pill 1165x103 rgb+smask; the blurred glows 626x204 + 710x28[89] gray jpeg on p1, 541x160 + 625x245 on p4), /login 6 (1168x168, 1765x2696, 329x329, 413x413 gray jpeg + 754x676 rgb+smask), every other route the EMPTY SET (their graphics stay VECTOR at print); the object order + content-derived sizes normalized out; the ±1px animated-glow jitter bucketed; determinism proven across renders; the RASTERIZATION LAW: video frames, background-clip:text gradients, alpha-composited pills, and blurred glows rasterize — everything else stays vector (VLM-attributed) | Measured paired (recon-s50 PH3 + the stability probe; poppler's pdfimages — the leading-space row law: never filter rows on leading spaces) | `tests/e2e/session50-imagelayer-alternates.spec.ts` (the 6 image pins), the battery's PH4 | **Full parity on first honest measurement — registered** (Session 50) |
 | D175 | The 24TH SURFACE'S ROUTE EXTENSIONS: the /login ALTERNATES' print story — the sign-up + forgot states' FONT censuses (DejaVuSans 2× + DejaVuSans-Bold 1× CID TrueType/Identity-H — the default state's system-stack census), METADATA (Title "SAAS Company", Pages 1, the standard family), LINK empty-sets (buttons, not anchors — the D169 law extended to the states), PRINT TEXT (19/19 sign-up, 25/25 forgot), and IMAGE censuses (2+2) all at parity — with the STATE-TRACKED RASTER record: the tall card-background raster re-rasterizes per state at the card's rendered height (1765x2696 default / 1765x1833 sign-up / 1765x1533 forgot; the title-area raster 1168x168 → 1168x156) | Measured paired (recon-s50 PH2 + the stability probe's alternates extension) | `tests/e2e/session50-imagelayer-alternates.spec.ts` (the 3 alternate pins), the battery's PH4 | **Full parity — registered + pinned** (Session 50) |
 | D176 | THE LEADING-SPACE ROW-FILTER LAW: pdfimages -list's right-aligned data rows carry LEADING SPACES — a `!line.startsWith(" ")` filter silently returns an EMPTY census and empty-equals-empty reads as false PARITY (the first S50 parse reported zero images on every route; the raw-output verification discipline caught it — the landing carries 13). The lesson-88 empty-census family's THIRD sighting (pdffonts' two-word TYPE column, the dead capture click, now the right-aligned rows). Its measured sibling: the ANIMATED-GLOW RASTER JITTER — a pulsing element's rasterized box carries ±1px frame-dependence (the live measured 710x288 and 710x289), so raster censuses pin static content exactly and bucket the animated rasters | Caught in flight (the recon's own raw-output verification) | The spec's `imageRows` parser comment + the jitter bucket; AGENTS gotcha 60; SKILL lesson 89 | **Instrument law — encoded** (Session 50) |
+| D177 | THE PDF VECTOR/SCRATCH LAYER (the twenty-sixth surface): the content-stream operator census through qpdf --json — the FORM XObjects' {BBox, operator-family} censuses SORTED and the per-page content-stream families (path/paint/clip/gs/xform/xobj/color/text). The form counts identical on every shared route (/faq 12/12, /privacy 7/7, /terms 7/7, /refund-policy 7/7, /accessibility 10/10, /thank-you 0/0, /login 7/7, the 404 0/0) and the per-form censuses byte-identical on the stable routes; the page-content structural families at near parity (the deterministic emission-structure deltas ≤ 6 ops); the state-tracking deltas ROOT-CAUSED through the color-VALUE census (the quantized distinct sets identical — 8/8 on /faq doc-wide; the count deltas pure re-establishment + the lab() serialization family); the /demo superset at the vector layer (683 paths vs the shell's 113); the landing's animated-form frame-dependence registered | Measured paired (recon-s51 PH3 + the stability probes) | `tests/e2e/session51-vectorlayer-reset-badge.spec.ts` (the vector pins), the battery's PH2/PH3 | **Structural parity — registered + pinned** (Session 51) |
+| D178 | THE /LOGIN ALTERNATES' ERROR + RESET-SUCCESS PRINT STORY + THE MAIL-BADGE BUILD: the ERROR state at full parity on its first measurement (fonts DejaVu 2+1, metadata, links empty, words 30, the image census 6/6 byte-identical — the 2927 state-tracked raster); the RESET-SUCCESS state carried THE REAL GAP — the live's mail-icon badge (div.mx-auto w-14 h-14 sm:w-16 sm:h-16 bg-slate-100 rounded-full flex items-center justify-center + the lucide Mail h-7 w-7 sm:h-8 sm:w-8 text-slate-700) was MISSING, the card 318 vs 398 (the raster 1359 vs 1609) — BUILT (the first clone-gap build since S47), the print story converging exactly (words 31, fonts, links, the 1609 raster). THE STATE-TRACKED RASTER RECORD EXTENDED: 2696 default / 2927 error / 1833 sign-up / 1533 forgot / 1609 reset | Measured paired (recon-s51 PH2) then built (RED -> GREEN) | `tests/e2e/session51-vectorlayer-reset-badge.spec.ts` (the badge + alternates pins), `src/app/login/login-card.tsx` | **Gap closed — parity converged** (Session 51) |
+| D179 | THE DM SERIF ITALIC-CUT FIX + THE DASHBOARD'S AUTHENTICATED PRINT STORY: the live's css2 URL for DM Serif Display ships NO ital axis — its italic Thrune wordmark renders the browser's SYNTHESIZED OBLIQUE over the regular file (the PDF embeds DMSerifDisplay-Regular); the clone had loaded the true italic variant (embedding DMSerifDisplay-Italic — different glyph shapes) — FIXED to the regular cut only, the print font census converged; AND the clone's authenticated dashboard print contract registered (the live's /dashboard is the SPA 404): 292 words, 2 pages, VendSans-Light 9x (the dark-route webfont family), the EMPTY image set (the all-vector dashboard), the EMPTY link set, 34 forms | Measured paired (the battery's landing font census + PH5) | `src/app/layout.tsx` (the font fix), the re-versioned session48 pin + the session51 dashboard pin, the battery's PH4/PH5 | **Fix converged + superset registered** (Session 51) |
+| D180 | THE BINARY-STREAM PARSER LAW + THE QPDF-JSON INSTRUMENT: a PDF's binary streams can carry the literal "N 0 obj" byte sequence — a text-regex object-boundary parse over a qdf file finds FALSE starts inside the binary, silently truncating every preceding object's region (the prototype's form censuses read 10-154 byte fragments — the lesson-88 family's FOURTH sighting, caught by the raw-output discipline). The robust instrument: qpdf --json --json-stream-data=inline (length-bounded base64 streams, no text heuristics). Its measured siblings: the 1/32 COLOR-VALUE quantization (the 1/64 straddles a rounding boundary — .9608 -> 61 vs .961 -> 62 at 0.05/255 apart) and the ENTRANCE-FRAME raster bucket (the live's page-2 mockup card measured 1481x832 AND 1494x838 with the ppi varying 180/191 — the S38 range law at the mockup's scale) | Caught in flight (the prototype's own raw-output verification) | The spec's vectorCensus instrument; AGENTS gotcha 61; SKILL lesson 90 | **Instrument law — encoded** (Session 51) |
 
 
 
@@ -3565,7 +3613,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 20 files | 252 | `src/lib/*.test.ts` + `src/app/api/workflows/generate/route.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
-| Browser E2E | 59 specs | 429 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Browser E2E | 60 specs | 440 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 125 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins

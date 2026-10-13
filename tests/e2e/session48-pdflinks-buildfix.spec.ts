@@ -111,7 +111,7 @@ const dwell = async (page: import("@playwright/test").Page, route: string) => {
 };
 
 test.describe("the build-pipeline font fix (Session 48 — D167)", () => {
-  test("the served CSS registers Playfair Display as the VARIABLE face (400 900) + the DM Serif pair", async ({ page }) => {
+  test("the served CSS registers Playfair Display as the VARIABLE face (400 900) + the DM Serif regular cut", async ({ page }) => {
     await dwell(page, "/");
     const cssUrls = await page.evaluate(() =>
       [...document.querySelectorAll('link[rel="stylesheet"]')].map((l) =>
@@ -130,12 +130,20 @@ test.describe("the build-pipeline font fix (Session 48 — D167)", () => {
     expect(css).toMatch(
       /@font-face\{font-family:Playfair Display;font-style:normal;font-weight:400 900;font-display:swap;src:url\([^)]*woff2\)/,
     );
-    // the DM Serif pair survives unchanged (static 400, normal + italic)
-    expect(css).toMatch(
-      /@font-face\{font-family:DM Serif Display;font-style:italic;font-weight:400;font-display:swap;src:url\([^)]*woff2\)/,
-    );
+    // the DM Serif SINGLE regular cut (Session 51 re-versioned: the
+    // live's css2 URL ships no ital axis — its italic Thrune wordmark
+    // renders the browser's SYNTHESIZED OBLIQUE over the regular file,
+    // so the clone loads the regular cut only; the italic @font-face
+    // is GONE by design and its italic wordmark renders the identical
+    // synthesized oblique — the print font census converged)
     expect(css).toMatch(
       /@font-face\{font-family:DM Serif Display;font-style:normal;font-weight:400;font-display:swap;src:url\([^)]*woff2\)/,
+    );
+    // the italic-cut ABSENCE guard (the Session-51 contract: loading
+    // the true italic again would diverge from the live's rendered
+    // glyphs at the print layer)
+    expect(css).not.toMatch(
+      /@font-face\{font-family:DM Serif Display;font-style:italic/,
     );
     // the self-hosted Vend Sans pair still ships (the body faces)
     expect(css).toMatch(/@font-face\{font-family:"?Vend Sans"?/);

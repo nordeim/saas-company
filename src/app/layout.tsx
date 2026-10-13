@@ -50,7 +50,15 @@ const playfair = Playfair_Display({
 const dmSerif = DM_Serif_Display({
   subsets: ["latin"],
   weight: ["400"],
-  style: ["normal", "italic"],
+  // Session 51 (the S51 print probe's scroll-through find): the live's
+  // css2 URL is `family=DM+Serif+Display` — NO ital axis — so its italic
+  // Thrune wordmark renders as the browser's SYNTHESIZED OBLIQUE over
+  // the regular cut (the PDF embeds DMSerifDisplay-Regular). This repo
+  // had loaded the true italic variant, embedding a different glyph set
+  // (the print font census: clone Italic vs live Regular). Load ONLY the
+  // regular cut — the italic class now synthesizes exactly like the
+  // live's rendered contract.
+  style: ["normal"],
   variable: "--font-dm-serif",
   display: "swap",
 });
