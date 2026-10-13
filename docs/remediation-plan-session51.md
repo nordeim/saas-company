@@ -256,4 +256,24 @@ surfaces, 66 checks, zero drift — `docs/session_109.md`).
 
 ## The pushed-hash record (the closing discipline)
 
-- (recorded at close)
+- Remediation commit **a28a5fc** (the full hash a28a5fcbc6ca311e8bbce8ca6f3da09567e0b20a)
+  pushed via the SSH wrapper with the EXPLICIT `--remote
+  git@github.com:nordeim/saas-company.git` (the S31 trap: the wrapper's
+  DEFAULT remote is the runbook's example repo — the explicit flag held
+  from the first dry-run, which confirmed the fast-forward
+  `5b9536f..a28a5fc` against the correct remote).
+- Wrapper-verified: remote main @ a28a5fc == local HEAD; the
+  fetch-independent HTTPS ls-remote agreed
+  (a28a5fcbc6ca311e8bbce8ca6f3da09567e0b20a).
+- The operator key's fingerprint verified through paramiko's own key
+  parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU
+  — matches the S1-S50 record); the operator's key file shredded
+  after use (the wrapper's own temp copy shredded at its teardown).
+- The paramiko ssh shim re-deployed on the reset sandbox
+  (/home/z/bin/ssh, shebang /usr/bin/python3 — the system python
+  owning the paramiko 5.0.0 install; the venv python on PATH lacks
+  it); the wrapper needed /home/z/bin on PATH (exported for the run).
+- Zero zombies at close (the port-sweep discipline held through every
+  recon/battery/capture/adjudication run — :3400 and :3500 swept
+  clean, including one next-server child that survived its parent);
+  the tree clean; no new branches.
