@@ -20,7 +20,7 @@ CHUNKS=(
   "session28-tie-break session29-first-run session29-jsonld session30-dual-ceiling"
   "session31-chart-edge session31-head-parity session32-head-parity session32-membership"
   "session33-concurrent-limiter session35-parity session36-interaction-parity session37-gradient-parity"
-  "session37-sitemap-parity session37-transition-parity session38-logo-petels session38-shine-parity"
+  "session37-sitemap-parity session37-transition-parity session38-logo-petals session38-shine-parity"
   "session38-static-inventory session39-period-parity session39-reduced-motion-loops session39-scroll-dot-period session39-stacking-inventory"
   "session40-responsive-inventory session41-focus-inventory session43-thankyou-input-surface session44-urlstate-selection-surface session45-traversal-media-video"
   "session46-clipboard-drag-offline typography-parity"

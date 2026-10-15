@@ -851,6 +851,83 @@
   registry-compounding lesson, remediation plan session33, session
   log 66.
 
+- `[NOTE]` **Session 54 remediation (2026-10-15)** — a registration
+  cycle (the worklog S53 candidates, the surface selection probed on
+  the raw shape FIRST per the lesson-88 discipline — ALL THREE
+  candidates probed, two measured EMPTY/FLAT and registered as laws,
+  one measured rich and became the surface; see
+  `docs/remediation-plan-session54.md`): **THE TWENTY-NINTH SURFACE
+  (D187) — the PDF RESOURCE-TARGET INTERIOR LAYER** (the D184 name
+  tables' RESOLVED TARGETS censused at the dict level through
+  `qpdf --json --json-stream-data=inline`): the EXTGSTATE interiors
+  as a sorted multiset at THE ALPHA GRID (the D187 law: the two
+  pipelines serialize /ca /CA differently — raw CSS decimals
+  0.05/0.1/0.5 vs 8-bit-quantized 13/255/26/255/128/255 — in BOTH
+  directions per route, but every measured pair converges on the
+  same Math.round(a*255) composite-grid point [12.75->13, 5.1->5,
+  127.5->128], rendering-identical by construction; the D134 oklab
+  family's SIXTH sighting, at the alpha layer; the first gs census
+  read DRIFT on every route and the diff root-caused the family
+  before any pin was written), the PATTERN interiors (tiling:
+  PaintType/TilingType/XStep/YStep/BBox/streamLen — the dashboard's
+  chart stripes 325x9 + 26x9 + the 1906x553 table texture; shading:
+  ShadingType/ColorSpace/Coords/Extend/Function shape — /login's
+  three card gradients byte-identical INCLUDING the gradient
+  endpoint values), and the FONT SUBSET-METRICS (the Type3 /Widths
+  advance arrays, lengths 49-254, byte-identical across sides;
+  /login carries the Type0/CIDFontType2 DejaVu family with the CID
+  descendant tables instead) — THE STABLE SEVEN AT FULL INTERIOR
+  PARITY on the first honest fresh measurement, determinism
+  verified 2x. The instrument corrections root-caused in flight:
+  the TYPELESS-OBJECT trap (/Type optional per PDF 32000-1 Table
+  59 — Skia omits it on 9 of /login's 14 ExtGStates, and most are
+  referenced from FORM XObjects' nested /Resources, not the page
+  name table; only the object-level census is complete) and the
+  pin-generation fontWidths shape fix (the census returns {count,
+  fonts}, not {count, entries} — JSON.stringify silently drops
+  undefined keys). **THE TWO LAWS (D188)**: the COLOR-SPACE
+  EMPTY-SET (zero ICC streams, zero named /ColorSpace table
+  entries, zero /Default* graphics-state overrides on every route,
+  both sides — all color flows through device-space operators [the
+  D177 color families] + pattern fills) and the PAGE-TREE FLATNESS
+  (zero intermediate /Pages nodes, zero inheritable attributes —
+  proving the D184 per-page census complete by construction).
+  **THE 28TH SURFACE'S ROUTE EXTENSIONS (D188)**: the alternates'
+  per-state NAME TABLES (default /X35, error /X36 — the banner's
+  +1, reset /X18, signup /X22, forgot /X22; /G3 + /P4 on every
+  state) + the five states' interiors at parity + the dashboard's
+  authenticated interior fingerprint (gs 18, tiling 3, shading 4,
+  fonts 9). The standing watch: the working eight at byte-identical
+  word parity (the TENTH consecutive session); the D160 mobile-nav
+  record re-verified (the clone y21/y28/y35 all open — the
+  390x397 panel, 6 links; the live toaster-blocked y21/y28,
+  y35-only; no Tailwind v4 bug); the live login -> /dashboard
+  SPA-404 record holding. TDD: the session54 pins 5/5 GREEN on
+  the first run (the generated-constants discipline; stable across
+  three runs). Gate: **833 -> 838 = 252 unit + 125 smoke + 461
+  e2e** — with THE S53 GATE-COUNT CORRECTION (the inherited 837
+  badge was a +4 arithmetic slip: 252+125+456 = 833, not 837; the
+  S51/S52 totals 817/826 were pure sums; the badge now re-derived
+  from the layer counts) AND THE SILENT-SKIP CATCH (the
+  S53-committed chunk runner's `session38-logo-petels` typo
+  silently skipped the logo-petals spec's 10 tests — playwright
+  path filters drop non-existent files without error; fixed in
+  both runners, every chunk reconciled against --list at 461).
+  The battery EXTENDED at **323/323 GREEN ZERO DRIFT** across six
+  phases (up from 243; the INTERIOR + LAWS +
+  ALTERNATES-INTERIOR/RESOURCE columns joining the standing set —
+  ph5 growing 82 -> 162). 21 screenshots refreshed (the capture
+  server on :3500 against db/capture54.db; the dev DB canonical
+  before AND after — 1/6/7,120/2/0, zero mutations); VLM 8/8 on
+  the first pass (zero adjudication needed). DOCUMENTED: PAD (this
+  block, the ledger D184-D189 — the S53 rows D184-D186 added to
+  the table in this pass, closing their doc gap — the 7.1 counts
+  63 specs/461), AGENTS (the counts + gotcha 64), CLAUDE (the
+  session-54 context), README (the 838 badge + the 29th-surface
+  story + the session54 suite row + the counts), SKILL v2.53.0
+  (lesson 93), the remediation plan session54, the session log
+  116, the worklog.
+
 - `[NOTE]` **Session 53 remediation (2026-10-15)** — a registration
   cycle (the worklog S52 candidates — ALL THREE delivered in one
   pass; see `docs/remediation-plan-session53.md`): **THE
@@ -3720,6 +3797,12 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D181 | THE PDF STRUCTURAL LAYER (the twenty-seventh surface): the document catalog's sorted key set, the tagged/outline markers (/MarkInfo, /StructTreeRoot, /Outlines, /Lang), /ViewerPreferences, the top-level outlines/acroform/encrypt/pagelabels views, and the total object count per route — through qpdf --json with the catalog located BY ITS /Type /Catalog. AT FULL PARITY on its first honest measurement: the key sets identical per route (the anchor-bearing family tracking D169; the clone's /demo carries /Dests where the live's 73-object shell carries none — the superset at the catalog-key layer); both sides emit UNTAGGED, OUTLINE-FREE PDFs (the empty-set contract); the object counts deterministic and near-identical (login 51/51, faq 241/241, privacy 234/234, terms 242/242, refund 239/239, accessibility 315/315, thank-you 101/101, dashboard 292; the landing's animated bucket 523/525-vs-530; /demo 260-vs-73) | Measured paired (recon-s52 PH4 + the stability probes — the counts verified deterministic 2x per route) | `tests/e2e/session52-structurallayer-convergence.spec.ts` (the structural pins), the battery's PH4 | **Full parity — registered + pinned** (Session 52) |
 | D182 | THE /login ALTERNATES' POST-BUILD CONVERGENCE at the operator layer + the glyph-level segmentation proof: the S51 badge build verified holding (the reset state's 1609 raster, words 31, the 6-block card census with blocks 1-5 byte-identical in ops AND glyph strings); the card form's 30-op text delta root-caused to the SAME 16 glyphs of "Check your email" split per-glyph (the clone: 16 single-glyph Tj + 15 Td) vs one combined run (the live: 1 Tj + 0 Td) — 15+15 = exactly 30; the INTERPOLATION-DEPENDENCE law (the typed email's length shifts the text count: 21 chars reads 76/136, 18 chars reads 74/134); the error state's 134-vs-139 record unchanged | Root-caused at the glyph level (the BT..ET block + glyph-string extraction through qpdf --json) | `tests/e2e/session52-structurallayer-convergence.spec.ts` (the convergence pins), the battery's PH5 | **Registered (no build — the D125/D177 library-structure law)** (Session 52) |
 | D183 | THE QPDF-12.2 JSON-SHAPE LAW + THE LESSON-88 FIFTH SIGHTING: the objects live under qpdf[1]["obj:N 0 R"] (plain objects wrapped in .value, streams in .stream.{data,dict} — there is NO qpdf[0].trailer in 12.2) and the catalog is located BY ITS /Type /Catalog — never by a guessed traversal, which silently returns empty-equals-empty false parity (caught by the raw-output discipline before any census was trusted). Siblings measured the same session: the landing's object count carries the animated-form bucket (523 AND 525 across renders — the S38 range law at the object-allocation layer) and the print pipeline's text counts on interpolated content are INPUT-LENGTH-DEPENDENT (pin the spec's own input) | Caught in flight (the structuralCensus prototype's own raw-output verification) | The spec's structuralCensus instrument; AGENTS gotcha 62; SKILL lesson 91 | **Instrument law — encoded** (Session 52) |
+| D184 | THE PDF RESOURCE NAME-TABLE LAYER (the twenty-eighth surface): every /Type /Page's /Resources name tables per category (/XObject, /Font, /ExtGState, /Pattern), the page tree resolved from the catalog through the string-form refs — the stable seven at BYTE-IDENTICAL name tables (the names encode the referenced object numbers, so the parity is the D181 object-count record proven at the NAME-ALLOCATION layer); the landing at count-level parity with the name-level animated family registered; /demo the registered superset at the resource layer; the dashboard's authenticated resource fingerprint 30/7/10/6 | Measured (the session53 spec, 7/7 GREEN first run) | tests/e2e/session53-resourcelayer-alternates.spec.ts; the drift battery's RESOURCE column | **Registered parity** (Session 53) |
+| D185 | THE /LOGIN ALTERNATES' STRUCTURAL CENSUSES + THE DASHBOARD'S AUTHENTICATED STRUCTURAL DEPTH: the five states' per-state object-allocation fingerprint (default 51, error 52 — the banner's +1, reset 34, signup 38, forgot 38) identical across sides, all untagged/outline-free/Lang-free; the dashboard at 292 objects carrying the public contract unchanged under auth | Measured (the same spec) | tests/e2e/session53-resourcelayer-alternates.spec.ts | **Registered parity** (Session 53) |
+| D186 | THE INSTRUMENT LAWS (the reaper + the serialization shape + the measurement order): the sandbox reaper (every phase a self-contained boot-work-kill unit); the oklab-serialization SHAPE (bg-black/95 serializes oklab(0 0 0 / 0.95) — integer zeros); the hydration dwell (~1500ms); the CONTEXT-ORDER law (an authenticated context poisons public /login measurements); the SSR-BYPASS law (a full-page goto bypasses browser interception); the post-login settle; the tally-extraction artifact (reconcile against --list) | Caught in flight (three instrumentation corrections, each root-caused) | AGENTS gotcha 63; SKILL lesson 92 | **Instrument law — encoded** (Session 53) |
+| D187 | THE PDF RESOURCE-TARGET INTERIOR LAYER (the twenty-ninth surface) + THE ALPHA-GRID LAW: the D184 name tables' RESOLVED TARGETS censused at the dict level — the ExtGState interiors (a sorted multiset at Math.round(a*255), the 8-bit composite grid where the two pipelines' divergent /ca /CA serializations [raw CSS decimals vs 8-bit-quantized N/255, in BOTH directions per route] converge — the D134 oklab family's sixth sighting, at the alpha layer), the PATTERN interiors (tiling: PaintType/TilingType/XStep/YStep/BBox/streamLen; shading: ShadingType/ColorSpace/Coords/Extend/Function shape — the gradient endpoint VALUES byte-identical), and the FONT subset-metrics (the Type3 /Widths advance arrays) — the stable seven at FULL INTERIOR PARITY on the first honest fresh measurement, determinism 2x. The TYPELESS-OBJECT trap: /Type is optional for ExtGState (Skia omits it on 9 of /login's 14) and most entries are referenced from FORM XObjects' nested /Resources — only the object-level census is complete | Measured (the session54 spec, 5/5 GREEN first run + the recon 101/101) | tests/e2e/session54-interiorlayer-laws.spec.ts; the drift battery's INTERIOR column; AGENTS gotcha 64(d)(e); SKILL lesson 93 | **Registered parity + instrument law** (Session 54) |
+| D188 | THE TWO PRINT LAWS + THE ALTERNATES' ROUTE EXTENSIONS: (a) the COLOR-SPACE EMPTY-SET — zero ICC streams, zero named /ColorSpace table entries, zero /Default* graphics-state overrides on every route, both sides (all color flows through device-space operators + pattern fills — the D170 empty-set pattern at the color layer); (b) the PAGE-TREE FLATNESS — zero intermediate /Pages nodes, zero inheritable attributes (/Resources, /MediaBox, /CropBox, /Rotate, /Group), proving the D184 per-page census complete by construction; (c) the alternates' per-state name tables (default /X35, error /X36, reset /X18, signup /X22, forgot /X22, with /G3 + /P4 on every state) + the five states' interiors at parity + the dashboard's authenticated interior fingerprint (gs 18, tiling 3, shading 4, fonts 9) | Measured (the same spec + the battery's LAWS columns) | tests/e2e/session54-interiorlayer-laws.spec.ts; AGENTS gotcha 64(f) | **Registered law + parity** (Session 54) |
+| D189 | THE SILENT-SKIP LAW + THE GATE-ARITHMETIC AUDIT: playwright path filters drop non-existent files WITHOUT error (the S53-committed chunk runner's session38-logo-petels typo silently skipped the logo-petals spec's 10 tests — every chunk it did run passed, so the tally summed green; the defense: verify every chunk's --list count against the expected sum); the COMMIT-ARTIFACT DRIFT corollary (the committed runner is not guaranteed the bytes that ran — re-verify on first reuse); and the S53 GATE-COUNT CORRECTION (the inherited 837 badge was a +4 arithmetic slip — 252+125+456 = 833; every badge bump must be re-derived from the layer counts, never incremented) | Caught at reuse (the S54 tally reconciliation: 301 recorded vs 311 expected through chunk 11; the 461 full-suite --list exposing the 10-test hole) | scripts/run-e2e-chunks-s54.sh (the fixed list); AGENTS gotcha 64(a)(b)(c); SKILL lesson 93 | **Instrument law — encoded** (Session 54) |
 
 
 
@@ -3784,7 +3867,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 20 files | 252 | `src/lib/*.test.ts` + `src/app/api/workflows/generate/route.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
-| Browser E2E | 62 specs | 456 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Browser E2E | 63 specs | 461 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 125 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins

@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.52.0 · **Last updated:** 2026-10-15 (Session 53 remediation)
+> **Version:** 2.53.0 · **Last updated:** 2026-10-15 (Session 54 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1984,6 +1984,48 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     chunks' pass counts (301 vs the true 311, twice now) —
     reconcile against `playwright test --list` per chunk before
     believing a short gate.
+
+
+93. **The interior-layer instrument + the alpha-grid law + the
+    silent-skip law + the gate-arithmetic audit (Session 54)**: the
+    TWENTY-NINTH SURFACE — the PDF RESOURCE-TARGET INTERIOR layer —
+    resolves the D184 name tables' TARGETS and censuses them at the
+    DICT level: the ExtGState interiors, the Pattern interiors
+    (tiling + shading), and the font /Widths subset-metrics. Three
+    laws in one session: (a) THE ALPHA-GRID LAW (the D134 oklab
+    family's SIXTH sighting, at the alpha layer) — the two print
+    pipelines serialize /ca /CA differently (raw CSS decimals
+    0.05/0.1/0.5 vs 8-bit-quantized 13/255/26/255/128/255) in BOTH
+    directions per route, but every measured pair converges on the
+    SAME Math.round(a*255) composite-grid point (12.75->13, 5.1->5,
+    127.5->128) — compare alphas at the grid, never the raw
+    serialization; a first census that reads DRIFT on every route
+    is a QUANTIZATION FAMILY until the diff proves otherwise. (b)
+    THE TYPELESS-OBJECT TRAP — /Type is OPTIONAL for ExtGState
+    (PDF 32000-1 Table 59) and Skia omits it on most entries (9 of
+    /login's 14), with most referenced from FORM XObjects' NESTED
+    /Resources rather than the page name table; a /Type-filtered
+    census silently reads 5 of 14 — detect by SHAPE (the Table-59
+    key universe + a characteristic key), at the OBJECT level. (c)
+    THE SILENT-SKIP LAW — `playwright test pathA pathB ...` drops a
+    non-existent path WITHOUT error (the committed chunk runner's
+    `petels` vs `petals` typo skipped a 10-test spec while every
+    chunk it did run passed green); verify every chunk's --list
+    count against the expected sum, and the full-suite --list total
+    against the gate's e2e figure, before trusting any chunked
+    tally — plus its corollary, THE COMMIT-ARTIFACT DRIFT (the
+    committed runner is not guaranteed the bytes that ran; re-
+    verify a committed script's file list on FIRST REUSE). And the
+    GATE-ARITHMETIC AUDIT: the S53 badge recorded 837 while its own
+    decomposition (252+125+456) sums to 833 — every badge bump
+    must be RE-DERIVED from the layer counts, never incremented
+    from the previous badge. THE EMPTY-CANDIDATE DISCIPLINE: probe
+    every candidate surface on the raw shape BEFORE building a
+    census — this session's worklog listed three 29th-surface
+    candidates; two measured EMPTY-SET/FLAT on both sides and
+    registered as LAWS (the color-space empty-set + the page-tree
+    flatness), one measured rich and became the surface. An
+    empty-set finding is a RESULT, not a failure.
 
 ## §13. Pitfalls to Avoid
 

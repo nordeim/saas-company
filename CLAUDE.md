@@ -321,6 +321,58 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   86: the print-pipeline exposure law + the record
   re-verification law + the print-text instrument.
 
+- **Session 54 (2026-10-15) remediation** — see
+  `docs/remediation-plan-session54.md`: a registration cycle (the
+  worklog S53 candidates — the surface selection probed on the raw
+  shape FIRST, the lesson-88 discipline; ZERO src/ changes).
+  **THE TWENTY-NINTH SURFACE (D187) — the PDF RESOURCE-TARGET
+  INTERIOR layer** (the D184 name tables' RESOLVED TARGETS censused
+  at the dict level through qpdf --json): the ExtGState interiors
+  (a sorted multiset at the ALPHA GRID — the D187 law: the two
+  pipelines serialize /ca /CA alphas differently in BOTH directions
+  per route, raw CSS decimals vs 8-bit-quantized N/255, but every
+  measured pair converges on the same Math.round(a*255) composite
+  grid point — the D134 oklab family's sixth sighting, at the alpha
+  layer; the object-level census the only complete one: 9 of
+  /login's 14 ExtGStates are TYPELESS — /Type optional per Table 59,
+  most referenced from FORM XObjects' nested /Resources), the
+  PATTERN interiors (tiling: PaintType/TilingType/XStep/YStep/BBox/
+  streamLen; shading: ShadingType/ColorSpace/Coords/Extend/Function
+  shape — /login's three card gradients byte-identical incl. the
+  gradient endpoint values), and the FONT subset-metrics (the Type3
+  /Widths advance arrays, lengths 49-254, byte-identical across
+  sides) — the stable seven at FULL INTERIOR PARITY on the first
+  honest fresh measurement, determinism verified 2x. **THE TWO LAWS
+  (D188)**: the COLOR-SPACE EMPTY-SET (zero ICC streams, zero named
+  /ColorSpace entries, zero /Default* overrides on every route, both
+  sides — all color flows through device-space operators + pattern
+  fills) and the PAGE-TREE FLATNESS (zero intermediate /Pages nodes,
+  zero inheritable attributes — proving the D184 per-page census
+  complete by construction). **THE 28TH SURFACE'S ROUTE EXTENSIONS
+  (D188)**: the alternates' per-state name tables (default /X35,
+  error /X36 — the banner's +1, reset /X18, signup /X22, forgot
+  /X22; /G3 + /P4 on every state) + the five states' interiors at
+  parity + the dashboard's authenticated interior fingerprint (gs
+  18, tiling 3 — the chart stripes + the table texture, shading 4 —
+  the brand-gradient family, fonts 9). The standing watch: zero
+  drift; the D160 mobile-nav record + the live login SPA-404 record
+  both re-verified for the TENTH consecutive session. The session54
+  pins 5/5 GREEN on the first run (the generated-constants
+  discipline; stable across three runs). Gate: **833 -> 838 = 252
+  unit + 125 smoke + 461 e2e** — WITH THE S53 GATE-COUNT CORRECTION
+  (the inherited 837 badge was an arithmetic slip: 252+125+456 =
+  833; the badge now re-derived from the layer counts) AND THE
+  SILENT-SKIP CATCH (the S53-committed chunk runner's
+  session38-logo-petels typo silently skipped the logo-petals spec's
+  10 tests — fixed in both runners, every chunk reconciled against
+  --list); the battery EXTENDED at 323/323 ZERO DRIFT (up from 243;
+  the INTERIOR + LAWS + ALTERNATES-INTERIOR/RESOURCE columns joining
+  the standing set); 21 screenshots (DB canonical, zero mutations);
+  VLM 8/8 on the first pass (zero adjudication). Gotcha 64 /
+  lesson 93: the silent-skip law + the gate-arithmetic audit + the
+  alpha-grid law + the typeless-object trap + the empty-candidate
+  discipline.
+
 - **Session 53 (2026-10-15) remediation** — see
   `docs/remediation-plan-session53.md`: a registration cycle (the
   worklog S52 candidates — ALL THREE delivered; ZERO src/ changes).

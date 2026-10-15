@@ -28,7 +28,35 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (456/456) — 837 checks across three layers (Session 53: the
+→ `npm run test:e2e` (461/461) — 838 checks across three layers (Session 54:
+the session54-interiorlayer-laws suite +5 e2e — the TWENTY-NINTH
+SURFACE pins [the D184 name tables' RESOLVED TARGETS censused at the
+dict level through qpdf --json: the ExtGState interiors as a sorted
+multiset at the ALPHA GRID — the D187 law, the two pipelines'
+/ca /CA serializations differ in BOTH directions per route but every
+pair converges on the same Math.round(a*255) composite-grid point —
+the object-level census the only complete one (9 of /login's 14
+ExtGStates are TYPELESS — /Type is optional, and most are referenced
+from FORM XObjects' nested /Resources), the PATTERN interiors (tiling:
+PaintType/TilingType/XStep/YStep/BBox/streamLen; shading:
+ShadingType/ColorSpace/Coords/Extend/Function shape), and the FONT
+subset-metrics (the Type3 /Widths advance arrays) — the stable seven
+at FULL INTERIOR PARITY on the first honest fresh measurement] + THE
+TWO LAWS [the COLOR-SPACE EMPTY-SET — zero ICC streams, zero named
+/ColorSpace entries, zero /Default* overrides on every route, both
+sides; the PAGE-TREE FLATNESS — zero intermediate /Pages nodes, zero
+inheritable attributes, proving the D184 per-page census complete by
+construction] + the ROUTE EXTENSIONS [the alternates' per-state name
+tables /X35//X36//X18//X22//X22 with /G3 + /P4 + the five states'
+interiors; the dashboard's authenticated interior fingerprint
+18/3/4/9] — AND THE S53 GATE-COUNT CORRECTION: the inherited 837
+badge was an arithmetic slip (252+125+456 = 833, not 837; the S51/S52
+totals 817/826 were pure sums — the S54 honest count 252+125+461 =
+838), plus the S54 chunk-runner fix: the S53-committed runner's
+`session38-logo-petels` typo SILENTLY SKIPPED the logo-petals spec —
+gotcha 64, the SILENT-SKIP law (playwright path filters drop
+non-existent files without error; verify every chunk's --list count
+against the expected sum before trusting a tally); Session 53: the
 session53-resourcelayer-alternates suite +7 e2e — the TWENTY-EIGHTH
 SURFACE pins [the per-page /Resources NAME TABLES through qpdf --json
 — the stable seven at BYTE-IDENTICAL name sets (the names encode the
@@ -1222,6 +1250,45 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    runner can under-record its early chunks' pass counts (301 vs the
    true 311 twice now) — reconcile against `playwright test --list`
    per chunk before believing a short gate.
+
+64. **The silent-skip law + the gate-arithmetic audit (Session 54).**
+   (a) THE SILENT SKIP: `playwright test pathA pathB ...` drops a
+   non-existent path WITHOUT any error — the S53-committed chunk
+   runner's `session38-logo-petels` typo (the file is
+   `session38-logo-petals.spec.ts`) silently skipped the logo-petals
+   spec's 10 tests from every chunked run; the tally still summed
+   "green" because every chunk it DID run passed. The defense: verify
+   every chunk's `--list` count against the expected per-chunk sum
+   (and the full-suite `--list` total against the gate's e2e figure)
+   before trusting a chunked tally — the S54 reconciliation caught the
+   10-test hole at chunk 10 (6 listed vs the S53-recorded 16).
+   (b) THE COMMIT-ARTIFACT DRIFT corollary: the committed runner is
+   not guaranteed to be the bytes that ran (the S53 session's own
+   456/456 record proves its in-flight list was correct — the typo
+   entered the committed artifact) — re-verify a committed script's
+   file list on FIRST REUSE, not never. (c) THE GATE-ARITHMETIC AUDIT:
+   the S53 badge recorded 837 while its own decomposition
+   (252+125+456) sums to 833 — a +4 slip (the S51/S52 totals 817/826
+   were both pure sums); every badge bump must be re-derived from the
+   layer counts, never incremented from the previous badge.
+   (d) THE ALPHA-GRID LAW (the D134 oklab family's sixth sighting, at
+   the ExtGState alpha layer): the two print pipelines serialize /ca
+   /CA differently (raw CSS decimals 0.05/0.1/0.5 vs 8-bit-quantized
+   13/255/26/255/128/255) in BOTH directions per route — compare at
+   `Math.round(a*255)` (the 8-bit composite grid), where every
+   measured pair converges (12.75->13, 5.1->5, 127.5->128).
+   (e) THE TYPELESS-OBJECT TRAP: `/Type` is OPTIONAL for ExtGState
+   (PDF 32000-1 Table 59) and Skia omits it on most entries — 9 of
+   /login's 14 ExtGStates carry NO /Type, and most are referenced from
+   FORM XObjects' nested /Resources (not the page name table); only
+   the OBJECT-LEVEL census (shape-based detection through the Table-59
+   key universe) is complete. (f) THE EMPTY-CANDIDATE DISCIPLINE: the
+   worklog's 29th-surface candidates were ALL probed on the raw shape
+   FIRST — the color-space layer measured EMPTY-SET on both sides
+   (zero ICC streams, zero named spaces) and the page-tree inheritance
+   layer measured FLAT (zero intermediate nodes) — both registered as
+   LAWS, not surfaces; the font /Widths layer measured rich and folded
+   into the interior surface. Probe before you build a census.
 
 ## Architecture invariants
 
