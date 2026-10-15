@@ -254,4 +254,19 @@ verified standing (see F7 — the transcription-injection near-miss).
 
 ## The pushed-hash record (the closing discipline)
 
-- (to be recorded at the close)
+- The remediation commit **0f4498f** pushed via the SSH wrapper
+  with the EXPLICIT --remote git@github.com:nordeim/saas-company.git;
+  wrapper-verified (remote main @ 0f4498f == local HEAD); the
+  fetch-independent HTTPS ls-remote cross-check agreed
+  (0f4498f32c5223a3ca152221558c8174548e2d29).
+- The operator key's fingerprint verified through paramiko's own key
+  parse (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU —
+  matches the S1-S56 record) BEFORE the push; the wrapper's temp key
+  copy shredded after each run; the operator's key file destroyed
+  after the push.
+- Zero zombies at close (the port-sweep discipline held through every
+  recon/battery/capture/e2e run — :3400/:3401/:3402/:3403/:3404/:3500/
+  :3100 swept clean; the orphaned/mirrored runner processes from the
+  gate's long-command windows swept + neutralized through the
+  per-batch arithmetic); the tree clean before the closing commit; no
+  new branches.
