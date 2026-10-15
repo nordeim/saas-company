@@ -241,10 +241,32 @@ e2e; the drift battery twenty-seven surfaces, 195 checks, zero drift —
       instrument + the serialization-shape law + the measurement-
       order laws), .env.example verified in sync (no config surface
       touched), this plan ticked, the session log 115, the worklog.
-- [ ] F6 the commit + the wrapper push (in progress at close —
-      the explicit `--remote` discipline; the fingerprint verified;
-      the key shredded after; the pushed hash recorded below)
+- [x] F6 the commit + the wrapper push — the remediation commit
+      `f4cce0c` (25 files: the session53 registration + the docs
+      alignment + the 15 refreshed screenshots + the worklog) pushed
+      via the SSH wrapper with the EXPLICIT --remote
+      git@github.com:nordeim/saas-company.git (the S31 trap held from
+      the dry-run: the fast-forward f74b8ee..f4cce0c against the
+      correct remote); wrapper-verified remote main @ f4cce0c ==
+      local HEAD; the fetch-independent HTTPS ls-remote agreed
+      (f4cce0c1e013029f6b1cb089ebc56b1f81c27004). The closing commit
+      (this pushed-hash record) pushed and verified the same way.
 
 ## The pushed-hash record (the closing discipline)
 
-- (to be recorded at close)
+- The remediation commit **f4cce0c** pushed and wrapper-verified
+  (remote main @ f4cce0c == local HEAD; the HTTPS ls-remote
+  cross-check agreed:
+  f4cce0c1e013029f6b1cb089ebc56b1f81c27004).
+- The operator key's fingerprint verified through paramiko's own
+  key parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU
+  — matches the S1-S52 record); the wrapper's temp key copy
+  shredded after use; the operator's key file destroyed after the
+  closing push.
+- The paramiko ssh shim re-deployed on the reset sandbox
+  (/home/z/bin/ssh, shebang /home/z/.venv/bin/python3 — the venv
+  python owning the paramiko 5.0.0 install; /home/z/bin on PATH for
+  the runs).
+- Zero zombies at close (the port-sweep discipline held through
+  every battery/capture run — :3400 + :3500 swept clean); the tree
+  clean before the closing commit; no new branches.
