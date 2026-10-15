@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (456 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (466 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (461/461) — 838 checks across three layers (Session 54:
+→ `npm run test:e2e` (466/466) — 843 checks across three layers (Session 55: the session55-functionlayer-laws suite +5 e2e — THE THIRTIETH SURFACE pins [the /Function layer — the gradient math at the function-dict granularity: the exponential Domain/C0/C1/N endpoint values + the stitching Bounds/Encode/sub-chains, stored INLINE inside the shading pattern dicts on /login — the inline-storage law, the lesson-88 family's SEVENTH sighting: an object-level probe measures EMPTY; the only complete census resolves through PatternType 2 -> /Shading -> /Function plus the standalone objects] + THE 29TH EXTENSION [the /SMask G-stream interiors — the luminosity-mask forms' own resource chains: BBox + the nested name tables + the 84-byte streams, 4/4 byte-identical on /login] + THE THREE LAWS [the /Metadata XMP empty-set + the /PieceInfo empty-set + the tiling nested-Resources flatness] + the alternates' five-state records + the dashboard's authenticated function fingerprint; Session 54:
 the session54-interiorlayer-laws suite +5 e2e — the TWENTY-NINTH
 SURFACE pins [the D184 name tables' RESOLVED TARGETS censused at the
 dict level through qpdf --json: the ExtGState interiors as a sorted
@@ -1289,6 +1289,29 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    layer measured FLAT (zero intermediate nodes) — both registered as
    LAWS, not surfaces; the font /Widths layer measured rich and folded
    into the interior surface. Probe before you build a census.
+
+65. **The inline-storage law + the array-key enumeration artifact
+   (Session 55).** (a) THE INLINE-STORAGE LAW (the lesson-88 family's
+   SEVENTH sighting): on /login the gradient FUNCTIONS live INSIDE the
+   shading pattern dicts (`PatternType 2 -> /Shading -> /Function` as
+   an inline dict, NOT a separate object) — an object-level
+   `/FunctionType` probe measures EMPTY on exactly the route that
+   carries three functions; the only complete census resolves through
+   the shading patterns AND walks the standalone objects (the landing
+   stores 5-7 BOTH ways — both shapes must be censused, or a route's
+   function layer silently reads empty). Probe the raw storage shape
+   before trusting any "empty" finding. (b) THE ARRAY-KEY
+   ENUMERATION ARTIFACT (the pin-shape family): iterating
+   `Object.entries()` over a qpdf JSON value that is actually an
+   ARRAY (the G-forms' `/ProcSet`) yields the array INDICES as keys
+   (`["0".."4"]`) — the census then pins an artifact that carries no
+   PDF meaning; guard with `Array.isArray()` first and keep the
+   sorted VALUES. Caught at pin-generation review, before any spec
+   was assembled. (c) THE SMask RECURSION TERMINUS: the luminosity
+   G-forms reference IMAGE XObjects (the alpha masks) — one level of
+   nesting, no deeper resource chains; a recursive census needs no
+   cycle guard but MUST record the terminus (imageRefs/formRefs) or
+   it measures nothing about the chain it claims to census.
 
 ## Architecture invariants
 

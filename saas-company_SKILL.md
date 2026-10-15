@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.53.0 · **Last updated:** 2026-10-15 (Session 54 remediation)
+> **Version:** 2.54.0 · **Last updated:** 2026-10-15 (Session 55 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -2026,6 +2026,40 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     registered as LAWS (the color-space empty-set + the page-tree
     flatness), one measured rich and became the surface. An
     empty-set finding is a RESULT, not a failure.
+
+94. **The function-layer instrument + the inline-storage law + the
+    array-key artifact + the recursion terminus (Session 55)**: the
+    THIRTIETH SURFACE — the PDF /Function layer, the gradient math
+    at the function-dict granularity (the exponential
+    Domain/C0/C1/N endpoint values + the stitching
+    Bounds/Encode/sub-chains). (a) THE INLINE-STORAGE LAW (the
+    lesson-88 family's SEVENTH sighting): on /login the gradient
+    functions live INSIDE the shading pattern dicts
+    (PatternType 2 -> /Shading -> /Function as an INLINE dict), so
+    an object-level /FunctionType probe measures EMPTY on exactly
+    the route that carries three functions — the complete census
+    resolves through the shading patterns AND walks the standalone
+    objects (the landing stores 5-7 BOTH ways; probe the raw
+    STORAGE SHAPE before trusting any "empty" finding — the
+    storage location is itself a per-route property, not a
+    constant). (b) THE ARRAY-KEY ENUMERATION ARTIFACT (the
+    pin-shape family): iterating Object.entries() over a qpdf JSON
+    value that is actually an ARRAY (the G-forms' /ProcSet) yields
+    the array INDICES as keys (["0".."4"]) — the census then pins a
+    meaningless artifact; guard with Array.isArray() FIRST and
+    keep the sorted VALUES. Catch it at pin-generation review,
+    before any spec is assembled. (c) THE SMASK RECURSION TERMINUS:
+    the luminosity G-forms reference IMAGE XObjects (the alpha
+    masks) — one level of nesting, no deeper chains; a recursive
+    census needs no cycle guard but MUST record the terminus
+    (imageRefs/formRefs) or it measures nothing about the chain it
+    claims to census. THE EMPTY-CANDIDATE DISCIPLINE held again:
+    of the five S55 candidates, the /Function and /SMask layers
+    measured rich (the surface + its extension), the tiling
+    nested-Resources measured thin (folded as a law column), and
+    the /Metadata XMP + /PieceInfo layers measured EMPTY-SET (both
+    registered as laws — the D170 pattern's third and fourth
+    members).
 
 ## §13. Pitfalls to Avoid
 

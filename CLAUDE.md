@@ -373,6 +373,59 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   alpha-grid law + the typeless-object trap + the empty-candidate
   discipline.
 
+- **Session 55 (2026-10-15) remediation** — see
+  `docs/remediation-plan-session55.md`: a registration cycle (the
+  worklog S54 candidates — ALL probed on the raw shape FIRST, the
+  lesson-88 discipline; ZERO src/ changes; the battery REBUILT after
+  the fresh-clone wipe — the S53 precedent). **THE THIRTIETH SURFACE
+  (D190) — the PDF /Function layer** (the gradient math at the
+  function-dict granularity): the exponential family (Domain/C0/C1/N
+  — the endpoint VALUES byte-identical) + the stitching family
+  (Domain/Bounds/Encode + the sub-function chains) — measured through
+  the INLINE-STORAGE LAW (the lesson-88 family's SEVENTH sighting:
+  on /login the functions live INSIDE the shading pattern dicts, an
+  object-level probe measures EMPTY; the complete census resolves
+  through PatternType 2 -> /Shading -> /Function plus the standalone
+  objects — the landing stores 5-7 both ways). The stable seven at
+  FULL FUNCTION PARITY on the first honest fresh measurement (/login
+  the only gradient-bearing route: 2 exponential + 1 stitching with
+  a 2-sub chain; the six content routes the EMPTY-SET law). **THE
+  29TH SURFACE'S ROUTE EXTENSION (D191) — the /SMask G-stream
+  interiors** (the luminosity-mask Form XObjects' OWN resource
+  chains): the host ExtGState's /S /TR + the G-form's BBox/Subtype +
+  the nested name tables (/G3 + the 5-member ProcSet + one image
+  XObject each) + the 84-byte streams — 4/4 BYTE-IDENTICAL on
+  /login (same object numbers), the recursion terminating at image
+  masks (the terminus law). **THE THREE LAWS (D192)**: the
+  /Metadata XMP EMPTY-SET (zero streams + zero catalog refs, every
+  route, both sides), the /PieceInfo EMPTY-SET, and the tiling
+  patterns' nested-Resources FLATNESS on the stable seven. The
+  alternates: default/error the full 3-function + 4-G-stream set,
+  reset 2+1, signup/forgot 2+2 — all five states identical across
+  sides. The dashboard's authenticated function fingerprint: 4
+  exponential functions of the brand-gradient family
+  ([0.5255,0.1412,1] -> [0,0.3333,1]) + 3 nested-tiling patterns.
+  The standing watch ELEVENTH consecutive re-verification (the
+  working eight at byte-identical word parity 739/24/101/335/390/
+  285/566/36, the sitemaps 8/7, the soft-404 16=16, the D160
+  mobile-nav record exact — the clone all-three-y open, the live
+  toaster-blocked y21/y28 + y35-only, NO Tailwind v4 bug; the live
+  login records holding). TDD: the session55 pins 5/5 GREEN on the
+  first run, stable across THREE runs (the generated-constants
+  discipline — one pin-shape catch in flight: the ProcSet
+  array-index enumeration artifact, fixed before assembly). Gate:
+  **838 -> 843 = 252 unit + 125 smoke + 466 e2e** (every chunk
+  reconciled at --list: 466 tests in 64 files). The battery REBUILT
+  at **135/135 GREEN ZERO DRIFT** across five phases (the standing
+  watch 18 + the poppler print layers 35 + the structural/resource
+  layers 21 + the interior layer 35 + the S55 columns 26 — the
+  battery now running THIRTY surfaces). 21 screenshots (DB
+  canonical, zero mutations); VLM 7/8 first-pass + 1 ADJUDICATED BY
+  EVIDENCE (the hero prompt's own enumeration error — the actual h1
+  "Automated Workflows, Powered by AI" identical across sides).
+  Gotcha 65 / lesson 94: the inline-storage law + the array-key
+  enumeration artifact + the SMask recursion terminus.
+
 - **Session 53 (2026-10-15) remediation** — see
   `docs/remediation-plan-session53.md`: a registration cycle (the
   worklog S52 candidates — ALL THREE delivered; ZERO src/ changes).

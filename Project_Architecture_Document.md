@@ -851,6 +851,81 @@
   registry-compounding lesson, remediation plan session33, session
   log 66.
 
+- `[NOTE]` **Session 55 remediation (2026-10-15)** — a registration
+  cycle (the worklog S54 candidates, the surface selection probed on
+  the raw shape FIRST per the lesson-88 discipline — the /SMask
+  G-stream candidate and the tiling nested-Resources candidate
+  measured rich on /login, the /Function candidate measured rich
+  INLINE, the /Metadata XMP and /PieceInfo candidates measured
+  EMPTY-SET; see `docs/remediation-plan-session55.md`): **THE
+  THIRTIETH SURFACE (D190) — the PDF /Function layer** (the
+  gradient math at the function-dict granularity, read through
+  `qpdf --json --json-stream-data=inline`): the EXPONENTIAL family
+  (Domain/C0/C1/N — the endpoint VALUES byte-identical: /login's
+  [0.9725,0.9804,0.9882] -> [0.9451,0.9608,0.9765] and
+  [0.9451,0.9608,0.9765] -> [0.8863,0.9098,0.9412]) + the STITCHING
+  family (Domain/Bounds [0.5]/Encode [0,1,0,1] + the sub-function
+  chains with their own N/C0/C1) — measured through THE
+  INLINE-STORAGE LAW (the lesson-88 family's SEVENTH sighting: on
+  /login the functions live INSIDE the shading pattern dicts
+  [PatternType 2 -> /Shading -> /Function as an inline dict], so an
+  object-level /FunctionType probe measures EMPTY on exactly the
+  route that carries three functions; the complete census resolves
+  through the shading patterns AND walks the standalone objects —
+  the landing stores 5-7 both ways). THE STABLE SEVEN AT FULL
+  FUNCTION PARITY on the first honest fresh measurement (/login the
+  only gradient-bearing route: 2 exponential + 1 stitching with a
+  2-sub chain; the six content routes the empty-set family at this
+  layer too), determinism verified 2x. **THE 29TH SURFACE'S ROUTE
+  EXTENSION (D191) — the /SMask G-STREAM INTERIORS** (the
+  luminosity-mask Form XObjects' OWN resource chains): the host
+  ExtGState's /S /Luminosity + /TR absent + the G-form's
+  BBox/Subtype /Form/Matrix absent + the nested name tables (/G3 +
+  the 5-member ProcSet + one IMAGE XObject each — the recursion
+  terminating at image masks, the terminus law) + the 84-byte
+  luminosity streams (the q/cm/black-RG/gs/Do/Q shape) — 4/4
+  BYTE-IDENTICAL on /login, the same object numbers 8->7, 17->16,
+  27->26, 30->29. **THE THREE LAWS (D192)**: the /Metadata XMP
+  EMPTY-SET (zero /Metadata streams + zero catalog /Metadata refs
+  on every route, both sides — neither print pipeline emits XMP),
+  the /PieceInfo EMPTY-SET (zero private application data), and the
+  TILING PATTERNS' NESTED-RESOURCES FLATNESS on the stable seven
+  (the content routes' tiling patterns carry zero nested
+  /Resources — self-contained; the landing's 6-7 the animated
+  bucket, the dashboard's 3 the chart stripes + the table texture).
+  The alternates: default/error the full 3-function + 4-G-stream
+  set, reset 2+1, signup/forgot 2+2 — all five states identical
+  across sides. The dashboard's authenticated function fingerprint:
+  4 exponential functions of the brand-gradient family
+  ([0.5255,0.1412,1] -> [0,0.3333,1]). The standing watch: the
+  ELEVENTH consecutive re-verification (the working eight at
+  byte-identical word parity 739/24/101/335/390/285/566/36; the
+  sitemaps 8/7; the soft-404 16=16; the D160 mobile-nav record
+  exact — the clone all-three-y open the 390x397 panel, the live
+  toaster-blocked y21/y28 + y35-only, NO Tailwind v4 bug; the live
+  login -> / at 739 + the /dashboard 16-word SPA-404). TDD: the
+  session55 pins 5/5 GREEN on the first run, stable across three
+  runs (the generated-constants discipline; one pin-shape catch in
+  flight — the ProcSet array-index enumeration artifact, caught at
+  generation review before assembly). Gate: **838 -> 843 = 252
+  unit + 125 smoke + 466 e2e** (every chunk reconciled at --list:
+  466 tests in 64 files). The battery REBUILT after the
+  fresh-clone wipe (the S53 precedent) at **135/135 GREEN ZERO
+  DRIFT** across five phases (the standing watch 18 + the poppler
+  print layers 35 + the structural/resource layers 21 + the
+  interior layer 35 + the S55 columns 26 — the battery now running
+  THIRTY surfaces). 21 screenshots refreshed (the capture server
+  on :3500 against db/capture55.db; the dev DB canonical before
+  AND after — 1/6/2, zero mutations); VLM 7/8 first-pass + 1
+  ADJUDICATED BY EVIDENCE (the hero prompt's own enumeration
+  error — the actual h1 "Automated Workflows, Powered by AI"
+  identical across sides). DOCUMENTED: PAD (this block, the ledger
+  D190-D192, the 7.1 counts 64 specs/466), AGENTS (the counts +
+  gotcha 65), CLAUDE (the session-55 context), README (the 843
+  badge + the 30th-surface story + the session55 suite row + the
+  counts), SKILL v2.54.0 (lesson 94), the remediation plan
+  session55, the session log 119, the worklog.
+
 - `[NOTE]` **Session 54 remediation (2026-10-15)** — a registration
   cycle (the worklog S53 candidates, the surface selection probed on
   the raw shape FIRST per the lesson-88 discipline — ALL THREE
@@ -3803,6 +3878,9 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D187 | THE PDF RESOURCE-TARGET INTERIOR LAYER (the twenty-ninth surface) + THE ALPHA-GRID LAW: the D184 name tables' RESOLVED TARGETS censused at the dict level — the ExtGState interiors (a sorted multiset at Math.round(a*255), the 8-bit composite grid where the two pipelines' divergent /ca /CA serializations [raw CSS decimals vs 8-bit-quantized N/255, in BOTH directions per route] converge — the D134 oklab family's sixth sighting, at the alpha layer), the PATTERN interiors (tiling: PaintType/TilingType/XStep/YStep/BBox/streamLen; shading: ShadingType/ColorSpace/Coords/Extend/Function shape — the gradient endpoint VALUES byte-identical), and the FONT subset-metrics (the Type3 /Widths advance arrays) — the stable seven at FULL INTERIOR PARITY on the first honest fresh measurement, determinism 2x. The TYPELESS-OBJECT trap: /Type is optional for ExtGState (Skia omits it on 9 of /login's 14) and most entries are referenced from FORM XObjects' nested /Resources — only the object-level census is complete | Measured (the session54 spec, 5/5 GREEN first run + the recon 101/101) | tests/e2e/session54-interiorlayer-laws.spec.ts; the drift battery's INTERIOR column; AGENTS gotcha 64(d)(e); SKILL lesson 93 | **Registered parity + instrument law** (Session 54) |
 | D188 | THE TWO PRINT LAWS + THE ALTERNATES' ROUTE EXTENSIONS: (a) the COLOR-SPACE EMPTY-SET — zero ICC streams, zero named /ColorSpace table entries, zero /Default* graphics-state overrides on every route, both sides (all color flows through device-space operators + pattern fills — the D170 empty-set pattern at the color layer); (b) the PAGE-TREE FLATNESS — zero intermediate /Pages nodes, zero inheritable attributes (/Resources, /MediaBox, /CropBox, /Rotate, /Group), proving the D184 per-page census complete by construction; (c) the alternates' per-state name tables (default /X35, error /X36, reset /X18, signup /X22, forgot /X22, with /G3 + /P4 on every state) + the five states' interiors at parity + the dashboard's authenticated interior fingerprint (gs 18, tiling 3, shading 4, fonts 9) | Measured (the same spec + the battery's LAWS columns) | tests/e2e/session54-interiorlayer-laws.spec.ts; AGENTS gotcha 64(f) | **Registered law + parity** (Session 54) |
 | D189 | THE SILENT-SKIP LAW + THE GATE-ARITHMETIC AUDIT: playwright path filters drop non-existent files WITHOUT error (the S53-committed chunk runner's session38-logo-petels typo silently skipped the logo-petals spec's 10 tests — every chunk it did run passed, so the tally summed green; the defense: verify every chunk's --list count against the expected sum); the COMMIT-ARTIFACT DRIFT corollary (the committed runner is not guaranteed the bytes that ran — re-verify on first reuse); and the S53 GATE-COUNT CORRECTION (the inherited 837 badge was a +4 arithmetic slip — 252+125+456 = 833; every badge bump must be re-derived from the layer counts, never incremented) | Caught at reuse (the S54 tally reconciliation: 301 recorded vs 311 expected through chunk 11; the 461 full-suite --list exposing the 10-test hole) | scripts/run-e2e-chunks-s54.sh (the fixed list); AGENTS gotcha 64(a)(b)(c); SKILL lesson 93 | **Instrument law — encoded** (Session 54) |
+| D190 | THE PDF /Function LAYER (the thirtieth surface) + THE INLINE-STORAGE LAW: the gradient math at the function-dict granularity — the exponential family (Domain/C0/C1/N endpoint values) + the stitching family (Domain/Bounds/Encode + the sub-function chains) — the stable seven at FULL FUNCTION PARITY on the first honest fresh measurement (/login the only gradient-bearing route: 2 exp + 1 stitch with a 2-sub chain; the six content routes empty at this layer); the INLINE-STORAGE law (the lesson-88 family's seventh sighting: the /login functions live INSIDE the shading dicts — an object-level probe measures EMPTY; the complete census resolves through PatternType 2 -> /Shading -> /Function plus the standalone objects, the landing storing 5-7 both ways) | Measured (the session55 spec, 5/5 GREEN first run + the recon) | tests/e2e/session55-functionlayer-laws.spec.ts; the drift battery's ph5 FN column; AGENTS gotcha 65(a) | **Registered parity + instrument law** (Session 55) |
+| D191 | THE /SMask G-STREAM INTERIORS (the 29th surface's route extension): the luminosity-mask Form XObjects' OWN resource chains — the host ExtGState's /S /TR + the G-form's BBox/Subtype/Matrix + the nested name tables (/G3 + the 5-member ProcSet + one image XObject each) + the 84-byte luminosity streams — 4/4 BYTE-IDENTICAL on /login (the same object numbers), the recursion terminating at image masks (the terminus law: record imageRefs/formRefs or the census measures nothing about the chain); the alternates' five-state records (default/error 4, reset 1, signup/forgot 2) | Measured (the same spec + the battery's ph5 GS column) | tests/e2e/session55-functionlayer-laws.spec.ts; AGENTS gotcha 65(c) | **Registered parity** (Session 55) |
+| D192 | THE THREE PRINT LAWS: (a) the /Metadata XMP EMPTY-SET — zero /Metadata streams + zero catalog /Metadata refs on every route, both sides (neither pipeline emits XMP); (b) the /PieceInfo EMPTY-SET — zero private application data; (c) the TILING PATTERNS' NESTED-RESOURCES FLATNESS on the stable seven (the content routes' tilings self-contained; the landing's 6-7 the animated bucket, the dashboard's 3 the chart stripes + the table texture); + the ProcSet ARRAY-KEY ENUMERATION artifact (Object.entries over an array yields indices — guard with Array.isArray, keep the sorted values) | Measured (the same spec + the battery's ph5 LAWS column) | tests/e2e/session55-functionlayer-laws.spec.ts; AGENTS gotcha 65(b)(c) | **Registered law** (Session 55) |
 
 
 
@@ -3867,7 +3945,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 20 files | 252 | `src/lib/*.test.ts` + `src/app/api/workflows/generate/route.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
-| Browser E2E | 63 specs | 461 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Browser E2E | 64 specs | 466 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 125 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins
