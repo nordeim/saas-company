@@ -185,10 +185,11 @@ the honest gate 838 = 252 unit + 125 smoke + 461 e2e
 
 ## The pushed-hash record (the closing discipline)
 
-- The remediation commit pushed via the SSH wrapper with the
-  EXPLICIT --remote git@github.com:nordeim/saas-company.git;
-  wrapper-verified (remote main == local HEAD); the fetch-independent
-  HTTPS ls-remote cross-check agreed.
+- The remediation commit **3eb288a** pushed via the SSH wrapper with
+  the EXPLICIT --remote git@github.com:nordeim/saas-company.git;
+  wrapper-verified (remote main @ 3eb288a == local HEAD); the
+  fetch-independent HTTPS ls-remote cross-check agreed
+  (3eb288af59baaa8625e0d56b09244be7fe72cf84).
 - The operator key's fingerprint verified through paramiko's own
   key parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU
   — matches the S1-S54 record); the wrapper's temp key copy shredded
