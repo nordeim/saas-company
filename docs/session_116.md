@@ -1,3 +1,55 @@
+I'll resume from where the previous session left off. Let me set up my task tracking and first verify the workspace state.
+Workspace was reset. Re-cloning the repository:
+The remote has advanced — Session 52 was completed and pushed (commits `6c36a7f`, `6ea972c`, `f74b8ee`). The user's message references `session_113.md`, `session_114.md` and `remediation-plan-session52.md`, so this session's work is **Session 53**. Let me read the current state documents:
+Session 52 is closed and pushed (gate 826, 27 surfaces). My work is **Session 53**. Let me read the worklog tail and remediation plan to get the S53 candidates and house patterns:
+Now let me refresh the house rules from AGENTS.md (gate commands, gotchas) and check the current gate structure:
+Let me read the remediation plan format, CLAUDE.md tail, and skills catalog, then start the environment setup:
+I now have the full picture. **Session 53** scope (from the worklog's S53 candidates, following the S52 "all three delivered" pattern): (1) the reference-regression watch (9th re-verification), (2) the 27th surface's route extensions (alternates' + dashboard's authenticated structural censuses at depth), (3) the 28th surface (PDF XObject resource layer / color-space layer / font subset-table layer). Let me start the environment setup:
+While npm install runs, let me read the CLAUDE.md session context and the skills catalog:
+Let me check npm install and audit the S52 diff (the recent changes):
+S52 diff conforms to the registration pattern (zero src/config changes). Now let me audit the new session52 spec:
+The spec audit is clean — conforms to house patterns (D183 shape law, anti-empty-catalog guard, interpolation-dependent pins bound to the spec's own input). Continuing environment setup:
+Canonical checksum `e7f6c011` first try. Verifying DB state and tool prerequisites:
+Environment ready: DB canonical (1/6/7,120/2/0), Chromium present, qpdf 12.2.0 + poppler. Now the **baseline gate** (826 checks, house order):
+Lint ✓ typecheck ✓ unit 252/252 ✓. Now the clean build + smoke:
+Build ✓ smoke 125/125 ✓. Now the e2e gate (449) in chunks — mapping specs first:
+449 e2e in 61 files ✓ (matches record). The `research/` folder was wiped by the fresh clone — will rebuild. Running e2e in chunks (house pattern). Writing the chunk runner first:
+Chunk failures — let me inspect the full output of chunk 3 to diagnose:
+The run seems interrupted. Let me see the full output head and the playwright config:
+Version mismatch — installed Playwright 1.63.0 expects browser build 1243, cache has 1200. Checking lockfile and installing the right browser:
+Browser build 1243 installed (Chromium 153.0.8010.12 — matches the record). Earlier chunk tallies were invalidated by the launch failure — resetting and re-running from chunk 1:
+301/449 through chunk 11. Continuing from chunk 12 (the PDF-heavy tail):
+439 vs the expected 449 — 10 short. Let me find where (list vs run comparison per chunk):
+Chunks 12-17 match exactly. The 9-test gap is in chunks 1-11. Let me check the runner for typos and re-run those chunks with skip visibility:
+My /tmp counter had the typo — the runner is correct; chunk 10 = 16 tests, so expected c1..c11 = 311 vs actual 301 → 10-test gap in the early chunks. Re-running them with per-chunk visibility:
+All chunks green — **BASELINE GATE: 826/826 ALL GREEN** (lint ✓ typecheck ✓ unit 252/252 ✓ build ✓ smoke 125/125 ✓ e2e 449/449 ✓ — matching the S52 record exactly). The earlier 301 tally was an undercount artifact from the timeout-killed first run; the re-run proves 311+138=449.
+Now the **S53 recon**. First, port sweep + server boot (house pattern — recon server against a scratch DB):
+Booting the recon server on :3400 against a scratch recon53.db (the smoke boot pattern):
+Server healthy. Now writing the S53 recon instrument (two-file pattern per the S52 lesson — instrument module + phased runner):
+Before writing the full runner — the lesson-88 discipline: dump the raw /Resources JSON shape first, then validate the resourceCensus traversal:
+Server was reaped (the known sandbox behavior). Re-booting:
+The sandbox reaps the server when the command ends. Trying `setsid` detachment:
+Even setsid is reaped — the sandbox kills all children per command. Restructuring: **each phase = one self-contained command** (boot server → measure → kill). Writing the wrapper + phased runners:
+PH1a clone: working eight at the standing record (739/24/101/36/335/390/566/285, sitemap 8). Now the live side:
+**PH1: ZERO DRIFT — the working eight at byte-identical parity, 9th consecutive session** (sitemaps live 7 / clone 8, the registered superset). Now PH2 — the alternates' structural censuses:
+**PH2: FULL PARITY on first measurement** — all five /login alternates at identical catalog keys + object counts (default 51, error 52, reset 34, signup 38, forgot 38 — both sides), and the dashboard's authenticated structural depth carries the same empty-set contract. Now PH3 — the 28th-surface shape probe (lesson-88 first):
+The shape probe is decisive: page refs are strings (`"2 0 R"`), `/Resources` is inline, and the name tables (`/G<n>`, `/F<n>`, `/X<n>`) key on the referenced object numbers — a richer fingerprint than counts alone. My instrument's traversal handles this shape. Writing the phase-B runner (28th-surface census + mobile-nav + live login):
+Stable seven MATCH at the summary level. Now the deeper check — the actual NAME SETS (not just counts), since names encode object numbers:
+Decisive: **the stable seven's resource name tables are BYTE-IDENTICAL** (same names = same object allocation, a direct echo of D181). The landing shows count-level parity with name-level drift — the animated-form family (523/530) at the name-allocation layer. Now PH4 (mobile-nav) + PH5 (live login):
+Live matches D160 exactly (y35-only, toaster-blocked y21/y28). But the clone probes returned null — needs debugging (the S52 instrument had the hydration-timing law). Writing a debug probe:
+Found both bugs: (1) my oklab regex expected `0.xxx` but the actual serialization is `oklab(0 0 0 / 0.95)`; (2) hydration needs a 1500ms dwell. The panel DOES open (390×397, 6 links — D160 holds). Fixing the detector:
+**PH4: D160 HOLDS EXACTLY — 9th consecutive session** (clone opens all three points, live toaster-blocked y21/y28, oklab/rgba rendering-identical — no Tailwind v4 bug). Now PH5:
+**PH5: records HOLD — 9th consecutive session** (post-login lands at `/` 739 words; `/dashboard` the 16-word SPA-404). The S53 recon is complete: **all three candidate groups delivered, NO build-worthy gap — a registration session**. Now the agent-browser visual/functional pass (the operator's standing request):
+Both survived. Running the functional pass — login → dashboard flow:
+agent-browser confirms the full flow: login → dashboard (5 active / 7,120 runs / 160h / 99.5% — the honest stats), the AI composer, workflow controls, and the mobile menu opens with all registered links (expanded=true). Checking console errors then wrapping the recon:
+Recon complete and clean. Extracting the pin constants for the remediation plan:
+All constants extracted. Now writing the Session-53 remediation plan:
+Plan written. Now validating it against the codebase (the pre-execution discipline) and generating the pin constants programmatically (the anti-transcription-error lesson from S52):
+Constants generated. Now writing the session53 spec (F1 — the registration pins):
+Running the session53 spec (the honest TDD verification — first run IS the verification for registration pins):
+**7/7 GREEN on the first run** — the generated-constants discipline paid off (no pin-transcription catches). Verifying stability ×2:
+**F1 已完成：7/7 通过（绿色），稳定 ×2。** 现在进行 F2 —— 电池重建（配对克隆 vs 线上，自包含的启动-工作-终止，遵循 D186 reaper 规则）：
+
 I'll continue from where the previous session left off. The log shows Session 53 recon was complete (registration session), F1 done (7/7 green stable ×2), and F2 (battery rebuild) was in progress when interrupted. Let me first verify the workspace state.
 Workspace persists. Let me check git status and the Session 53 work state.
 State confirmed: Session 53 in progress. F1 spec exists untracked, remediation plan written. F2 (battery rebuild) was interrupted. Let me check the worklog and current file states.
