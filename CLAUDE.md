@@ -23,6 +23,17 @@ the reference and generic best practice conflict, the reference wins; when
 parity and a functional superset conflict, document the deviation (see the
 PAD's deviations table) rather than silently picking a side.
 
+## Foundational Principles
+
+### Meticulous Approach (Six-Phase Workflow)
+
+1. **ANALYZE** — Read the relevant page/component/route and its tests in full before writing. Identify which contract (db-path, validation, auth session, UI parity) governs the change.
+2. **PLAN** — State the smallest correct path; name the files touched and the specs that must be updated alongside.
+3. **VALIDATE** — Confirm scope for anything touching auth, sessions, or the ticket vocabulary before coding.
+4. **IMPLEMENT** — Modular, typed, test-backed increments. Domain rules go in `src/lib/` seams; UI consumes them.
+5. **VERIFY** — Run the full gate; for visual changes, capture a screenshot and compare against `docs/screenshots/` and the reference captures.
+6. **DELIVER** — Report what was verified, what was not, and any deferred debt. Never claim "works" without executed evidence.
+
 ## The Stack (versions from package-lock.json)
 
 | Layer | Technology | Notes |
