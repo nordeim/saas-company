@@ -176,3 +176,29 @@ checks, zero drift — `docs/session_115.md`).
   the /Metadata XMP layer (the streams' XML payloads), or the
   /MarkInfo-adjacent /PieceInfo layer (the private application
   data — likely another empty-set).
+
+## The pushed-hash record (the closing discipline)
+
+- The remediation commit **ede4970** pushed and wrapper-verified
+  (remote main @ ede4970 == local HEAD; the fetch-independent HTTPS
+  ls-remote cross-check agreed:
+  ede49704b023dec7a30e9fffaa674df3cafad81e).
+- THE REMOTE-DIVERGENCE RECONCILIATION (in flight at push time): the
+  first dry-run was REJECTED — the remote had advanced past the S53
+  close with two operator-side commits (b8680f8 + 0e94381 "update
+  session log", pushing the operator's OWN raw session_116.md — the
+  S53-continuation transcript, confirming the commit-artifact-drift
+  analysis: its in-flight chunk runner was correct [chunk 10 = 16,
+  the full 449 baseline], the petals typo entered only the committed
+  artifact). Resolution: this session's transcript log renumbered
+  116 -> 117 (the operator's session_116.md kept verbatim), the
+  commit rebased onto the operator's tip, the fast-forward
+  0e94381..ede4970 accepted.
+- The operator key's fingerprint verified through paramiko's own key
+  parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU
+  — matches the S1-S53 record); the wrapper's temp key copy shredded
+  after each run; the operator's key file destroyed after the closing
+  push.
+- Zero zombies at close (the port-sweep discipline held through every
+  recon/battery/capture run — :3400 + :3500 swept clean); the tree
+  clean before the closing commit; no new branches.
