@@ -310,6 +310,40 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   86: the print-pipeline exposure law + the record
   re-verification law + the print-text instrument.
 
+- **Session 52 (2026-10-14) remediation** — see
+  `docs/remediation-plan-session52.md`: a registration cycle (the
+  worklog S51 candidates — ALL THREE delivered; ZERO src/ changes).
+  **THE TWENTY-SEVENTH SURFACE (D181) — the PDF STRUCTURAL layer**
+  (the document catalog's key sets, the tagged/outline empty-set,
+  /ViewerPreferences, the top-level outlines/acroform/encrypt/
+  pagelabels views, the per-route object counts) at FULL PARITY on
+  its first honest measurement — with the instrument lesson (D183):
+  the qpdf-12.2 JSON shape (the catalog found BY ITS /Type under
+  qpdf[1], plain objects in .value) after a guessed traversal read
+  empty-equals-empty false parity (the lesson-88 family's FIFTH
+  sighting, caught by the raw-output discipline). **THE ALTERNATES'
+  POST-BUILD CONVERGENCE (D182)**: the S51 badge build verified
+  holding (the 1609 raster, words 31, the 6-block census) and the
+  card form's 30-op text delta ROOT-CAUSED AT THE GLYPH LEVEL (the
+  same 16 glyphs — the clone's per-glyph 16 Tj + 15 Td vs the
+  live's one run; the interpolation-dependence law: the typed
+  email's length shifts the text count). The 404-route DOM datum
+  registered (16 words both sides). The standing watch: zero drift;
+  the D160 mobile-nav record + the live login SPA-404 record both
+  re-verified for the EIGHTH consecutive session. The session52
+  pins 9/9 GREEN (three pin-transcription catches in flight: the
+  email-length family, the /demo /Dests transcription, the
+  landing's 523/525 animated bucket). Gate: **817 -> 826 = 252
+  unit + 125 smoke + 449 e2e**; the battery 195/195 ZERO DRIFT
+  (the STRUCTURAL + ALTERNATES-CONVERGENCE columns added — up from
+  113; the scrolled-landing records registered: print 670,
+  anchors 105, images 29, all both-sides-equal); 21 screenshots
+  (DB canonical, zero mutations); VLM 8/8 (the two first-pass
+  flags adjudicated by evidence — both the prompts' own
+  enumeration errors, the elements proven present by the evidence
+  probes). Gotcha 62 / lesson 91: the qpdf-JSON shape law + the
+  glyph-level segmentation adjudication.
+
 - **Session 51 (2026-10-13) remediation** — see
   `docs/remediation-plan-session51.md`: a measurement + BUILD +
   registration cycle (the worklog S50 candidates — ALL THREE

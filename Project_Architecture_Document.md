@@ -851,6 +851,86 @@
   registry-compounding lesson, remediation plan session33, session
   log 66.
 
+- `[NOTE]` **Session 52 remediation (2026-10-14)** — a registration
+  cycle (the worklog S51 candidates — ALL THREE delivered in one
+  pass; see `docs/remediation-plan-session52.md`): **THE
+  TWENTY-SEVENTH SURFACE (D181) — the PDF STRUCTURAL LAYER** (the
+  document catalog's sorted key set, the tagged/outline markers,
+  /ViewerPreferences, the top-level outlines/acroform/encrypt/
+  pagelabels views, and the total object count per route — read
+  through `qpdf --json` with the catalog located BY ITS
+  `/Type /Catalog`) at FULL PARITY ON ITS FIRST HONEST
+  MEASUREMENT: the key sets identical on every route (the
+  anchor-bearing `{/Dests,/Pages,/Type,/ViewerPreferences}` family
+  tracking the D169 named-destination record; the anchor-free
+  `{/Pages,/Type,/ViewerPreferences}` on /login, /thank-you and the
+  dashboard; the CLONE's /demo carrying /Dests — its 14 links —
+  where the live's 73-object SPA shell carries none: the superset
+  at the catalog-key layer too); BOTH sides' print pipelines emit
+  UNTAGGED, OUTLINE-FREE PDFs on every route (/MarkInfo,
+  /StructTreeRoot, /Outlines, /Lang all absent — the D170
+  empty-set pattern at the structural layer);
+  /ViewerPreferences `{/DisplayDocTitle: true}` identical; the
+  object counts deterministic across renders and near-identical
+  across sides (/login 51/51, /faq 241/241, /privacy 234/234,
+  /terms 242/242, /refund-policy 239/239, /accessibility 315/315,
+  /thank-you 101/101, the dashboard 292; the LANDING's 523/525 +
+  the live's 530 the animated-form bucket — the S38 range law at
+  the object-allocation layer; the /demo superset 260 vs 73).
+  **THE 26TH SURFACE'S ROUTE EXTENSIONS (D182) — the /login
+  alternates' POST-BUILD VECTOR CENSUSES**: the S51 badge build's
+  convergence VERIFIED at the operator layer (the reset state's
+  1609 state-tracked raster, words 31, the page families and the
+  color-VALUE sets identical) and the card form's 30-op
+  text-family delta ROOT-CAUSED AT THE GLYPH LEVEL — both sides
+  carry EXACTLY 6 BT blocks with blocks 1-5 byte-identical in op
+  counts AND glyph strings; the single delta is block 0: the SAME
+  16 glyphs in the same order ("Check your email") where the
+  clone emits 16 single-glyph Tj + 15 Td repositions and the live
+  emits ONE combined Tj (15 + 15 = exactly the 30-op delta — the
+  registered D177 family at glyph granularity; registration,
+  never a build) — with the INTERPOLATION-DEPENDENCE law (the
+  reset view paints the typed email: a 21-char input reads 76/136
+  text ops, an 18-char one 74/134 — every pin binds its own
+  input). The error state's 134-vs-139 record unchanged. **THE
+  404-ROUTE DOM DATUM registered**: a nonexistent route renders
+  16 DOM words on BOTH sides (the interpolated "could not be
+  found" copy + the Go Home button — the DOM layer behind the
+  D168 print record). **THE INSTRUMENT LAW (D183)**: the
+  qpdf-12.2 JSON shape (the objects under `qpdf[1]["obj:N 0 R"]`,
+  plain objects wrapped in `.value`, streams in
+  `.stream.{data,dict}`; NO `qpdf[0].trailer`) — a guessed
+  traversal silently reads empty-equals-empty false parity (the
+  lesson-88 family's FIFTH sighting, caught by the raw-output
+  discipline before any census was trusted). The standing watch:
+  ZERO DRIFT (the working eight at 739/24/101/36/335/390/566/285
+  — the eighth consecutive session); the D160 mobile-nav record
+  (the clone y21/y28/y35 all open, 390x397, 6 links; the live
+  toaster-blocked y21/y28, y35-only) and the live login ->
+  /dashboard SPA-404 record (the post-login landing at 739 words;
+  /dashboard the 16-word shell) BOTH re-verified for the EIGHTH
+  consecutive session. TDD: the session52 pins 9/9 GREEN (three
+  pin-transcription catches in flight: the email-length family,
+  the /demo /Dests transcription, the landing's 523/525 animated
+  bucket — each root-caused before re-pinning). Gate: **817 ->
+  826 = 252 unit + 125 smoke + 449 e2e**. The battery
+  (drift-battery-s52.mjs — the STRUCTURAL + ALTERNATES-
+  CONVERGENCE columns) 195/195 GREEN ZERO DRIFT across five
+  phases (up from 113; the scrolled-landing records registered —
+  the print text 670, the anchors 105, the images 29, all
+  both-sides-equal); 21 screenshots refreshed (DB canonical
+  before AND after — 1/6/7,120/2/0, zero mutations); VLM 8/8
+  (the two first-pass flags ADJUDICATED BY EVIDENCE — both the
+  prompts' own enumeration errors: the reset card's text-style
+  back button + the mobile menu's Log In button row, both proven
+  present by the evidence probes). DOCUMENTED: PAD (this block,
+  the ledger D181-D183, the 7.1 counts), AGENTS (the counts +
+  gotcha 62), CLAUDE (the session-52 context), README (the 826
+  badge + the 27th-surface story + the session52 suite row), SKILL
+  v2.51.0 (lesson 91), .env.example verified in sync (no config
+  surface touched), the remediation plan session52 (ticked), the
+  session log 113, the worklog.
+
 - `[NOTE]` **Session 51 remediation (2026-10-13)** — a measurement +
   build + registration cycle (the worklog S50 candidates — ALL THREE
   delivered in one pass; see `docs/remediation-plan-session51.md`):
@@ -3550,6 +3630,10 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D178 | THE /LOGIN ALTERNATES' ERROR + RESET-SUCCESS PRINT STORY + THE MAIL-BADGE BUILD: the ERROR state at full parity on its first measurement (fonts DejaVu 2+1, metadata, links empty, words 30, the image census 6/6 byte-identical — the 2927 state-tracked raster); the RESET-SUCCESS state carried THE REAL GAP — the live's mail-icon badge (div.mx-auto w-14 h-14 sm:w-16 sm:h-16 bg-slate-100 rounded-full flex items-center justify-center + the lucide Mail h-7 w-7 sm:h-8 sm:w-8 text-slate-700) was MISSING, the card 318 vs 398 (the raster 1359 vs 1609) — BUILT (the first clone-gap build since S47), the print story converging exactly (words 31, fonts, links, the 1609 raster). THE STATE-TRACKED RASTER RECORD EXTENDED: 2696 default / 2927 error / 1833 sign-up / 1533 forgot / 1609 reset | Measured paired (recon-s51 PH2) then built (RED -> GREEN) | `tests/e2e/session51-vectorlayer-reset-badge.spec.ts` (the badge + alternates pins), `src/app/login/login-card.tsx` | **Gap closed — parity converged** (Session 51) |
 | D179 | THE DM SERIF ITALIC-CUT FIX + THE DASHBOARD'S AUTHENTICATED PRINT STORY: the live's css2 URL for DM Serif Display ships NO ital axis — its italic Thrune wordmark renders the browser's SYNTHESIZED OBLIQUE over the regular file (the PDF embeds DMSerifDisplay-Regular); the clone had loaded the true italic variant (embedding DMSerifDisplay-Italic — different glyph shapes) — FIXED to the regular cut only, the print font census converged; AND the clone's authenticated dashboard print contract registered (the live's /dashboard is the SPA 404): 292 words, 2 pages, VendSans-Light 9x (the dark-route webfont family), the EMPTY image set (the all-vector dashboard), the EMPTY link set, 34 forms | Measured paired (the battery's landing font census + PH5) | `src/app/layout.tsx` (the font fix), the re-versioned session48 pin + the session51 dashboard pin, the battery's PH4/PH5 | **Fix converged + superset registered** (Session 51) |
 | D180 | THE BINARY-STREAM PARSER LAW + THE QPDF-JSON INSTRUMENT: a PDF's binary streams can carry the literal "N 0 obj" byte sequence — a text-regex object-boundary parse over a qdf file finds FALSE starts inside the binary, silently truncating every preceding object's region (the prototype's form censuses read 10-154 byte fragments — the lesson-88 family's FOURTH sighting, caught by the raw-output discipline). The robust instrument: qpdf --json --json-stream-data=inline (length-bounded base64 streams, no text heuristics). Its measured siblings: the 1/32 COLOR-VALUE quantization (the 1/64 straddles a rounding boundary — .9608 -> 61 vs .961 -> 62 at 0.05/255 apart) and the ENTRANCE-FRAME raster bucket (the live's page-2 mockup card measured 1481x832 AND 1494x838 with the ppi varying 180/191 — the S38 range law at the mockup's scale) | Caught in flight (the prototype's own raw-output verification) | The spec's vectorCensus instrument; AGENTS gotcha 61; SKILL lesson 90 | **Instrument law — encoded** (Session 51) |
+| D181 | THE PDF STRUCTURAL LAYER (the twenty-seventh surface): the document catalog's sorted key set, the tagged/outline markers (/MarkInfo, /StructTreeRoot, /Outlines, /Lang), /ViewerPreferences, the top-level outlines/acroform/encrypt/pagelabels views, and the total object count per route — through qpdf --json with the catalog located BY ITS /Type /Catalog. AT FULL PARITY on its first honest measurement: the key sets identical per route (the anchor-bearing family tracking D169; the clone's /demo carries /Dests where the live's 73-object shell carries none — the superset at the catalog-key layer); both sides emit UNTAGGED, OUTLINE-FREE PDFs (the empty-set contract); the object counts deterministic and near-identical (login 51/51, faq 241/241, privacy 234/234, terms 242/242, refund 239/239, accessibility 315/315, thank-you 101/101, dashboard 292; the landing's animated bucket 523/525-vs-530; /demo 260-vs-73) | Measured paired (recon-s52 PH4 + the stability probes — the counts verified deterministic 2x per route) | `tests/e2e/session52-structurallayer-convergence.spec.ts` (the structural pins), the battery's PH4 | **Full parity — registered + pinned** (Session 52) |
+| D182 | THE /login ALTERNATES' POST-BUILD CONVERGENCE at the operator layer + the glyph-level segmentation proof: the S51 badge build verified holding (the reset state's 1609 raster, words 31, the 6-block card census with blocks 1-5 byte-identical in ops AND glyph strings); the card form's 30-op text delta root-caused to the SAME 16 glyphs of "Check your email" split per-glyph (the clone: 16 single-glyph Tj + 15 Td) vs one combined run (the live: 1 Tj + 0 Td) — 15+15 = exactly 30; the INTERPOLATION-DEPENDENCE law (the typed email's length shifts the text count: 21 chars reads 76/136, 18 chars reads 74/134); the error state's 134-vs-139 record unchanged | Root-caused at the glyph level (the BT..ET block + glyph-string extraction through qpdf --json) | `tests/e2e/session52-structurallayer-convergence.spec.ts` (the convergence pins), the battery's PH5 | **Registered (no build — the D125/D177 library-structure law)** (Session 52) |
+| D183 | THE QPDF-12.2 JSON-SHAPE LAW + THE LESSON-88 FIFTH SIGHTING: the objects live under qpdf[1]["obj:N 0 R"] (plain objects wrapped in .value, streams in .stream.{data,dict} — there is NO qpdf[0].trailer in 12.2) and the catalog is located BY ITS /Type /Catalog — never by a guessed traversal, which silently returns empty-equals-empty false parity (caught by the raw-output discipline before any census was trusted). Siblings measured the same session: the landing's object count carries the animated-form bucket (523 AND 525 across renders — the S38 range law at the object-allocation layer) and the print pipeline's text counts on interpolated content are INPUT-LENGTH-DEPENDENT (pin the spec's own input) | Caught in flight (the structuralCensus prototype's own raw-output verification) | The spec's structuralCensus instrument; AGENTS gotcha 62; SKILL lesson 91 | **Instrument law — encoded** (Session 52) |
+
 
 
 
@@ -3613,7 +3697,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 20 files | 252 | `src/lib/*.test.ts` + `src/app/api/workflows/generate/route.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
-| Browser E2E | 60 specs | 440 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Browser E2E | 61 specs | 449 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 125 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins

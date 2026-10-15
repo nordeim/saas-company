@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.50.0 · **Last updated:** 2026-10-13 (Session 51 remediation)
+> **Version:** 2.51.0 · **Last updated:** 2026-10-14 (Session 52 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1907,6 +1907,44 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     word counts could not see (the missing 80px badge with the
     words identical at 31 = 31) — a print-layer size delta with
     matching text is a GEOMETRY gap until proven otherwise.
+91. **The structural-layer instrument + the glyph-level segmentation
+    adjudication + the JSON-shape law (Session 52)**: the
+    TWENTY-SEVENTH SURFACE — the PDF's document CATALOG layer —
+    is read through the same `qpdf --json` call, but at the
+    structural granularity: the catalog located BY ITS
+    `/Type /Catalog`, its sorted key set, the tagged/outline
+    markers (/MarkInfo, /StructTreeRoot, /Outlines, /Lang — ALL
+    ABSENT on both sides: Chromium's print pipeline emits neither
+    structure trees nor bookmarks), /ViewerPreferences, the
+    top-level outlines/acroform/encrypt/pagelabels views, and the
+    per-route total object count (deterministic across renders on
+    the stable routes; the LANDING carries the animated-form
+    bucket — 523 AND 525 — the S38 range law at the
+    object-allocation layer). THE JSON-SHAPE LAW (the lesson-88
+    family's FIFTH sighting): a guessed traversal
+    (`qpdf[0].trailer./Root` — a v11 shape) matches NOTHING in
+    qpdf 12.2 and every route reads empty-equals-empty FALSE
+    PARITY — dump the raw JSON shape first and show the traversal
+    a non-empty input before trusting its census; in 12.2 the
+    objects live under `qpdf[1]["obj:N 0 R"]` (plain objects in
+    `.value`, streams in `.stream.{data,dict}`). THE GLYPH-LEVEL
+    SEGMENTATION ADJUDICATION: a text-family op delta is proven
+    the registered library-structure family by extracting every
+    BT..ET block's shown-glyph strings — the SAME glyphs in the
+    same order split differently (the reset card's "Check your
+    email": the clone's 16 single-glyph Tj + 15 Td vs the live's
+    one combined Tj = exactly the 30-op delta). THE
+    INTERPOLATION-DEPENDENCE LAW: the print pipeline PAINTS the
+    typed email, so the text-op counts shift with the input's
+    LENGTH (21 chars reads 76/136, 18 chars reads 74/134) — every
+    pin binds its spec's own input, and the paired comparisons
+    feed both sides the same string. And the SCROLLED-RECORD
+    LESSON: the landing's print story is a PER-STATE contract at
+    every layer (the no-scroll 87 anchors / 13 images / 251
+    words vs the scroll-through 105 / 29 / 670 — all
+    both-sides-equal; the scroll cadence must DWELL ~400ms per
+    step or the observers never fire and both sides read the
+    unrevealed state).
 
 ## §13. Pitfalls to Avoid
 

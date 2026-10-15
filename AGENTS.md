@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (440 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (449 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,15 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (440/440) — 817 checks across three layers (Session 51: the
+→ `npm run test:e2e` (449/449) — 826 checks across three layers (Session 52: the
+session52-structurallayer-convergence suite +9 e2e — the TWENTY-SEVENTH
+SURFACE pins [the PDF's document CATALOG layer through qpdf --json —
+the per-route key sets, the tagged/outline empty-set, /ViewerPreferences,
+the top-level views, the deterministic object counts with the landing's
+animated bucket + the /demo superset floor] + the ALTERNATES'
+POST-BUILD CONVERGENCE pins [the reset card's 6-block glyph-run census
+with the per-glyph block-0 decomposition + the error card's census] +
+the 404-route DOM datum; Session 51: the
 session51-vectorlayer-reset-badge suite +11 e2e — the TWENTY-SIXTH
 SURFACE pins [the PDF's content-stream operator census through
 `qpdf --json --json-stream-data=inline` — the form XObjects' BBox +
@@ -1161,6 +1169,26 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
     varying with it — 180 vs 191) — the S38 range law at the raster
     layer, bucketed like the animated-glow ±1px but at the mockup's
     scale range.
+
+
+62. **The qpdf-12.2 JSON-shape law + the empty-catalog trap (Session
+   52).** Reading the structural layer through `qpdf --json`: the
+   objects live under `qpdf[1]["obj:N 0 R"]` (plain objects wrapped in
+   `.value`, streams in `.stream.{data,dict}` — there is NO
+   `qpdf[0].trailer` in 12.2), and the catalog is located BY ITS
+   `/Type /Catalog` — never by a guessed traversal. A guessed traversal
+   silently returns empty-equals-empty and every route "matches" (the
+   lesson-88 family's FIFTH sighting, caught by the raw-output
+   discipline before any census was trusted: dump the JSON shape and
+   show the traversal a non-empty input first). Two sibling
+   measurements the same session: the per-route OBJECT COUNTS are
+   deterministic across renders but the LANDING's carries the
+   animated-form bucket (523 AND 525 across runs — the S38 range law
+   at the object-allocation layer), and the print-PIPELINE's text
+   counts on interpolated content are INPUT-LENGTH-DEPENDENT (the
+   reset view paints the typed email: a 21-char measurement reads
+   76/136 text ops, an 18-char one reads 74/134 — pin the spec's own
+   input).
 
 ## Architecture invariants
 
