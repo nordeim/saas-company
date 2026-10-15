@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (449 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (456 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,18 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (449/449) — 826 checks across three layers (Session 52: the
+→ `npm run test:e2e` (456/456) — 837 checks across three layers (Session 53: the
+session53-resourcelayer-alternates suite +7 e2e — the TWENTY-EIGHTH
+SURFACE pins [the per-page /Resources NAME TABLES through qpdf --json
+— the stable seven at BYTE-IDENTICAL name sets (the names encode the
+referenced object numbers — the D181 object-count parity proven at the
+NAME-ALLOCATION layer), the landing's count-parity with the animated
+name bucket, the /demo resource superset floor, the dashboard's
+authenticated fingerprint 30/7/10/6, the determinism re-render law] +
+the ALTERNATES' STRUCTURAL pins [the five /login states' per-state
+object-allocation fingerprint 51/52/34/38/38 identical across sides +
+the dashboard's authenticated structural depth at 292 objects];
+Session 52: the
 session52-structurallayer-convergence suite +9 e2e — the TWENTY-SEVENTH
 SURFACE pins [the PDF's document CATALOG layer through qpdf --json —
 the per-route key sets, the tagged/outline empty-set, /ViewerPreferences,
@@ -1189,6 +1200,28 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    reset view paints the typed email: a 21-char measurement reads
    76/136 text ops, an 18-char one reads 74/134 — pin the spec's own
    input).
+
+63. **The sandbox reaper law + the measurement-order laws (Session
+   53).** (a) THE REAPER: this sandbox kills EVERY server child when a
+   command ends — even `setsid nohup` detachments die — so every
+   recon/battery/capture phase is a SELF-CONTAINED boot-work-kill unit
+   (one server life per measurement batch; the wrapper boots, waits
+   for health, runs ONE phase, kills). (b) THE CONTEXT-ORDER LAW: an
+   AUTHENTICATED browser context redirects /login to /dashboard — a
+   dashboard measurement taken mid-sequence poisons every public
+   /login measurement after it (the S53 battery's alternates read the
+   dashboard's 292 objects where /login's 51 belonged); public states
+   run on the clean context FIRST, authenticated measurements in
+   their OWN context LAST. (c) THE SSR-BYPASS LAW: a full-page `goto`
+   takes the server-render path — browser route interception never
+   sees the request; the error-boundary capture must go through a
+   client-side refresh (the pause click), the spec's own pattern.
+   (d) THE POST-LOGIN SETTLE: measuring the live SPA's landing words
+   mid-navigation reads 0 — wait for the non-empty body before any
+   census. (e) THE TALLY-EXTRACTION ARTIFACT: a timeout-killed chunk
+   runner can under-record its early chunks' pass counts (301 vs the
+   true 311 twice now) — reconcile against `playwright test --list`
+   per chunk before believing a short gate.
 
 ## Architecture invariants
 

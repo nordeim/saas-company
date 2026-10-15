@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.51.0 · **Last updated:** 2026-10-14 (Session 52 remediation)
+> **Version:** 2.52.0 · **Last updated:** 2026-10-15 (Session 53 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -1945,6 +1945,45 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     both-sides-equal; the scroll cadence must DWELL ~400ms per
     step or the observers never fire and both sides read the
     unrevealed state).
+
+92. **The resource-layer instrument + the serialization-shape law +
+    the measurement-order laws (Session 53)**: the TWENTY-EIGHTH
+    SURFACE — the PDF's per-page RESOURCE name-table layer —
+    reads the same `qpdf --json --json-stream-data=inline` at the
+    RESOURCE granularity: resolve the page tree from the
+    catalog's /Pages through the STRING-FORM refs ("N 0 R" —
+    dump the raw shape first; the lesson-88 discipline at the
+    SIXTH instrument), then census every /Type /Page's
+    /Resources name tables per category (/XObject, /Font,
+    /ExtGState, /ColorSpace, /Pattern, /Shading, /Properties).
+    The names encode the referenced OBJECT NUMBERS, so
+    byte-identical name tables prove the object-count parity at
+    the NAME-ALLOCATION layer — a stronger fingerprint than
+    counts alone. THE SERIALIZATION-SHAPE LAW (the lesson-88
+    family at the CSS layer): Tailwind v4's computed `bg-black/95`
+    serializes `oklab(0 0 0 / 0.95)` — INTEGER zero components,
+    not the guessed `0.xxx` shape; a detector regex written from
+    the assumed shape matches NOTHING while the panel renders
+    fine — dump the raw computed value before writing the
+    detector. THE MEASUREMENT-ORDER LAWS: (a) THE CONTEXT-ORDER
+    LAW — an AUTHENTICATED browser context redirects /login to
+    /dashboard, so a dashboard measurement taken mid-sequence
+    poisons every public /login measurement after it (public
+    states on the clean context FIRST, authenticated measurements
+    in their OWN context LAST); (b) THE SSR-BYPASS LAW — a
+    full-page `goto` takes the server-render path, so browser
+    route interception never sees the request (the error-boundary
+    capture must go through a client-side refresh — the pause
+    click); (c) THE POST-LOGIN SETTLE — measuring the live SPA's
+    landing words mid-navigation reads 0 (wait for the non-empty
+    body before any census); (d) THE REAPER LAW — this sandbox
+    kills every server child at command end, even setsid
+    detachments, so every measurement phase is a self-contained
+    boot-work-kill unit; and (e) THE TALLY-EXTRACTION ARTIFACT —
+    a timeout-killed chunk runner can under-record its early
+    chunks' pass counts (301 vs the true 311, twice now) —
+    reconcile against `playwright test --list` per chunk before
+    believing a short gate.
 
 ## §13. Pitfalls to Avoid
 

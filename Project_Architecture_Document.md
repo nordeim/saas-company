@@ -851,6 +851,93 @@
   registry-compounding lesson, remediation plan session33, session
   log 66.
 
+- `[NOTE]` **Session 53 remediation (2026-10-15)** — a registration
+  cycle (the worklog S52 candidates — ALL THREE delivered in one
+  pass; see `docs/remediation-plan-session53.md`): **THE
+  TWENTY-EIGHTH SURFACE (D184) — the PDF's per-page RESOURCE
+  NAME-TABLE LAYER** (every /Type /Page's /XObject /Font
+  /ExtGState /Pattern name sets per page, the page tree resolved
+  from the catalog's /Pages through the string-form refs, read
+  through `qpdf --json --json-stream-data=inline` at the RESOURCE
+  granularity) — THE STABLE SEVEN AT BYTE-IDENTICAL NAME TABLES
+  on the first honest measurement: the names encode the referenced
+  OBJECT NUMBERS (/X12 -> obj 12), so the byte-identical name
+  tables are the D181 object-count parity now proven at the
+  NAME-ALLOCATION layer — the two print pipelines allocate the
+  SAME object numbers to the SAME resources; the landing at
+  COUNT-level parity with the NAME-level animated family registered
+  (the union counts + per-page multisets identical — XObject
+  34/34, Font 7/7, ExtGState 11/11 — the names drifting inside the
+  registered D181 523/530 bucket, the Pattern union clone 5 vs
+  live 7 bucketed 5-8); /demo the REGISTERED SUPERSET at the
+  resource layer (the clone's 2 working pages: 12 XObjects, 7
+  Fonts, 9 GStates vs the live's 1-page 16-word shell: ZERO
+  XObjects); the DASHBOARD'S AUTHENTICATED RESOURCE FINGERPRINT
+  registered (2 pages carrying XObjects 13/17 [union 30], Fonts
+  5/7 [union 7], GStates 6/9 [union 10], Patterns 6 — the charts'
+  pattern fills surfacing at the resource layer); determinism
+  verified 2x. **THE 27TH SURFACE'S ROUTE EXTENSIONS (D185)**: the
+  five /login alternates' STRUCTURAL censuses at FULL PARITY (the
+  per-state object-allocation fingerprint — default 51, error 52
+  [the banner's +1], reset 34 [the success card's smaller tree],
+  signup 38, forgot 38 — identical across sides, all
+  untagged/outline-free/Lang-free) + the dashboard's authenticated
+  structural census AT DEPTH (292 objects, the SAME
+  /ViewerPreferences, the top-level views identical to the public
+  routes — the authenticated layer carrying the public contract
+  unchanged). **THE INSTRUMENT LAWS (D186)**: (a) the REAPER law —
+  the sandbox kills every server child at command end (even setsid
+  detachments), every phase a self-contained boot-work-kill unit;
+  (b) the OKLAB-SERIALIZATION SHAPE law — Tailwind v4's computed
+  `bg-black/95` serializes `oklab(0 0 0 / 0.95)` (INTEGER zero
+  components, not the guessed `0.xxx` shape — a detector regex
+  written from the assumed shape matches nothing while the panel
+  renders fine; the lesson-88 family at the CSS layer, caught by
+  the debug probe's raw dump); (c) the HYDRATION DWELL — the
+  standalone build's burger needs ~1500ms before coordinate clicks
+  are wired. The standing watch: the working eight at byte-identical
+  word parity (the NINTH consecutive session); the D160 mobile-nav
+  record re-verified (the clone y21/y28/y35 all open, the live
+  toaster-blocked y21/y28, y35-only — no Tailwind v4 bug, the
+  oklab/rgba serializations rendering-identical); the live login
+  -> /dashboard SPA-404 record holding; the agent-browser functional
+  pass confirming the login -> dashboard flow + the AI composer +
+  the mobile menu end-to-end. TDD: the session53 pins 7/7 GREEN on
+  the first run (the generated-constants discipline — no
+  pin-transcription catches; stable across three runs). Gate: **826
+  -> 837 = 252 unit + 125 smoke + 456 e2e** (the timeout-killed
+  chunk tally root-caused as an extraction artifact and reconciled
+  against --list per chunk: every chunk at its true count). The
+  battery REBUILT at **243/243 GREEN ZERO DRIFT** across six phases
+  (up from 195 — the S52 battery was wiped by the fresh clone; the
+  RESOURCE + ALTERNATES-STRUCTURAL columns joining the standing
+  eleven; three instrumentation corrections in flight, each
+  root-caused: the landing print content flags re-pinned to the
+  current copy [the h1 "Automated Workflows, Powered by AI" — the
+  moving-target law], the CONTEXT-ORDER law [an authenticated
+  context redirects /login to /dashboard and poisons every public
+  measurement after it — public states on the clean context first,
+  authenticated measurements in their own context last], the
+  post-login settle wait [measuring mid-navigation reads 0 words]).
+  21 screenshots refreshed (the capture server on :3500 against
+  db/capture53.db; the dev DB canonical before AND after —
+  1/6/7,120/2/0, zero mutations); VLM 8/8 (the two first-pass flags
+  ADJUDICATED BY EVIDENCE — the hero prompt's own h1/sub-headline
+  enumeration error [the VLM's own description proving every element
+  present] + the error-boundary capture's SSR-BYPASS [a full-page
+  goto takes the server-render path, the browser interception never
+  sees the request — root-caused through the spec and fixed to the
+  pause-click refresh pattern]). DOCUMENTED: PAD (this block, the
+  ledger D184-D186, the 7.1 counts), AGENTS (the counts + gotcha
+  63 — the reaper + context-order + SSR-bypass + settle +
+  tally-extraction laws), CLAUDE (the session-53 context), README
+  (the 837 badge + the 28th-surface story + the session53 suite row
+  + the counts), SKILL v2.52.0 (lesson 92: the resource-layer
+  instrument + the serialization-shape law + the reaper +
+  context-order + SSR-bypass laws), .env.example verified in sync
+  (no config surface touched), the remediation plan session53
+  (ticked), the session log 115, the worklog.
+
 - `[NOTE]` **Session 52 remediation (2026-10-14)** — a registration
   cycle (the worklog S51 candidates — ALL THREE delivered in one
   pass; see `docs/remediation-plan-session52.md`): **THE
@@ -3697,7 +3784,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 20 files | 252 | `src/lib/*.test.ts` + `src/app/api/workflows/generate/route.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
-| Browser E2E | 61 specs | 449 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Browser E2E | 62 specs | 456 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 125 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins

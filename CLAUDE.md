@@ -321,6 +321,51 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   86: the print-pipeline exposure law + the record
   re-verification law + the print-text instrument.
 
+- **Session 53 (2026-10-15) remediation** — see
+  `docs/remediation-plan-session53.md`: a registration cycle (the
+  worklog S52 candidates — ALL THREE delivered; ZERO src/ changes).
+  **THE TWENTY-EIGHTH SURFACE (D184) — the PDF's per-page RESOURCE
+  NAME-TABLE layer** (every /Type /Page's /XObject /Font /ExtGState
+  /Pattern name sets, the page tree resolved from the catalog
+  through the string-form refs) — the stable seven at BYTE-IDENTICAL
+  NAME TABLES on the first honest measurement: the names encode the
+  referenced object numbers, so the byte-parity is the D181
+  object-count record now proven at the NAME-ALLOCATION layer (the
+  two print pipelines allocate the SAME object numbers to the SAME
+  resources); the landing at count-level parity with the name-level
+  animated family registered (union counts + per-page multisets
+  identical, the names drifting inside the registered bucket — the
+  S38 range law at the resource-name granularity); /demo the
+  registered superset at the resource layer (12 XObjects across 2
+  working pages vs the live shell's zero); the dashboard's
+  authenticated resource fingerprint (XObjects 13/17, Fonts 5/7,
+  GStates 6/9, Patterns 6 — the charts' pattern fills surfacing at
+  the resource layer). **THE 27TH SURFACE'S ROUTE EXTENSIONS
+  (D185)**: the five /login alternates' structural censuses at full
+  parity (the per-state object-allocation fingerprint 51/52/34/38/38
+  identical across sides) + the dashboard's authenticated structural
+  census at depth (292 objects, the public contract unchanged under
+  auth). The standing watch: zero drift; the D160 mobile-nav record
+  + the live login SPA-404 record both re-verified for the NINTH
+  consecutive session. The session53 pins 7/7 GREEN on the first
+  run (the generated-constants discipline — no pin-transcription
+  catches; stable across three runs). Gate: **826 -> 837 = 252
+  unit + 125 smoke + 456 e2e** (the timeout-killed chunk tally
+  root-caused as an extraction artifact and reconciled against
+  --list per chunk); the battery REBUILT at 243/243 ZERO DRIFT
+  (up from 195; the RESOURCE + ALTERNATES-STRUCTURAL columns added
+  — with three root-caused instrumentation corrections: the
+  landing print content flags re-pinned to the current copy, the
+  CONTEXT-ORDER law [an authenticated context poisons public
+  /login measurements], the post-login settle wait); 21
+  screenshots (DB canonical, zero mutations); VLM 8/8 (the two
+  first-pass flags adjudicated by evidence — the hero prompt's own
+  h1/sub-headline enumeration error + the error-boundary capture's
+  SSR-bypass, root-caused through the spec and fixed to the
+  pause-click refresh pattern). Gotcha 63 / lesson 92: the reaper
+  law + the context-order law + the SSR-bypass law + the
+  resource-layer instrument.
+
 - **Session 52 (2026-10-14) remediation** — see
   `docs/remediation-plan-session52.md`: a registration cycle (the
   worklog S51 candidates — ALL THREE delivered; ZERO src/ changes).
