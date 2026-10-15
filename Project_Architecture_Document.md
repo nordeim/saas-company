@@ -851,6 +851,88 @@
   registry-compounding lesson, remediation plan session33, session
   log 66.
 
+- `[NOTE]` **Session 56 remediation (2026-10-15)** — a registration
+  cycle (the worklog S55 candidates, ALL FIVE probed on the raw shape
+  FIRST per the lesson-88 discipline — the /Decode candidate EMPTY,
+  the /Info-dict VALUE candidate already pinned by S49, the BI/ID/EI
+  candidate EMPTY, the dashboard function-depth candidate THIN (the
+  S55 fingerprint unchanged), the /demo print-gradient candidate
+  EMPTY; the P1 sweep's ICC finding then probed at depth — the
+  image-INTERIOR layer measured RICH; see
+  `docs/remediation-plan-session56.md`): **THE THIRTY-FIRST SURFACE
+  (D193) — the image XObject INTERIOR layer at the OBJECT level**
+  (the layer BELOW the page-placement census `pdfimages -list`
+  walks — form-nested images and /SMask TARGET images invisible to
+  poppler; the complete census through `qpdf --json`): every image's
+  dims/colorspace/filter + its resolved /SMask target + the ICC
+  profile streams through SHAPE-BASED detection. **THE ICC SHAPE
+  LAW** (the lesson-88 family's EIGHTH sighting): Skia's ICC profile
+  streams carry NO /Subtype — just /N + /Length (+ /Alternate) — so
+  the S54 color-space detector (keyed on /Subtype === /ICCBased) was
+  shape-blind at the image layer; the landing's 1920x1080 video
+  poster carries a 716-byte N=3 profile BYTE-IDENTICAL across sides
+  (sha 7f19707f9846243d) — the FIRST honest ICC measurement. The S54
+  color-space empty-set law REFINED, not contradicted: zero NAMED
+  page-resource /ColorSpace entries holds; the image-embedded ICC
+  layer sits below it. THE STABLE SEVEN + THE FIVE ALTERNATES + THE
+  404 + /demo AT FULL OBJECT-LEVEL IMAGE-INTERIOR PARITY on the
+  first honest fresh measurement (/login 6 images with the
+  754x676 RGB→Gray SMask pair identical across sides; the
+  alternates default/error 6 + the pair, reset 1, signup/forgot 2;
+  the content routes the empty-set family), determinism verified 2x.
+  **THE LANDING'S FORM-NESTED SUPERSET REGISTERED** (the D125
+  engine-structure family at the form-nested image layer): the
+  clone's CSS-keyframe animated elements rasterize as image slivers
+  inside FORM XObjects at print time — 16-18 object-level images vs
+  the live's stable 13 (the 1x26 + 738x1 + 738x26 RGB slivers on
+  every render; the 201x1 pair frame-dependent 2-of-3) — where the
+  live's framer-inline elements stay vector; the page-PLACED census
+  unchanged at 13/13 (the S50 pin green — both layers true).
+  **THE FOUR LAWS (D194)**: the /Decode EMPTY-SET + the
+  /DecodeParms EMPTY-SET + the inline-image BI/ID/EI EMPTY-SET
+  (every public route, both sides — all 31 renders zero) + the /demo
+  print-gradient EMPTY-SET (the mockup's animated gradients never
+  paint at print time). **THE RE-VERIFICATIONS**: the /Info VALUE
+  layer (the S49 record re-derived — Producer "u:Skia/PDF m153" +
+  Creator "u:Chromium" + the per-route Titles, identical across
+  sides) + the dashboard's function fingerprint (the S55 record
+  holding: 4 exponential + 0 standalone + the 1904x551 SMask pair +
+  the "Dashboard | SAAS Company" Title). The standing watch: the
+  TWELFTH consecutive re-verification (the working eight at
+  byte-identical word parity 739/24/101/36/335/390/566/285; the
+  sitemaps 8/7; the soft-404 family at the registered statuses; the
+  D160 mobile-nav record exact — the clone all-three-y open the
+  390x397 panel, the live toaster-blocked y21/y28 + y35-only, NO
+  Tailwind v4 bug; the live login -> / at 739 + the /dashboard
+  16-word SPA-404; the clone login -> the working dashboard 233
+  words). TDD: the session56 pins 6/6 GREEN (one in-flight
+  instrument catch: the determinism test's missing initial dwell —
+  render A measured a blank page's empty census, root-caused as the
+  instrument, not the code), stable across three runs. Gate:
+  **843 -> 849 = 252 unit + 125 smoke + 472 e2e** (every chunk
+  reconciled at --list: 472 tests in 65 files — WITH THE
+  SILENT-SKIP RECURRENCE CATCH, gotcha 66c: the copied S55 chunk
+  runner's sed REPLACED session55 with session56, silently dropping
+  5 tests; caught at the --list reconciliation, the runner fixed,
+  the spec re-run 5/5). The battery REBUILT after the fresh-clone
+  wipe (the S53/S55 precedent) at **201/201 GREEN ZERO DRIFT**
+  across six phases (the standing watch 16 + the poppler print
+  layers 40 + the structural/resource layers 27 + the interior
+  layers 33 + the S55 columns 30 + the S56 columns 48 + the
+  dashboard 3 — the battery now running THIRTY-ONE surfaces). 21
+  screenshots refreshed (the capture server on :3500 against
+  db/capture56.db; the dev DB canonical before AND after — 1/6/2,
+  zero mutations); VLM 5/8 first-pass + 3 ADJUDICATED BY EVIDENCE
+  (all three the prompt's own enumeration errors: the login copy
+  "Welcome to SAAS Company" not "Welcome back", the tiers
+  Free/Pro/Enterprise not "Basic", the hero's below-fold logo
+  strip). DOCUMENTED: PAD (this block, the ledger D193/D194, the
+  7.1 counts 65 specs/472), AGENTS (the counts + gotcha 66),
+  CLAUDE (the session-56 context), README (the 849 badge + the
+  31st-surface story + the session56 suite row + the counts), SKILL
+  v2.55.0 (lesson 95), the remediation plan session56, the session
+  log 121, the worklog.
+
 - `[NOTE]` **Session 55 remediation (2026-10-15)** — a registration
   cycle (the worklog S54 candidates, the surface selection probed on
   the raw shape FIRST per the lesson-88 discipline — the /SMask
@@ -3881,6 +3963,8 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D190 | THE PDF /Function LAYER (the thirtieth surface) + THE INLINE-STORAGE LAW: the gradient math at the function-dict granularity — the exponential family (Domain/C0/C1/N endpoint values) + the stitching family (Domain/Bounds/Encode + the sub-function chains) — the stable seven at FULL FUNCTION PARITY on the first honest fresh measurement (/login the only gradient-bearing route: 2 exp + 1 stitch with a 2-sub chain; the six content routes empty at this layer); the INLINE-STORAGE law (the lesson-88 family's seventh sighting: the /login functions live INSIDE the shading dicts — an object-level probe measures EMPTY; the complete census resolves through PatternType 2 -> /Shading -> /Function plus the standalone objects, the landing storing 5-7 both ways) | Measured (the session55 spec, 5/5 GREEN first run + the recon) | tests/e2e/session55-functionlayer-laws.spec.ts; the drift battery's ph5 FN column; AGENTS gotcha 65(a) | **Registered parity + instrument law** (Session 55) |
 | D191 | THE /SMask G-STREAM INTERIORS (the 29th surface's route extension): the luminosity-mask Form XObjects' OWN resource chains — the host ExtGState's /S /TR + the G-form's BBox/Subtype/Matrix + the nested name tables (/G3 + the 5-member ProcSet + one image XObject each) + the 84-byte luminosity streams — 4/4 BYTE-IDENTICAL on /login (the same object numbers), the recursion terminating at image masks (the terminus law: record imageRefs/formRefs or the census measures nothing about the chain); the alternates' five-state records (default/error 4, reset 1, signup/forgot 2) | Measured (the same spec + the battery's ph5 GS column) | tests/e2e/session55-functionlayer-laws.spec.ts; AGENTS gotcha 65(c) | **Registered parity** (Session 55) |
 | D192 | THE THREE PRINT LAWS: (a) the /Metadata XMP EMPTY-SET — zero /Metadata streams + zero catalog /Metadata refs on every route, both sides (neither pipeline emits XMP); (b) the /PieceInfo EMPTY-SET — zero private application data; (c) the TILING PATTERNS' NESTED-RESOURCES FLATNESS on the stable seven (the content routes' tilings self-contained; the landing's 6-7 the animated bucket, the dashboard's 3 the chart stripes + the table texture); + the ProcSet ARRAY-KEY ENUMERATION artifact (Object.entries over an array yields indices — guard with Array.isArray, keep the sorted values) | Measured (the same spec + the battery's ph5 LAWS column) | tests/e2e/session55-functionlayer-laws.spec.ts; AGENTS gotcha 65(b)(c) | **Registered law** (Session 55) |
+| D193 | THE IMAGE XObject INTERIOR LAYER (the thirty-first surface) + THE ICC SHAPE LAW: the image XObjects' OWN interiors at the OBJECT level (the layer BELOW the page-placement census pdfimages walks — form-nested + /SMask-target images invisible to poppler): every image's dims/colorspace/filter + its resolved /SMask target + the ICC profile streams through SHAPE-BASED detection (Skia's profiles carry NO /Subtype — /N + /Length only — so the S54 /Subtype-keyed detector was shape-blind at the image layer; the landing's video poster carries a 716-byte N=3 profile BYTE-IDENTICAL across sides, the FIRST honest ICC measurement — the S54 law REFINED not contradicted: zero NAMED page-resource entries holds, the image-embedded ICC layer sits below it); the stable seven + the five alternates + the 404 + /demo at FULL OBJECT-LEVEL IMAGE-INTERIOR PARITY (/login 6 images with the 754x676 RGB→Gray SMask pair identical across sides; the alternates 6/6/1/2/2); the landing's FORM-NESTED SUPERSET registered (the clone's CSS-keyframe animated elements rasterize as image slivers inside FORM XObjects at print time — 16-18 objects vs the live's stable 13; the page-PLACED census unchanged at 13/13 — both layers true) | Measured (the session56 spec, 6/6 GREEN + the recon) | tests/e2e/session56-imagelayer-interiors.spec.ts; the drift battery's ph6 IMAGE column; AGENTS gotcha 66(a)(b) | **Registered parity + instrument law** (Session 56) |
+| D194 | THE FOUR PRINT LAWS: (a) the /Decode EMPTY-SET — zero image XObjects carry /Decode on any route, either side; (b) the /DecodeParms EMPTY-SET — zero decode parameters (the DCT images ride their filters' defaults); (c) the inline-image BI/ID/EI EMPTY-SET — zero inline-image operators in any content stream (all images are XObject-referenced; all 31 measured renders zero); (d) the /demo print-gradient EMPTY-SET — the mockup's animated gradients never paint at print time (zero shading + zero tiling patterns on the clone's working page AND the live's shell); + THE SILENT-SKIP RECURRENCE (gotcha 66c: the copied S55 chunk runner's sed REPLACED session55 with session56, dropping 5 tests silently — caught at the --list reconciliation; chunk runners are versioned artifacts: ADD the new spec, never replace) | Measured (the same spec + the battery's ph6 LAWS column) | tests/e2e/session56-imagelayer-interiors.spec.ts; AGENTS gotcha 66(c) | **Registered law** (Session 56) |
 
 
 
@@ -3945,7 +4029,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 20 files | 252 | `src/lib/*.test.ts` + `src/app/api/workflows/generate/route.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
-| Browser E2E | 64 specs | 466 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Browser E2E | 65 specs | 472 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 125 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins

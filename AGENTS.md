@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (466 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (472 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (466/466) — 843 checks across three layers (Session 55: the session55-functionlayer-laws suite +5 e2e — THE THIRTIETH SURFACE pins [the /Function layer — the gradient math at the function-dict granularity: the exponential Domain/C0/C1/N endpoint values + the stitching Bounds/Encode/sub-chains, stored INLINE inside the shading pattern dicts on /login — the inline-storage law, the lesson-88 family's SEVENTH sighting: an object-level probe measures EMPTY; the only complete census resolves through PatternType 2 -> /Shading -> /Function plus the standalone objects] + THE 29TH EXTENSION [the /SMask G-stream interiors — the luminosity-mask forms' own resource chains: BBox + the nested name tables + the 84-byte streams, 4/4 byte-identical on /login] + THE THREE LAWS [the /Metadata XMP empty-set + the /PieceInfo empty-set + the tiling nested-Resources flatness] + the alternates' five-state records + the dashboard's authenticated function fingerprint; Session 54:
+→ `npm run test:e2e` (472/472) — 849 checks across three layers (Session 56: the session56-imagelayer-interiors suite +6 e2e — THE THIRTY-FIRST SURFACE pins [the image XObject INTERIOR layer at the OBJECT level — every image's dims/colorspace/filter + the resolved /SMask target + the ICC profile streams through SHAPE-BASED detection: Skia's profiles carry NO /Subtype, so the S54 color-space detector was shape-blind at the image layer — the landing's video poster carries a 716-byte N=3 profile BYTE-IDENTICAL across sides, the first honest ICC measurement] + THE FOUR LAWS [the /Decode + /DecodeParms + BI/ID/EI inline-image EMPTY-SETS on every public route + the /demo print-gradient EMPTY-SET] + the landing's form-nested SUPERSET registered [the clone's CSS-keyframe animated elements rasterize as image slivers inside FORM XObjects at print time — 16-18 object-level images vs the live's stable 13 — the D125 engine family, the page-PLACED census unchanged at 13/13] + the /Info VALUE re-verification + the alternates' + dashboard's image-interior records; Session 55: the session55-functionlayer-laws suite +5 e2e — THE THIRTIETH SURFACE pins [the /Function layer — the gradient math at the function-dict granularity: the exponential Domain/C0/C1/N endpoint values + the stitching Bounds/Encode/sub-chains, stored INLINE inside the shading pattern dicts on /login — the inline-storage law, the lesson-88 family's SEVENTH sighting: an object-level probe measures EMPTY; the only complete census resolves through PatternType 2 -> /Shading -> /Function plus the standalone objects] + THE 29TH EXTENSION [the /SMask G-stream interiors — the luminosity-mask forms' own resource chains: BBox + the nested name tables + the 84-byte streams, 4/4 byte-identical on /login] + THE THREE LAWS [the /Metadata XMP empty-set + the /PieceInfo empty-set + the tiling nested-Resources flatness] + the alternates' five-state records + the dashboard's authenticated function fingerprint; Session 54:
 the session54-interiorlayer-laws suite +5 e2e — the TWENTY-NINTH
 SURFACE pins [the D184 name tables' RESOLVED TARGETS censused at the
 dict level through qpdf --json: the ExtGState interiors as a sorted
@@ -1312,6 +1312,33 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    nesting, no deeper resource chains; a recursive census needs no
    cycle guard but MUST record the terminus (imageRefs/formRefs) or
    it measures nothing about the chain it claims to census.
+
+66. **The object-level image census law + the ICC shape law (Session
+   56).** (a) THE OBJECT-LEVEL CENSUS LAW (the gotcha-64e typeless law
+   at the image layer): `pdfimages -list` walks PAGE-LEVEL resources
+   ONLY — images referenced from FORM XObjects' nested /Resources (the
+   animated mockup's raster slivers) and /SMask TARGET images are
+   INVISIBLE to it. The complete image census is object-level through
+   `qpdf --json`: the S50 page census (13 keys) and the S56 object
+   census (16-18 on the clone, 13 stable on the live) are BOTH true —
+   different layers, both pinned. (b) THE ICC SHAPE LAW (the lesson-88
+   family's EIGHTH sighting): Skia's ICC profile streams carry NO
+   /Subtype — just /N + /Length (+ /Alternate) — so a detector keyed
+   on `/Subtype === /ICCBased` measures EMPTY on exactly the document
+   carrying a profile (the landing's 1920x1080 video poster → the
+   716-byte N=3 profile, byte-identical across sides). Shape-based
+   detection: /N + stream data + the key universe + referenced from an
+   image's `[/ICCBased n 0 R]` array. The S54 color-space empty-set
+   law is REFINED, not contradicted: zero NAMED page-resource
+   /ColorSpace entries holds; the image-embedded ICC layer sits below
+   it. (c) THE SILENT-SKIP RECURRENCE (the gotcha-64 law's own
+   corollary, caught in flight THIS session): copying the S55 chunk
+   runner with a sed that REPLACED `session55-functionlayer-laws` with
+   the new spec silently dropped the session55 spec's 5 tests — the
+   tally summed 467 while `--list` said 472. Chunk runners are
+   versioned artifacts: ADD the new spec to the previous session's
+   final chunk, never replace it; reconcile every chunk AND the total
+   against `--list` before trusting a gate.
 
 ## Architecture invariants
 

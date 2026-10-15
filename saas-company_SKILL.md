@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.54.0 · **Last updated:** 2026-10-15 (Session 55 remediation)
+> **Version:** 2.55.0 · **Last updated:** 2026-10-15 (Session 56 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–29)
+## §12. Lessons Learnt (Sessions 1–56)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -2060,6 +2060,41 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     the /Metadata XMP + /PieceInfo layers measured EMPTY-SET (both
     registered as laws — the D170 pattern's third and fourth
     members).
+
+95. **The object-level image census + the ICC shape law + the
+    silent-skip recurrence (Session 56)**: the THIRTY-FIRST SURFACE —
+    the image XObject INTERIOR layer at the OBJECT level. (a) THE
+    OBJECT-LEVEL CENSUS LAW (the typeless-object law at the image
+    layer): `pdfimages -list` walks PAGE-LEVEL resources ONLY —
+    images referenced from FORM XObjects' nested /Resources (the
+    animated mockup's raster slivers) and /SMask TARGET images are
+    INVISIBLE to it. The complete image census is object-level
+    through `qpdf --json`; the S50 page census (13 keys) and the S56
+    object census (16-18 clone / 13 live) are BOTH true — different
+    layers, both pinned. An "empty" or "complete" image finding is
+    instrument-relative: name the layer before claiming either.
+    (b) THE ICC SHAPE LAW (the lesson-88 family's EIGHTH sighting):
+    Skia's ICC profile streams carry NO /Subtype — just /N + /Length
+    (+ /Alternate) — so a detector keyed on /Subtype === /ICCBased
+    measures EMPTY on exactly the document carrying a profile (the
+    landing's video poster → the 716-byte N=3 profile,
+    byte-identical across sides, the FIRST honest ICC measurement).
+    Detect PDF objects by their KEY UNIVERSE + shape, never by an
+    optional /Type-family key the writer may omit. (c) THE
+    SILENT-SKIP RECURRENCE (the gotcha-64 law's own corollary,
+    caught in flight): copying the S55 chunk runner with a sed that
+    REPLACED `session55-functionlayer-laws` with the new spec
+    silently dropped 5 tests — the tally summed 467 while --list
+    said 472. Chunk runners are VERSIONED artifacts: ADD the new
+    session's spec to the previous final chunk, never REPLACE it;
+    reconcile every chunk AND the total against --list before
+    trusting a gate. (d) THE VLM PROMPT-ENUMERATION family (three
+    adjudications in one session): the check prompt's own invented
+    copy ("Welcome back" vs the actual "Welcome to SAAS Company",
+    "Basic" vs the actual "Free" tier, the below-fold logo strip)
+    reads as a visual FAIL — always adjudicate a VLM flag against
+    the DOM/source evidence before counting it; the word-parity
+    record (byte-identical across sides) outranks the prompt.
 
 ## §13. Pitfalls to Avoid
 

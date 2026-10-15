@@ -426,6 +426,65 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   Gotcha 65 / lesson 94: the inline-storage law + the array-key
   enumeration artifact + the SMask recursion terminus.
 
+- **Session 56 (2026-10-15) remediation** — see
+  `docs/remediation-plan-session56.md`: a registration cycle (the
+  worklog S55 candidates — ALL FIVE probed on the raw shape FIRST, the
+  lesson-88 discipline; ZERO src/ changes; the battery REBUILT after
+  the fresh-clone wipe — the S53/S55 precedent). **THE THIRTY-FIRST
+  SURFACE (D193) — the image XObject INTERIOR layer at the OBJECT
+  level** (the layer BELOW the page-placement census pdfimages
+  walks): every image's dims/colorspace/filter + its resolved /SMask
+  target + the ICC profile streams through SHAPE-BASED detection —
+  **THE ICC SHAPE LAW** (the lesson-88 family's EIGHTH sighting:
+  Skia's profile streams carry NO /Subtype, so the S54 color-space
+  detector was shape-blind at the image layer; the landing's video
+  poster carries a 716-byte N=3 profile BYTE-IDENTICAL across sides —
+  the FIRST honest ICC measurement; the S54 law REFINED, not
+  contradicted: zero NAMED page-resource entries holds, the
+  image-embedded ICC layer sits below it). The stable seven + the
+  five alternates + the 404 + /demo at **FULL OBJECT-LEVEL
+  IMAGE-INTERIOR PARITY** on the first honest fresh measurement
+  (/login 6 images with the 754x676 RGB→Gray SMask pair identical
+  across sides; the alternates 6/6/1/2/2; the content routes the
+  empty-set family). **THE LANDING'S FORM-NESTED SUPERSET REGISTERED**
+  (the clone's CSS-keyframe animated elements rasterize as image
+  slivers inside FORM XObjects at print time — 16-18 object-level
+  images vs the live's stable 13 + the 710x28x jitter — the D125
+  engine-structure family; the page-PLACED census unchanged at 13/13,
+  the S50 pin green). **THE FOUR LAWS (D194)**: the /Decode EMPTY-SET
+  + the /DecodeParms EMPTY-SET + the inline-image BI/ID/EI EMPTY-SET
+  (every public route, both sides, all 31 renders zero) + the /demo
+  print-gradient EMPTY-SET. **THE RE-VERIFICATIONS**: the /Info VALUE
+  layer (the S49 record re-derived — Producer "u:Skia/PDF m153" +
+  Creator "u:Chromium" + the per-route Titles, identical across sides)
+  + the dashboard's function fingerprint (the S55 record holding:
+  4 exponential + 0 standalone). The standing watch TWELFTH
+  consecutive re-verification (the working eight at byte-identical
+  word parity 739/24/101/36/335/390/566/285, the sitemaps 8/7, the
+  soft-404 family, the D160 mobile-nav record exact — the clone
+  all-three-y open the 390x397 panel, the live toaster-blocked
+  y21/y28 + y35-only, NO Tailwind v4 bug; the live login records
+  holding). TDD: the session56 pins 6/6 GREEN (one in-flight
+  instrument catch: the determinism test's missing initial dwell —
+  render A measured a blank page, root-caused as the instrument, not
+  the code), stable across THREE runs. Gate: **843 -> 849 = 252 unit
+  + 125 smoke + 472 e2e** (every chunk reconciled at --list: 472
+  tests in 65 files — WITH THE SILENT-SKIP RECURRENCE CATCH: the
+  copied S55 chunk runner's sed REPLACED session55 with session56,
+  dropping 5 tests; caught at the --list reconciliation, the runner
+  fixed, the spec re-run 5/5 — gotcha 66c). The battery REBUILT at
+  **201/201 GREEN ZERO DRIFT** across six phases (the standing watch
+  16 + the poppler print layers 40 + the structural/resource layers
+  27 + the interior layers 33 + the S55 columns 30 + the S56 columns
+  48 + the dashboard 3 — the battery now running THIRTY-ONE
+  surfaces). 21 screenshots (DB canonical, zero mutations); VLM 5/8
+  first-pass + 3 ADJUDICATED BY EVIDENCE (all three the prompt's own
+  enumeration errors — the login copy "Welcome to SAAS Company" not
+  "Welcome back", the tiers Free/Pro/Enterprise not "Basic", the
+  hero's below-fold logo strip). Gotcha 66 / lesson 95: the
+  object-level image census law + the ICC shape law + the
+  silent-skip recurrence.
+
 - **Session 53 (2026-10-15) remediation** — see
   `docs/remediation-plan-session53.md`: a registration cycle (the
   worklog S52 candidates — ALL THREE delivered; ZERO src/ changes).
