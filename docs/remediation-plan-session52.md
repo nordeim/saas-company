@@ -234,3 +234,28 @@ surfaces, 113 checks, zero drift — `docs/session_112.md`).
 - [x] F4 the screenshots (21/21, the dev DB canonical before AND after — 1/6/7,120/2/0, zero mutations; the capture on :3500 against db/capture52.db) + the VLM standing checks 8/8 (the two first-pass flags ADJUDICATED BY EVIDENCE — both the prompts' own enumeration errors: the reset card's text-style back button + the mobile menu's Log In button row, both proven present by the evidence probes)
 - [x] F5 the docs alignment (PAD: the S52 revision block + the ledger D181-D183 + the 7.1 counts 61 specs/449; AGENTS: the counts + gotcha 62; CLAUDE: the session-52 context; README: the 826 badge + the 27th-surface story + the session52 suite row; SKILL v2.51.0 lesson 91; .env.example verified in sync — no config surface touched)
 - [x] F6 the commit + the wrapper push — done (see the record below)
+
+## The pushed-hash record (the closing discipline)
+
+- Remediation commit **6c36a7f** (the full hash
+  6c36a7f560e0b738307d429a109062b58936f4e3, 29 files: the session52
+  registration — tests/e2e/session52-structurallayer-convergence.spec.ts
+  [9 pins] + docs/remediation-plan-session52.md + docs/session_113.md +
+  the 21 refreshed screenshots + the docs alignment across PAD/AGENTS/
+  CLAUDE/README/SKILL v2.51.0 + the worklog) pushed via the SSH wrapper
+  with the EXPLICIT `--remote git@github.com:nordeim/saas-company.git`
+  (the S31 trap held from the first dry-run — the dry-run confirming
+  the fast-forward `52237ea..6c36a7f` against the correct remote).
+- Wrapper-verified: remote main @ 6c36a7f == local HEAD; the
+  fetch-independent HTTPS ls-remote agreed
+  (6c36a7f560e0b738307d429a109062b58936f4e3).
+- The operator key's fingerprint verified through paramiko's own key
+  parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU
+  — matches the S1-S51 record); the operator's key file shredded after
+  use (the wrapper's own temp copy shredded at its teardown).
+- The paramiko ssh shim re-deployed on the reset sandbox
+  (/home/z/bin/ssh, shebang /home/z/.venv/bin/python3 — the venv python
+  owning the paramiko 5.0.0 install; PATH exported for the runs).
+- Zero zombies at close (the port-sweep discipline held through every
+  recon/battery/capture/adjudication run — :3400 + :3500 swept clean);
+  the tree clean; no new branches.
