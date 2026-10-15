@@ -851,6 +851,72 @@
   registry-compounding lesson, remediation plan session33, session
   log 66.
 
+- `[NOTE]` **Session 57 remediation (2026-10-16)** — a registration
+  cycle (the worklog S56 candidates: the THIRTY-SECOND-surface trio
+  probed on the raw shape FIRST per the lesson-88 discipline — the
+  image STREAM interiors measured RICH and SELECTED; the q/Q stack
+  measured (balanced everywhere, the content-route engine-family
+  deltas) and registered as a LAW; the /Annots-dict interiors measured
+  RICH and folded in as the second column; the route-extension
+  candidates verified already-pinned by the committed S56 spec — the
+  error-state's image interior + the 404/thank-you floors; ZERO src/
+  changes). **THE THIRTY-SECOND SURFACE (D195) — the image STREAM
+  PAYLOAD layer**: the filtered bytes of every image XObject through
+  `qpdf --show-object=N --filtered-stream-data` (the layer below the
+  S56 image-dict interior) — every deterministic route at FULL BYTE
+  PARITY on the first honest measurement: /login 6 streams (the
+  1168x168 + 1765x2696 + 329x329 + 413x413 DCTs + the 754x676 RGB/Gray
+  SMask pair) with byte-identical sha256s AND the same object numbers
+  across sides; the content routes + the 404 + /demo the empty-set
+  family; all five /login alternates byte-identical (default/error the
+  6-stream set, reset 1, signup/forgot 2); the landing's payload
+  BUCKETS through the 3x-per-side stability probe — the stable-shared
+  core byte-identical (the 1165x103 pair + the 541x160/625x245 DCTs +
+  the 201x201/2025x534 stable masks + the clone-stable 626x204/710x288
+  DCTs), the VIDEO-FRAME family frame-dependent on BOTH sides with
+  INTERSECTING sha sets (the same 8s hero video captured at different
+  times — de39ffca/77a75b89 both observed on both sides), the 201x1
+  pair frame-dependent on BOTH sides (the S56 record's clone-only
+  reading CORRECTED), the clone-only form-nested slivers 1x26/738x1/
+  738x26 now pinned at the byte level (the S56 registered superset
+  with stable payload shas). **THE /ANNOTS VALUE LAYER (D196)**: every
+  annotation dict at the value level — the /Rect byte-precision
+  (values identical to 2 decimal places across sides), the /A action
+  dicts (/S /URI), the /Dest named destinations, the /F 4 flags, the
+  /BS empty — under the pg-dropped (page-object allocation) +
+  origin-normalized (the qpdf `u:`-prefix-aware URI strip) contract,
+  at EXACT parity on every public route (landing 69, /faq 14,
+  /thank-you 1, privacy/terms/refund 14, /accessibility 16, /login +
+  the 404 the empty sets; /demo the 14/0 registered superset floor).
+  **THE Q/Q LAW (D197)**: the graphics-state stack balanced on every
+  page content stream (q === Q, endDepth 0, maxDepth <= 2) with the
+  content-route ENGINE-FAMILY deltas registered (the clone's page
+  streams carry +4/+2/+6/+4 q-pairs on privacy/terms/accessibility/
+  refund — stable per side, measured 3x; the landing's animated
+  189/190 band + the forms stream-count delta 54/57; the /demo 96/7
+  superset floor). **THE TRANSCRIPTION-INJECTION CATCH (gotcha 67)**: the new
+  runner's file-set reconciliation diff showed a logo-petels "typo in
+  the committed runners" — root-caused as the RECONCILIATION
+  COMMAND'S OWN re-typed chunk list carrying the typo (the committed
+  runners verified correct by hexdump of the actual files +
+  `git show HEAD:` + the no-op sed leaving them git-unmodified; the
+  S56 gate's 849 = 252 + 125 + 472 stands in full); the honest
+  reconciliation expands the runner FILE ITSELF, never a re-typed
+  copy — the final gate reconciled 482/482 with the empty file-set
+  diff. **THE THIRTEENTH STANDING WATCH: all records
+  hold** (the working eight byte-identical, the sitemaps 8/7, the
+  soft-404 family, the D160 mobile-nav exact — NO Tailwind v4 bug,
+  the live login records, the clone login -> dashboard). Gate 849 ->
+  859 = 252 unit + 125 smoke + 482 e2e (the session57 suite's +10;
+  normal growth); the battery at 234/234 GREEN ZERO DRIFT
+  across SEVEN phases (the payload + qq + annots columns joining —
+  the battery now running THIRTY-TWO surfaces). DOCUMENTED: PAD (this
+  block, the ledger D195-D197, the 7.1 counts 66 specs/482), AGENTS
+  (the counts + gotcha 67), CLAUDE (the
+  session-57 context), README (the 859 badge + the 32nd-surface story
+  + the session57 suite row), SKILL v2.56.0 (lesson 96), the
+  remediation plan session57, the session log 123, the worklog.
+
 - `[NOTE]` **Session 56 remediation (2026-10-15)** — a registration
   cycle (the worklog S55 candidates, ALL FIVE probed on the raw shape
   FIRST per the lesson-88 discipline — the /Decode candidate EMPTY,
@@ -3965,6 +4031,9 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D192 | THE THREE PRINT LAWS: (a) the /Metadata XMP EMPTY-SET — zero /Metadata streams + zero catalog /Metadata refs on every route, both sides (neither pipeline emits XMP); (b) the /PieceInfo EMPTY-SET — zero private application data; (c) the TILING PATTERNS' NESTED-RESOURCES FLATNESS on the stable seven (the content routes' tilings self-contained; the landing's 6-7 the animated bucket, the dashboard's 3 the chart stripes + the table texture); + the ProcSet ARRAY-KEY ENUMERATION artifact (Object.entries over an array yields indices — guard with Array.isArray, keep the sorted values) | Measured (the same spec + the battery's ph5 LAWS column) | tests/e2e/session55-functionlayer-laws.spec.ts; AGENTS gotcha 65(b)(c) | **Registered law** (Session 55) |
 | D193 | THE IMAGE XObject INTERIOR LAYER (the thirty-first surface) + THE ICC SHAPE LAW: the image XObjects' OWN interiors at the OBJECT level (the layer BELOW the page-placement census pdfimages walks — form-nested + /SMask-target images invisible to poppler): every image's dims/colorspace/filter + its resolved /SMask target + the ICC profile streams through SHAPE-BASED detection (Skia's profiles carry NO /Subtype — /N + /Length only — so the S54 /Subtype-keyed detector was shape-blind at the image layer; the landing's video poster carries a 716-byte N=3 profile BYTE-IDENTICAL across sides, the FIRST honest ICC measurement — the S54 law REFINED not contradicted: zero NAMED page-resource entries holds, the image-embedded ICC layer sits below it); the stable seven + the five alternates + the 404 + /demo at FULL OBJECT-LEVEL IMAGE-INTERIOR PARITY (/login 6 images with the 754x676 RGB→Gray SMask pair identical across sides; the alternates 6/6/1/2/2); the landing's FORM-NESTED SUPERSET registered (the clone's CSS-keyframe animated elements rasterize as image slivers inside FORM XObjects at print time — 16-18 objects vs the live's stable 13; the page-PLACED census unchanged at 13/13 — both layers true) | Measured (the session56 spec, 6/6 GREEN + the recon) | tests/e2e/session56-imagelayer-interiors.spec.ts; the drift battery's ph6 IMAGE column; AGENTS gotcha 66(a)(b) | **Registered parity + instrument law** (Session 56) |
 | D194 | THE FOUR PRINT LAWS: (a) the /Decode EMPTY-SET — zero image XObjects carry /Decode on any route, either side; (b) the /DecodeParms EMPTY-SET — zero decode parameters (the DCT images ride their filters' defaults); (c) the inline-image BI/ID/EI EMPTY-SET — zero inline-image operators in any content stream (all images are XObject-referenced; all 31 measured renders zero); (d) the /demo print-gradient EMPTY-SET — the mockup's animated gradients never paint at print time (zero shading + zero tiling patterns on the clone's working page AND the live's shell); + THE SILENT-SKIP RECURRENCE (gotcha 66c: the copied S55 chunk runner's sed REPLACED session55 with session56, dropping 5 tests silently — caught at the --list reconciliation; chunk runners are versioned artifacts: ADD the new spec, never replace) | Measured (the same spec + the battery's ph6 LAWS column) | tests/e2e/session56-imagelayer-interiors.spec.ts; AGENTS gotcha 66(c) | **Registered law** (Session 56) |
+| D195 | THE IMAGE STREAM PAYLOAD LAYER (the thirty-second surface): the filtered bytes of every image XObject — `qpdf --show-object=N --filtered-stream-data` (the layer BELOW the S56 image-dict interior) — measured at FULL BYTE PARITY on every deterministic route on the first honest measurement: /login 6 streams with byte-identical sha256s AND the same object numbers across sides (the 4 DCTs + the 754x676 RGB/Gray SMask pair); the content routes + the 404 + /demo the empty-set family; all five /login alternates byte-identical; the landing's BUCKETS: the stable-shared core byte-identical + the VIDEO-FRAME family frame-dependent BOTH sides with INTERSECTING sha sets (the same 8s video captured at different times) + the 201x1 pair frame-dependent on BOTH sides (the S56 clone-only reading corrected) + the clone-only slivers pinned at the byte level | Measured (the session57 spec, 10/10 GREEN x3 + the recon + the stability probe) | tests/e2e/session57-payload-annots-qq.spec.ts; the drift battery's ph7 PAYLOAD column; AGENTS gotcha 67(c) | **Registered parity + instrument law** (Session 57) |
+| D196 | THE /ANNOTS VALUE LAYER: every annotation dict at the value level — the /Rect byte-precision (identical to 2dp across sides), the /A action dicts (/S /URI, origin-normalized), the /Dest named destinations, the /F 4 flags, the /BS empty — under the pg-dropped + origin-normalized contract (the qpdf u:-prefix-aware URI strip), at EXACT parity on every public route (landing 69, /faq 14, /thank-you 1, privacy/terms/refund 14, /accessibility 16, /login + 404 empty; /demo the 14/0 registered superset floor — the live's 16-word shell carries no links, the S48 record) | Measured (the same spec + the battery's ph7 ANNOTS column) | tests/e2e/session57-payload-annots-qq.spec.ts | **Registered parity** (Session 57) |
+| D197 | THE Q/Q LAW: the graphics-state stack balanced on every page content stream (q === Q, endDepth 0, maxDepth <= 2, both sides, every route) with the content-route ENGINE-FAMILY deltas registered (the clone's page streams carry +4/+2/+6/+4 q-pairs on privacy/terms/accessibility/refund — stable per side, measured 3x: 70/66, 68/66, 86/80, 70/66; the landing's animated 189/190 band + the forms stream-count delta 54/57; the /demo 96/7 superset floor); + THE TRANSCRIPTION-INJECTION CATCH (gotcha 67a: the reconciliation diff showed a logo-petels "typo in the committed runners" — root-caused as the reconciliation command's own re-typed chunk list carrying the typo; the committed runners verified correct by hexdump + git-unmodified; the S56 gate's 849 stands; the honest file-set reconciliation expands the runner FILE ITSELF, never a re-typed copy) | Measured (the same spec + the battery's ph7 QQ column) | tests/e2e/session57-payload-annots-qq.spec.ts; AGENTS gotcha 67(a) | **Registered law + the instrument correction** (Session 57) |
 
 
 
@@ -4029,7 +4098,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 20 files | 252 | `src/lib/*.test.ts` + `src/app/api/workflows/generate/route.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
-| Browser E2E | 65 specs | 472 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Browser E2E | 66 specs | 482 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 125 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins

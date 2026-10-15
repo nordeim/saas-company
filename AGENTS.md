@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (472 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (482 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (472/472) — 849 checks across three layers (Session 56: the session56-imagelayer-interiors suite +6 e2e — THE THIRTY-FIRST SURFACE pins [the image XObject INTERIOR layer at the OBJECT level — every image's dims/colorspace/filter + the resolved /SMask target + the ICC profile streams through SHAPE-BASED detection: Skia's profiles carry NO /Subtype, so the S54 color-space detector was shape-blind at the image layer — the landing's video poster carries a 716-byte N=3 profile BYTE-IDENTICAL across sides, the first honest ICC measurement] + THE FOUR LAWS [the /Decode + /DecodeParms + BI/ID/EI inline-image EMPTY-SETS on every public route + the /demo print-gradient EMPTY-SET] + the landing's form-nested SUPERSET registered [the clone's CSS-keyframe animated elements rasterize as image slivers inside FORM XObjects at print time — 16-18 object-level images vs the live's stable 13 — the D125 engine family, the page-PLACED census unchanged at 13/13] + the /Info VALUE re-verification + the alternates' + dashboard's image-interior records; Session 55: the session55-functionlayer-laws suite +5 e2e — THE THIRTIETH SURFACE pins [the /Function layer — the gradient math at the function-dict granularity: the exponential Domain/C0/C1/N endpoint values + the stitching Bounds/Encode/sub-chains, stored INLINE inside the shading pattern dicts on /login — the inline-storage law, the lesson-88 family's SEVENTH sighting: an object-level probe measures EMPTY; the only complete census resolves through PatternType 2 -> /Shading -> /Function plus the standalone objects] + THE 29TH EXTENSION [the /SMask G-stream interiors — the luminosity-mask forms' own resource chains: BBox + the nested name tables + the 84-byte streams, 4/4 byte-identical on /login] + THE THREE LAWS [the /Metadata XMP empty-set + the /PieceInfo empty-set + the tiling nested-Resources flatness] + the alternates' five-state records + the dashboard's authenticated function fingerprint; Session 54:
+→ `npm run test:e2e` (482/482) — 859 checks across three layers (Session 57: the session57-payload-annots-qq suite +10 e2e — THE THIRTY-SECOND SURFACE pins [the image STREAM PAYLOAD layer: the filtered bytes of every image XObject through `qpdf --show-object=N --filtered-stream-data` — every deterministic route at FULL BYTE PARITY on the first honest measurement: /login 6 streams incl. the 754x676 SMask pair + the DCT family, the content routes + the 404 + /demo the empty-set family, all five /login alternates byte-identical] + the landing's payload BUCKETS [the stability probe's decomposition: the stable-shared core byte-identical across sides, the video-frame family frame-dependent BOTH sides with INTERSECTING sha sets — the same 8s video captured at different times, the 201x1 pair frame-dependent on BOTH sides (the S56 record's clone-only reading corrected), the clone-only slivers 1x26/738x1/738x26 now pinned at the byte level] + THE /ANNOTS VALUE LAYER [every annotation dict's /Rect byte-precision + /A /S /URI actions + /Dest named dests + /F flags under the pg-dropped + origin-normalized contract — exact parity on every public route: landing 69, /faq 14, /accessibility 16, /login + 404 the empty sets, /demo the 14/0 superset floor] + THE Q/Q LAW [balanced q/Q on every page content stream, endDepth 0, maxDepth <= 2; the content-route engine-family deltas REGISTERED (clone privacy 70 / live 66, terms 68/66, accessibility 86/80, refund 70/66 — stable per side, 3x); the landing's animated band; /demo the 96/7 superset floor] + THE TRANSCRIPTION-INJECTION CATCH (gotcha 67: the reconciliation diff showed a logo-petels "typo in the committed runners" — root-caused as the RECONCILIATION COMMAND'S OWN re-typed chunk list carrying the typo; the committed runners verified correct by hexdump + git-unmodified; the honest file-set reconciliation expands the runner FILE ITSELF, never a re-typed copy); the dashboard's authenticated payload + qq + annots records; the THIRTEENTH standing watch all records hold; Session 56: the session56-imagelayer-interiors suite +6 e2e — THE THIRTY-FIRST SURFACE pins [the image XObject INTERIOR layer at the OBJECT level — every image's dims/colorspace/filter + the resolved /SMask target + the ICC profile streams through SHAPE-BASED detection: Skia's profiles carry NO /Subtype, so the S54 color-space detector was shape-blind at the image layer — the landing's video poster carries a 716-byte N=3 profile BYTE-IDENTICAL across sides, the first honest ICC measurement] + THE FOUR LAWS [the /Decode + /DecodeParms + BI/ID/EI inline-image EMPTY-SETS on every public route + the /demo print-gradient EMPTY-SET] + the landing's form-nested SUPERSET registered [the clone's CSS-keyframe animated elements rasterize as image slivers inside FORM XObjects at print time — 16-18 object-level images vs the live's stable 13 — the D125 engine family, the page-PLACED census unchanged at 13/13] + the /Info VALUE re-verification + the alternates' + dashboard's image-interior records; Session 55: the session55-functionlayer-laws suite +5 e2e — THE THIRTIETH SURFACE pins [the /Function layer — the gradient math at the function-dict granularity: the exponential Domain/C0/C1/N endpoint values + the stitching Bounds/Encode/sub-chains, stored INLINE inside the shading pattern dicts on /login — the inline-storage law, the lesson-88 family's SEVENTH sighting: an object-level probe measures EMPTY; the only complete census resolves through PatternType 2 -> /Shading -> /Function plus the standalone objects] + THE 29TH EXTENSION [the /SMask G-stream interiors — the luminosity-mask forms' own resource chains: BBox + the nested name tables + the 84-byte streams, 4/4 byte-identical on /login] + THE THREE LAWS [the /Metadata XMP empty-set + the /PieceInfo empty-set + the tiling nested-Resources flatness] + the alternates' five-state records + the dashboard's authenticated function fingerprint; Session 54:
 the session54-interiorlayer-laws suite +5 e2e — the TWENTY-NINTH
 SURFACE pins [the D184 name tables' RESOLVED TARGETS censused at the
 dict level through qpdf --json: the ExtGState interiors as a sorted
@@ -1339,6 +1339,41 @@ npm run db:seed && npm run dev`. Demo login: `demo@novaai.app` /
    versioned artifacts: ADD the new spec to the previous session's
    final chunk, never replace it; reconcile every chunk AND the total
    against `--list` before trusting a gate.
+
+
+67. **The transcription-injection law + the file-set reconciliation
+   (Session 57, the gotcha-64 family's near-miss).** (a) THE NEAR-MISS:
+   the new chunk runner's reconciliation (the count summed 472 vs the
+   global `--list` 482 — correctly diagnosed as the not-yet-added
+   session57 spec) was followed by a file-set diff that showed
+   `session38-logo-petels` vs `session38-logo-petals` — read as "the
+   committed runners carry the petals typo, the S54 fix never landed,
+   10 tests never ran." ALL FALSE: the diff's runner side was built
+   from a chunk list RE-TYPED INTO THE RECONCILIATION COMMAND — the
+   typo was injected by the instrument itself (the committed runners
+   verified correct by hexdump of the actual files + `git show HEAD:`
+   + the no-op sed leaving them git-unmodified; the S56 gate's
+   849 = 252 + 125 + 472 stands in full). THE LAW: a reconciliation
+   must expand the artifact's OWN file list (parse the runner's
+   CHUCKS array from the script file), never a re-typed transcription
+   — the instrument can inject exactly the defect it claims to find.
+   (b) THE FILE-SET RECONCILIATION (the sound part): counting
+   `--list` totals is not enough — a typo'd or missing spec name
+   silently drops from both the runner's list and its per-chunk
+   reconciliation; the honest discipline diffs the runner's expanded
+   spec FILE SET (parsed from the script) against the global `--list`
+   file set — the diff must be EMPTY (this session's final gate
+   reconciled 482/482 with the empty diff). (c) THE PAYLOAD-LAYER
+   INSTRUMENT LAWS: qpdf's `--show-object=N --filtered-stream-data`
+   writes the decoded bytes to STDOUT (no `--binary` flag exists in
+   qpdf 12 — capture with `execFileSync` + `encoding: "buffer"`); the
+   qpdf-JSON stream `data` field is BASE64 for binary streams (a
+   plain-ASCII content stream is ALSO base64-alphabet-clean —
+   disambiguate by testing for PDF operators before and after
+   decoding); the JSON string serialization carries a `u:` type
+   prefix (`u:http://...`) — an origin-normalization regex anchored
+   on `^https?` never fires; and the q/Q token census must run on
+   the DECODED stream (the raw JSON reads zero operators).
 
 ## Architecture invariants
 

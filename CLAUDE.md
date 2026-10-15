@@ -426,6 +426,60 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   Gotcha 65 / lesson 94: the inline-storage law + the array-key
   enumeration artifact + the SMask recursion terminus.
 
+- **Session 57 (2026-10-16) remediation** — see
+  `docs/remediation-plan-session57.md`: a registration cycle (the
+  worklog S56 candidates — the THIRTY-SECOND-surface trio probed on
+  the raw shape FIRST, the lesson-88 discipline; the route-extension
+  candidates verified already-pinned; ZERO src/ changes). **THE
+  THIRTY-SECOND SURFACE (D195) — the image STREAM PAYLOAD layer**: the
+  filtered BYTES of every image XObject (`qpdf --show-object=N
+  --filtered-stream-data` — the layer below the S56 image-dict
+  interior) — every deterministic route at FULL BYTE PARITY on the
+  first honest measurement (/login 6 streams incl. the 754x676 SMask
+  pair + the DCT family, byte-identical sha256s across sides; the
+  content routes + the 404 + /demo the empty-set family; all five
+  /login alternates byte-identical); the landing's payload BUCKETS
+  through the 3x-per-side stability probe (the stable-shared core
+  byte-identical — the 1165x103 pair + the DCT family + the stable
+  masks; the VIDEO-FRAME family frame-dependent on BOTH sides with
+  INTERSECTING sha sets — the same 8s video captured at different
+  times, incl. the 1920x1080 poster; the 201x1 pair frame-dependent
+  on BOTH sides — the S56 record's clone-only reading corrected; the
+  clone-only slivers 1x26/738x1/738x26 pinned at the byte level). **THE
+  /ANNOTS VALUE LAYER (D196)**: every annotation dict at the value
+  level — the /Rect byte-precision (136.77/802.38-class values
+  identical to 2dp across sides), the /A /S /URI actions, the /Dest
+  named dests, the /F=4 flags, the /BS empty — under the pg-dropped +
+  origin-normalized contract at EXACT parity on every public route
+  (landing 69, /faq 14, /thank-you 1, privacy/terms/refund 14,
+  /accessibility 16, /login + 404 empty, /demo the 14/0 superset
+  floor). **THE Q/Q LAW (D197)**: balanced q/Q on every page content
+  stream (endDepth 0, maxDepth <= 2) with the content-route
+  ENGINE-FAMILY deltas registered (clone privacy 70 / live 66, terms
+  68/66, accessibility 86/80, refund 70/66 — stable per side,
+  measured 3x; the landing's animated 189/190 band + the forms
+  stream-count delta 54/57; /demo the 96/7 superset floor).
+  **THE TRANSCRIPTION-INJECTION CATCH (gotcha 67)**: the new runner's
+  file-set reconciliation diff showed a logo-petels "typo in the
+  committed runners" — root-caused as the RECONCILIATION COMMAND'S OWN
+  re-typed chunk list carrying the typo (the committed runners
+  verified correct by hexdump + git-unmodified; the S56 gate's 849
+  stands in full); the honest reconciliation expands the runner FILE
+  ITSELF, never a re-typed copy. Gate 849 -> 859 = 252 +
+  125 + 482 (the S57 suite's +10 e2e — normal growth); the
+  battery at 234/234 across seven phases (the payload + qq + annots
+  columns joining — THIRTY-TWO surfaces); the THIRTEENTH standing
+  watch all records hold (the mobile-nav D160 exact — NO Tailwind v4
+  bug). The instrument laws: the filtered-stream-to-STDOUT law, the
+  base64-stream-data law (a plain-ASCII stream is also
+  base64-alphabet-clean — disambiguate by the PDF-operator test), the
+  u:-prefix origin-normalization law, the fresh-context determinism
+  law (an authenticated /login redirects to /dashboard).
+  Gotcha 67 / lesson 96: the transcription-injection law (the
+  reconciliation instrument can inject exactly the defect it claims to
+  find — expand the artifact's own file list, never a re-typed copy)
+  + the file-set reconciliation + the 201x1 both-sides correction.
+
 - **Session 56 (2026-10-15) remediation** — see
   `docs/remediation-plan-session56.md`: a registration cycle (the
   worklog S55 candidates — ALL FIVE probed on the raw shape FIRST, the

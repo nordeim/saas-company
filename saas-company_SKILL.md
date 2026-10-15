@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.55.0 · **Last updated:** 2026-10-15 (Session 56 remediation)
+> **Version:** 2.56.0 · **Last updated:** 2026-10-16 (Session 57 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–56)
+## §12. Lessons Learnt (Sessions 1–57)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -2060,6 +2060,44 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     the /Metadata XMP + /PieceInfo layers measured EMPTY-SET (both
     registered as laws — the D170 pattern's third and fourth
     members).
+
+96. **The transcription-injection law + the payload-layer instrument
+    laws (Session 57)**: the THIRTY-SECOND SURFACE — the image STREAM
+    PAYLOAD layer at FULL BYTE PARITY on every deterministic route (the
+    filtered bytes through `qpdf --show-object=N --filtered-stream-data`
+    — /login's 6 streams byte-identical incl. the SMask pair, the same
+    object numbers; the five alternates byte-identical; the landing's
+    buckets: the stable-shared core + the video-frame family with
+    INTERSECTING sha sets + the clone-only slivers at the byte level;
+    the 201x1 pair frame-dependent on BOTH sides — the prior
+    clone-only reading corrected). (a) THE TRANSCRIPTION-INJECTION LAW:
+    a chunk-runner reconciliation diff showed a logo-petels "typo in
+    the committed runners" and a whole false narrative followed ("the
+    S54 fix never landed; 10 tests never ran; the badge over-counted")
+    — root-caused as the RECONCILIATION COMMAND'S OWN re-typed chunk
+    list carrying the typo. The committed runners were correct all
+    along (verified by hexdump + `git show HEAD:` + the no-op sed
+    leaving them git-unmodified). THE LAW: expand the artifact's OWN
+    file list (parse the script's CHUCKS array), never a re-typed
+    transcription — the instrument can inject exactly the defect it
+    claims to find, and a corrupted instrument's "evidence" must be
+    re-verified against the artifact before any record is rewritten.
+    (b) THE FILE-SET RECONCILIATION (the sound half): the honest
+    discipline diffs the runner's expanded spec FILE SET against the
+    global `--list` file set — the diff must be empty (482/482 with
+    the empty diff this session). (c) THE PAYLOAD-LAYER INSTRUMENT
+    LAWS: the filtered-stream data goes to STDOUT (no `--binary` flag
+    in qpdf 12 — capture the Buffer); the qpdf-JSON stream `data` is
+    BASE64 for binary streams AND a plain-ASCII content stream is
+    base64-alphabet-clean — disambiguate by testing for PDF operators
+    before and after decoding; the JSON strings carry the `u:` type
+    prefix (`u:http://...`) — an origin-normalization regex anchored
+    on `^https?` never fires; and the q/Q census must run on the
+    DECODED stream (the raw JSON reads zero operators). (d) THE
+    FRESH-CONTEXT DETERMINISM LAW: a determinism re-render of a public
+    route must run on a CLEAN context — an authenticated context's
+    /login REDIRECTS to /dashboard and render B silently measures the
+    dashboard's images.
 
 95. **The object-level image census + the ICC shape law + the
     silent-skip recurrence (Session 56)**: the THIRTY-FIRST SURFACE —
