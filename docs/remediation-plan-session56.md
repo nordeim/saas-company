@@ -220,10 +220,11 @@ is the Session-55 tree at `3eb288a` + the closing pushes (`9f813d9` +
 
 ## The pushed-hash record (the closing discipline)
 
-- The remediation commit **<PUSHED_HASH>** pushed via the SSH wrapper
+- The remediation commit **b2344a4** pushed via the SSH wrapper
   with the EXPLICIT --remote git@github.com:nordeim/saas-company.git;
-  wrapper-verified (remote main @ <PUSHED_HASH> == local HEAD); the
-  fetch-independent HTTPS ls-remote cross-check agreed.
+  wrapper-verified (remote main @ b2344a4 == local HEAD); the
+  fetch-independent HTTPS ls-remote cross-check agreed
+  (b2344a460225714cdbbd0c94d1f4c27459e41f4a).
 - The operator key's fingerprint verified through paramiko's own key
   parse BEFORE the push; the wrapper's temp key copy shredded after
   each run; the operator's key file destroyed after the closing push.
