@@ -163,3 +163,30 @@ v2.60.0 (lesson 100), the remediation plan (this file), the session log
   14v10 count family's value-level counterpart); or the remaining
   css-text mirror families (the login bundle's --border cascade
   adjudication documented in the S60 not-fix guards).
+
+## The pushed-hash record (the closing discipline)
+
+- The remediation commit **44bcae7** (26 files: the session61 spec +6 +
+  the s61 chunk runner + the docs alignment [PAD/AGENTS/CLAUDE/README/
+  SKILL v2.60.0] + the 17 refreshed screenshots [4 byte-identical on
+  re-capture — the determinism signal] + the session log 131 + this
+  plan + the worklog) — **PUSHED AND WRAPPER-VERIFIED**: the push ran
+  `5ebad7e..44bcae7 HEAD -> main` through the wrapper v3.1 (the
+  paramiko 5.0.0 shim on PATH — `/home/z/my-project/bin/ssh`,
+  re-extracted from the skill's Appendix A after the workspace reset),
+  and the wrapper's own verification gate returned **remote
+  refs/heads/main @ 44bcae7 == local HEAD** with exit 0, the
+  remote-tracking ref synced (git status agreeing, no "ahead"
+  residue).
+- The operator key's fingerprint was verified through paramiko's own
+  key parse BEFORE the push and matched the S1-S60 record exactly
+  (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — the clean
+  first materialization, no transcription catch this session); the
+  wrapper's temp key copy shredded per its lifecycle; the operator's
+  key file destroyed after the final closing push (the closing
+  discipline).
+- Zero zombies at close (the port sweep extended to the next-server
+  CHILD process — gotcha 71b — :3000/:3100/:3200/:3400/:3500 all
+  swept and re-verified at the closing commit); the scratch DBs
+  removed (recon61/capture61) + the probe PDFs; the tree clean before
+  the closing commit; no new branches.

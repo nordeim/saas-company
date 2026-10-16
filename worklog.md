@@ -2215,3 +2215,16 @@ Stage Summary:
 - Gate 883 -> 889 (252 + 125 + 512 in 70 files, the file-set diff EMPTY); VLM 8/8 zero adjudications (the fourth consecutive); 21 screenshots refreshed with the dev DB canonical untouched.
 - Survey scripts persisted under research/ (gitignored scratch): watch-s61.mjs, mobilenav-s61.mjs, print-s61.mjs, print-alts-s61.mjs, readingorder-s61.mjs, capture-screenshots-s61.mjs, capture-run-s61.sh, with-recon-server.sh, vlm-checks-s61.mjs, reconcile-s61.cjs + the committed scripts/run-e2e-chunks-s61.sh.
 - The S62 candidates: the EIGHTEENTH standing watch (with the reading-order column); the 37th surface (the transfer-mode interiors, or the animation-band value layer under a pinned-frame contract, or the remaining css-text mirror families).
+---
+Task ID: 61-close
+Agent: Super Z (main)
+Task: Session 61 closing — the pushed-hash record + the final state
+
+Work Log:
+- The remediation commit 44bcae7 (26 files) PUSHED AND WRAPPER-VERIFIED: 5ebad7e..44bcae7 HEAD -> main through the wrapper v3.1 (the paramiko 5.0.0 shim at /home/z/my-project/bin/ssh, re-extracted from the skill's Appendix A after the workspace reset), the verification gate returning remote refs/heads/main @ 44bcae7 == local HEAD (exit 0), the remote-tracking ref synced.
+- The operator key's fingerprint verified through paramiko's own parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — the exact S1-S60 record; the clean first materialization); the wrapper's temp copy shredded per its lifecycle; the operator's key file destroyed after the final closing push (the closing discipline).
+- The remediation plan's pushed-hash record BACK-FILLED; this closing entry; the scratch DBs removed (recon61/capture61) + the probe PDFs; zero zombies (all ports swept incl. the :3100 e2e webServer's next-server child — the gotcha-71b sweep; re-verified at close); the tree clean; no new branches.
+
+Stage Summary:
+- Session 61 FULLY CLOSED at 44bcae7: the SECOND-consecutive fresh-clone session + the SEVENTEENTH standing watch all records hold + the D160 mobile-nav record exact (NO Tailwind v4 bug — the kickoff's watch item GREEN) + THE THIRTY-SIXTH SURFACE (the pdftohtml -xml reading-order layer) at FULL PARITY on its first honest measurement (no src/ fix — the line + font + word layers converge) + the session61 suite +6 (GREEN x4); gate 883 -> 889 = 252 + 125 + 512 in 70 files (the file-set diff EMPTY); VLM 8/8 zero adjudications (the fourth consecutive).
+- The S62 candidates recorded (the EIGHTEENTH standing watch; the 37th surface [the transfer-mode interiors; or the animation-band value layer under a pinned-frame contract; or the remaining css-text mirror families]).
