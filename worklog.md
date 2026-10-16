@@ -2181,3 +2181,16 @@ Stage Summary:
 - Gate 877 -> 883 (252 + 125 + 506 in 69 files); VLM 8/8 zero adjudications (the third consecutive); 21 screenshots refreshed with the dev DB canonical untouched.
 - Survey scripts persisted under research/ (gitignored scratch): watch-s60-{live,clone}.mjs, violet-rules-s60.mjs, live-equivalents-s60.mjs, pulse-glow-s60.mjs, shading-s60.mjs, typed-fills-s60.mjs, capture-screenshots-s60.mjs, vlm-checks-s60.mjs, run-chunks-range.sh + the committed scripts/run-e2e-chunks-s60.sh.
 - The S61 candidates: the SEVENTEENTH standing watch; the 36th surface (the pdftohtml -xml reading-order layer; or the transfer-mode interiors; or the animation-band value layer under a pinned-frame contract); or the remaining css-text mirror families.
+---
+Task ID: 60-close
+Agent: Super Z (main)
+Task: Session 60 closing — the pushed-hash record + the final state
+
+Work Log:
+- The remediation commit bc75686 (27 files, 818 insertions) PUSHED AND WRAPPER-VERIFIED: 4747964..bc75686 HEAD -> main through the wrapper v3.1 (the paramiko 5.0.0 shim re-extracted from the skill's Appendix A to /home/z/my-project/bin/ssh after the workspace reset), the verification gate returning remote refs/heads/main @ bc75686 == local HEAD (exit 0), the remote-tracking ref synced.
+- The operator key's fingerprint verified through paramiko's own parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — the exact S1-S59 record; the clean first materialization, no transcription catch this session); the wrapper's temp copy shredded per its lifecycle; the operator's key file destroyed after the final closing push (the closing discipline).
+- The remediation plan's pushed-hash record BACK-FILLED; this closing entry; the scratch DBs removed (recon60/capture60); zero zombies (all ports swept and re-verified at close); the tree clean; no new branches.
+
+Stage Summary:
+- Session 60 FULLY CLOSED at bc75686: the FRESH-CLONE session (the first full rebuild since S24, the sandbox DATABASE_URL gotcha registered as gotcha 70a) + the SIXTEENTH standing watch all records hold + both 34th-surface route extensions answered (the second-interpolation-input cross-check HOLDS; the literal family = 1 real divergence + 2 inventions) + THE THIRTY-FIFTH SURFACE (the /Shading pattern-interior VALUE layer) at FULL PARITY + THE LITERAL-RULE CONVERGENCE (the D205 family's last member, TDD 6/6 x3) + the D135 hover-instrument hardening (the chunk-9 flake closed, the original failing order 26/26); gate 877 -> 883 = 252 + 125 + 506 in 69 files (the file-set diff EMPTY); VLM 8/8 zero adjudications (the third consecutive).
+- The S61 candidates recorded (the SEVENTEENTH standing watch; the 36th surface [the pdftohtml -xml reading-order layer; or the transfer-mode interiors; or the animation-band value layer under a pinned-frame contract]; or the remaining css-text mirror families).

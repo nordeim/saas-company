@@ -178,6 +178,34 @@ hardening law), CLAUDE (the session-60 context), README (the counts +
 the session60 suite row), SKILL (lesson 99), the remediation plan (this
 file), the session log 129, the worklog.
 
+## The pushed-hash record (the closing discipline)
+
+- The remediation commit **bc75686** (27 files: the session60 spec +
+  the src/app/globals.css literal-rule convergence + the
+  session36-interaction-parity D135 hardening + the docs alignment
+  [PAD/AGENTS/CLAUDE/README/SKILL v2.59.0] + the 15 refreshed
+  screenshots + scripts/run-e2e-chunks-s60.sh + the session log 129 +
+  this plan + the worklog) — **PUSHED AND WRAPPER-VERIFIED**: the push
+  ran `4747964..bc75686 HEAD -> main` through the wrapper v3.1 (the
+  paramiko 5.0.0 shim on PATH — `/home/z/my-project/bin/ssh`,
+  re-extracted from the skill's Appendix A after the workspace reset),
+  and the wrapper's own verification gate returned **remote
+  refs/heads/main @ bc75686 == local HEAD** with exit 0, the
+  remote-tracking ref synced (git status agreeing, no "ahead"
+  residue).
+- The operator key's fingerprint was verified through paramiko's own
+  key parse BEFORE the push and matched the S1-S59 record exactly
+  (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — the clean
+  first materialization, no transcription catch this session); the
+  wrapper's temp key copy shredded per its lifecycle; the operator's
+  key file destroyed after the final closing push (the closing
+  discipline).
+- Zero zombies at close (the port-sweep discipline held through every
+  probe/render/capture/e2e run — :3000/:3100/:3400/:3500 all swept
+  clean and re-verified at the closing commit); the scratch DBs
+  removed (recon60/capture60); the tree clean before the closing
+  commit; no new branches.
+
 ## The S61 candidates
 
 - The SEVENTEENTH standing watch (the records now include the 35th
