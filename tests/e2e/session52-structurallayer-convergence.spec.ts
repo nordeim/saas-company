@@ -348,25 +348,32 @@ test.describe("the PDF structural layer (Session 52 — D181, the twenty-seventh
 // convergence at the operator layer (D182)
 // =====================================================================
 test.describe("the /login alternates' post-build convergence (Session 52 — D182)", () => {
-  test("the reset state's card-form 6-block census: the per-glyph block-0 decomposition + the byte-identical tail blocks (the D177 family at glyph granularity)", async ({ page }) => {
+  test("the reset state's card-form 6-block census: the CONVERGED single-run block-0 + the byte-identical tail blocks (the D182 record at its S58 convergence)", async ({ page }) => {
     await enterReset(page);
     const file = await renderPdf(page, "reset-blocks");
-    // the card form's family census — the S51 convergence holding
+    // the card form's family census — the S51 convergence holding + the
+    // S58 CONVERGENCE: the login-local h2-h6 tracking pin (Session 58)
+    // collapsed the h2's per-glyph emission to the live's single merged
+    // run — text 74 -> 44 (exactly the D182 30-op delta: 15 Td + 15 Tj)
     const v = vectorCensus(file);
     expect(v.forms.length).toBe(2);
     expect(v.forms[0].bbox).toBe("[0,0,1798,1639]");
-    expect(v.forms[0].families).toEqual({ gs: 36, path: 354, clip: 8, paint: 18, color: 25, xform: 6, text: 74 });
+    expect(v.forms[0].families).toEqual({ gs: 36, path: 354, clip: 8, paint: 18, color: 25, xform: 6, text: 44 });
     expect(v.forms[1].bbox).toBe("[18,15,1783,1624]");
     expect(v.forms[1].families).toEqual({ gs: 3, xform: 1, color: 2, xobj: 1 });
-    // THE GLYPH-RUN BLOCK CENSUS: 6 BT blocks; block 0 the per-glyph
-    // decomposition (16 single-glyph Tj + 15 Td repositions — the clone's
-    // emission of "Check your email"), blocks 1-5 the live-identical runs.
+    // THE GLYPH-RUN BLOCK CENSUS: 6 BT blocks; block 0 the CONVERGED
+    // single merged run (the S58 tracking fix: the h2 "Check your email"
+    // emitted 16 single-glyph Tj + 15 Td repositions under the leaked
+    // 0.02em tracking — the pre-fix D182 divergence record — and now
+    // emits ONE Tj with the same 16 glyphs, matching the live's own
+    // emission at full line-level parity), blocks 1-5 the live-identical
+    // runs (unchanged by the fix, measured 3x pre + post).
     // The census is INTERPOLATION-DEPENDENT (the email's length changes the
     // run segmentation — the D177 family; the pin binds the spec's own
     // s52-pin@test.local input, measured deterministic 3x).
     const blocks = textBlocks(file, "[0,0,1798,1639]");
     expect(blocks.length).toBe(6);
-    expect(blocks[0]).toEqual({ tf: 1, td: 15, tj: 16, glyphs: 16 });
+    expect(blocks[0]).toEqual({ tf: 1, td: 0, tj: 1, glyphs: 16 });
     expect([blocks[1], blocks[2], blocks[3], blocks[4], blocks[5]]).toEqual([
       { tf: 1, td: 3, tj: 4, glyphs: 41 },
       { tf: 1, td: 0, tj: 1, glyphs: 18 },

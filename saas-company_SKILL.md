@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.56.0 · **Last updated:** 2026-10-16 (Session 57 remediation)
+> **Version:** 2.57.0 · **Last updated:** 2026-10-16 (Session 58 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–57)
+## §12. Lessons Learnt (Sessions 1–58)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -2060,6 +2060,52 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     the /Metadata XMP + /PieceInfo layers measured EMPTY-SET (both
     registered as laws — the D170 pattern's third and fourth
     members).
+
+97. **The render-input identity + the comparator-format + the
+    stale-pin convergence (Session 58)**: the THIRTY-THIRD SURFACE —
+    the content streams' TEXT-POSITION layer (every Td/Tm/TJ record
+    tokenized, the pages compared at the LINE level — (y, x0, runs,
+    glyph-hash) with the per-baseline block merge absorbing the ±2
+    BT/Tm re-blocking family) — the six deterministic content routes
+    at FULL LINE-LEVEL PARITY, the landing's 23-line stable core,
+    the 404's registered 2-space-glyph delta, /demo the 27-line
+    superset floor; PLUS the session's REAL finding — the
+    LOGIN-LOCAL H2-H6 TRACKING FIX (the reference's SPA bundle ships
+    a base `h1..h6 { letter-spacing: .02em }` rule its LOGIN bundle
+    does not; the three alternate-state h2s computed +0.48px here vs
+    normal on the live, and the leaked tracking RE-SEGMENTED the
+    glyph runs — per-glyph 16/19/19 single-glyph Tj decompositions
+    vs the live's single merged run — the RE-SEGMENTATION root cause
+    of the whole D177/D182 family; the login-local `letter-spacing:
+    normal` pin converged the alternates to full line parity AND
+    the S52 D182 record to the merged truth — the first src/ parity
+    fix since S54, TDD RED→BUILD→GREEN). (a) THE RENDER-INPUT
+    IDENTITY LAW: a cached-render battery comparing clone-vs-live
+    PDFs is comparing INTERPOLATED CONTENT — the login family's
+    censuses change with the email/password typed into the capture
+    driver (the print text, the x-origins, the run segmentation,
+    even the printed bullet count); a re-render of ONE side MUST
+    reuse the exact inputs the OTHER side's cache was captured
+    with — the first post-fix re-render borrowed the spec's pin
+    email against a live cache captured with the probe email, and
+    the battery went RED on the mismatch, not on drift (four REDs
+    root-caused as the instrument before any parity conclusion).
+    (b) THE COMPARATOR-FORMAT LAW: constants compared against a
+    comparator's output must be compared under the comparator's OWN
+    canonical form — `payloadRows()` returns sorted, a hand-written
+    constants array is not (compare against `[...CONST].sort()` or
+    generate the constants through the same sort). (c) THE
+    GLYPH-STRING HEX LAW (the lesson-88 family's 9th sighting):
+    Chromium's print pipelines emit glyph strings as HEX (`<01>
+    Tj`), not parenthesized literals — a paren-only regex reads
+    every text block as empty; both forms must be parsed. (d) THE
+    STALE-PIN CONVERGENCE LAW: when a src/ fix CONVERGES a
+    previously registered divergence, the OLD divergence pin now
+    pins a FALSEHOOD — the gate's missing test is the stale pin
+    failing, and the honest update re-pins the converged truth
+    with the provenance recorded in the spec (the S52 reset-card
+    census 16-Tj+15-Td → 1 Tj; text 74 → 44 — exactly the D182
+    30-op delta).
 
 96. **The transcription-injection law + the payload-layer instrument
     laws (Session 57)**: the THIRTY-SECOND SURFACE — the image STREAM

@@ -198,6 +198,24 @@ export function LoginCard() {
            h1 ui-sans-serif…, card 746px). Restore the inheritance on
            this route only. */
         h1, h2, h3, h4, h5, h6 { font-family: inherit; }
+        /* Session 58 — the login-local heading TRACKING pin. The
+           reference's SPA bundle ships a base 'h1..h6 { letter-spacing:
+           .02em }' rule (globals.css mirrors it), but its LOGIN bundle
+           does NOT: the live's three alternate-state h2s ("Create your
+           account" / "Reset your password" / "Check your email") compute
+           letter-spacing normal, while the base rule leaks +0.02em
+           (+0.48px at the 24px sm:text-2xl) onto them here — measured at
+           the print text-position layer: the h2 lines' x-origins shifted
+           +3.84..4.57pt with the same glyph hashes, and the per-glyph
+           emission split each line into 16/19/19 single-glyph Tj runs
+           vs the live's single merged run (the D177/D182 segmentation
+           family at its root). Pin h2-h6 back to normal on this route;
+           the signin h1 is untouched — its explicit tracking-tight
+           utility (the S7 record, computed -0.75px) carries the route's
+           heading tracking at parity. The fix also CONVERGES the reset
+           card's glyph-run census (the S52 D182 pin updated to the
+           converged truth). */
+        h2, h3, h4, h5, h6 { letter-spacing: normal; }
         /* Session 37 D137 - the reference's LOGIN css bundle defines
            .transition-colors with the legacy -webkit-text-decoration-color
            alias (SEVEN properties) while its SPA bundle - and every other

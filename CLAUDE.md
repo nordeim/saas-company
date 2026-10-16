@@ -426,6 +426,55 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   Gotcha 65 / lesson 94: the inline-storage law + the array-key
   enumeration artifact + the SMask recursion terminus.
 
+- **Session 58 (2026-10-16) remediation** — see
+  `docs/remediation-plan-session58.md`: the FIRST src/-change parity
+  session since S54 (the worklog S57 candidates — the
+  THIRTY-THIRD-surface trio probed on the raw shape FIRST, the
+  lesson-88 discipline; the /HT + catalog-view + ICC candidates
+  measured empty/null and registered as laws; the dashboard's
+  payload-under-mutation selected as the mutation column). **THE
+  THIRTY-THIRD SURFACE (D198) — the content streams' TEXT-POSITION
+  layer**: every Td/Tm/TJ positioning record tokenized, the glyph
+  runs positioned, the pages compared at the LINE level — (y, x0,
+  runs, glyph-hash) with the per-baseline block merge absorbing the
+  ±2 BT/Tm re-blocking family — the six deterministic content routes
+  at FULL LINE-LEVEL PARITY (23/6/36/39/34/64 lines), the landing's
+  23-line stable core, the 404's registered 2-space-glyph delta
+  (pdftotext byte-identical), /demo the 27-line superset floor.
+  **THE LOGIN-LOCAL H2-H6 TRACKING FIX (D199 — TDD
+  RED→BUILD→GREEN)**: the reference's SPA bundle ships a base
+  `h1..h6 { letter-spacing: .02em }` rule its LOGIN bundle does NOT
+  — the three alternate-state h2s computed +0.48px here vs normal
+  on the live (measured at this layer: +3.84..4.57pt x-origin
+  shifts, identical glyph hashes, per-glyph 16/19/19-run
+  decompositions vs the live's single merged run — the
+  RE-SEGMENTATION root cause of the D177/D182 family); the
+  login-local `h2..h6 { letter-spacing: normal }` pin converged the
+  alternates to FULL line parity AND the S52 D182 record to the
+  merged truth (16-Tj+15-Td → 1 Tj; text 74 → 44 — the stale-pin
+  convergence: the gate's missing test was the OLD divergence pin
+  failing, re-pinned to the converged truth). **THE FOUR LAWS
+  (D200-D203)** — the /HT empty-set + the /OpenAction+/PageMode
+  null catalog-view + the alternates' ICC empty-set + the gs
+  VALUE-layer parity (/SA /LW /LC /LJ /ML at exact multiset parity).
+  **THE MUTATION COLUMN (D204)** — the dashboard's print payload
+  tracks the data (+1 shading pattern per new chart row to the
+  ceiling, objects 292→303→320→329 deterministically, gs 18 +
+  tilings 3 stable, A===A2 at every step). **THE FOURTEENTH
+  standing watch: all records hold.** Gate 859 → **870** (252 +
+  125 + 493 — the session58 suite's +11; the chunk runner built
+  from the S57 runner per gotcha 66c, the file-set diff EMPTY);
+  the drift battery REBUILT as ONE consolidated ten-phase check at
+  **103/103 GREEN ZERO DRIFT** with FOUR instrument REDs
+  root-caused mid-run (gotcha 68 / lesson 97: the render-input
+  identity — both sides' cached renders MUST be captured with
+  IDENTICAL inputs, the D177 interpolation family at the battery
+  layer; the comparator-format law — constants compared under the
+  comparator's own sort; the glyph-string HEX law, the lesson-88
+  family's 9th sighting; the stale-pin convergence law). 21
+  screenshots refreshed (the dev DB canonical before AND after);
+  VLM **8/8 on the FIRST PASS** — zero adjudications.
+
 - **Session 57 (2026-10-16) remediation** — see
   `docs/remediation-plan-session57.md`: a registration cycle (the
   worklog S56 candidates — the THIRTY-SECOND-surface trio probed on

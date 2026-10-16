@@ -851,6 +851,96 @@
   registry-compounding lesson, remediation plan session33, session
   log 66.
 
+- `[NOTE]` **Session 58 remediation (2026-10-16)** — the FIRST
+  src/-change parity session since S54 (the worklog S57 candidates:
+  the THIRTY-THIRD-surface trio probed on the raw shape FIRST per
+  the lesson-88 discipline — the content streams' TEXT-POSITION
+  layer measured RICH (the glyph-run-splitting family: BT 37 vs 35
+  on /faq) and SELECTED; the /HT + /OpenAction+/PageMode + the
+  alternates' ICC candidates measured EMPTY/NULL and registered as
+  LAWS; the dashboard's payload-under-mutation measured RICH and
+  selected as the mutation column). **THE THIRTY-THIRD SURFACE
+  (D198) — the content streams' TEXT-POSITION layer:** every
+  Td/Tm/TJ positioning record tokenized, the glyph runs positioned,
+  the pages compared at the LINE level — (y, x0, runs,
+  glyph-hash), the blocks merged per baseline so the ±2 BT/Tm
+  page-layer re-blocking family (the D125 engine structure, stable
+  per side) absorbs into the honest comparable census — the six
+  deterministic content routes at FULL LINE-LEVEL PARITY
+  (23/6/36/39/34/64 lines), the landing's 23-line STABLE CORE (the
+  entrance-gated below-fold family bucketed), the default/error
+  pair's two registered ±1 run-split lines (same glyph hashes — the
+  D177 segmentation family), the 404's 2-space-glyph emission
+  delta (58v60 runs, pdftotext byte-identical — the D161
+  adjudication family), /demo the 27-line superset floor.
+  **THE LOGIN-LOCAL H2-H6 TRACKING FIX (D199 — the session's REAL
+  computed-style finding, TDD RED→BUILD→GREEN):** the reference's
+  SPA bundle ships a base `h1..h6 { letter-spacing: .02em }` rule
+  (globals.css mirrors it) but its LOGIN bundle does NOT — the
+  three alternate-state h2s ("Create your account" / "Reset your
+  password" / "Check your email") computed +0.48px here vs normal
+  on the live, measured at this layer as +3.84..4.57pt x-origin
+  shifts with identical glyph hashes + the per-glyph 16/19/19-run
+  decompositions vs the live's single merged run; the login-local
+  `h2..h6 { letter-spacing: normal }` pin converged the alternates
+  to FULL line-level parity AND the S52 D182 record to the merged
+  truth (the reset card's block-0 census 16-Tj+15-Td → 1 Tj, text
+  74 → 44 — exactly the D182 30-op delta; the STALE-PIN
+  CONVERGENCE caught: the gate's missing test was the old S52
+  divergence pin failing, updated to the converged truth with the
+  provenance recorded). **THE FOUR LAWS (D200-D203):** the /HT
+  empty-set (no halftone key in any resources-referenced
+  /ExtGState on any route, both sides) + the /OpenAction +
+  /PageMode null catalog-view law + the alternates' ICC empty-set
+  law (the S56 shape detection extended: image counts 6/6/1/2/2
+  both sides) + the gs VALUE-layer parity law (the /SA /LW /LC
+  /LJ /ML values at exact multiset parity on every route).
+  **THE MUTATION COLUMN (D204):** the dashboard's print payload
+  tracks the data — +1 shading pattern per new chart row until the
+  CHART_ROWS ceiling, objects growing deterministically
+  (292→303→320→329), gs stable 18, tilings stable 3, the YStep
+  fractional-pixel family (9 → 9.000061), A===A2 at every step.
+  THE INSTRUMENT LAWS honored: the GLYPH-STRING HEX law (the
+  lesson-88 family's 9th sighting — a paren-only regex reads every
+  block empty; both forms parsed), the pin-your-own-input law, the
+  fresh-context law. **THE FOURTEENTH STANDING WATCH: all records
+  hold** (the working eight byte-identical 739/24/101/36/335/390/
+  566/285, the 404 16=16, the sitemaps 8/7, the soft-404 family,
+  the D160 mobile-nav exact — NO Tailwind v4 bug, the live login
+  records, the clone login -> dashboard). Gate 859 -> **870** =
+  252 unit + 125 smoke + 493 e2e (the session58 suite's +11); the
+  chunk runner built from the S57 runner per gotcha 66c (the
+  session58 spec APPENDED, the file-set diff against the global
+  --list EMPTY — 493 in 67 files, every chunk reconciled); the
+  gate's e2e flakes root-caused (the chunk-11 font-stack
+  entries.length=0 environment family — clean on re-run after the
+  orphan sweep; the heavy PDF-batch chunk reaped in the window
+  timeout — run directly per the house pattern, tally by
+  output-captured arithmetic). The drift battery REBUILT as ONE
+  consolidated ten-phase check on the cached renders (the S55-S57
+  battery scratch lost to the sandbox reset — consolidated, not
+  re-ported) at **103/103 GREEN ZERO DRIFT** (the print-text 15 +
+  payload 7 + annots 10 + qq 9 + gs 15 + ICC 5 + catalog 10 +
+  line-records 13 + dashboard 4 + the standing watch 15), with
+  FOUR instrument REDs root-caused mid-run before any parity
+  conclusion (gotcha 68: the render-input identity — the post-fix
+  re-render borrowed the spec's pin email against the live cache
+  captured with the probe email, the D177 interpolation family at
+  the battery layer; the comparator-format — the constants array
+  compared unsorted against payloadRows()'s sorted output; both
+  fixed as the instrument, re-rendered with identical inputs,
+  re-run green). 21 screenshots refreshed (the capture server on
+  :3500 against db/capture58.db — a fresh copy of the canonical
+  dev DB; the dev DB canonical before AND after — 1/6/2, zero
+  mutations). VLM **8/8 on the FIRST PASS** (zero adjudications —
+  the first session since the VLM checks began where every prompt
+  read the records correctly). DOCUMENTED: PAD (this block, the
+  ledger D198-D204, the 7.1 counts 67 specs/493), AGENTS (the
+  counts + gotcha 68), CLAUDE (the session-58 context), README
+  (the 870 badge + the 33rd-surface story + the session58 suite
+  row + the counts), SKILL v2.57.0 (lesson 97), the remediation
+  plan session58, the session log 125, the worklog.
+
 - `[NOTE]` **Session 57 remediation (2026-10-16)** — a registration
   cycle (the worklog S56 candidates: the THIRTY-SECOND-surface trio
   probed on the raw shape FIRST per the lesson-88 discipline — the
@@ -4034,6 +4124,13 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D195 | THE IMAGE STREAM PAYLOAD LAYER (the thirty-second surface): the filtered bytes of every image XObject — `qpdf --show-object=N --filtered-stream-data` (the layer BELOW the S56 image-dict interior) — measured at FULL BYTE PARITY on every deterministic route on the first honest measurement: /login 6 streams with byte-identical sha256s AND the same object numbers across sides (the 4 DCTs + the 754x676 RGB/Gray SMask pair); the content routes + the 404 + /demo the empty-set family; all five /login alternates byte-identical; the landing's BUCKETS: the stable-shared core byte-identical + the VIDEO-FRAME family frame-dependent BOTH sides with INTERSECTING sha sets (the same 8s video captured at different times) + the 201x1 pair frame-dependent on BOTH sides (the S56 clone-only reading corrected) + the clone-only slivers pinned at the byte level | Measured (the session57 spec, 10/10 GREEN x3 + the recon + the stability probe) | tests/e2e/session57-payload-annots-qq.spec.ts; the drift battery's ph7 PAYLOAD column; AGENTS gotcha 67(c) | **Registered parity + instrument law** (Session 57) |
 | D196 | THE /ANNOTS VALUE LAYER: every annotation dict at the value level — the /Rect byte-precision (identical to 2dp across sides), the /A action dicts (/S /URI, origin-normalized), the /Dest named destinations, the /F 4 flags, the /BS empty — under the pg-dropped + origin-normalized contract (the qpdf u:-prefix-aware URI strip), at EXACT parity on every public route (landing 69, /faq 14, /thank-you 1, privacy/terms/refund 14, /accessibility 16, /login + 404 empty; /demo the 14/0 registered superset floor — the live's 16-word shell carries no links, the S48 record) | Measured (the same spec + the battery's ph7 ANNOTS column) | tests/e2e/session57-payload-annots-qq.spec.ts | **Registered parity** (Session 57) |
 | D197 | THE Q/Q LAW: the graphics-state stack balanced on every page content stream (q === Q, endDepth 0, maxDepth <= 2, both sides, every route) with the content-route ENGINE-FAMILY deltas registered (the clone's page streams carry +4/+2/+6/+4 q-pairs on privacy/terms/accessibility/refund — stable per side, measured 3x: 70/66, 68/66, 86/80, 70/66; the landing's animated 189/190 band + the forms stream-count delta 54/57; the /demo 96/7 superset floor); + THE TRANSCRIPTION-INJECTION CATCH (gotcha 67a: the reconciliation diff showed a logo-petels "typo in the committed runners" — root-caused as the reconciliation command's own re-typed chunk list carrying the typo; the committed runners verified correct by hexdump + git-unmodified; the S56 gate's 849 stands; the honest file-set reconciliation expands the runner FILE ITSELF, never a re-typed copy) | Measured (the same spec + the battery's ph7 QQ column) | tests/e2e/session57-payload-annots-qq.spec.ts; AGENTS gotcha 67(a) | **Registered law + the instrument correction** (Session 57) |
+| D198 | THE TEXT-POSITION LAYER (the thirty-third surface): every content stream's Td/Tm/TJ positioning records tokenized, the glyph runs positioned, the pages compared at the LINE level — (y, x0, runs, glyph-hash-without-run-markers), the per-baseline block merge absorbing the ±2 BT/Tm page-layer re-blocking family (the D125 engine structure) into the honest comparable census — the six deterministic content routes at FULL LINE-LEVEL PARITY (thank-you 23, /login 6, /faq 36, privacy 39, refund 34, accessibility 64 lines — every (y, x0, runs, glyphs) equal); the landing's 23-line STABLE CORE (the entrance-gated below-fold family bucketed — the below-fold lines vary 23/25/31 by entrance animation state); the alternates reset/signup/forgot at FULL parity POST-FIX (6/9/7 lines); the default/error pair's two registered ±1 run-split lines (y=701: 7v6 runs, y=348: 1v2 runs — same glyph hashes, the D177 segmentation family); the 404's y=586 line carrying the registered 2-space-glyph emission delta (58v60 runs, the live emits B7 spaces at the quote boundaries — pdftotext byte-identical, the D161 adjudication family); /demo the 27-line superset floor over the live's 4-line shell | Measured (the session58 spec, 11/11 GREEN x3 + the recon + the post-fix re-render) | tests/e2e/session58-textposition-laws.spec.ts; the drift battery's ph8 LINE-RECORDS column | **Registered parity** (Session 58) |
+| D199 | THE LOGIN-LOCAL H2-H6 TRACKING FIX (the first src/ parity fix since S54, TDD RED→BUILD→GREEN): the reference's SPA bundle ships a base `h1..h6 { letter-spacing: .02em }` rule (globals.css mirrors it) but its LOGIN bundle does NOT — the three alternate-state h2s ("Create your account" / "Reset your password" / "Check your email") computed letter-spacing normal on the live but +0.02em (+0.48px at the 24px sm:text-2xl) here, measured at the text-position layer as +3.84..4.57pt x-origin shifts with identical glyph hashes + the per-glyph 16/19/19 single-glyph Tj decompositions vs the live's single merged run (the glyph-run RE-SEGMENTATION root cause of the D177/D182 family); the fix — the login-local `h2, h3, h4, h5, h6 { letter-spacing: normal }` pin beside the S37 font-family pin (the signin h1 untouched — its explicit tracking-tight utility carries the route's heading tracking at parity); the fix converged the alternates to FULL line-level parity AND the S52 D182 record to the merged truth (the reset card's block-0 census 16-Tj+15-Td → 1 Tj + 16 glyphs, card-form text ops 74 → 44 — exactly the D182 30-op delta; the STALE-PIN CONVERGENCE: the gate's missing test was the old divergence pin failing — updated to the converged truth with the provenance recorded) | Measured + FIXED (the RED pin → the build → GREEN; the S52 spec's D182 pin re-pinned; the battery's P8 post-fix convergence green) | src/app/login/login-card.tsx (the login-local pin); tests/e2e/session58-textposition-laws.spec.ts (the D199 pin); tests/e2e/session52-structurallayer-convergence.spec.ts (the converged D182 record) | **Parity fix + the stale-pin convergence law** (Session 58) |
+| D200 | THE /HT EMPTY-SET LAW: no halftone key in any resources-referenced /ExtGState on any route, both sides, every render — Skia's print pipeline emits no /HT (the gs VALUE layer extends: /SA /LW /LC /LJ /ML measured at exact multiset parity on every route, but /HT never appears) | Measured (the session58 spec's laws block + the battery's ph5 gs columns) | tests/e2e/session58-textposition-laws.spec.ts | **Registered law** (Session 58) |
+| D201 | THE CATALOG VIEW LAYER: the /OpenAction + /PageMode keys null on every route's catalog dict, both sides (the document-view layer — neither pipeline opens a viewer action or a non-default page mode at print time) | Measured (the same spec + the battery's ph7 catalog column) | tests/e2e/session58-textposition-laws.spec.ts | **Registered law** (Session 58) |
+| D202 | THE ALTERNATES' ICC EMPTY-SET LAW: zero ICC profile streams or refs on all five /login alternates, both sides (the S56 shape-based detection extended to the alternate states — the image counts 6/6/1/2/2 default/error/reset/signup/forgot, identical across sides; the ICC layer confined to the landing's video poster, both sides) | Measured (the same spec + the battery's ph6 ICC column) | tests/e2e/session58-textposition-laws.spec.ts | **Registered law** (Session 58) |
+| D203 | THE GS VALUE-LAYER PARITY LAW: the /SA /LW /LC /LJ /ML values at exact multiset parity on every route, both sides (the D187 alpha-grid law's value-level complement — the previously unmeasured gs keys now pinned; /SA boolean/null normalized, the stroke joins/caps/miter values byte-equal) | Measured (the same spec + the battery's ph5 gs columns) | tests/e2e/session58-textposition-laws.spec.ts | **Registered law** (Session 58) |
+| D204 | THE MUTATION COLUMN (the dashboard's print payload under live data): the authenticated dashboard's print payload TRACKS THE DATA — +1 shading pattern per new chart row until the CHART_ROWS ceiling (fns 4→5→6→7), the tiling XStep/YStep family (54→127→142 bytes; YStep 9 → 9.000061 at the 4-row reflow — the fractional-pixel family), objects growing deterministically (292→303→320→329), gs stable 18, tilings stable 3, and A===A2 at every step (the re-render determinism law under mutation) | Measured (the session58 spec's mutation block + the battery's ph9 dashboard columns) | tests/e2e/session58-textposition-laws.spec.ts | **Registered parity-under-mutation** (Session 58) |
 
 
 
@@ -4098,7 +4195,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 20 files | 252 | `src/lib/*.test.ts` + `src/app/api/workflows/generate/route.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
-| Browser E2E | 66 specs | 482 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Browser E2E | 67 specs | 493 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 125 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins
