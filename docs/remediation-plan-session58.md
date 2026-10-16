@@ -244,21 +244,26 @@ leaked heading tracking), fixed through the full TDD discipline
 
 - The remediation commit **e2eca61** (the session58 registration — the
   spec + the src/ fix + the S52 re-pin + the docs alignment + the
-  screenshots + scripts/run-e2e-chunks-s58.sh + the worklog) —
-  **PUSH PENDING THE OPERATOR KEY**: the SSH key was destroyed after
-  the S57 push per the closing discipline and was NOT re-provided in
-  the Session-58 prompt (the context compaction stripped it from the
-  original message). The commit sits at local HEAD, the tree clean;
-  the push proceeds via the wrapper (`--key-file` / `--key-stdin` /
-  `$SSH_KEY`) the moment the operator re-provides the key, followed
-  by the wrapper verification (remote main == local HEAD + the
-  fetch-independent HTTPS ls-remote cross-check) and this record's
-  back-fill.
-- The operator key's fingerprint will be verified through
-  paramiko's own key parse BEFORE the push (the S1-S57 record:
-  SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU); the wrapper's
-  temp key copy shredded after the run; the operator's key file
-  destroyed after the push.
+  screenshots + scripts/run-e2e-chunks-s58.sh + the worklog) and the
+  closing commit **e5a0647** — **PUSHED AND WRAPPER-VERIFIED**: the
+  operator re-provided the key in the continuation turn; the push ran
+  `837df23..e5a0647 HEAD -> main` through the wrapper v3.1 (the
+  paramiko shim on PATH — `/home/z/my-project/bin/ssh`), and the
+  wrapper's own verification gate returned **remote refs/heads/main @
+  e5a0647 == local HEAD** with exit 0, the remote-tracking ref synced
+  (git status agreeing, no "ahead" residue).
+- The operator key's fingerprint was verified through paramiko's own
+  key parse BEFORE the push and matched the S1-S57 record exactly
+  (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — the same
+  field-tested deploy key that carried every prior push); one
+  transcription catch in flight: the chat-relayed key block's fifth
+  base64 line arrived garbled on the first materialization (paramiko
+  rejected it with `Invalid key`), root-caused structurally (the
+  OpenSSH-v1 header/checkints/algo/pub/sig decoded clean through byte
+  210 — the defect isolated to the comment+padding tail), the operator
+  re-pasted the block, and the corrected key parsed with the exact
+  recorded fingerprint; the wrapper's temp key copy shredded after the
+  run; the operator's key file destroyed after the final closing push.
 - Zero zombies at close (the port-sweep discipline held through every
   recon/battery/capture/e2e run — :3000/:3100/:3400/:3401/:3500 all
   swept clean, verified at the closing commit); the tree clean before
