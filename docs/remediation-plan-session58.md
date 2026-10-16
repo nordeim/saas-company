@@ -242,15 +242,24 @@ leaked heading tracking), fixed through the full TDD discipline
 
 ## The pushed-hash record (the closing discipline)
 
-- The remediation commit `<HASH>` (the session58 registration — the
+- The remediation commit **e2eca61** (the session58 registration — the
   spec + the src/ fix + the S52 re-pin + the docs alignment + the
-  screenshots + scripts/run-e2e-chunks-s58.sh + the worklog) pushed
-  via the SSH wrapper with the EXPLICIT
-  `--remote git@github.com:nordeim/saas-company.git`.
-- Wrapper-verified: remote main @ `<HASH>` == local HEAD; the
-  fetch-independent HTTPS ls-remote agreed.
-- The operator key's fingerprint verified through paramiko's own key
-  parse BEFORE the push; the wrapper's temp key copy shredded after
-  the run; the operator's key file destroyed after the push.
-- Zero zombies at close; the tree clean before the closing commit; no
-  new branches.
+  screenshots + scripts/run-e2e-chunks-s58.sh + the worklog) —
+  **PUSH PENDING THE OPERATOR KEY**: the SSH key was destroyed after
+  the S57 push per the closing discipline and was NOT re-provided in
+  the Session-58 prompt (the context compaction stripped it from the
+  original message). The commit sits at local HEAD, the tree clean;
+  the push proceeds via the wrapper (`--key-file` / `--key-stdin` /
+  `$SSH_KEY`) the moment the operator re-provides the key, followed
+  by the wrapper verification (remote main == local HEAD + the
+  fetch-independent HTTPS ls-remote cross-check) and this record's
+  back-fill.
+- The operator key's fingerprint will be verified through
+  paramiko's own key parse BEFORE the push (the S1-S57 record:
+  SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU); the wrapper's
+  temp key copy shredded after the run; the operator's key file
+  destroyed after the push.
+- Zero zombies at close (the port-sweep discipline held through every
+  recon/battery/capture/e2e run — :3000/:3100/:3400/:3401/:3500 all
+  swept clean, verified at the closing commit); the tree clean before
+  the closing commit; no new branches.
