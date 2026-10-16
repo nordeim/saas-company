@@ -186,8 +186,26 @@ worklog.
 
 ## The pushed-hash record (the closing discipline)
 
-- TO BE BACK-FILLED AT THE CLOSING PUSH (the wrapper verification:
-  remote main == local HEAD).
+- The remediation commit **a43d67c** (24 files: the session59 spec +
+  the src/ token fixes [globals.css + login-card.tsx] + the S57
+  dashboard-raster re-pin + the docs alignment + the 11 refreshed
+  screenshots + scripts/run-e2e-chunks-s59.sh + the session log 127 +
+  this plan + the worklog) — **PUSHED AND WRAPPER-VERIFIED**: the push
+  ran `acfb319..a43d67c HEAD -> main` through the wrapper v3.1 (the
+  paramiko shim on PATH — `/home/z/my-project/bin/ssh`), and the
+  wrapper's own verification gate returned **remote refs/heads/main @
+  a43d67c == local HEAD** with exit 0, the remote-tracking ref synced
+  (git status agreeing, no "ahead" residue).
+- The operator key's fingerprint was verified through paramiko's own
+  key parse BEFORE the push and matched the S1-S57 record exactly
+  (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU); the wrapper's
+  temp key copy shredded after the run; the operator's key file
+  destroyed after the final closing push.
+- Zero zombies at close (the port-sweep discipline held through every
+  probe/render/battery/capture/e2e run — :3000/:3100/:3400/:3401/:3500
+  all swept clean and re-verified at the closing commit); the scratch
+  DBs removed (recon59/capture59 + the S58 leftovers); the tree clean
+  before the closing commit; no new branches.
 
 ## The S60 candidates
 

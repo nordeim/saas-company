@@ -2147,3 +2147,16 @@ Stage Summary:
 - Gate 870 -> 877 (252 + 125 + 500, every chunk reconciled, the file-set diff EMPTY); the battery at ELEVEN phases 120/120 GREEN ZERO DRIFT; the FIFTEENTH standing watch 15/15 all records hold; VLM 8/8 first-pass zero adjudications.
 - Survey scripts persisted under research/ (gitignored scratch): probe-s59-{surfaces,colors,computed,ops,tokens,reconcile,loginbundle,fills}.mjs, recon-s59-ph1.mjs, render-s59.mjs, drift-battery-s59.mjs, capture-screenshots-s59.mjs, vlm-checks-s59.sh + the committed scripts/run-e2e-chunks-s59.sh.
 - The S60 candidates: the SIXTEENTH standing watch; the 34th surface's route extensions (the second-interpolation-input cross-check at the color layer; the 3 remaining literal-#d500ff outline/shadow rules); or the THIRTY-FIFTH surface (the /Shading pattern-interior value layer — the first candidate the var-indirection law makes measurable; the pdftohtml -xml reading-order layer).
+---
+Task ID: 59-close
+Agent: Super Z (main)
+Task: Session 59 closing — the pushed-hash record + the final state
+
+Work Log:
+- The remediation commit a43d67c (24 files, 976 insertions) PUSHED AND WRAPPER-VERIFIED: acfb319..a43d67c HEAD -> main through the wrapper v3.1, the verification gate returning remote refs/heads/main @ a43d67c == local HEAD (exit 0), the remote-tracking ref synced.
+- The operator key's fingerprint verified through paramiko's own parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — the exact S1-S57 record, the same field-tested deploy key); the wrapper's temp copy shredded per its lifecycle; the operator's key file destroyed after this closing push (the closing discipline).
+- The remediation plan's pushed-hash record BACK-FILLED; this closing entry; the scratch DBs removed (recon59/capture59 + the S58 leftovers); zero zombies (all ports swept and re-verified at close); the tree clean; no new branches.
+
+Stage Summary:
+- Session 59 FULLY CLOSED at a43d67c: the THIRTY-FOURTH SURFACE (the PDF COLOR-FILL VALUE layer) at full convergence — the token-syntax fixes (the var-indirection law; the red/green-50 oklch leaks; the login hsl specs; the inert tokens), the :root-vs-.dark adjudication pinned, the dashboard raster re-pinned; gate 877 = 252 + 125 + 500 (68 files, the file-set diff EMPTY); the battery at ELEVEN phases 120/120 GREEN ZERO DRIFT; the FIFTEENTH standing watch 15/15; VLM 8/8 first-pass zero adjudications (the second consecutive).
+- The S60 candidates recorded (the SIXTEENTH standing watch; the 34th surface's route extensions [the second-interpolation-input cross-check at the color layer; the 3 remaining literal-#d500ff outline/shadow rules]; or the THIRTY-FIFTH surface [the /Shading pattern-interior value layer — the first candidate the var-indirection law makes measurable; the pdftohtml -xml reading-order layer]).
