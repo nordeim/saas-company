@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.58.0 · **Last updated:** 2026-10-16 (Session 59 remediation)
+> **Version:** 2.59.0 · **Last updated:** 2026-10-17 (Session 60 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–59)
+## §12. Lessons Learnt (Sessions 1–60)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -2108,6 +2108,55 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     fix REACHES the rasters — the dashboard chart's payload sha
     shifted with the violet's half-LSB convergence (the stale-pin
     convergence law's second sighting).
+
+99. **The literal-rule endgame + the fresh-clone environment laws
+    (Session 60)**: the 34th surface's route extensions answered +
+    the THIRTY-FIFTH SURFACE (/Shading pattern-interior VALUES)
+    measured at FULL PARITY on the first honest census (login 3v3,
+    faq 0v0, the landing's distinct shapes all shared — the S59
+    token convergence CARRIED the shading layer; probe the
+    counterpart surface before assuming a fix is needed: the
+    previous session's convergence may already cover it). (a) THE
+    LITERAL-RULE ENDGAME: the S59-flagged "3 remaining literal
+    rules" resolved as ONE real divergence + TWO inventions — the
+    live's universal rule consumes `hsl(var(--ring) / .5)` (the
+    ring component var, the float carrier — the LAST unconverted
+    member of the token-syntax family, fixed through the @theme
+    component var + the * rule's outline half, the built css
+    verified surviving) while the clone's pulse-glow box-shadows
+    were INVENTED (the live's keyframe is opacity-ONLY .4/.8 over
+    4s with NO box-shadow — converged as an inert css-text mirror;
+    zero consumers in either tree). LESSON: flag remaining literals
+    by MEASURING the live's exact rule text, not by pattern-matching
+    the clone — one was a real divergence, two were inventions, and
+    the fix for each is different (indirection vs deletion). (b)
+    THE NOT-FIX DISCIPLINE'S DEPENDENCY PINNING: the * rule's
+    BORDER half keeps `var(--color-border)` (NOT the live's
+    `hsl(var(--border))`) because the clone's login-local
+    `--color-border: #e5e7eb` pin mechanism (the D131 computed
+    parity story) depends on the token-consumption form — when you
+    adjudicate a not-fix, PIN THE MECHANISM THAT DEPENDS ON IT so a
+    future convergence cannot silently break the parity story the
+    adjudication protects. (c) THE SANDBOX DATABASE_URL PRECEDENT:
+    the sandbox pre-sets an out-of-repo ABSOLUTE `DATABASE_URL` —
+    the CLI precedence rule (explicit process env = operator
+    intent) honors it, so a bare db:push/db:seed on a fresh clone
+    writes OUTSIDE the repo (consistent with where the app then
+    reads, but NOT the documented story); the codebase is correct
+    per its tested contract, the environment is the artifact — pin
+    `DATABASE_URL` per command (the gotcha-1 discipline) on every
+    DB-touching invocation in such an environment. (d) THE
+    HOVER-INSTRUMENT RACE (the S40 refinement): a poll whose
+    early-return fires on the FIRST two-consecutive-equal samples
+    locks the PRE-hover value when the hover state lags under chunk
+    load (3 failures in 5 in-context, 0 standalone — the load-order
+    trigger); the durable instrument is changed-then-stable (wait
+    for the value to LEAVE the initial read, THEN require the
+    stable pair) + the locator-based hover() (re-resolves the
+    element, moves to its CURRENT center — also closes the
+    stale-point/layout-shift mechanism); harden the whole family,
+    not just the flaking member (the same defect pattern rides the
+    siblings).
 
 97. **The render-input identity + the comparator-format + the
     stale-pin convergence (Session 58)**: the THIRTY-THIRD SURFACE —

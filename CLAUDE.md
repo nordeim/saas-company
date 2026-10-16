@@ -426,6 +426,36 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   Gotcha 65 / lesson 94: the inline-storage law + the array-key
   enumeration artifact + the SMask recursion terminus.
 
+- **Session 60 (2026-10-17) remediation** — see
+  `docs/remediation-plan-session60.md`: the FRESH-CLONE session (the
+  workspace reset — node_modules/Chromium/.env/DB all rebuilt; the
+  first since S24) + the THREE-CANDIDATE pass. **THE SIXTEENTH
+  STANDING WATCH: all records hold** (the working eight
+  byte-identical both sides; the D160 mobile-nav record EXACT — NO
+  Tailwind v4 bug; the D131 trio re-measured on the live in vivo).
+  **THE 34TH SURFACE'S ROUTE EXTENSIONS**: the
+  second-interpolation-input cross-check HOLDS (the 49-char email's
+  typed fills identical both sides); the 3 remaining literal-violet
+  rules measured — the live's `*` rule consumes
+  `hsl(var(--ring) / .5)` (the float carrier) and its pulse-glow is
+  opacity-ONLY. **THE THIRTY-FIFTH SURFACE (D215): the /Shading
+  pattern-interior VALUE layer at FULL PARITY** — the S59 token
+  convergence carried the shading layer (no fix). **THE
+  LITERAL-RULE CONVERGENCE (D213/D214, TDD 6/6 ×3)**: the @theme
+  `--ring: 290 100% 50%` component var + the * rule's outline half
+  at the live's indirection (the D205 family's LAST member; the
+  built css verified surviving; the computed layer UNCHANGED); the
+  pulse-glow keyframe at the live's exact body (the two invented
+  box-shadows REMOVED); the not-fix guards (the border half's token
+  consumption + the login ring literal). **THE D135 HOVER-INSTRUMENT
+  HARDENING** (the chunk-9 flake root-caused — the changed-then-stable
+  poll + locator hover across the family; the original failing order
+  26/26). **THE SANDBOX DATABASE_URL GOTCHA (gotcha 70)**: the
+  sandbox pre-sets an out-of-repo absolute `DATABASE_URL` which the
+  CLI precedence honors — pin per command in this environment. Gate
+  877 → **883** (252 + 125 + 506 in 69 files); VLM 8/8 zero
+  adjudications (the third consecutive).
+
 - **Session 59 (2026-10-16) remediation** — see
   `docs/remediation-plan-session59.md`: the THIRTY-FOURTH-SURFACE
   session (the /Kids page-tree VALUE layer + the /DecodeParms

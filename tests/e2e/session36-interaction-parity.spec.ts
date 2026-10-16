@@ -37,31 +37,29 @@ test("the features AI-chip's gray-200 border serializes the live's rgb string (D
 
 test("the login Google button's hover bg renders the live's #f8fafc under a REAL pointer hover (D135)", async ({ page }) => {
   await page.goto("/login");
-  const box = await page.evaluate(() => {
-    const el = Array.from(document.querySelectorAll("button")).find((b) =>
-      (b.textContent || "").includes("Google"),
-    );
-    if (!el) return null;
-    const r = el.getBoundingClientRect();
-    return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
-  });
-  expect(box).not.toBeNull();
-  await page.mouse.move(box!.x, box!.y);
-  // the S40 hardening: under full-suite load the mousemove's hover state
-  // can lag behind the poll's first samples — the two-consecutive-equal
-  // early-return then locks the PRE-hover white. A 150ms hover-settle
-  // head start (plus the widened 1200ms cap) closes the race.
-  await page.waitForTimeout(150);
+  /* S60 hardening (the S40 successor — the chunk-9 flake root-caused):
+   * the old instrument measured the button center THEN mouse.move'd to
+   * the recorded point; under the post-concurrency chunk load the hover
+   * state lagged the poll's first samples and the two-consecutive-EQUAL
+   * early-return locked the PRE-hover white (3 failures in 5 in-context
+   * runs, 0 standalone). The hardened form: the locator-based hover()
+   * re-resolves the element + moves to its CURRENT center (also closing
+   * the stale-point/layout-shift mechanism), and the poll waits for the
+   * value to LEAVE the pre-hover read BEFORE requiring the stable pair
+   * (changed-then-stable, 50ms x 30 cap). If the hover never applies,
+   * the final sample fails the assertion honestly. */
+  await page.getByRole("button", { name: /google/i }).hover();
   const bg = await page.evaluate(async () => {
     const el = Array.from(document.querySelectorAll("button")).find((b) =>
       (b.textContent || "").includes("Google"),
     )!;
     const read = () => getComputedStyle(el).backgroundColor;
+    const initial = read();
     let prev = read();
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < 30; i++) {
       await new Promise((r) => setTimeout(r, 50));
       const cur = read();
-      if (cur === prev) return cur;
+      if (cur !== initial && cur === prev) return cur;
       prev = cur;
     }
     return prev;
@@ -72,26 +70,22 @@ test("the login Google button's hover bg renders the live's #f8fafc under a REAL
 
 test("the 404 Go Home button's hover bg renders the live's #f8fafc (D135 twin)", async ({ page }) => {
   await page.goto("/does-not-exist-404");
-  const box = await page.evaluate(() => {
-    const el = Array.from(document.querySelectorAll("a, button")).find((b) =>
-      (b.textContent || "").includes("Go Home"),
-    );
-    if (!el) return null;
-    const r = el.getBoundingClientRect();
-    return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
-  });
-  expect(box).not.toBeNull();
-  await page.mouse.move(box!.x, box!.y);
+  // S60: the same hardened hover instrument as the D135 login pin (the
+  // early-return race is the same defect pattern — hardened preventively;
+  // this twin has never flaked [warm layout, no font-swap risk] but rides
+  // the identical measure-then-move + equal-poll shape)
+  await page.getByRole("button", { name: /go home/i }).hover();
   const bg = await page.evaluate(async () => {
     const el = Array.from(document.querySelectorAll("a, button")).find((b) =>
       (b.textContent || "").includes("Go Home"),
     )!;
     const read = () => getComputedStyle(el).backgroundColor;
+    const initial = read();
     let prev = read();
-    for (let i = 0; i < 14; i++) {
+    for (let i = 0; i < 30; i++) {
       await new Promise((r) => setTimeout(r, 50));
       const cur = read();
-      if (cur === prev) return cur;
+      if (cur !== initial && cur === prev) return cur;
       prev = cur;
     }
     return prev;
@@ -101,26 +95,20 @@ test("the 404 Go Home button's hover bg renders the live's #f8fafc (D135 twin)",
 
 test("the Google button's hover border tracks the live's slate-300 (the hover twin's sibling carrier)", async ({ page }) => {
   await page.goto("/login");
-  const box = await page.evaluate(() => {
-    const el = Array.from(document.querySelectorAll("button")).find((b) =>
-      (b.textContent || "").includes("Google"),
-    );
-    if (!el) return null;
-    const r = el.getBoundingClientRect();
-    return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
-  });
-  expect(box).not.toBeNull();
-  await page.mouse.move(box!.x, box!.y);
+  // S60: the same hardened hover instrument (the sibling carrier shares
+  // the login page's cold-layout exposure — the same defect pattern)
+  await page.getByRole("button", { name: /google/i }).hover();
   const border = await page.evaluate(async () => {
     const el = Array.from(document.querySelectorAll("button")).find((b) =>
       (b.textContent || "").includes("Google"),
     )!;
     const read = () => getComputedStyle(el).borderTopColor;
+    const initial = read();
     let prev = read();
-    for (let i = 0; i < 14; i++) {
+    for (let i = 0; i < 30; i++) {
       await new Promise((r) => setTimeout(r, 50));
       const cur = read();
-      if (cur === prev) return cur;
+      if (cur !== initial && cur === prev) return cur;
       prev = cur;
     }
     return prev;

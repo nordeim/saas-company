@@ -934,6 +934,68 @@
   (lesson 98), the remediation plan session59, the session log 127,
   the worklog.
 
+- `[NOTE]` **Session 60 remediation (2026-10-17)** — the FRESH-CLONE
+  session (the workspace reset at the boundary — the first full
+  rebuild since S24: the clone at `4747964`, node_modules, the
+  Chromium v1243 binaries, `.env` from `.env.example`, the DB
+  re-pushed + re-seeded IN-REPO at 1/6/2) + the THREE-CANDIDATE
+  session (the watch + both 34th-surface route extensions + the
+  35th surface, all probed in one pass). **THE SANDBOX
+  DATABASE_URL GOTCHA (gotcha 70a)**: the sandbox pre-sets an
+  out-of-repo ABSOLUTE `DATABASE_URL` which the CLI precedence
+  rule #1 honors (probed in vivo — a bare db:push/db:seed writes
+  outside the repo; the codebase is correct per its tested
+  contract, the sandbox is the artifact) — every DB-touching
+  command pinned per command (the gotcha-1 discipline).
+  **THE SIXTEENTH STANDING WATCH: ALL RECORDS HOLD** (the working
+  eight at byte-identical word parity 739/24/101/36/335/390/566/285
+  measured fresh on BOTH sides; the 404 16=16; the sitemaps 8/7;
+  the soft-404 family at the registered statuses; the D160
+  mobile-nav record EXACT — the clone's burger open at ALL THREE
+  y-points + the 7 rows × 44px pinned, the live's toaster-blocked,
+  NO Tailwind v4 bug; the live login records incl. the D131 trio
+  re-measured on the live in vivo [rgb(229,231,235) at border-width
+  0]; the clone login → the working dashboard 233 words).
+  **THE 34TH SURFACE'S ROUTE EXTENSIONS**: the
+  second-interpolation-input cross-check HOLDS (the 49-char email's
+  typed-text fills `.0351,.0351,.0429` ×2 both sides, all 15
+  distinct fills identical — the S59 convergence is input-invariant);
+  the 3 remaining literal-violet rules MEASURED — the live's `*`
+  rule consumes `hsl(var(--ring) / .5)` (the float carrier) and its
+  pulse-glow is opacity-ONLY (.4/.8, 4s, NO box-shadow).
+  **THE THIRTY-FIFTH SURFACE (D215): the /Shading PATTERN-interior
+  VALUE layer at FULL PARITY** (login 3v3 patterns identical, faq
+  0v0, the landing's every DISTINCT interior shape shared — the
+  14v10 count delta the registered animation-band engine family) —
+  the S59 token convergence CARRIED the shading layer, no fix
+  required. **THE LITERAL-RULE CONVERGENCE (D213/D214, TDD
+  RED→BUILD→GREEN 6/6 ×3)**: the @theme `--ring: 290 100% 50%
+  component var + the `*` rule's outline half at the live's
+  indirection (the D205/D206 family's LAST unconverted member —
+  the BUILT css verified surviving unresolved; the computed layer
+  UNCHANGED: the runtime indirection serializes rgba(213,0,255,.5)
+  exactly — the D206 masking law); the pulse-glow keyframe at the
+  live's exact body (the two invented box-shadow literals REMOVED;
+  INERT — zero consumers in either tree); the NOT-FIX guards pin
+  the border half's token consumption (the D211/D131 adjudication:
+  the live's login --border cascade is a multi-defined
+  zinc/gray/dark-!important soup whose value never paints) + the
+  login ring literal (the D212 pin). **THE D135 HOVER-INSTRUMENT
+  HARDENING (gotcha 70c)**: the chunk-9 flake root-caused (the
+  early-return race locking the pre-hover white under chunk load);
+  the locator-hover + changed-then-stable poll across the whole
+  D135 family; the original failing order 26/26. Gate: 877 →
+  **883** (252 unit + 125 smoke + **506 e2e in 69 files**, the
+  session60 suite's +6; the file-set diff EMPTY; the chunk-1
+  cold-start flake clean on direct re-run). VLM 8/8 zero
+  adjudications (the third consecutive). 21 screenshots refreshed
+  (capture60.db, the dev DB canonical before AND after —
+  md5-verified, zero mutations). DOCUMENTED: PAD (this block + the
+  ledger D213–D216 + the 7.1 counts 69 specs/506), AGENTS (the
+  counts + gotcha 70), CLAUDE (the session-60 context), README (the
+  883 badge + the session60 suite row), SKILL v2.59.0 (lesson 99),
+  the remediation plan session60, the session log 129, the worklog.
+
 - `[NOTE]` **Session 58 remediation (2026-10-16)** — the FIRST
   src/-change parity session since S54 (the worklog S57 candidates:
   the THIRTY-THIRD-surface trio probed on the raw shape FIRST per
@@ -4222,6 +4284,10 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D210 | THE GREEN-50 OKLCH LEAK (the same family): the reset flow's success banner ("Check your email") — pinned `--color-green-50: #f0fdf4`; the fill .9412,.9922,.9569 | Measured + FIXED (the same) | src/app/globals.css (--color-green-50); tests/e2e/session59-colorfill-laws.spec.ts (D210) | **Parity fix** (Session 59) |
 | D211 | THE INERT-TOKEN CONVERGENCE: the globals card/border/input tokens (#0f0f0f/#242424 → the live :root's hsl(0 0% 6%) / hsl(0 0% 14%)) and the dark --color-muted (#161616 → hsl(240 5% 12%) = rgb(29,29,32)) — every one INERT (no un-overridden consumer on any route; the dark muted's only consumer sits under the login route's local light override) but converged for token-table honesty; every conversion 8-bit-transparent (15.3→15, 35.7→36, 163.2→163, 212.5→213, 8.95→9) | Measured (the consumer census: bg-muted's only consumer locally overridden; no differing .0588/.06 fill pair in any census) | src/app/globals.css; tests/e2e/session59-colorfill-laws.spec.ts (D211) | **Registered convergence (inert)** (Session 59) |
 | D212 | THE NOT-FIX GUARDS (the :root-vs-.dark adjudication): the live's SPA css ships BOTH token blocks (`:root{--primary: 267 100% 57%}` + `.dark{--primary: 290 100% 50%}` — also destructive 0 84.2% 60.2% v 0 62.8% 30.6%) and NEVER MOUNTS .dark (html/body class empty both sides, verified on the DOM) — the RENDERING primary is #8624ff (the glow gradient stops rgba(134,36,255,.2) IDENTICAL on both sides), the RENDERING destructive #ef4444, and the ring token mirrors the live LOGIN bundle's :root (hsl(240 10% 3.9%), the S9 F2 pin; the SPA :root's 290° ring serves the outline-color base rule mirrored separately since S5 F3); all three pinned so a future token alignment cannot drift them to the inert .dark values — the exact trap the S59 reconciliation instrument fell into first | Measured (the block-aware token extraction + the DOM glow-stops probe) | tests/e2e/session59-colorfill-laws.spec.ts (D212) | **Registered adjudication** (Session 59) |
+| D213 | THE RING-INDIRECTION CONVERGENCE (the literal-rule family's fix, the 34th surface's route extension answered): the live's universal base rule is `*{border-color:hsl(var(--border));outline-color:hsl(var(--ring)/.5)}` with `:root{--ring:290 100% 50%}` — the outline tint consumes the RING COMPONENT VAR (the float carrier, the D205/D206 token-syntax family's LAST unconverted member); the clone's mirror ships the @theme `--ring: 290 100% 50%` component var + `outline-color: hsl(var(--ring) / 0.5)` (the BUILT css verified surviving unresolved — the var-indirection law at the outline seam; the computed layer UNCHANGED: the runtime hsl(290 100% 50% / .5) serializes rgba(213,0,255,.5) exactly like the old literal — the D206 masking law; the D212 row's "mirrored separately" claim now TRUE at the css-text layer). The BORDER half KEEPS the token consumption (`var(--color-border)`) — the not-fix adjudication: the live's login --border cascade is a multi-defined zinc(240 5.9% 90%)/gray/dark-!important(240 3.7% 15.9%) soup whose value never paints (the D131 trio computes rgb(229,231,235) at border-width 0, re-measured on the live in vivo S60), and the clone's login-local `--color-border:#e5e7eb` pin mechanism depends on the token-consumption form | Measured (the live's served-css rule extraction + the built-css verification + the computed probe) | tests/e2e/session60-literalrule-laws.spec.ts (D213/D213b/D215) | **Registered parity (converged)** (Session 60) |
+| D214 | THE PULSE-GLOW CONVERGENCE: the live's keyframe is opacity-ONLY (`@keyframes pulse-glow{0%,to{opacity:.4}50%{opacity:.8}}` + the 4s consumer) with NO box-shadow; the clone's copy carried INVENTED box-shadows (the two remaining literal-violet rules — `0 0 12px 2px rgb(213 0 255/.6)` + `0 0 4px 0 rgb(213 0 255/.3)`) + opacity 1/.6 + a 2.4s duration — converged to the live's exact body + 4s. INERT both sides (zero .animate-pulse-glow consumers in either tree — the live DOM verified S60; the session39 note records the clone's copy as defined-but-unused): a css-text-layer convergence of the mirror with zero visual risk | Measured (the live's keyframe extraction + the DOM consumer sweep) | tests/e2e/session60-literalrule-laws.spec.ts (D214) | **Registered parity (converged)** (Session 60) |
+| D215 | THE 35TH SURFACE — the /Shading PATTERN-interior VALUE layer at FULL PARITY: every shading pattern's ShadingType/Coords/the /Function C0/C1 endpoint values at the PDF's own float serialization censused on both sides (the same print inputs per gotcha 68) — /login 3v3 patterns IDENTICAL, /faq 0v0 (the empty set), the landing's every DISTINCT interior shape shared (the live's 14 v the clone's 10 — the count delta the registered animation-band engine family, count-only); the D205 family's shading counterpart, the first candidate the var-indirection law made measurable — the S59 token convergence CARRIED the shading layer, no fix required | Measured (the pattern-dict census through qpdf --json, both sides fresh) | research/shading-s60.mjs (the S60 probe; the record registered in this ledger) | **Registered parity (law-quality)** (Session 60) |
+| D216 | THE SECOND-INTERPOLATION-INPUT CROSS-CHECK (the pin-your-own-input law at the color layer): under a 49-char email (a different interpolation input than S59's probe) the typed text's fill census is `.0351,.0351,.0429` ×2 on BOTH sides (the live's hsl(240 10% 3.9%) floats) and all 15 distinct fills identical — zero live-only, zero clone-only; the S59 convergence is input-invariant | Measured (the typed-render fill census, both sides fresh) | research/typed-fills-s60.mjs (the S60 probe; the record registered in this ledger) | **Registered parity** (Session 60) |
 
 
 
@@ -4286,7 +4352,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 20 files | 252 | `src/lib/*.test.ts` + `src/app/api/workflows/generate/route.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
-| Browser E2E | 68 specs | 500 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Browser E2E | 69 specs | 506 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 125 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins

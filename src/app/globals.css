@@ -80,6 +80,17 @@
   --violet: 290 100% 50%;
   --color-violet: hsl(var(--violet));
   --color-electric-blue: #0055ff;
+  /* S60 D213 — the live SPA's RING component var (`--ring: 290 100% 50%`
+     in its :root), consumed by the universal base rule's outline half
+     as `hsl(var(--ring) / .5)` — the float carrier of the D205/D206
+     token-syntax family's LAST unconverted member (the outline tint
+     was this repo's final 8-bit literal: rgb(213 0 255 / .5)). Raw
+     components — not a color value, invisible to lightningcss — so it
+     lands in :root like --violet (the live's variable landscape). The
+     LOGIN route overrides it locally (login-card.tsx: :root { --ring:
+     240 10% 3.9% } — the live's login bundle's own --ring), where the
+     login-local `* { outline-color: revert }` wins the cascade anyway. */
+  --ring: 290 100% 50%;
 
   /* Dark surfaces */
   --color-background: #000000;
@@ -202,7 +213,7 @@
   /* Animations (measured keyframe names from the reference bundle) */
   --animate-marquee: marquee 40s linear infinite;
   --animate-float: float 4s ease-in-out infinite;
-  --animate-pulse-glow: pulse-glow 2.4s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 4s ease-in-out infinite; /* S60 D214 — the live's duration */
   --animate-gradient-shift: gradientShift 6s ease-in-out infinite;
   --animate-organic-gradient: organic-gradient 14s ease-in-out infinite;
   --animate-organic-gradient-fast: organic-gradient 6s ease-in-out infinite;
@@ -341,12 +352,20 @@
      at 50% on every element. Replaces this repo's invented
      `:focus-visible { outline: 2px solid primary }` (Session 5 F3) — the
      live has no such rule; its keyboard ring is the browser default,
-     tinted. Cascade-safe: every bordered element here carries an explicit
-     border-color utility (audited), so the border-color half only sets
-     the same default the live's base layer sets. */
+     tinted.
+     S60 D213 — the OUTLINE half now consumes the live's own indirection
+     (hsl(var(--ring) / .5) — the runtime float; the 8-bit literal was
+     the D205 family's last member). The BORDER half KEEPS the token
+     consumption (the D211/D131 adjudication — the not-fix: the live's
+     login --border cascade is a multi-defined zinc/gray/dark-!important
+     soup whose value never paints [the live's borderless trio computes
+     rgb(229,231,235) at border-width 0], and the clone's login-local
+     `--color-border: #e5e7eb` pin mechanism depends on this form).
+     Cascade-safe: every bordered element here carries an explicit
+     border-color utility (audited). */
   * {
     border-color: var(--color-border);
-    outline-color: rgb(213 0 255 / 0.5);
+    outline-color: hsl(var(--ring) / 0.5);
   }
   /* NO ::selection rule: the reference ships NONE in either bundle (the
      Session-9 F3 CSSOM survey — its landing has zero ::selection rules;
@@ -604,18 +623,25 @@
 }
 
 @keyframes pulse-glow {
+  /* S60 D214 — the live's exact body (opacity-ONLY: 0.4 ↔ 0.8 over 4s;
+   * its compiled css ships `@keyframes pulse-glow
+   * {0%,to{opacity:.4}50%{opacity:.8}}` — NO box-shadow. The previous
+   * copy carried invented box-shadows (the two remaining literal-violet
+   * rules the S59 record flagged) + opacity 1 ↔ 0.6 + a 2.4s duration.
+   * INERT either way: zero .animate-pulse-glow consumers in either
+   * tree (the live DOM verified; the session39 note records the
+   * clone's copy as defined-but-unused) — a css-text-layer
+   * convergence of the mirror. */
   0%,
   100% {
-    opacity: 1;
-    box-shadow: 0 0 12px 2px rgb(213 0 255 / 0.6);
+    opacity: 0.4;
   }
   50% {
-    opacity: 0.6;
-    box-shadow: 0 0 4px 0 rgb(213 0 255 / 0.3);
+    opacity: 0.8;
   }
 }
 .animate-pulse-glow {
-  animation: pulse-glow 2.4s ease-in-out infinite;
+  animation: pulse-glow 4s ease-in-out infinite;
 }
 
 /* The hero scroll-indicator dot (rAF-sampled on the reference: the dot
