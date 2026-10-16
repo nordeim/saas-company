@@ -934,6 +934,50 @@
   (lesson 98), the remediation plan session59, the session log 127,
   the worklog.
 
+- `[NOTE]` **Session 61 remediation (2026-10-17)** — the SECOND-
+  consecutive FRESH-CLONE session (the clone at `5ebad7e`, node_modules
+  + Chromium v1243 + .env + the DB 1/6/2 rebuilt; paramiko + the ssh
+  shim re-extracted; the gotcha-70a pin-per-command discipline held).
+  **THE SEVENTEENTH STANDING WATCH: all records hold** (the working
+  eight byte-identical both sides; the 404 16=16; the sitemaps 8/7;
+  the soft-404 family; the clone login → the dashboard 233 words; the
+  D131 trio re-measured in vivo — with the instrument catch: the
+  third borderless element is ONE button, "Need an account? Sign up",
+  so the honest selector is the prefix match). **THE D160 MOBILE-NAV
+  RECORD EXACT — NO Tailwind v4 bug** (the kickoff's explicit watch
+  item: the clone's burger clickable at all three y-points, every
+  click opens the 7×44px row set; the live's toaster-blocked at
+  y21/y28, the y35 sliver opening nothing). **THE THIRTY-SIXTH
+  SURFACE (D217): the pdftohtml -xml READING-ORDER layer at FULL
+  PARITY on its first honest two-sided capture** — 13 states (login
+  11v11, typed 11v11, reset 6v6, signup 8v8, error 12v12, faq
+  33v33, thank-you 3v3, privacy 46v46, terms 49v49, accessibility
+  81v81, refund-policy 44v44, landing 43v43) all EQUAL on the three
+  censuses (the per-word font census with the subset prefix
+  stripped + poppler's own reading-order sequence + the per-line
+  column assignment); the 404 (7v7) carrying only the REGISTERED
+  2-space-glyph emission family at one word (the live's trailing
+  space + the 4pt shift — S47/S58); the embedded-font cross-check
+  re-verifying the S49 records exactly. NO src/ fix required — the
+  S58 line layer + the S49 font layer + the S61 word layer all
+  converge (law-quality). The session61 suite +6 pins the clone
+  side (TDD-verified ×4; two instrument catches: the numeric
+  test-timeout third arg is not a TestDetails in this Playwright —
+  the in-body `test.setTimeout()` house form; the write-layer
+  quote-sandwich mangling of `'"'` — the fromCharCode constant,
+  registered with gotcha 71). Gate: 883 → **889** (252 unit + 125
+  smoke + **512 e2e in 70 files**, the s61 runner's file-set diff
+  EMPTY; the chunk-4 ring + chunk-11 font-stack flakes both
+  registered families, clean on re-run). VLM 8/8 zero adjudications
+  (the fourth consecutive). 21 screenshots refreshed (capture61.db,
+  the dev DB canonical before AND after — md5-verified, zero
+  mutations; the port sweep extended to the next-server CHILD
+  process). DOCUMENTED: PAD (this block + the D217 ledger row + the
+  7.1 counts 70 specs/512), AGENTS (the counts + gotcha 71), CLAUDE
+  (the session-61 context), README (the 889 badge + the session61
+  suite row), SKILL v2.60.0 (lesson 100), the remediation plan
+  session61, the session log 131, the worklog.
+
 - `[NOTE]` **Session 60 remediation (2026-10-17)** — the FRESH-CLONE
   session (the workspace reset at the boundary — the first full
   rebuild since S24: the clone at `4747964`, node_modules, the
@@ -4288,6 +4332,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D214 | THE PULSE-GLOW CONVERGENCE: the live's keyframe is opacity-ONLY (`@keyframes pulse-glow{0%,to{opacity:.4}50%{opacity:.8}}` + the 4s consumer) with NO box-shadow; the clone's copy carried INVENTED box-shadows (the two remaining literal-violet rules — `0 0 12px 2px rgb(213 0 255/.6)` + `0 0 4px 0 rgb(213 0 255/.3)`) + opacity 1/.6 + a 2.4s duration — converged to the live's exact body + 4s. INERT both sides (zero .animate-pulse-glow consumers in either tree — the live DOM verified S60; the session39 note records the clone's copy as defined-but-unused): a css-text-layer convergence of the mirror with zero visual risk | Measured (the live's keyframe extraction + the DOM consumer sweep) | tests/e2e/session60-literalrule-laws.spec.ts (D214) | **Registered parity (converged)** (Session 60) |
 | D215 | THE 35TH SURFACE — the /Shading PATTERN-interior VALUE layer at FULL PARITY: every shading pattern's ShadingType/Coords/the /Function C0/C1 endpoint values at the PDF's own float serialization censused on both sides (the same print inputs per gotcha 68) — /login 3v3 patterns IDENTICAL, /faq 0v0 (the empty set), the landing's every DISTINCT interior shape shared (the live's 14 v the clone's 10 — the count delta the registered animation-band engine family, count-only); the D205 family's shading counterpart, the first candidate the var-indirection law made measurable — the S59 token convergence CARRIED the shading layer, no fix required | Measured (the pattern-dict census through qpdf --json, both sides fresh) | research/shading-s60.mjs (the S60 probe; the record registered in this ledger) | **Registered parity (law-quality)** (Session 60) |
 | D216 | THE SECOND-INTERPOLATION-INPUT CROSS-CHECK (the pin-your-own-input law at the color layer): under a 49-char email (a different interpolation input than S59's probe) the typed text's fill census is `.0351,.0351,.0429` ×2 on BOTH sides (the live's hsl(240 10% 3.9%) floats) and all 15 distinct fills identical — zero live-only, zero clone-only; the S59 convergence is input-invariant | Measured (the typed-render fill census, both sides fresh) | research/typed-fills-s60.mjs (the S60 probe; the record registered in this ledger) | **Registered parity** (Session 60) |
+| D217 | THE 36TH SURFACE — the pdftohtml -xml READING-ORDER layer at FULL PARITY (the S61 candidate, measured on its first honest two-sided capture — 20 PDFs + the 3 alternates, identical print inputs per the pin-your-own-input law): three censuses per state — (A) the per-word FONT census (every `<text>` element's fontspec family\|size\|color, the subset prefix stripped), (B) the READING-ORDER sequence (poppler's own layout ordering — a SECOND engine's read of the text the S58/D198 line layer pinned through the qpdf token stream), (C) the COLUMN assignment (per 4pt line-bucket the sorted x-origins) — ALL EQUAL on 12 of 13 states: login 11v11, typed 11v11, reset 6v6, signup 8v8, error 12v12, faq 33v33, thank-you 3v3, privacy 46v46, terms 49v49, accessibility 81v81, refund-policy 44v44, landing 43v43 (the landing entrance-invariant at both dwell contracts); the 404 (7v7): the font census EQUAL, the order/column delta at exactly ONE word — the live's trailing space on "The page " + the 4pt-shifted following origin, the REGISTERED 2-space-glyph emission family (S47/S58); the embedded-font cross-check re-verified the S49 records exactly (faq 7× VendSans-Light, 404 5×, thank-you 4×, landing 10×, /login the DejaVu system stack — identical subsets both sides); NO src/ fix required — the line layer + the font layer + the word layer all converge | Measured (the two-sided print + pdftohtml -xml census, both sides fresh) | tests/e2e/session61-readingorder-laws.spec.ts (D217a–f) | **Registered parity (law-quality)** (Session 61) |
 
 
 
@@ -4352,7 +4397,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 20 files | 252 | `src/lib/*.test.ts` + `src/app/api/workflows/generate/route.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
-| Browser E2E | 69 specs | 506 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Browser E2E | 70 specs | 512 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 125 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins

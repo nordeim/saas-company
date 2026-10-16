@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.59.0 · **Last updated:** 2026-10-17 (Session 60 remediation)
+> **Version:** 2.60.0 · **Last updated:** 2026-10-17 (Session 61 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -2108,6 +2108,32 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     fix REACHES the rasters — the dashboard chart's payload sha
     shifted with the violet's half-LSB convergence (the stale-pin
     convergence law's second sighting).
+
+100. **The reading-order surface + the three-layer convergence law
+    (Session 61)**: the 36th surface (the pdftohtml -xml reading-order
+    layer) measured at FULL PARITY on its first honest two-sided
+    capture — 13 states, three censuses (the per-word font census
+    with the subset prefix stripped / poppler's own layout ordering /
+    the per-line column assignment), all EQUAL except the 404's
+    registered 2-space-glyph family. LESSONS: (a) THE SECOND-ENGINE
+    CROSS-CHECK: when a parity layer is pinned through ONE engine's
+    token stream (qpdf), a SECOND engine's independent read (poppler)
+    at a different granularity (the word) is a cheap, high-value
+    confirmation surface — converging engines at every granularity is
+    the strongest no-fix evidence there is; measure it before
+    manufacturing a fix. (b) THE PREFIX-STRIP: an embedded-font
+    subset prefix (AAAAAA+) is object-number bookkeeping, not a value
+    — strip it before pinning or the pin keys on engine bookkeeping;
+    and beware post-strip MERGES (two subsets with the same
+    family|size|color collapse into one count — recompute the
+    constants at the merged level). (c) THE ROUTE-NAME-SENSITIVE
+    PIN: a 404 page's centered text shifts x-origins with the
+    requested URL's length — pin x-origin constants only for the
+    spec's OWN deterministic route string, never values borrowed
+    from a probe that used a different bogus path. (d) THE
+    QUOTE-SANDWICH LAW (gotcha 71a): never write a single-char
+    string literal wrapping a quote through a tool write layer —
+    use fromCharCode and verify the raw bytes.
 
 99. **The literal-rule endgame + the fresh-clone environment laws
     (Session 60)**: the 34th surface's route extensions answered +

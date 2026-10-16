@@ -426,6 +426,29 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   Gotcha 65 / lesson 94: the inline-storage law + the array-key
   enumeration artifact + the SMask recursion terminus.
 
+- **Session 61 (2026-10-17) remediation** — see
+  `docs/remediation-plan-session61.md`: the SECOND-consecutive
+  FRESH-CLONE session (the clone at `5ebad7e`; node_modules/Chromium
+  v1243/.env/DB 1/6/2 rebuilt; paramiko + the ssh shim re-extracted).
+  **THE SEVENTEENTH STANDING WATCH: all records hold** (the working
+  eight byte-identical both sides; the clone login → dashboard 233
+  words; the D131 trio re-measured in vivo — the third element is ONE
+  button, "Need an account? Sign up", the prefix match the honest
+  selector). **THE D160 MOBILE-NAV RECORD EXACT — NO Tailwind v4 bug**
+  (the kickoff's watch item: the clone's burger clickable at all three
+  y-points + the 7×44px rows; the live's toaster-blocked). **THE
+  THIRTY-SIXTH SURFACE (D217, law-quality): the pdftohtml -xml
+  READING-ORDER layer at FULL PARITY** — 13 states measured two-sided
+  with identical inputs, all three censuses EQUAL (the per-word font
+  census / poppler's reading-order sequence / the column assignment);
+  the 404 carrying only the REGISTERED 2-space-glyph family at one
+  word; NO src/ fix required — the S58 line layer + the S49 font
+  layer + the S61 word layer all converge. The session61 suite +6
+  pins the clone side (GREEN ×4; the quote-sandwich + TestDetails
+  catches registered as gotcha 71). Gate 883 → **889** (252 + 125 +
+  512 in 70 files, the s61 runner's file-set diff EMPTY); VLM 8/8
+  zero adjudications (the fourth consecutive).
+
 - **Session 60 (2026-10-17) remediation** — see
   `docs/remediation-plan-session60.md`: the FRESH-CLONE session (the
   workspace reset — node_modules/Chromium/.env/DB all rebuilt; the
