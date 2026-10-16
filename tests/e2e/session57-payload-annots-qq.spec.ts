@@ -437,7 +437,12 @@ const DASHBOARD = {
       {
         "key": "1904x551:none",
         "len": 3147312,
-        "sha": "25bdc4e3840b6fda"
+        // S59 re-pin (the D205 downstream convergence): the chart's
+        // violet-tinted raster shifted with the login-agnostic violet
+        // token's hsl-float convergence (the ±0.5/255 channel delta on
+        // the violet regions) — was 25bdc4e3840b6fda (the hex-mirror
+        // raster); the new sha deterministic across renders.
+        "sha": "f2537a3eda99f592"
       },
       {
         "key": "24x7:none",

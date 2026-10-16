@@ -140,11 +140,15 @@ export function LoginCard() {
       <style>{`
         body {
           background-color: #fff;
-          color: #09090b;
+          /* S59 D207 — the live login bundle's :root spec kept in its own
+             hsl syntax: its float (8.95,8.95,10.94) is what the print
+             operators write (.0351,.0351,.0429); the hex mirror #09090b
+             wrote .0353 — both round to rgb(9,9,11) at 8-bit. */
+          color: hsl(240 10% 3.9%);
           font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
           --color-background: #ffffff;
-          --color-foreground: #09090b;
-          --color-card-foreground: #09090b;
+          --color-foreground: hsl(240 10% 3.9%);
+          --color-card-foreground: hsl(240 10% 3.9%);
           /* The reference's login bundle ships the STANDARD tracking scale
              (its "or" divider computes 0.6px = 0.05em at 12px) while its
              SPA bundle doubles the two widest steps (globals.css @theme,
@@ -177,8 +181,12 @@ export function LoginCard() {
            Session-9 F5 computed-parity family) — the battery's
            computed-STYLE inventory caught the property delta on its
            first run; pinned here so a future edit that makes the color
-           visible (a transparent gradient stop) starts from parity. */
-        body { --color-muted: #f4f4f5; }
+           visible (a transparent gradient stop) starts from parity.
+           S59 D208 — pinned in the live's own hsl syntax
+           (240 4.8% 95.9% = zinc-100): the floats (.957,.957,.961) are
+           what its print operators write; the hex mirror #f4f4f5 wrote
+           .9569 — both round to rgb(244,244,245) at 8-bit. */
+        body { --color-muted: hsl(240 4.8% 95.9%); }
         /* The reference's login bundle pins html overscroll-behavior-y:
            none (measured: the live's /login html computes none while
            its landing computes auto — a login-scoped rule, not app-wide).

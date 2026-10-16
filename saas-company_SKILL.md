@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.57.0 · **Last updated:** 2026-10-16 (Session 58 remediation)
+> **Version:** 2.58.0 · **Last updated:** 2026-10-16 (Session 59 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -252,7 +252,7 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
 `:memo: docs:`) on `main` only; push via
 `python3 docs/ssh_git_wrapper_v3.py --key-file <key outside the repo>`.
 
-## §12. Lessons Learnt (Sessions 1–58)
+## §12. Lessons Learnt (Sessions 1–59)
 
 1. **The reference is a moving target** — it was a different app (ORBITAL) in
    this repo's previous cycle. Re-survey before touching chrome (ADR-009).
@@ -2060,6 +2060,54 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     the /Metadata XMP + /PieceInfo layers measured EMPTY-SET (both
     registered as laws — the D170 pattern's third and fourth
     members).
+
+98. **The var-indirection law + the :root-vs-.dark trap (Session
+    59)**: the THIRTY-FOURTH SURFACE — the PDF COLOR-FILL VALUE layer
+    (every rg/scn fill in every stream censused at the PDF's own
+    4-decimal granularity; the comprehensive cross-route census
+    decoded 21 differing value-pairs to SIX syntax/precision
+    families) — the root cause is THE TOKEN-SYNTAX DIVERGENCE: the
+    reference's palette ships hsl-COMPONENT tokens (`--violet: 290
+    100% 50%` consumed as `hsl(var(--violet))`) whose RUNTIME
+    conversion carries float precision (R = 5/6 = .8333 =
+    212.5/255 in the print operators) while the hex mirrors
+    (#d500ff = 213/255 = .8353) quantized it — the CSSOM's
+    rgb(213,0,255) serialization masks the half-LSB delta at EVERY
+    DOM layer (computed styles measure EQUAL on both sides); only
+    the print pipeline's float operators reveal it. (a) THE
+    VAR-INDIRECTION LAW: lightningcss (the v4 build) resolves any
+    LITERAL hsl() in @theme back to 8-bit hex AT COMPILE TIME — the
+    first fix attempt (`--color-violet: hsl(290 100% 50%)`) was
+    silently re-quantized in the built css; the mirror MUST keep
+    the reference's own indirection (raw components in a custom
+    property + `hsl(var(--x))` as the token value — var() is opaque
+    to the compiler), and the verification reads the BUILT css
+    (hsl(var(--violet)) surviving unresolved), never just the
+    source. (b) THE OKLCH-LEAK RESIDUALS: the s9 v3-hex palette
+    pins covered red/green-200..700 but MISSED the 50 steps — the
+    error/success banners' `bg-red-50/70` computed v4's oklch while
+    the reference ships the v3 hex (rgba(254,242,242,.7)); the
+    emission-path corollary: v4's opacity modifier emits
+    color-mix(in oklab) so the computed style SERIALIZES oklab
+    while the reference's v3 serializes rgba — the sRGB values
+    converge and the SURFACE truth is the print fill (the base
+    color + the alpha gs, never the serialized form). (c) THE
+    :root-vs-.dark TRAP: the reference's SPA css ships BOTH token
+    blocks and NEVER MOUNTS .dark — a token-extraction regex taking
+    the LAST definition reads the inert .dark block as truth and
+    flags the CORRECT mirrors (#8624ff primary, #ef4444
+    destructive) as REAL divergences; block-aware extraction + a
+    DOM ground-truth probe (the glow gradient stops) adjudicate,
+    and the adjudication is PINNED (the not-fix guards) so the trap
+    cannot recur. (d) THE ANIMATION-BAND RENDER LAW: the landing's
+    print fills are entrance-timing-dependent like its line records
+    — a fresh render can catch whole sections unpainted; pin exact
+    fill counts only on summed deterministic routes, presence-level
+    on the landing, and NEVER scroll one side only (the cached
+    reference renders are same-dwell states). Corollary: a color
+    fix REACHES the rasters — the dashboard chart's payload sha
+    shifted with the violet's half-LSB convergence (the stale-pin
+    convergence law's second sighting).
 
 97. **The render-input identity + the comparator-format + the
     stale-pin convergence (Session 58)**: the THIRTY-THIRD SURFACE —

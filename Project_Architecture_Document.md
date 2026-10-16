@@ -851,6 +851,89 @@
   registry-compounding lesson, remediation plan session33, session
   log 66.
 
+- `[NOTE]` **Session 59 remediation (2026-10-16)** — the
+  THIRTY-FOURTH-surface session (the worklog S58 candidates probed
+  raw-first): the /Kids page-tree VALUE layer measured IDENTICAL on
+  every deterministic route (the S54 flatness law's value-level
+  complement — pages/depth/kids/distinct-resources/pageKeys/
+  inherit-keys all equal; /demo the registered 2v1 superset with the
+  clone's /Annots superset pageKeys) and REGISTERED AS A LAW; the
+  /DecodeParms family measured the EMPTY-SET LAW (zero decode parms
+  on every stream, both sides, every route); the pdftohtml -xml
+  per-word layer measured RICH — every word's (x,y,w,h,font) at
+  EXACT parity on every deterministic route but the FONTSPEC COLORS
+  exposing two new value families (the violet #d500ff v #d400ff on
+  root+faq; the near-black #09090a v #08080a on alt-error) —
+  **THE THIRTY-FOURTH SURFACE (D205): the PDF COLOR-FILL VALUE
+  layer** (every rg/scn fill in every stream censused at the PDF's
+  own 4-decimal granularity): the comprehensive census decoded 21
+  differing value-pairs to SIX syntax/precision families + the
+  count-only re-blocking/entrance families + the /demo superset.
+  **THE TOKEN-SYNTAX DIVERGENCE (the root cause):** the live's
+  palette ships hsl-COMPONENT tokens (`--violet: 290 100% 50%`
+  consumed as `hsl(var(--violet))`) whose runtime conversion carries
+  FLOAT precision (R = 5/6 = .8333 = 212.5/255 in the print
+  operators) while the clone's mirrors were rounded to 8-bit HEX
+  (#d500ff = 213/255 = .8353) — the CSSOM's rgb(213,0,255)
+  serialization masked the half-LSB delta at EVERY DOM layer (the
+  computed-style probes measure EQUAL on both sides); only the print
+  pipeline's float operators reveal it. **THE VAR-INDIRECTION LAW
+  (the build-layer discovery):** the clone's first fix attempt
+  (literal `hsl(290 100% 50%)` in @theme) was RESOLVED BACK TO HEX
+  by the build pipeline — lightningcss quantizes any literal hsl()
+  to 8-bit hex at compile time — so the mirror must keep the live's
+  exact indirection: RAW COMPONENTS in a custom property +
+  `hsl(var(...))` as the token value (opaque to the compiler, the
+  browser resolves the float at runtime; the component var also
+  lands in :root, matching the live's variable landscape).
+  **THE RED/GREEN-50 OKLCH LEAKS (D209/D210 — the REAL gaps):** the
+  error/success banners' `bg-red-50/70` + `bg-green-50/70` computed
+  v4's OKLCH defaults (oklab(0.971 0.0124 0.0039/.7) = 254.19,
+  242.15) where the live ships the v3 HEX (rgba(254,242,242,.7)) —
+  the s9 palette pins covered red/green-200..700 but MISSED the 50
+  step; fixed by pinning `--color-red-50: #fef2f2` +
+  `--color-green-50: #f0fdf4` (the fills .9967→.9961,
+  .9413,.9923,.957→.9412,.9922,.9569). **THE LOGIN HSL-SPEC
+  CONVERGENCE (D207/D208):** the login-local style block's hex pins
+  (#09090b zinc-950 / #f4f4f5 zinc-100) converged to the live login
+  bundle's own hsl specs (240 10% 3.9% / 240 4.8% 95.9%) — the
+  inline <style> bypasses lightningcss so the literals survive.
+  **THE :root-vs-.dark ADJUDICATION (D212):** the live's SPA css
+  ships BOTH blocks (:root --primary 267° + .dark --primary 290°)
+  and NEVER MOUNTS .dark — the rendering primary is #8624ff
+  (measured at the glow stops: rgba(134,36,255,.2) IDENTICAL both
+  sides), the rendering destructive #ef4444, the login ring
+  hsl(240 10% 3.9%) — all three pinned as NOT-FIX guards after the
+  reconciliation instrument itself fell into the .dark trap first
+  (reading the inert block as the truth). **THE DASHBOARD RASTER
+  RE-PIN (the D205 downstream):** the S57 payload pin on the
+  dashboard's 1904x551 chart raster shifted with the violet's
+  half-LSB convergence (25bdc4e3→f2537a3e, deterministic) — the
+  stale-pin convergence law's second sighting. TDD: the session59
+  spec 7/7 GREEN x3 (the in-flight catches each root-caused: the
+  PDF's leading-dot fill keys `.8333` v `0.8333`; the v4
+  color-mix oklab EMISSION law — the /70 modifier always serializes
+  oklab, the SURFACE truth is the fill values; the near-black
+  family living in the TYPED-input renders not the empty login).
+  The battery REBUILT at ELEVEN phases: 120/120 GREEN ZERO DRIFT
+  (the S58's 103 carried + the 17-check color-fill column; the
+  root checks presence-level per the ANIMATION-BAND law — the
+  landing's fill counts are entrance-timing-dependent, the
+  deterministic-route summed census at FULL value parity with only
+  the 1,1,1 re-blocking family exempt). Gate: 870 → **877** (252
+  unit + 125 smoke + 493→500 e2e, the session59 suite's +7; the
+  chunk-11 font-stack environment flake clean on re-run; the
+  S57 dashboard pin re-pinned). VLM 8/8 ON THE FIRST PASS — ZERO
+  ADJUDICATIONS (the second consecutive clean session). 21
+  screenshots refreshed (capture59.db, the dev DB canonical before
+  AND after — 1/6/2, zero mutations). DOCUMENTED: PAD (this block +
+  the ledger D205-D212 + the 7.1 counts 68 specs/500), AGENTS (the
+  counts + the var-indirection + leading-dot + animation-band
+  laws), CLAUDE (the session-59 context), README (the 877 badge +
+  the 34th-surface story + the session59 suite row), SKILL v2.58.0
+  (lesson 98), the remediation plan session59, the session log 127,
+  the worklog.
+
 - `[NOTE]` **Session 58 remediation (2026-10-16)** — the FIRST
   src/-change parity session since S54 (the worklog S57 candidates:
   the THIRTY-THIRD-surface trio probed on the raw shape FIRST per
@@ -4131,6 +4214,14 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D202 | THE ALTERNATES' ICC EMPTY-SET LAW: zero ICC profile streams or refs on all five /login alternates, both sides (the S56 shape-based detection extended to the alternate states — the image counts 6/6/1/2/2 default/error/reset/signup/forgot, identical across sides; the ICC layer confined to the landing's video poster, both sides) | Measured (the same spec + the battery's ph6 ICC column) | tests/e2e/session58-textposition-laws.spec.ts | **Registered law** (Session 58) |
 | D203 | THE GS VALUE-LAYER PARITY LAW: the /SA /LW /LC /LJ /ML values at exact multiset parity on every route, both sides (the D187 alpha-grid law's value-level complement — the previously unmeasured gs keys now pinned; /SA boolean/null normalized, the stroke joins/caps/miter values byte-equal) | Measured (the same spec + the battery's ph5 gs columns) | tests/e2e/session58-textposition-laws.spec.ts | **Registered law** (Session 58) |
 | D204 | THE MUTATION COLUMN (the dashboard's print payload under live data): the authenticated dashboard's print payload TRACKS THE DATA — +1 shading pattern per new chart row until the CHART_ROWS ceiling (fns 4→5→6→7), the tiling XStep/YStep family (54→127→142 bytes; YStep 9 → 9.000061 at the 4-row reflow — the fractional-pixel family), objects growing deterministically (292→303→320→329), gs stable 18, tilings stable 3, and A===A2 at every step (the re-render determinism law under mutation) | Measured (the session58 spec's mutation block + the battery's ph9 dashboard columns) | tests/e2e/session58-textposition-laws.spec.ts | **Registered parity-under-mutation** (Session 58) |
+| D205 | THE PDF COLOR-FILL VALUE LAYER (the thirty-fourth surface): every rg/scn fill in every stream (page + form XObjects) censused at the PDF's own 4-decimal granularity — the comprehensive cross-route census (21 differing value-pairs of 42 distinct fills) decoded to SIX syntax/precision families: the violet .8353v.8333 (17 fills — the badge/CTA/faq-h1), the gray .6392v.64 (5 — the faq chevrons), the login near-white .9569,.9569,.9608v.957,.957,.961 (3), the near-black .0353,.0353,.0431v.0351,.0351,.0429 (2 — the typed input text), the red-50 .9967,.9496,.9496v.9961,.949,.949 (1), the green-50 .9413,.9923,.957v.9412,.9922,.9569 (1) — ALL CONVERGED by the token-syntax fixes; the count-only 0/1-fill re-blocking + entrance families + the /demo superset registered as the structure layer; the deterministic-route summed census at FULL value parity (18 families, only the 1,1,1 re-blocking family exempt) | Measured (the session59 spec + the fill census probes + the battery's ph11) | tests/e2e/session59-colorfill-laws.spec.ts; the drift battery's ph11 COLOR-FILL column | **Registered parity (converged)** (Session 59) |
+| D206 | THE TOKEN-SYNTAX DIVERGENCE (the root cause of D205): the live's palette ships hsl-COMPONENT tokens (`--violet: 290 100% 50%` consumed as `hsl(var(--violet))`) whose runtime conversion carries FLOAT precision (R = 5/6 = .8333 = 212.5/255) while the clone's mirrors were rounded to 8-bit HEX (#d500ff = 213/255 = .8353) — the CSSOM's rgb(213,0,255) serialization masks the half-LSB delta at every DOM layer (the computed styles measure EQUAL); only the print pipeline's float operators reveal it | Measured (the computed-style probes + the PDF operator dumps) | tests/e2e/session59-colorfill-laws.spec.ts (the 8-bit transparency guards) | **Registered root cause** (Session 59) |
+| D207 | THE VAR-INDIRECTION LAW (the build-layer discovery): the clone's build pipeline (lightningcss) resolves any literal hsl() to 8-bit hex at compile time (`--color-violet: hsl(290 100% 50%)` → `#d500ff` in the built css) — the token-syntax mirror MUST keep the live's indirection: RAW COMPONENTS in a custom property (`--violet: 290 100% 50%`) + `hsl(var(...))` as the token value (var() is opaque to the compiler; the browser resolves the float at runtime; the component var lands in :root, matching the live's variable landscape) | Measured (the built-css verification: hsl(var(--violet)) x23 survives unresolved) | src/app/globals.css (the @theme indirection); tests/e2e/session59-colorfill-laws.spec.ts (D211) | **Registered law + fix** (Session 59) |
+| D208 | THE LOGIN HSL-SPEC CONVERGENCE: the login-local style block's hex pins converged to the live login bundle's own hsl specs — the near-black `#09090b` → `hsl(240 10% 3.9%)` (the body color + --color-foreground + --color-card-foreground) and the near-white `#f4f4f5` → `hsl(240 4.8% 95.9%)` (the light --color-muted); the inline <style> bypasses lightningcss so the literals survive to the browser; both round to the same 8-bit values (rgb(9,9,11) / rgb(244,244,245)) | Measured (the SSR-chunk verification + the spec's fill assertions) | src/app/login/login-card.tsx; tests/e2e/session59-colorfill-laws.spec.ts (D207/D208) | **Registered fix** (Session 59) |
+| D209 | THE RED-50 OKLCH LEAK (the s9 roundtrap family's residual): the login error banner's `bg-red-50/70` computed v4's UNPINNED oklch default (oklab(0.971 0.0124 0.0039/.7) = sRGB 254.19,242.15,242.13) where the live ships the v3 hex rgba(254,242,242,.7) — the s9 palette pins covered red-200..700 but MISSED the 50 step; FIXED by `--color-red-50: #fef2f2`; THE V4 EMISSION-PATH LAW: the /70 modifier emits color-mix(in oklab,…) so the computed style SERIALIZES oklab on this app (the live's v3 serializes rgba) — the sRGB values converge (the roundtrip lands within ±0.05/255) and the SURFACE truth is the print fill (the base color + the alpha gs): .9961,.949,.949 | Measured + FIXED (the spec's fill + emission assertions) | src/app/globals.css (--color-red-50); tests/e2e/session59-colorfill-laws.spec.ts (D209) | **Parity fix + the emission law** (Session 59) |
+| D210 | THE GREEN-50 OKLCH LEAK (the same family): the reset flow's success banner ("Check your email") — pinned `--color-green-50: #f0fdf4`; the fill .9412,.9922,.9569 | Measured + FIXED (the same) | src/app/globals.css (--color-green-50); tests/e2e/session59-colorfill-laws.spec.ts (D210) | **Parity fix** (Session 59) |
+| D211 | THE INERT-TOKEN CONVERGENCE: the globals card/border/input tokens (#0f0f0f/#242424 → the live :root's hsl(0 0% 6%) / hsl(0 0% 14%)) and the dark --color-muted (#161616 → hsl(240 5% 12%) = rgb(29,29,32)) — every one INERT (no un-overridden consumer on any route; the dark muted's only consumer sits under the login route's local light override) but converged for token-table honesty; every conversion 8-bit-transparent (15.3→15, 35.7→36, 163.2→163, 212.5→213, 8.95→9) | Measured (the consumer census: bg-muted's only consumer locally overridden; no differing .0588/.06 fill pair in any census) | src/app/globals.css; tests/e2e/session59-colorfill-laws.spec.ts (D211) | **Registered convergence (inert)** (Session 59) |
+| D212 | THE NOT-FIX GUARDS (the :root-vs-.dark adjudication): the live's SPA css ships BOTH token blocks (`:root{--primary: 267 100% 57%}` + `.dark{--primary: 290 100% 50%}` — also destructive 0 84.2% 60.2% v 0 62.8% 30.6%) and NEVER MOUNTS .dark (html/body class empty both sides, verified on the DOM) — the RENDERING primary is #8624ff (the glow gradient stops rgba(134,36,255,.2) IDENTICAL on both sides), the RENDERING destructive #ef4444, and the ring token mirrors the live LOGIN bundle's :root (hsl(240 10% 3.9%), the S9 F2 pin; the SPA :root's 290° ring serves the outline-color base rule mirrored separately since S5 F3); all three pinned so a future token alignment cannot drift them to the inert .dark values — the exact trap the S59 reconciliation instrument fell into first | Measured (the block-aware token extraction + the DOM glow-stops probe) | tests/e2e/session59-colorfill-laws.spec.ts (D212) | **Registered adjudication** (Session 59) |
 
 
 
@@ -4195,7 +4286,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 20 files | 252 | `src/lib/*.test.ts` + `src/app/api/workflows/generate/route.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
-| Browser E2E | 67 specs | 493 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Browser E2E | 68 specs | 500 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 125 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins

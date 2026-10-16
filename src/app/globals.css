@@ -67,20 +67,34 @@
   --color-primary-foreground: #ffffff;
   --color-accent: #0055ff; /* hsl(220 100% 50%) — electric blue */
   --color-accent-foreground: #ffffff;
-  --color-violet: #d500ff; /* hsl(290 100% 50%) — the magenta used by text/border/bg-violet */
+  /* S59 D205 — THE VAR-INDIRECTION LAW: the live's token is
+     `--violet: 290 100% 50%` consumed as `hsl(var(--violet))` — the
+     RAW COMPONENTS are not a color value, so its build never resolves
+     them and the browser's runtime hsl() carries FLOAT precision
+     (R = 5/6 = .8333 in the print operators; 212.5/255). This app's
+     build pipeline (lightningcss) resolves any literal hsl() to 8-bit
+     hex at compile time (#d500ff — the half-LSB divergence the CSSOM's
+     rgb(213,0,255) serialization masked), so the mirror must keep the
+     SAME indirection: raw components + hsl(var(...)). The --violet
+     component var also lands in :root — the live's variable landscape. */
+  --violet: 290 100% 50%;
+  --color-violet: hsl(var(--violet));
   --color-electric-blue: #0055ff;
 
   /* Dark surfaces */
   --color-background: #000000;
   --color-foreground: #ffffff;
-  --color-card: #0f0f0f; /* hsl(0 0% 6%) */
+  --color-card: hsl(0 0% 6%); /* S59 D211 — the live :root's syntax (the 15.3 float); INERT: no un-overridden consumer */
   --color-card-foreground: #ffffff;
-  --color-muted: #161616;
-  /* The reference's SPA token: hsl(0 0% 64%) = #a3a3a3 (neutral-400,
+  --color-muted: hsl(240 5% 12%); /* S59 D211 — the live :root's token (= rgb(29,29,32) at 8-bit); INERT — the only bg-muted consumer sits under the login route's local light override */
+  /* S59 D206 — the same var-indirection for the muted-foreground gray
+     (the live SPA token `--muted-foreground: 0 0% 64%`; the .64 float is
+     what its print operators write; the hex mirror #a3a3a3 wrote .6392;
      measured on its FAQ chevron — Session 8 F6; was #a1a1aa zinc-400). */
-  --color-muted-foreground: #a3a3a3;
-  --color-border: #242424; /* hsl(0 0% 14%) */
-  --color-input: #242424;
+  --muted-foreground: 0 0% 64%;
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-border: hsl(0 0% 14%); /* S59 D211 — the live :root's syntax (the 35.7 float) */
+  --color-input: hsl(0 0% 14%); /* S59 D211 — same */
   --color-destructive: #ef4444;
 
   /* The ring token the live's LOGIN bundle ships as `--ring: 240 10% 3.9%`
@@ -125,10 +139,14 @@
   --color-gray-700: #374151;
   --color-gray-800: #1f2937;
   --color-gray-900: #111827;
+  --color-red-50: #fef2f2; /* S59 D209 — the 50 step the s9 v3-hex palette pins missed: unpinned, v4's
+     oklch default leaked oklab(0.971 0.0124 0.0039) into the login error banner
+     where the live ships rgba(254,242,242,.7) */
   --color-red-200: #fecaca;
   --color-red-400: #f87171;
   --color-red-500: #ef4444;
   --color-red-700: #b91c1c;
+  --color-green-50: #f0fdf4; /* S59 D210 — the same 50-step oklch leak (the reset flow's success banner) */
   --color-green-200: #bbf7d0;
   --color-green-400: #4ade80;
   --color-green-500: #22c55e;

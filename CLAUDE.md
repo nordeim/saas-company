@@ -426,6 +426,32 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   Gotcha 65 / lesson 94: the inline-storage law + the array-key
   enumeration artifact + the SMask recursion terminus.
 
+- **Session 59 (2026-10-16) remediation** — see
+  `docs/remediation-plan-session59.md`: the THIRTY-FOURTH-SURFACE
+  session (the /Kids page-tree VALUE layer + the /DecodeParms
+  family measured LAWS; the pdftohtml -xml fontspec colors measured
+  RICH). **THE THIRTY-FOURTH SURFACE (D205) — the PDF COLOR-FILL
+  VALUE layer**: every rg/scn fill in every stream censused at the
+  PDF's 4-decimal granularity — six syntax/precision families
+  decoded to THE TOKEN-SYNTAX DIVERGENCE (the live's hsl-component
+  tokens carry float precision its hex mirrors quantized away; the
+  CSSOM serialization masked the half-LSB delta at every DOM
+  layer). **THE VAR-INDIRECTION LAW (D207)**: lightningcss resolves
+  literal hsl() to hex at compile time — the mirror keeps the
+  live's raw-components + hsl(var(...)) indirection (verified in
+  the BUILT css). **THE RED/GREEN-50 OKLCH LEAKS (D209/D210)**: the
+  two 50-step palette pins the s9 v3-hex pins missed (the
+  error/success banners) — fixed. **THE LOGIN HSL-SPEC CONVERGENCE
+  (D208)** + **THE :root-vs-.dark NOT-FIX GUARDS (D212)** (the
+  .dark blocks never mount; the rendering primary #8624ff /
+  destructive #ef4444 / login ring pinned). The dashboard's chart
+  raster re-pinned (the D205 downstream — the stale-pin
+  convergence's second sighting). Gate 870 → 877 (252 + 125 +
+  500); the battery ELEVEN phases 120/120; VLM 8/8 first-pass zero
+  adjudications (the second consecutive). Gotcha 69 / lesson 98:
+  the var-indirection + leading-dot fill keys + animation-band
+  render + :root-vs-.dark laws.
+
 - **Session 58 (2026-10-16) remediation** — see
   `docs/remediation-plan-session58.md`: the FIRST src/-change parity
   session since S54 (the worklog S57 candidates — the
