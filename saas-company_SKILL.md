@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.63.0 · **Last updated:** 2026-10-17 (Session 64 remediation)
+> **Version:** 2.64.0 · **Last updated:** 2026-10-17 (Session 65 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -2142,6 +2142,38 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     transfer function in either tree sat INSIDE a /SMask dict
     ({1 exch sub}, funcType 4), two levels beneath the census every
     prior session trusted; every empty-set law is depth-scoped.
+
+104. **The gradient-function value layer + the by-value comparison
+    law (Session 65)**: the 40th surface (the gradient-function
+    value layer under the pinned-frame contract) chased the animated
+    gradient family's phase into the deepest interior measured — and
+    found the phase was never in the colors. LESSONS: (a) THE
+    PHASE-CARRIER HUNT: when an "animated gradient" family is pinned
+    and the SMask/pattern/gs layers all read T-INVARIANT, walk the
+    FUNCTION interiors before concluding drift — the stop values
+    (the type-4 bodies, the exponential C0/C1, the stitched
+    sub-chains) are the last place the phase could hide; here every
+    function was byte-identical across frames, localizing the
+    animation to the alpha layer the prior session had already
+    registered. (b) THE BY-VALUE COMPARISON LAW: engines renumber
+    objects between renders (the clone's 149->148/169->168 with
+    byte-identical interiors) — an object-keyed census reports
+    false drift; sort and compare the VALUE multiset, never the
+    object identity. (c) THE STITCH IS A SHADE: an axial shading
+    carrying a STITCHED (type-3) function is not "an exponential"
+    — decompose to the sub-chain (Bounds + each sub's C0/C1) or the
+    census silently merges distinct gradient families (the
+    hero-text sheen pair vs the monotone ramps). (d) THE
+    SINGLE-MATRIX ADJUDICATION: a /Matrix on a tiling pattern is a
+    PLACEMENT transform, not an animation carrier — count them,
+    read their values, and compare across frames before calling a
+    background-position animation (here: exactly one, static, the
+    border-shimmer strip's). (e) THE SLASH-KEY DISCIPLINE (the
+    instrument-side bug family again): qpdf dict keys carry leading
+    slashes — a `"Coords" in sh` guard reads a key that never
+    exists and silently nulls the field; every qpdf reader
+    access needs the exact "/Coords" form, and a null-coords census
+    is an instrument bug until proven otherwise.
 
 102. **The pinned-frame print contract + the streaming-window law
     (Session 63)**: the 38th surface (the animation-band value layer)

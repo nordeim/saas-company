@@ -426,6 +426,27 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   Gotcha 65 / lesson 94: the inline-storage law + the array-key
   enumeration artifact + the SMask recursion terminus.
 
+- **Session 65 (2026-10-17) remediation** — see
+  `docs/remediation-plan-session65.md`: the FRESH-CLONE rebuild
+  session (the workspace reset; npm ci, Chromium v1243, `.env`,
+  the DB re-seeded 1/6/2, paramiko + the ssh shim). **THE FORTIETH
+  SURFACE (D221): the gradient-function value layer** — the
+  function-interior T-invariance law (every shading function
+  byte-identical across the pinned frames, compared by value — the
+  gradient stop values are not the animation carrier, the phase
+  lives in the alpha layer), the cross-side value convergence at
+  engine float precision (deltas <= 1.2e-7 + the epsilon carriers),
+  the axial stitch decomposition (2 exponentials + 4 stitched
+  chains — the hero-text sheen symmetric pair), and the
+  single-matrix law (the border-shimmer strip's static placement).
+  The TWENTY-FIRST standing watch all records hold — now with the
+  39th surface's interior columns; the D160 mobile-nav record: the
+  clone EXACT (NO Tailwind v4 bug), the live's y35 healed affordance
+  holding. The session65 suite +4 (GREEN x3). Gate 902 -> 906 (252
+  + 125 + 529 in 74 files, the s65 runner, the file-set diff
+  EMPTY, zero failures — the cleanest session yet); VLM 8/8 (one
+  prompt-calibration catch); zero src/ changes again this session.
+
 - **Session 64 (2026-10-17) remediation** — see
   `docs/remediation-plan-session64.md`: the FRESH-CLONE rebuild
   session (the first since S61 — the workspace reset, the full
