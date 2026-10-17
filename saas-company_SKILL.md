@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.62.0 · **Last updated:** 2026-10-17 (Session 63 remediation)
+> **Version:** 2.63.0 · **Last updated:** 2026-10-17 (Session 64 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -2108,6 +2108,40 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     fix REACHES the rasters — the dashboard chart's payload sha
     shifted with the violet's half-LSB convergence (the stale-pin
     convergence law's second sighting).
+
+103. **The SMask interior walk + the attribution method (Session
+    64)**: the 39th surface (the /SMask-in-gs interior decomposition
+    under the pinned-frame contract) resolved the two T-invariant
+    structural deltas the previous session registered but could not
+    attribute. LESSONS: (a) THE REFS ARE STRINGS: qpdf --json
+    represents indirect references as plain "N 0 R" STRINGS keyed
+    "obj:N 0 R" (not ref arrays), and --json-stream-data=inline
+    BASE64-encodes every stream — a naive deref walks nothing and a
+    naive read prints base64; resolve through the string keys and
+    decode before interpreting. (b) THE USAGE SITES LIVE IN THE
+    PATTERN TREE: the SMask-bearing gs objects are NOT invoked from
+    the page's own content stream — they are set inside TILING
+    PATTERNS and FORM XObjects whose resource dicts name them; the
+    honest attribution walk must follow /Resources /Pattern and
+    /Resources /XObject recursively (a page-content-only scan finds
+    zero usages and looks like dead objects). (c) THE ATTRIBUTION
+    METHOD: a structural count delta (13v11) decomposes into KIND
+    census + BBox-signature multiset first (which entries are the
+    extras), then the interiors (what the mask groups paint), then
+    the OWNER index (which patterns/forms set them) — the delta
+    resolves to a named element family (here: the two
+    organic-gradient hero text elements printing as
+    gradient-through-gradient-mask chains on the live, mask-free on
+    the clone). (d) OBJECT-IDENTITY DEDUP IS NOT A VALUE DELTA: two
+    gs objects with identical /ca, shape, and /BM but different
+    object identity (the live's one-gs-across-five-owners v the
+    clone's two) count differently in a multiset while painting
+    identically — attribute before adjudicating. (e) THE SCAN-DEPTH
+    LAW: an "empty-set law" proven at one depth (the D218 top-level
+    transfer keys) says nothing about deeper layers — the first
+    transfer function in either tree sat INSIDE a /SMask dict
+    ({1 exch sub}, funcType 4), two levels beneath the census every
+    prior session trusted; every empty-set law is depth-scoped.
 
 102. **The pinned-frame print contract + the streaming-window law
     (Session 63)**: the 38th surface (the animation-band value layer)

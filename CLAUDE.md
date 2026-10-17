@@ -426,6 +426,26 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   Gotcha 65 / lesson 94: the inline-storage law + the array-key
   enumeration artifact + the SMask recursion terminus.
 
+- **Session 64 (2026-10-17) remediation** — see
+  `docs/remediation-plan-session64.md`: the FRESH-CLONE rebuild
+  session (the first since S61 — the workspace reset, the full
+  environment rebuilt: npm ci, Chromium v1243, `.env`, the DB
+  re-seeded 1/6/2, paramiko + the ssh shim). **THE THIRTY-NINTH
+  SURFACE (D220): the /SMask-in-gs interior decomposition** — the
+  live's 13v11 /SMask pair attributed to the two organic-gradient
+  hero text elements (gradient-through-gradient-mask chains over the
+  hero band; the clone mask-free, 10 v 14 shading patterns), the
+  @51 slot attributed to a pure gs-object dedup family, and THE /TR
+  INTERIOR DISCOVERY (the shared /Alpha mask's funcType-4
+  `{1 exch sub}` inversion — the first transfer function in either
+  tree). The TWENTIETH standing watch all records hold (now with
+  the pinned-frame column); the D160 mobile-nav record: the clone
+  EXACT (NO Tailwind v4 bug), the live's y35 affordance HEALED
+  since S63 (a live-site evolution registered). The session64 suite
+  +4 (GREEN x3). Gate 898 -> 902 (252 + 125 + 525 in 73 files, the
+  s64 runner, the file-set diff EMPTY); VLM 8/8 zero adjudications
+  (the seventh consecutive); zero src/ changes again this session.
+
 - **Session 63 (2026-10-17) remediation** — see
   `docs/remediation-plan-session63.md`: the second-consecutive
   warm-workspace session (the clone at `09d9a23` = remote main after
