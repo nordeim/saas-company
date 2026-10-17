@@ -2365,3 +2365,16 @@ Stage Summary:
 - Session 65 complete: the FRESH-CLONE rebuild session (the second in five) + the TWENTY-FIRST standing watch all records hold (with the interior columns) + the D160 mobile-nav record exact (NO Tailwind v4 bug; the live's y35 healed affordance holding) + THE FORTIETH SURFACE at measured value parity (the function-interior T-invariance law + the cross-side convergence + the axial stitch decomposition + the single-matrix law; no src/ fix) + the session65 suite +4 pinned GREEN x3; gate 902 -> 906 = 252 + 125 + 529 in 74 files (zero failures — the cleanest session yet); VLM 8/8; 21 screenshots refreshed (14 byte-identical).
 - Survey scripts persisted under research/ (gitignored scratch): with-recon-server-s65.sh, watch-s65.mjs, mobilenav-s65.mjs, probe-live-burger-s65.mjs, probe-live-menu-s65.mjs, probe-live-affordance-s65.mjs, pinned-prints-s65.mjs, gradient-interiors-s65.py, gradient-diffs-s65.py, pattern-matrix-s65.py, with-capture-server-s65.sh, capture-screenshots-s65.mjs, vlm-checks-s65.mjs, doc-edits-s65.py + the committed scripts/run-e2e-chunks-s65.sh.
 - The S66 candidates: the TWENTY-SECOND standing watch (with the 40th surface's function-interior columns); the 41st surface (the /SMask G-STREAM interiors under the pin; or the content-stream /scn pattern-invocation layer; or the font subset interiors under the pin).
+---
+Task ID: 65-close
+Agent: Super Z (main)
+Task: Session 65 closing — the pushed-hash record + the final state
+
+Work Log:
+- The remediation commit 3b744bf (24 files) PUSHED AND WRAPPER-VERIFIED: 72f35c7..3b744bf HEAD -> main through the wrapper v3.1 (the paramiko 5.0.0 shim at /home/z/my-project/bin/ssh — re-extracted from docs/ssh.py after the fresh-clone reset), the verification gate returning remote refs/heads/main @ 3b744bf == local HEAD (exit 0), the remote-tracking ref synced.
+- The operator key's fingerprint verified through paramiko's own parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU — the exact S1-S64 record); the wrapper's temp key copy shredded per its lifecycle; the operator's key file destroyed after the push (the closing discipline).
+- The remediation plan's pushed-hash record BACK-FILLED; this closing entry; the scratch DBs removed (recon65/capture65); zero zombies (the ports swept and re-verified at close); the tree clean; no new branches.
+
+Stage Summary:
+- Session 65 FULLY CLOSED at 3b744bf: the FRESH-CLONE rebuild session (the second in five) + the TWENTY-FIRST standing watch all records hold (now with the 39th surface's interior columns) + the D160 mobile-nav record exact (NO Tailwind v4 bug; the live's y35 healed affordance holding) + THE FORTIETH SURFACE at measured value parity (the function-interior T-invariance law + the cross-side convergence + the axial stitch decomposition + the single-matrix law; no src/ fix) + the session65 suite +4 (GREEN x3); gate 902 -> 906 = 252 + 125 + 529 in 74 files (the file-set diff EMPTY; zero failures — the cleanest session yet); VLM 8/8; 21 screenshots refreshed (14 byte-identical).
+- The S66 candidates recorded (the TWENTY-SECOND standing watch with the 40th surface's function-interior columns; the 41st surface [the /SMask G-STREAM interiors under the pin; or the content-stream /scn pattern-invocation layer; or the font subset interiors under the pin]).

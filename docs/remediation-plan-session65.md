@@ -202,4 +202,23 @@ the worklog.
 
 ## The pushed-hash record (the closing discipline)
 
-- (to be back-filled at the closing push)
+- The remediation commit **3b744bf** (24 files: the session65 spec +4 + the
+  s65 chunk runner + the docs alignment [PAD/AGENTS/CLAUDE/README/SKILL
+  v2.64.0] + the 15 refreshed screenshots + the session log 139 + this
+  plan + the worklog) — **PUSHED AND WRAPPER-VERIFIED**: the push ran
+  `72f35c7..3b744bf HEAD -> main` through the wrapper v3.1 (the
+  paramiko 5.0.0 shim at `/home/z/my-project/bin/ssh` — re-extracted
+  from `docs/ssh.py` after the workspace reset), and the wrapper's own
+  verification gate returned **remote refs/heads/main @ 3b744bf ==
+  local HEAD** with exit 0, the remote-tracking ref synced (git status
+  agreeing, no "ahead" residue).
+- The operator key's fingerprint verified through paramiko's own key
+  parse BEFORE the push and matched the S1-S64 record exactly
+  (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU); the wrapper's
+  temp key copy shredded per its lifecycle; the operator's key file
+  destroyed after the push (the closing discipline — re-materialized
+  only for the closing push, then destroyed again).
+- Zero zombies at close (the port sweep :3000/:3100/:3200/:3400/:3500
+  — swept and re-verified at the closing commit); the scratch DBs
+  removed (recon65/capture65 + the probe qjson/PDF artifacts); the
+  tree clean before the closing commit; no new branches.
