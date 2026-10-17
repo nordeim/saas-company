@@ -174,4 +174,26 @@ plan (this file), the session log 133, the worklog.
 
 ## The pushed-hash record (the closing discipline)
 
-- (back-filled at close per the house convention)
+- The remediation commit **ff7ea82** (20 files, 854 insertions: the
+  session62 spec +5 + the s62 chunk runner + the docs alignment
+  [PAD/AGENTS/CLAUDE/README/SKILL v2.61.0] + the 21 refreshed
+  screenshots [11 byte-identical on re-capture — the determinism
+  signal] + the session log 133 + this plan + the worklog) —
+  **PUSHED AND WRAPPER-VERIFIED**: the push ran
+  `1c98d5d..ff7ea82 HEAD -> main` through the wrapper v3.1 (the
+  paramiko 5.0.0 shim at `/home/z/my-project/bin/ssh` — the WARM
+  WORKSPACE carried it over intact from S61, zero re-extraction, the
+  first no-rebuild environment since S59), and the wrapper's own
+  verification gate returned **remote refs/heads/main @ ff7ea82 ==
+  local HEAD** with exit 0, the remote-tracking ref synced (git
+  status agreeing, no "ahead" residue).
+- The operator key's fingerprint was verified through paramiko's own
+  key parse BEFORE the push and matched the S1-S61 record exactly
+  (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU); the
+  wrapper's temp key copy shredded per its lifecycle; the operator's
+  key file destroyed after the final closing push (the closing
+  discipline).
+- Zero zombies at close (the port sweep :3000/:3100/:3200/:3400/:3500
+  — swept and re-verified at the closing commit); the scratch DBs
+  removed (recon62/capture62); the tree clean before the closing
+  commit; no new branches.
