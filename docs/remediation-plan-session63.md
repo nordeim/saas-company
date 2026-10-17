@@ -204,4 +204,27 @@ plan (this file), the session log 135, the worklog.
 
 ## The pushed-hash record (the closing discipline)
 
-- (back-filled at close per the house convention)
+- The remediation commit **d9b2add** (22 files, 982 insertions: the
+  session63 spec +4 + the s63 chunk runner + the two TEST-ONLY spec
+  hardenings [the gotcha-73 streaming-window fixes — brand-parity +
+  palette-parity, the pins unchanged] + the docs alignment
+  [PAD/AGENTS/CLAUDE/README/SKILL v2.62.0] + the 11 refreshed
+  screenshots [10 byte-identical on re-capture — the determinism
+  signal] + the session log 135 + this plan + the worklog) —
+  **PUSHED AND WRAPPER-VERIFIED**: the push ran
+  `09d9a23..d9b2add HEAD -> main` through the wrapper v3.1 (the
+  paramiko 5.0.0 shim at `/home/z/my-project/bin/ssh` — the SECOND
+  warm workspace in a row, zero re-extraction), and the wrapper's own
+  verification gate returned **remote refs/heads/main @ d9b2add ==
+  local HEAD** with exit 0, the remote-tracking ref synced (git
+  status agreeing, no "ahead" residue).
+- The operator key's fingerprint was verified through paramiko's own
+  key parse BEFORE the push and matched the S1-S62 record exactly
+  (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU); the
+  wrapper's temp key copy shredded per its lifecycle; the operator's
+  key file destroyed after the final closing push (the closing
+  discipline).
+- Zero zombies at close (the port sweep :3000/:3100/:3200/:3400/:3500
+  — swept and re-verified at the closing commit); the scratch DBs
+  removed (recon63/capture63); the tree clean before the closing
+  commit; no new branches.
