@@ -152,24 +152,28 @@ test.describe("login focus + route chrome (Session-9 F2/F4/F5)", () => {
     //     as either rgb(9, 9, 11) or rgba(9, 9, 11, 1) — poll the shadow
     //     to its settled 4px form, matching either spelling, instead of
     //     string-matching at a fixed 200ms offset.
-    for (let i = 0; i < 10; i++) {
-      const focused = await page.evaluate(() => {
-        const el = document.activeElement;
-        return el instanceof HTMLButtonElement && (el.innerText || "").trim() === "Sign in";
-      });
-      if (focused) break;
-      await page.keyboard.press("Tab");
-    }
+    // (S63) the walk now lives INSIDE the poll: /login is an async server
+    //     component (the real-auth gate) under Suspense — React streams
+    //     the card inside a HIDDEN container for the first ~100-250ms
+    //     after goto, and NOTHING streamed there is focusable, so blind
+    //     Tab presses are silently lost (the old bounded walk exhausted
+    //     inside the window when all 10 presses landed there). One
+    //     re-attempted Tab per poll iteration rides through to the
+    //     completed boundary — the D135 re-attempt law, pins unchanged.
     await expect
       .poll(
         async () => {
-          const shadow = await page.evaluate(() => {
+          const focused = await page.evaluate(() => {
+            const el = document.activeElement;
+            return el instanceof HTMLButtonElement && (el.innerText || "").trim() === "Sign in";
+          });
+          if (!focused) await page.keyboard.press("Tab");
+          return page.evaluate(() => {
             const el = document.activeElement;
             return el instanceof HTMLButtonElement && (el.innerText || "").trim() === "Sign in"
               ? getComputedStyle(el).boxShadow
               : "NOT FOCUSED ON SIGN IN";
           });
-          return shadow;
         },
         { timeout: 10_000 },
       )
@@ -177,14 +181,28 @@ test.describe("login focus + route chrome (Session-9 F2/F4/F5)", () => {
   });
 
   test("the focused email input's ring renders the live's slate-400 (#94a3b8)", async ({ page }) => {
+    // (S63) /login streams its card inside a hidden Suspense container for
+    // ~100-250ms after goto (the async real-auth gate) — locator.focus()
+    // waits only for ATTACHMENT, so a focus attempt inside the window is a
+    // silent no-op and the fixed 200ms offset landed marginal of the
+    // boundary completion. Re-attempting the focus inside the poll rides
+    // through to the settled ring — the D135 re-attempt law; the pin keeps
+    // the original color check, tolerant of either settled serialization.
     await page.goto("/login");
-    await page.locator("input#email").focus();
-    await page.waitForTimeout(200);
-    const shadow = await page.evaluate(() => {
-      const el = document.activeElement;
-      return el ? getComputedStyle(el).boxShadow : "NO ACTIVE ELEMENT";
-    });
-    expect(shadow.includes("rgb(148, 163, 184)")).toBe(true);
+    await expect
+      .poll(
+        async () => {
+          await page.locator("input#email").focus();
+          return page.evaluate(() => {
+            const el = document.activeElement;
+            return el instanceof HTMLInputElement && el.type === "email"
+              ? getComputedStyle(el).boxShadow
+              : "NOT FOCUSED ON EMAIL";
+          });
+        },
+        { timeout: 10_000 },
+      )
+      .toMatch(/rgba?\(148, 163, 184(, 1)?\)/);
   });
 
   test("the Sign in's implicit border color matches the live's login bundle (gray-200, inert)", async ({ page }) => {

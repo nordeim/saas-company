@@ -233,22 +233,34 @@ test.describe("login route theme + head parity (Session 4)", () => {
     // (v3-style margin-top) — measured label→input gap 10px, card 746px at
     // 1440×900. v4's margin-bottom-on-preceding is lost on inline labels,
     // which had tightened the card by 12px (the route style restores it).
+    // (S63) The /login route is an async server component (the real-auth
+    // gate — a live session read) under Suspense: React streams the card
+    // markup inside a HIDDEN container and completes the boundary only
+    // after the session query resolves, so raw rects read all-zero
+    // (lblH/cardH 0 with the full DOM present, display/visibility normal)
+    // for the first ~100-250ms after goto — measured in vivo, converging
+    // 0 -> 16/746 at t+210-244ms. The poll form rides through the
+    // streaming window to the settled layout (the D135 changed-then-stable
+    // precedent, test-only — the pins unchanged).
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/login");
-    const m = await page.evaluate(() => {
-      const label = document.querySelector('label[for="email"]')!;
-      const input = document.querySelector('input[type="email"]')!;
-      const card = document.querySelector("main > div > div")!;
-      const lr = label.getBoundingClientRect();
-      const ir = input.getBoundingClientRect();
-      return {
-        gap: ir.top - (lr.top + lr.height),
-        cardH: card.getBoundingClientRect().height,
-      };
-    });
-    expect(Math.round(m.gap)).toBe(10);
-    expect(Math.round(m.cardH)).toBeGreaterThanOrEqual(742);
-    expect(Math.round(m.cardH)).toBeLessThanOrEqual(750);
+    const measure = () =>
+      page.evaluate(() => {
+        const label = document.querySelector('label[for="email"]')!;
+        const input = document.querySelector('input[type="email"]')!;
+        const card = document.querySelector("main > div > div")!;
+        const lr = label.getBoundingClientRect();
+        const ir = input.getBoundingClientRect();
+        return {
+          gap: Math.round(ir.top - (lr.top + lr.height)),
+          cardH: Math.round(card.getBoundingClientRect().height),
+        };
+      });
+    await expect.poll(async () => (await measure()).gap).toBe(10);
+    const m = await measure();
+    expect(m.gap).toBe(10);
+    expect(m.cardH).toBeGreaterThanOrEqual(742);
+    expect(m.cardH).toBeLessThanOrEqual(750);
   });
 
   test("the dark routes keep the dark body theme (regression guard)", async ({ page }) => {

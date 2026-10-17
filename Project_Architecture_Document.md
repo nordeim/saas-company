@@ -934,6 +934,59 @@
   (lesson 98), the remediation plan session59, the session log 127,
   the worklog.
 
+- `[NOTE]` **Session 63 remediation (2026-10-17)** — the second-
+  consecutive WARM-WORKSPACE session (the clone at `09d9a23` = remote
+  main after the operator's own session_134 closing-log push; the S62
+  environment carried over intact, the dev DB md5-verified canonical
+  `e22829c2…`). **THE NINETEENTH STANDING WATCH: all records hold** —
+  now carrying THE TRANSFER-MODE COLUMN (the S63 extension: the watch
+  prints /login + /faq + the landing per side through qpdf, the D218
+  constants GREEN both sides — login 9x /Normal, faq 12x /Normal, THE
+  /SCREEN LAW on the landing with the count delta correctly inside the
+  registered animation-band family) + the D131 trio now
+  serialization-tolerant (the live's computed borderColor serializes
+  SPACED — the color/width unchanged from the record). **THE D160
+  MOBILE-NAV RECORD: EXACT — NO TAILWIND v4 BUG** (the kickoff's watch
+  item). **THE THIRTY-EIGHTH SURFACE (D219): the ANIMATION-BAND VALUE
+  LAYER under a PINNED-FRAME PRINT CONTRACT at measured parity** —
+  pause every Web-Animations-API animation at a deterministic
+  currentTime T (1700 and 1000), print, census: each side's pinned
+  transfer-mode layer BYTE-IDENTICAL across prints (the S62 animation
+  band was pure CSS/WAAPI opacity-phase randomness; the rAF families
+  contribute no gs entries — scale-only geometry); across sides at
+  T=1700 the full-stroke family (5 shapes) EQUAL, 14 of 16 alpha slots
+  EQUAL at identical multiplicities, THE /SCREEN LAW holds both sides
+  — with TWO T-INVARIANT STRUCTURAL DELTAS registered (the live's
+  /SMask pair 13v11, re-attributed from the animation band to a
+  CONSTANT engine family; the clone's extra @51 slot 1v2) and the
+  phase slots pinned as deterministic functions of T (@230 present at
+  T=1700, absent at T=1000). THE ENGINE CENSUS discovery: the live
+  drives its loop family WAAPI(opacity) + rAF(transform — the ambient
+  scale 1↔1.15, the under-glow translateY 0↔-12px, the five mockup
+  dots' scale pulses; the mockup DOM census identical both sides: 56
+  elements, 24 shape keys, the same 7 dots), the clone consolidates
+  the SAME choreography into CSS keyframes — no invention, no loss, NO
+  src/ fix required. GOTCHA 73 registered (the /login STREAMING
+  WINDOW: the async-auth route streams its card inside a hidden
+  Suspense container for ~100-250ms after goto — the full DOM present,
+  every rect zero, nothing focusable; the baseline's THREE in-flight
+  failures all root-caused to it, the two affected specs hardened
+  TEST-ONLY per the D135 re-attempt law). The session63 suite +4 pins
+  the clone side (TDD-verified ×3: the pinned determinism, the pinned
+  census constants at both frames with the T-invariant structural
+  slots, the full-choreography guard + the 32-animation at-rest
+  census). Gate: 894 → **898** (252 unit + 125 smoke + **521 e2e in
+  72 files**, the s63 runner — the s62 list verbatim + the session63
+  spec appended; the file-set diff EMPTY 72/72; ZERO flakes across
+  all 23 chunks in the final gate). VLM 8/8 zero adjudications (the
+  sixth consecutive). 21 screenshots refreshed (capture63.db, the dev
+  DB canonical before AND after — md5-verified, zero mutations).
+  DOCUMENTED: PAD (this block + the D219 ledger row + the 7.1 counts
+  72 specs/521), AGENTS (the counts + gotcha 73), CLAUDE (the
+  session-63 context), README (the 898 badge + the session63 suite
+  row), SKILL v2.62.0 (lesson 102), the remediation plan session63,
+  the session log 135, the worklog.
+
 - `[NOTE]` **Session 62 remediation (2026-10-17)** — the warm-workspace
   session (the clone at `1c98d5d` = remote main after the operator's
   own `session_132` closing-log push; zero rebuild needed — the S61
@@ -4391,6 +4444,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D215 | THE 35TH SURFACE — the /Shading PATTERN-interior VALUE layer at FULL PARITY: every shading pattern's ShadingType/Coords/the /Function C0/C1 endpoint values at the PDF's own float serialization censused on both sides (the same print inputs per gotcha 68) — /login 3v3 patterns IDENTICAL, /faq 0v0 (the empty set), the landing's every DISTINCT interior shape shared (the live's 14 v the clone's 10 — the count delta the registered animation-band engine family, count-only); the D205 family's shading counterpart, the first candidate the var-indirection law made measurable — the S59 token convergence CARRIED the shading layer, no fix required | Measured (the pattern-dict census through qpdf --json, both sides fresh) | research/shading-s60.mjs (the S60 probe; the record registered in this ledger) | **Registered parity (law-quality)** (Session 60) |
 | D216 | THE SECOND-INTERPOLATION-INPUT CROSS-CHECK (the pin-your-own-input law at the color layer): under a 49-char email (a different interpolation input than S59's probe) the typed text's fill census is `.0351,.0351,.0429` ×2 on BOTH sides (the live's hsl(240 10% 3.9%) floats) and all 15 distinct fills identical — zero live-only, zero clone-only; the S59 convergence is input-invariant | Measured (the typed-render fill census, both sides fresh) | research/typed-fills-s60.mjs (the S60 probe; the record registered in this ledger) | **Registered parity** (Session 60) |
 | D217 | THE 36TH SURFACE — the pdftohtml -xml READING-ORDER layer at FULL PARITY (the S61 candidate, measured on its first honest two-sided capture — 20 PDFs + the 3 alternates, identical print inputs per the pin-your-own-input law): three censuses per state — (A) the per-word FONT census (every `<text>` element's fontspec family\|size\|color, the subset prefix stripped), (B) the READING-ORDER sequence (poppler's own layout ordering — a SECOND engine's read of the text the S58/D198 line layer pinned through the qpdf token stream), (C) the COLUMN assignment (per 4pt line-bucket the sorted x-origins) — ALL EQUAL on 12 of 13 states: login 11v11, typed 11v11, reset 6v6, signup 8v8, error 12v12, faq 33v33, thank-you 3v3, privacy 46v46, terms 49v49, accessibility 81v81, refund-policy 44v44, landing 43v43 (the landing entrance-invariant at both dwell contracts); the 404 (7v7): the font census EQUAL, the order/column delta at exactly ONE word — the live's trailing space on "The page " + the 4pt-shifted following origin, the REGISTERED 2-space-glyph emission family (S47/S58); the embedded-font cross-check re-verified the S49 records exactly (faq 7× VendSans-Light, 404 5×, thank-you 4×, landing 10×, /login the DejaVu system stack — identical subsets both sides); NO src/ fix required — the line layer + the font layer + the word layer all converge | Measured (the two-sided print + pdftohtml -xml census, both sides fresh) | tests/e2e/session61-readingorder-laws.spec.ts (D217a–f) | **Registered parity (law-quality)** (Session 61) |
+| D219 | THE 38TH SURFACE — the ANIMATION-BAND VALUE LAYER under a PINNED-FRAME PRINT CONTRACT at measured parity (the S63 candidate, measured on its first two-sided pinned capture): pause every Web-Animations-API animation at a deterministic currentTime (T=1700 and T=1000), print, census the gs layer through qpdf — each side's PINNED layer BYTE-IDENTICAL across prints (the S62 "animation band" was pure CSS/WAAPI opacity-phase randomness; the rAF families contribute no gs entries — scale-only geometry); across sides at T=1700: the full-stroke family (5 shapes) EQUAL, 14 of 16 alpha slots EQUAL at identical multiplicities, THE /SCREEN LAW holds both sides — with TWO T-INVARIANT STRUCTURAL DELTAS registered (the live's /SMask pair 13v11, re-attributed from the animation band to a CONSTANT engine family; the clone's extra @51 slot 1v2) and the phase slots pinned as deterministic functions of T (@230 present at T=1700, absent at T=1000). THE ENGINE CENSUS: the live drives its loop family WAAPI(opacity) + rAF(transform — the ambient scale 1↔1.15, the under-glow translateY 0↔-12px, the five mockup dots' scale), the clone consolidates the SAME choreography into CSS keyframes (the mockup section's DOM census identical both sides: 56 elements, 24 shape keys, the same 7 dots) — no invention, no loss, NO src/ fix required | Measured (the two-sided pinned-frame qpdf census + the rAF-proof transform sampling, both sides fresh) | tests/e2e/session63-pinnedframe-laws.spec.ts (D219a–d) | **Registered parity (law-quality)** (Session 63) |
 | D218 | THE 37TH SURFACE — the /ExtGState-adjacent TRANSFER-MODE INTERIORS at FULL PARITY (the S62 candidate, measured on its first honest two-sided capture — 20 PDFs, identical print inputs per the pin-your-own-input law): three censuses — (A) the /BM VALUE census (every ExtGState's blend-mode entry: /Normal on every deterministic route both sides + THE /SCREEN LAW — the landing's hero `mix-blend-mode` renders into print as the /Screen blend mode, ONE entry both sides, identical shape `/BM,/ca` at full opacity, the only non-Normal blend mode in either tree), (B) THE TRANSFER-FUNCTION EMPTY-SET LAW (the PDF 32000-1 Table-59 transfer/halftone family /TR /TR2 /HT /BG /BG2 /UCR /UCR2 /OP /op /OPM /RI /D /FL /AIS /TK /SP /Font — zero entries on every route, both sides), (C) the BM-BEARING SHAPE CENSUS at the D187 255-grid (404 3v3 · login 9v9 · login-typed 9v9 · faq 12v12 · thank-you 4v4 · privacy/terms/accessibility/refund-policy 11v11 each — the live's 8-bit-quantized alphas v the clone's raw CSS decimals converging on every grid point incl. the 179 half-point; the landing's animated slots the REGISTERED animation-band family around the stable core) — NO src/ fix required. INSTRUMENT LAWS (gotcha 72): the reading-order/print columns of any two-sided probe run in a FRESH CONTEXT (an authenticated session makes /login redirect to /dashboard); the D187 grid re-implemented outside JS must use floor(v×255+0.5), never round() — Python banker's rounding read a FALSE 178v179 drift on the four legal routes | Measured (the two-sided qpdf --json gs-dict census, both sides fresh) | tests/e2e/session62-transfermode-laws.spec.ts (D218a–e) | **Registered parity (law-quality)** (Session 62) |
 
 
@@ -4456,7 +4510,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 20 files | 252 | `src/lib/*.test.ts` + `src/app/api/workflows/generate/route.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
-| Browser E2E | 71 specs | 517 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Browser E2E | 72 specs | 521 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 125 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins

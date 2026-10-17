@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.61.0 · **Last updated:** 2026-10-17 (Session 62 remediation)
+> **Version:** 2.62.0 · **Last updated:** 2026-10-17 (Session 63 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -2108,6 +2108,40 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     fix REACHES the rasters — the dashboard chart's payload sha
     shifted with the violet's half-LSB convergence (the stale-pin
     convergence law's second sighting).
+
+102. **The pinned-frame print contract + the streaming-window law
+    (Session 63)**: the 38th surface (the animation-band value layer)
+    measured under a PINNED-FRAME PRINT CONTRACT — pause every
+    Web-Animations-API animation at a deterministic currentTime T,
+    print, census. LESSONS: (a) THE PHASE BAND IS PURE PHASE: each
+    side's pinned transfer-mode layer is byte-identical across prints
+    — the previous session's "animation band" (frame-dependent gs
+    slots) was the CSS/WAAPI opacity keyframes' phase randomness,
+    nothing structural; the rAF-driven families (scale-only
+    transforms) contribute no gs entries at all. (b) THE ENGINE
+    SPLIT: the reference drives its loop family through WAAPI
+    (opacity) + rAF (transform — the ambient scale, the under-glow
+    rise, the mockup dots), while a CSS-consolidated clone carries
+    the same choreography in keyframes — getAnimations() sees ONLY
+    the WAAPI half on the reference, so a naive inventory reads
+    "missing animations"; the rAF-proof method is SAMPLING the
+    computed transform over seconds, never trusting the animation
+    registry alone. (c) THE STREAMING WINDOW (gotcha 73): an
+    async-auth route (a live session read under Suspense) streams
+    its card inside a HIDDEN container for ~100-250ms after goto —
+    the full DOM present, display/visibility normal, yet every rect
+    and offsetHeight reads ZERO and nothing is focusable; raw-rect
+    reads and attachment-only focus/keyboard interactions race the
+    boundary completion (locator.focus() waits only for ATTACHMENT;
+    blind Tab presses are silently lost). The durable forms: poll
+    the settled value, re-attempt the interaction inside the poll
+    (the D135 law), and remember computed-STYLE reads are
+    window-immune — only layout-dependent reads and focus
+    interactions can race. (d) THE T-INVARIANCE TEST: a delta that
+    persists across two different pinned frames is STRUCTURAL
+    (engine family), not phase — pin it as a constant; a delta that
+    shifts with T is a phase slot — pin it as a function of the
+    frame.
 
 101. **The transfer-mode surface + the two instrument laws of a
     cross-language grid (Session 62)**: the 37th surface (the

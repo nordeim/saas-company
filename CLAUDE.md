@@ -426,6 +426,27 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   Gotcha 65 / lesson 94: the inline-storage law + the array-key
   enumeration artifact + the SMask recursion terminus.
 
+- **Session 63 (2026-10-17) remediation** — see
+  `docs/remediation-plan-session63.md`: the second-consecutive
+  warm-workspace session (the clone at `09d9a23` = remote main after
+  the operator's session_134 push; the S62 environment carried over).
+  THE NINETEENTH standing watch all records hold — now with the
+  TRANSFER-MODE COLUMN (the /Screen law + the empty-set, GREEN both
+  sides); the D160 mobile-nav record exact (NO Tailwind v4 bug); THE
+  THIRTY-EIGHTH SURFACE (the animation-band value layer under a
+  pinned-frame print contract) at measured parity — the pin tames the
+  phase band (byte-identical within side), 17/19 shapes equal across
+  sides at T=1700, two T-invariant structural deltas registered (the
+  live's SMask 13v11 + the clone's @51 slot), the engine census (the
+  live WAAPI(opacity)+rAF(transform) v the clone CSS-consolidated —
+  the same choreography); GOTCHA 73 (the /login streaming window) +
+  the two TEST-ONLY hardenings (brand-parity raw rects +
+  palette-parity focus pairs — the D135 re-attempt law; zero src/
+  changes again this session). The session63 suite +4 (GREEN x3).
+  Gate 894 -> 898 = 252 + 125 + 521 in 72 files.
+  Gotcha 73 / lesson 102: the streaming-window law + the pinned-frame
+  contract + the engine-split census method.
+
 - **Session 62 (2026-10-17) remediation** — see
   `docs/remediation-plan-session62.md`: the warm-workspace session (the
   clone at `1c98d5d` = remote main after the operator's own session_132
