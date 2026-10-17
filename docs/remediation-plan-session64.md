@@ -191,12 +191,16 @@ the session log 137, the worklog.
 
 ## The pushed-hash record (the closing discipline)
 
-- The remediation commit `<FILLED AT CLOSE>` (**PUSHED AND
-  WRAPPER-VERIFIED**: the push through the wrapper v3.1 — the
-  paramiko 5.0.0 shim at `/home/z/my-project/bin/ssh`, re-extracted
-  from `docs/ssh.py` after the workspace reset — and the wrapper's
-  own verification gate returning remote refs/heads/main == local
-  HEAD with exit 0, the remote-tracking ref synced).
+- The remediation commit **3a06173** (26 files: the session64 spec +4 + the
+  s64 chunk runner + the docs alignment [PAD/AGENTS/CLAUDE/README/SKILL
+  v2.63.0] + the 16 refreshed screenshots + the session log 137 + this
+  plan + the worklog) — **PUSHED AND WRAPPER-VERIFIED**: the push ran
+  `0d1c795..3a06173 HEAD -> main` through the wrapper v3.1 (the
+  paramiko 5.0.0 shim at `/home/z/my-project/bin/ssh` — re-extracted
+  from `docs/ssh.py` after the workspace reset), and the wrapper's own
+  verification gate returned **remote refs/heads/main @ 3a06173 ==
+  local HEAD** with exit 0, the remote-tracking ref synced (git status
+  agreeing, no "ahead" residue).
 - The operator key's fingerprint verified through paramiko's own key
   parse BEFORE the push and matched the S1-S63 record exactly
   (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU); the wrapper's
