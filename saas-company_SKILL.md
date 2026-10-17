@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.60.0 · **Last updated:** 2026-10-17 (Session 61 remediation)
+> **Version:** 2.61.0 · **Last updated:** 2026-10-17 (Session 62 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -2108,6 +2108,40 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     fix REACHES the rasters — the dashboard chart's payload sha
     shifted with the violet's half-LSB convergence (the stale-pin
     convergence law's second sighting).
+
+101. **The transfer-mode surface + the two instrument laws of a
+    cross-language grid (Session 62)**: the 37th surface (the
+    /ExtGState-adjacent TRANSFER-MODE INTERIORS) measured at FULL
+    PARITY on its first honest two-sided capture — the /BM value
+    census (/Normal everywhere + THE /SCREEN LAW: the landing's hero
+    `mix-blend-mode` renders into print as the /Screen blend mode —
+    one entry, both sides, identical shape — the only non-Normal
+    blend mode in either tree), the TRANSFER-FUNCTION EMPTY-SET law
+    (the Table-59 family never emitted by either pipeline), and the
+    BM-bearing shape census at the D187 255-grid. LESSONS: (a) THE
+    BLEND-MODE SURPRISE: a CSS `mix-blend-mode` survives ALL the way
+    into the print pipeline as the ExtGState /BM entry — a surface
+    family no DOM-layer census can see; when the reference uses
+    blend modes, the print layer is where their parity lives. (b)
+    THE CROSS-LANGUAGE GRID TRAP (gotcha 72b): re-implementing a
+    JS-pinned numeric mapping (Math.round) in Python changes the
+    semantics at exact halves — Python round() is half-to-EVEN
+    (round(178.5) = 178), JS Math.round is half-away-from-zero (179),
+    and 0.7×255 = 178.5 EXACTLY in IEEE754, so the first analyzer
+    pass read a FALSE parity drift on all four legal routes. The
+    durable form: floor(v×255 + 0.5), never round(), plus a pin
+    (D218e) that fails if anyone ever reads the banker's point. (c)
+    THE FRESH-CONTEXT PROBE LAW (gotcha 72a): any two-sided probe
+    that prints or censuses a route runs its print phase in a FRESH
+    browser context — an authenticated session's cookie makes the
+    clone's /login REDIRECT to /dashboard, so a shared-context print
+    after a login flow measures the wrong page entirely (the state
+    leakage reads as a 79-word dashboard where an 11-word login card
+    should be). (d) THE ANIMATED-BUCKET PIN DISCIPLINE: the landing's
+    animation-band slots (frame-dependent opacities) are pinned at
+    the presence level (a stable-core grid set with minimum
+    multiplicities + a floor count), never as exact values — the
+    deterministic routes carry the exact pins.
 
 100. **The reading-order surface + the three-layer convergence law
     (Session 61)**: the 36th surface (the pdftohtml -xml reading-order

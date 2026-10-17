@@ -934,6 +934,64 @@
   (lesson 98), the remediation plan session59, the session log 127,
   the worklog.
 
+- `[NOTE]` **Session 62 remediation (2026-10-17)** — the warm-workspace
+  session (the clone at `1c98d5d` = remote main after the operator's
+  own `session_132` closing-log push; zero rebuild needed — the S61
+  environment carried over intact, the dev DB canonical md5-verified).
+  **THE EIGHTEENTH STANDING WATCH: all records hold, now with the
+  READING-ORDER COLUMN** (the S62-candidate extension: the watch's
+  per-side probe now prints /login + /faq + /thank-you and compares
+  the D217 word censuses against the registered constants — GREEN both
+  sides; the working eight byte-identical 739/24/101/36/335/390/566/
+  285; the 404 16=16; the sitemaps 8/7; the soft-404 family; the D131
+  trio; the clone login → the dashboard 233 words; with the session's
+  instrument catch: the reading-order column runs in a FRESH CONTEXT —
+  the clone side's login-flow cookie makes /login REDIRECT to
+  /dashboard (the documented workspace-forward behavior), so a
+  shared-context print measures the dashboard, not the login card —
+  registered with gotcha 72). **THE D160 MOBILE-NAV RECORD EXACT — NO
+  Tailwind v4 bug** (the kickoff's explicit watch item: the clone's
+  burger clickable at all three y-points, every click opening the
+  canonical 7 rows × 44px; the live's toaster-blocked at y21/y28, the
+  y35 sliver opening nothing — unchanged). **THE THIRTY-SEVENTH
+  SURFACE (D218): the /ExtGState-adjacent TRANSFER-MODE INTERIORS at
+  FULL PARITY on its first honest two-sided measurement** — (a) THE
+  /BM VALUE CENSUS: /Normal on every deterministic route both sides +
+  THE /SCREEN LAW (the landing's hero `mix-blend-mode` renders into
+  print as the /Screen blend mode — ONE entry, both sides, identical
+  shape `/BM,/ca` at full opacity — the only non-Normal blend mode in
+  either tree); (b) THE TRANSFER-FUNCTION EMPTY-SET LAW (the Table-59
+  family /TR /TR2 /HT /BG /BG2 /UCR /UCR2 /OP /op /OPM /RI /D /FL
+  /AIS /TK /SP /Font — zero entries on every route, both sides — both
+  pipelines' transfer modes are alpha+blend-only by construction);
+  (c) THE BM-BEARING SHAPE CENSUS at the D187 255-grid (404 3v3,
+  login 9v9, login-typed 9v9, faq 12v12, thank-you 4v4, the four
+  legal routes 11v11 each — the live's 8-bit-quantized serializations
+  v the clone's raw CSS decimals converging on every grid point; the
+  landing's animated slots the REGISTERED animation-band family around
+  the stable core). NO src/ fix required. THE S62 INSTRUMENT CATCH
+  (gotcha 72b, pinned forever by D218e): Python's banker's rounding
+  reads `round(178.5) = 178` — half-to-EVEN — where the D187 grid's
+  JS `Math.round` semantics map `0.7 × 255 = 178.5` (EXACTLY
+  representable) half-away-from-zero to 179; the first analyzer pass
+  read a FALSE drift on all four legal routes — any grid
+  re-implementation outside JS must use `floor(v×255 + 0.5)`, never
+  `round()`. The session62 suite +5 pins the clone side (TDD-verified
+  ×3: the deterministic nine, the login shimmer states, THE /SCREEN
+  LAW + the landing's stable core at the presence level, the
+  transfer-function empty-set, the 179 convergence). Gate: 889 →
+  **894** (252 unit + 125 smoke + **517 e2e in 71 files**, the s62
+  runner — the s61 list verbatim + the session62 spec appended; the
+  file-set diff EMPTY 71/71; ZERO flakes across all 22 chunks in both
+  the baseline and the final gate). VLM 8/8 zero adjudications (the
+  fifth consecutive). 21 screenshots refreshed (capture62.db, the dev
+  DB canonical before AND after — md5-verified, zero mutations).
+  DOCUMENTED: PAD (this block + the D218 ledger row + the 7.1 counts
+  71 specs/517), AGENTS (the counts + gotcha 72), CLAUDE (the
+  session-62 context), README (the 894 badge + the session62 suite
+  row), SKILL v2.61.0 (lesson 101), the remediation plan session62,
+  the session log 133, the worklog.
+
 - `[NOTE]` **Session 61 remediation (2026-10-17)** — the SECOND-
   consecutive FRESH-CLONE session (the clone at `5ebad7e`, node_modules
   + Chromium v1243 + .env + the DB 1/6/2 rebuilt; paramiko + the ssh
@@ -4333,6 +4391,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D215 | THE 35TH SURFACE — the /Shading PATTERN-interior VALUE layer at FULL PARITY: every shading pattern's ShadingType/Coords/the /Function C0/C1 endpoint values at the PDF's own float serialization censused on both sides (the same print inputs per gotcha 68) — /login 3v3 patterns IDENTICAL, /faq 0v0 (the empty set), the landing's every DISTINCT interior shape shared (the live's 14 v the clone's 10 — the count delta the registered animation-band engine family, count-only); the D205 family's shading counterpart, the first candidate the var-indirection law made measurable — the S59 token convergence CARRIED the shading layer, no fix required | Measured (the pattern-dict census through qpdf --json, both sides fresh) | research/shading-s60.mjs (the S60 probe; the record registered in this ledger) | **Registered parity (law-quality)** (Session 60) |
 | D216 | THE SECOND-INTERPOLATION-INPUT CROSS-CHECK (the pin-your-own-input law at the color layer): under a 49-char email (a different interpolation input than S59's probe) the typed text's fill census is `.0351,.0351,.0429` ×2 on BOTH sides (the live's hsl(240 10% 3.9%) floats) and all 15 distinct fills identical — zero live-only, zero clone-only; the S59 convergence is input-invariant | Measured (the typed-render fill census, both sides fresh) | research/typed-fills-s60.mjs (the S60 probe; the record registered in this ledger) | **Registered parity** (Session 60) |
 | D217 | THE 36TH SURFACE — the pdftohtml -xml READING-ORDER layer at FULL PARITY (the S61 candidate, measured on its first honest two-sided capture — 20 PDFs + the 3 alternates, identical print inputs per the pin-your-own-input law): three censuses per state — (A) the per-word FONT census (every `<text>` element's fontspec family\|size\|color, the subset prefix stripped), (B) the READING-ORDER sequence (poppler's own layout ordering — a SECOND engine's read of the text the S58/D198 line layer pinned through the qpdf token stream), (C) the COLUMN assignment (per 4pt line-bucket the sorted x-origins) — ALL EQUAL on 12 of 13 states: login 11v11, typed 11v11, reset 6v6, signup 8v8, error 12v12, faq 33v33, thank-you 3v3, privacy 46v46, terms 49v49, accessibility 81v81, refund-policy 44v44, landing 43v43 (the landing entrance-invariant at both dwell contracts); the 404 (7v7): the font census EQUAL, the order/column delta at exactly ONE word — the live's trailing space on "The page " + the 4pt-shifted following origin, the REGISTERED 2-space-glyph emission family (S47/S58); the embedded-font cross-check re-verified the S49 records exactly (faq 7× VendSans-Light, 404 5×, thank-you 4×, landing 10×, /login the DejaVu system stack — identical subsets both sides); NO src/ fix required — the line layer + the font layer + the word layer all converge | Measured (the two-sided print + pdftohtml -xml census, both sides fresh) | tests/e2e/session61-readingorder-laws.spec.ts (D217a–f) | **Registered parity (law-quality)** (Session 61) |
+| D218 | THE 37TH SURFACE — the /ExtGState-adjacent TRANSFER-MODE INTERIORS at FULL PARITY (the S62 candidate, measured on its first honest two-sided capture — 20 PDFs, identical print inputs per the pin-your-own-input law): three censuses — (A) the /BM VALUE census (every ExtGState's blend-mode entry: /Normal on every deterministic route both sides + THE /SCREEN LAW — the landing's hero `mix-blend-mode` renders into print as the /Screen blend mode, ONE entry both sides, identical shape `/BM,/ca` at full opacity, the only non-Normal blend mode in either tree), (B) THE TRANSFER-FUNCTION EMPTY-SET LAW (the PDF 32000-1 Table-59 transfer/halftone family /TR /TR2 /HT /BG /BG2 /UCR /UCR2 /OP /op /OPM /RI /D /FL /AIS /TK /SP /Font — zero entries on every route, both sides), (C) the BM-BEARING SHAPE CENSUS at the D187 255-grid (404 3v3 · login 9v9 · login-typed 9v9 · faq 12v12 · thank-you 4v4 · privacy/terms/accessibility/refund-policy 11v11 each — the live's 8-bit-quantized alphas v the clone's raw CSS decimals converging on every grid point incl. the 179 half-point; the landing's animated slots the REGISTERED animation-band family around the stable core) — NO src/ fix required. INSTRUMENT LAWS (gotcha 72): the reading-order/print columns of any two-sided probe run in a FRESH CONTEXT (an authenticated session makes /login redirect to /dashboard); the D187 grid re-implemented outside JS must use floor(v×255+0.5), never round() — Python banker's rounding read a FALSE 178v179 drift on the four legal routes | Measured (the two-sided qpdf --json gs-dict census, both sides fresh) | tests/e2e/session62-transfermode-laws.spec.ts (D218a–e) | **Registered parity (law-quality)** (Session 62) |
 
 
 
@@ -4397,7 +4456,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 20 files | 252 | `src/lib/*.test.ts` + `src/app/api/workflows/generate/route.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
-| Browser E2E | 70 specs | 512 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Browser E2E | 71 specs | 517 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 125 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins

@@ -426,6 +426,35 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   Gotcha 65 / lesson 94: the inline-storage law + the array-key
   enumeration artifact + the SMask recursion terminus.
 
+- **Session 62 (2026-10-17) remediation** — see
+  `docs/remediation-plan-session62.md`: the warm-workspace session (the
+  clone at `1c98d5d` = remote main after the operator's own session_132
+  closing-log push; the S61 environment carried over, dev DB
+  md5-verified canonical). **THE EIGHTEENTH STANDING WATCH: all
+  records hold, now with the READING-ORDER COLUMN** (the watch prints
+  /login + /faq + /thank-you per side and compares the D217 word
+  censuses — GREEN both sides; instrument catch: the print columns run
+  in a FRESH CONTEXT, since an authenticated /login redirects to
+  /dashboard — gotcha 72a). **THE D160 MOBILE-NAV RECORD EXACT — NO
+  Tailwind v4 bug** (the kickoff's watch item, unchanged). **THE
+  THIRTY-SEVENTH SURFACE (D218, law-quality): the /ExtGState-adjacent
+  TRANSFER-MODE INTERIORS at FULL PARITY** — (a) the /BM VALUE census
+  (/Normal everywhere + THE /SCREEN LAW: the landing's hero
+  `mix-blend-mode` renders into print as the /Screen blend mode, ONE
+  entry both sides, identical shape — the only non-Normal blend mode
+  in either tree); (b) THE TRANSFER-FUNCTION EMPTY-SET LAW (the
+  Table-59 family /TR /TR2 /HT /BG /BG2 /UCR /UCR2 /OP /op /OPM /RI
+  /D /FL /AIS /TK /SP /Font — zero entries, every route, both sides);
+  (c) the BM-BEARING SHAPE CENSUS at the D187 255-grid (the four legal
+  routes' 0.7-v-0.702 pair converging at 179 — the banker's-rounding
+  instrument catch, gotcha 72b, pinned by D218e: Python round(178.5) =
+  178 [half-to-even] v JS Math.round(178.5) = 179 [half-away]; any
+  grid re-implementation outside JS must use floor(v×255+0.5)). NO
+  src/ fix required. The session62 suite +5 pins the clone side
+  (GREEN ×3). Gate 889 → **894** (252 + 125 + 517 in 71 files, the
+  s62 runner's file-set diff EMPTY, zero flakes); VLM 8/8 zero
+  adjudications (the fifth consecutive).
+
 - **Session 61 (2026-10-17) remediation** — see
   `docs/remediation-plan-session61.md`: the SECOND-consecutive
   FRESH-CLONE session (the clone at `5ebad7e`; node_modules/Chromium
