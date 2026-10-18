@@ -218,8 +218,16 @@ guarded by construction this time).
 
 ## The pushed-hash record (the closing discipline)
 
-- The remediation commit **[TO BE BACK-FILLED]** — **PUSHED AND
-  WRAPPER-VERIFIED** through the wrapper v3.1.
+- The remediation commit **2fdd4d8** (32 files: the session67 spec +4 + the
+  s67 chunk runner + the reconcile-s67.py gotcha-64 checker + the docs
+  alignment [PAD/AGENTS/CLAUDE/README/SKILL v2.66.0] + the 21 refreshed
+  screenshots + the session log 143 + this plan + the worklog) — **PUSHED
+  AND WRAPPER-VERIFIED**: the push ran `822a261..2fdd4d8 HEAD -> main`
+  through the wrapper v3.1 (the paramiko 5.1.0 shim at
+  `/home/z/my-project/bin/ssh` — re-extracted from `docs/ssh.py` after the
+  workspace reset), and the wrapper's own verification gate returned
+  **remote refs/heads/main @ 2fdd4d8 == local HEAD** with exit 0, the
+  remote-tracking ref synced (git status agreeing, no "ahead" residue).
 - The operator key's fingerprint verified through paramiko's own key
   parse BEFORE the push; the wrapper's temp key copy shredded per its
   lifecycle; the operator's key file destroyed after the push (the
