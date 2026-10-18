@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (533 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (537 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,24 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (533/533) — 910 checks across three layers (Session 66:
+→ `npm run test:e2e` (537/537) — 914 checks across three layers (Session 67:
+  the session67-doinvocation-laws suite +4 e2e — THE FORTY-SECOND-SURFACE
+  pins [the content-stream /XObject Do INVOCATION LAYER under the
+  pinned-frame contract: (a) THE INVOCATION-SITE CENSUS — 24 sites = 19
+  form-container + 5 tiling-container, ZERO page-stream, ZERO unresolved,
+  exactly ONE doubly-invoked value; (b) THE VALUE CENSUS — the 11 form
+  invocations (the 1169x149 family + the 179x83 + the 2023x532 + the
+  29x29 + the 729x770 trio) + the 13 image invocations (the shared
+  payload family + the clone-only CSS-rasterized slivers); (c) THE SHARED
+  PHASE FORM — the doubly-invoked animated pill whose emitted geometry
+  differs by pinned frame (len765 -> len635), IDENTICALLY on both sides;
+  (d) THE T-INVARIANCE BY VALUE — the full invoked tree identical across
+  frames modulo the phase pair; the cross-side laws: the object-number
+  ALIGNMENT (obj:42-52, 5 of 6 byte-identical), the trio's value parity
+  across the renumbering, the near-twin's ONE-extra color
+  re-establishment delta — no src/ fix]; the TWENTY-THIRD standing watch
+  all records hold NOW WITH THE INVOCATION COLUMNS; the D160 mobile-nav
+  record — the clone EXACT again (NO Tailwind v4 bug); Session 66:
 the session66-scninvocation-laws suite +4 e2e — THE FORTY-FIRST-SURFACE
 pins [the /scn PATTERN-INVOCATION LAYER under the pinned-frame contract:
 (a) the invocation-site census — 7 form sites, ZERO page-stream

@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.65.0 · **Last updated:** 2026-10-18 (Session 66 remediation)
+> **Version:** 2.66.0 · **Last updated:** 2026-10-18 (Session 67 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -2142,6 +2142,37 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     transfer function in either tree sat INSIDE a /SMask dict
     ({1 exch sub}, funcType 4), two levels beneath the census every
     prior session trusted; every empty-set law is depth-scoped.
+
+106. **The Do invocation layer + the sort-normalization discipline
+    (Session 67)**: the 42nd surface (the content-stream /XObject Do
+    invocation layer under the pinned-frame contract) measured WHERE
+    the document invokes its XObjects — every `<name> Do` site in
+    every page + form + tiling stream, the names resolved BY VALUE
+    through each OWNER's /Resources//XObject table (the S66 /scn
+    layer's sibling). LESSONS: (a) THE OWNER-TABLE LAW GENERALIZES:
+    the lesson-105 owner-resolution law (resolve each name through
+    its OWNING stream's table) extends from /Pattern to /XObject —
+    and the /Do sites live in TILING streams too (the logo/icon
+    tiles' `/X# Do` paints), not just forms; a page+form-only census
+    misses the tiling-container sites. (b) THE PHASE-FORM FAMILY:
+    an animated element pinned at different frames emits DIFFERENT
+    stream bytes (the pill's m/l/c capsule repositioned — len765 ->
+    len635) — a T-invariance pin over a tree carrying an animated
+    form must normalize the phase pair BEFORE comparing, or it reads
+    false drift. (c) THE SORT-NORMALIZATION DISCIPLINE (the pin-side
+    catch): when normalizing tokens for a sorted-list comparison,
+    the replace MUST precede the sort — `len635` sorts BEFORE
+    `len67` where `len765` sorts AFTER, so a replace-after-sort
+    breaks list alignment and reports a phantom 2-element delta.
+    (d) THE COLOR RE-ESTABLISHMENT FAMILY: engine print pipelines
+    re-emit `1 1 1 RG 1 1 1 rg` before text blocks at different
+    granularities (the clone's 18-char extra re-establishment in an
+    otherwise byte-identical 4.8K form) — pure emission, zero
+    visual difference; the S51 white-re-establishment record's
+    form-layer sighting. (e) THE BOTH-SIDES BURGER FORM: the live's
+    mobile burger carries NO aria-expanded (the clone's superset
+    does) — a both-sides detection form must key on the shared
+    `md:hidden` class, not the clone's own a11y extras.
 
 105. **The invocation layer + the name-renumbering-in-stream law
     (Session 66)**: the 41st surface (the content-stream /scn

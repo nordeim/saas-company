@@ -426,6 +426,34 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   Gotcha 65 / lesson 94: the inline-storage law + the array-key
   enumeration artifact + the SMask recursion terminus.
 
+- **Session 67 (2026-10-18) remediation** — see
+  `docs/remediation-plan-session67.md`: the FRESH-CLONE REBUILD session
+  (the fourth in seven: the workspace reset; npm ci, Chromium v1243,
+  `.env`, the DB re-seeded 1/6/2, paramiko + the ssh shim). **THE
+  FORTY-SECOND SURFACE (D223): the content-stream /XObject Do
+  INVOCATION LAYER under the pinned-frame contract** — the /scn
+  census's sibling: every `<name> Do` site in every page + form +
+  tiling stream, resolved BY VALUE through each owner's
+  /Resources//XObject table. The invocation-site census (24 sites =
+  19 form + 5 tiling, zero page-stream, zero unresolved, one
+  doubly-invoked value), the value census (11 forms + 13 images incl.
+  the clone-only CSS-rasterized slivers), THE SHARED PHASE FORM (the
+  animated pill len765 -> len635 across frames, identically on both
+  sides — the first two-sided phase-dependent emission at the
+  form-stream layer), and the T-invariance by value. The cross-side
+  laws: the object-number ALIGNMENT across sides (obj:42-52, 5 of 6
+  byte-identical), the trio's full value parity across the renumbering,
+  and the near-twin's whole delta = ONE extra `1 1 1 RG 1 1 1 rg`
+  color re-establishment (18 chars, zero visual difference). The
+  TWENTY-THIRD standing watch all records hold (with the invocation
+  columns); the D160 mobile-nav record: the clone EXACT (NO Tailwind
+  v4 bug; two instrument-form catches — the menu-detection and
+  burger-detection forms). The session67 suite +4 (GREEN x3; one
+  pin-calibration — the phase-token sort normalization). Gate: 910
+  -> 914 (252 + 125 + 537 in 76 files, the s67 runner, the file-set
+  diff EMPTY, zero failures); VLM 8/8 (one probe-settled adjudication
+  — ONE hero CTA); zero src/ changes again this session.
+
 - **Session 66 (2026-10-18) remediation** — see
   `docs/remediation-plan-session66.md`: the FRESH-CLONE REBUILD session
   (the third in six: the workspace reset; npm ci, Chromium v1243,
