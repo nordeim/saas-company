@@ -426,6 +426,30 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
   Gotcha 65 / lesson 94: the inline-storage law + the array-key
   enumeration artifact + the SMask recursion terminus.
 
+- **Session 66 (2026-10-18) remediation** — see
+  `docs/remediation-plan-session66.md`: the FRESH-CLONE REBUILD session
+  (the third in six: the workspace reset; npm ci, Chromium v1243,
+  `.env`, the DB re-seeded 1/6/2, paramiko + the ssh shim). **THE
+  FORTY-FIRST SURFACE (D222): the content-stream /scn PATTERN-INVOCATION
+  LAYER under the pinned-frame contract** — the invocation-site census
+  (every scn site lives in a FORM XObject, zero page-stream invocations,
+  one invocation per pattern; the clone 7 = 3 tilings + 4 shadings, the
+  live 8 = the same 3-tiling mirror minus the shimmer strip plus the
+  hero-band mask-gradient pair), the shading-invocation value mirror
+  (the 4 axial families carrying the D221b values verbatim at the fill
+  sites — full cross-side parity), the tiling-invocation bbox census,
+  and the name-renumbering-in-stream law (the invocation census
+  T-invariant by value; the tiling streams differing across prints only
+  in nested name tokens + the 1e-8 epsilon — the S65 object law now
+  measured INSIDE the pattern streams). The TWENTY-SECOND standing watch
+  all records hold both sides NOW WITH THE FUNCTION-INTERIOR COLUMNS;
+  the D160 mobile-nav record: the clone EXACT (NO Tailwind v4 bug). The
+  session66 suite +4 (GREEN x3; one honest-count calibration — the
+  tiling-tree census covers the D221d six, of which exactly three carry
+  scn sites). Gate: 906 -> 910 (252 + 125 + 533 in 75 files, the s66
+  runner, the file-set diff EMPTY, zero failures); VLM 8/8 zero
+  adjudications; zero src/ changes again this session.
+
 - **Session 65 (2026-10-17) remediation** — see
   `docs/remediation-plan-session65.md`: the FRESH-CLONE rebuild
   session (the workspace reset; npm ci, Chromium v1243, `.env`,

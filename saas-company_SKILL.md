@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.64.0 · **Last updated:** 2026-10-17 (Session 65 remediation)
+> **Version:** 2.65.0 · **Last updated:** 2026-10-18 (Session 66 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -2142,6 +2142,34 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     transfer function in either tree sat INSIDE a /SMask dict
     ({1 exch sub}, funcType 4), two levels beneath the census every
     prior session trusted; every empty-set law is depth-scoped.
+
+105. **The invocation layer + the name-renumbering-in-stream law
+    (Session 66)**: the 41st surface (the content-stream /scn
+    pattern-invocation layer under the pinned-frame contract) measured
+    WHERE the document invokes its patterns — every `/Pattern cs` +
+    `<name> scn` site in every page + form stream, the names resolved
+    BY VALUE through each owner's /Resources//Pattern table. LESSONS:
+    (a) THE INVOCATION LAYER IS THE FORMS': every scn site lives in a
+    FORM XObject — a page-stream-only census reads empty (the
+    lesson-88 shape family at the invocation layer); resolve each name
+    through its OWNING stream's table (the same name in two owners can
+    point at different objects). (b) THE CAPTURE-GROUP DISCIPLINE: a
+    regex census capturing `((\/\w+)\s+scn)` yields the name WITH the
+    operator ("/P10 scn") — every table lookup then silently reads
+    UNRESOLVED while the by-name census still "works" (it prints the
+    malformed key); capture the bare-name group, and eyeball one
+    resolved dump before trusting a census that can pass trivially on
+    UNRESOLVED. (c) THE NAME-RENUMBERING-IN-STREAM LAW: engines
+    renumber not only objects (lesson 104) but the NAME TOKENS
+    WRITTEN INSIDE streams (/X97 Do -> /X96 Do between prints) — a
+    stream-hash identity reports false drift on renumbering alone;
+    normalize the nested name tokens (/X# /P# /G#) + quantize the
+    1e-8 engine epsilon before comparing stream bytes across prints.
+    (d) THE SUBATOMIC-SCALE FAMILY: the logo tile's second paint
+    carries a near-zero cm scale whose emission differs between prints
+    (.0000000596 v .0000000298) — sub-1e-7 differences in degenerate
+    scales are engine float noise, invisible at any rendering; pin
+    them at the quantized granularity, never byte-exact.
 
 104. **The gradient-function value layer + the by-value comparison
     law (Session 65)**: the 40th surface (the gradient-function
