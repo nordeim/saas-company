@@ -159,12 +159,41 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run test` → 247/247 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 125/125 PASS
-- [ ] `npm run test:e2e` → 549/549 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 553/553 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 71 (2026-10-19) remediation** — see
+  `docs/remediation-plan-session71.md`: the FORTY-SIXTH-SURFACE cycle
+  (the worklog S70 candidates, answered by the recon's measurements).
+  **THE HEADLINE: THE TYPE-4 FUNCTION-STREAM INTERIORS under the
+  pinned-frame contract (D227)** — the {pop dup ...} postfix color
+  programs, the deepest layer of the shading tree, both sides, T=1700
+  + T=1000. (a) THE SITE CENSUS — the clone 5 = the shared trio
+  (8/14/46) + the animated pair (148/168); the live 7 = the trio +
+  its pair (141/161) + the live-only DEDUP pair (179/185 sharing one
+  body — the hero-band family); (b) THE FULL-BYTE T-INVARIANCE —
+  zero name-renumbering at this layer, the trio HELD at 8/14/46, the
+  clone's pair at -1 (the S68 attribution), the live's at +2 (the
+  asymmetry's newest member); (c) THE CROSS-SIDE TRIO — obj 8/14/46
+  byte-identical ACROSS SIDES at the SAME object numbers; (d) THE
+  ANIMATED PAIR + THE EPSILON CARRIERS — the D222 family at the body
+  layer (the clone's epsilon strings v the live's shorter rounded
+  mirrors), a/b print-deterministic, T-invariant — NO src/ fix. TWO
+  CANDIDATE-PREMISE CORRECTIONS (the richness probe): the nested-/X#
+  targets are IMAGE XObjects (not forms); zero /FontFile on either
+  side (all 10 fonts Type3 with /CharProcs glyph streams). THE WATCH:
+  the 27th standing watch all records hold both sides (the third
+  consecutive fully-green two-sided print watch, now with the D226
+  tiling-interior columns). MOBILE NAV: the clone EXACT, NO Tailwind
+  v4 bug (the eighth consecutive session; zero instrument catches —
+  the side-aware honest forms by construction). GATE: 926 -> 930 =
+  252 + 125 + 553 in 80 files (the s71 runner, all 31 chunks, ZERO
+  failures — the cleanest gate in sessions). VLM 8/8 zero
+  adjudications (the fifth consecutive clean pass).
 
 - **Session 70 (2026-10-19) remediation** — see
   `docs/remediation-plan-session70.md`: the FORTY-FIFTH-SURFACE cycle

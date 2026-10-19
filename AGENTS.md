@@ -28,7 +28,32 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (549/549) — 926 checks across three layers (Session 70:
+→ `npm run test:e2e` (553/553) — 930 checks across three layers (Session 71:
+  the session71-fn4interior-laws suite +4 e2e — THE FORTY-SIXTH-SURFACE
+  pins [the TYPE-4 FUNCTION-STREAM INTERIORS under the pinned-frame
+  contract — the {pop dup ...} postfix color programs, the deepest
+  layer of the shading tree: (a) THE SITE CENSUS — the clone 5 bodies
+  = the shared trio (obj 8 the 332-byte alpha ramp + obj 14 the
+  233-byte black fade + obj 46 the 12-byte {1 exch sub} — the S64 /TR
+  family) + THE ANIMATED PAIR (obj 148 the h1 sheen + obj 168 the
+  span sheen); (b) THE FULL-BYTE T-INVARIANCE + THE NUMBERING LAWS —
+  every body byte-identical across T=1700/T=1000, ZERO name-renumbering
+  at this layer (the bodies carry no /Name references at all), the
+  trio HELD at 8/14/46 both frames, the pair shifted by EXACTLY -1
+  (148->147, 168->167 — the S68 phase-slot attribution); (c) THE
+  CROSS-SIDE TRIO — obj 8/14/46 byte-identical ACROSS SIDES at the
+  SAME object numbers (the deepest cross-side parity yet measured) +
+  the live-only DEDUP PAIR (179/185 sharing one 246-byte body — the
+  hero-band family); (d) THE ANIMATED PAIR + THE EPSILON CARRIERS —
+  the D222 float-precision family at the body layer (the clone's
+  -.083333373/.00000063773246/.50000024/.59999925 carriers v the
+  live's shorter rounded mirrors at len 349/452 v 321/403) + the
+  live's +2 renumbering asymmetry]; the TWENTY-SEVENTH standing watch
+  ALL RECORDS HOLD both sides NOW WITH THE D226 TILING-INTERIOR
+  COLUMNS (the third consecutive fully-green two-sided print watch);
+  the D160 mobile-nav record — the clone EXACT, NO Tailwind v4 bug
+  (the eighth consecutive session; the side-aware honest forms by
+  construction, zero instrument catches); Session 70:
   the session70-tilinginterior-laws suite +4 e2e — THE FORTY-FIFTH-SURFACE
   pins [the TILING-PATTERN STREAM INTERIORS under the pinned-frame contract —
   the /P# painting streams' own interiors, the S69 G-stream walk's sibling

@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.69.0 · **Last updated:** 2026-10-19 (Session 70 remediation)
+> **Version:** 2.70.0 · **Last updated:** 2026-10-19 (Session 71 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -2208,6 +2208,36 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     never the wrapper's direct children (the S69 wrapper trap met
     again).
 
+
+110. **The function-body layer + the premise-check discipline
+    (Session 71)**: the 46th surface (THE TYPE-4 FUNCTION-STREAM
+    INTERIORS under the pinned-frame contract) — the {pop dup ...}
+    postfix color programs the shading dicts reference, the deepest
+    layer of the shading tree, both sides at T=1700/T=1000. LESSONS:
+    (a) THE NO-RENAMING LAYER: some interiors carry ZERO /Name
+    references — their cross-frame comparison needs NO
+    name-renumbering normalization at all (raw byte equality IS the
+    value identity); the renumbering-by-n laws of the tiling/G-stream
+    layers are layer-scoped, not universal. (b) THE NUMBERING-LAW
+    DIRECTION IS SIDE- AND LAYER-SPECIFIC: the clone's animated-pair
+    functions shift -1 across frames while the live's shift +2 —
+    object-number shifts are emission-order artifacts that can run
+    OPPOSITE directions on the two sides at the same layer; measure
+    the sign on both sides before recording any renumbering law.
+    (c) THE DEEPEST CROSS-SIDE PARITY IS NUMBER-ALIGNED: three
+    function bodies (obj 8/14/46) byte-identical ACROSS SIDES at the
+    SAME object numbers — when an engine emits identical bytes at
+    identical numbers, the pin can key on the number directly
+    (still pair by structural key first; the number alignment is the
+    measured result, never the assumption). (d) THE PREMISE-CHECK
+    DISCIPLINE: the recorded candidates carried TWO wrong premises —
+    the "nested XObject forms" were IMAGE XObjects (/Subtype /Image
+    with /SMask), and the "/FontFile payload" layer does not exist
+    on either side (all 10 fonts Type3, the glyph payload in
+    /CharProcs streams); probe a candidate's actual dict shapes
+    BEFORE building the walk, and register the corrected premise
+    when the recorded one is wrong (the honest open-check extended:
+    an empty-set reading may mean the LAYER is misnamed, not absent).
 
 107. **The gs invocation layer + the print-jitter adjudication law
     (Session 68)**: the 43rd surface (the content-stream `gs`
