@@ -166,6 +166,40 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 ## Known Context
 
+- **Session 68 (2026-10-19) remediation** — see
+  `docs/remediation-plan-session68.md`: the FORTY-THIRD-SURFACE cycle
+  (the worklog S67 candidates, answered by the recon's measurements).
+  **THE HEADLINE: the content-stream `gs` EXTGSTATE-INVOCATION LAYER
+  (D224)** — the third name-table sibling (S66 /Pattern + S67 /XObject,
+  now /ExtGState): every `<name> gs` site in every page + form + tiling
+  stream, the names resolved BY VALUE through each OWNER's
+  /Resources//ExtGState table. (a) THE SITE CENSUS — the clone 132 sites
+  = 124 form + 8 tiling, ZERO page-stream, ZERO unresolved, at BOTH
+  frames; the live 131→130 (123 form stable; one tiling invocation
+  print-jitter-unstable). (b) THE VALUE CENSUS — 18 identities; the
+  invocation layer runs at ~4x the object census (132 v 33 — ONE /None
+  object invoked SIX times, the S64 @51 dedup family measured at the
+  invocation layer). (c) THE PHASE-SLOT LAW — the animated 1169x149
+  phase form carries DIFFERENT gs invocations per pinned frame (ca230
+  present @T=1700 absent @T=1000; ca128 gained @T=1000) — BOTH deltas
+  attributed by container to the same form, measured IDENTICALLY on
+  both sides (the S67 shared-phase-form family extended to the gs
+  layer). (d) THE T-INVARIANCE — 16 of 18 values T-invariant, the
+  totals 132=132. CROSS-SIDE: 16 of 18 values at IDENTICAL
+  multiplicities — the two deltas attributed (the clone's ca255 +3 =
+  the CSS-rasterized shimmer tiling's 2 + the mockup form's +1; the
+  live's /Luminosity +2 = the D220 hero-band pair). NO src/ fix.
+  ALSO: the TWENTY-FOURTH standing watch (Phase A 13/13 both sides;
+  Phase B/C the clone 18/18 with the live Do-count REDs ADJUDICATED —
+  the live's len603 sliver is EMISSION-UNSTABLE ACROSS PRINTS, and the
+  S67 D223 ledger row's live count pair was one print pair recorded as
+  if a law — the honest record: the live 20-21 Do sites per print, 19
+  form STABLE); the D160 mobile-nav record GREEN again (NO Tailwind v4
+  bug); the session68 suite +4 (GREEN x4; one pin-calibration — the
+  value-identity spelling). Gate: **918 checks** (252 unit + 125 smoke
+  + 541 e2e in 77 files, all 28 chunks, zero failures); zero src/
+  changes (the eighth consecutive session).
+
 - **Session 33 (2026-10-10) remediation** — see
   `docs/remediation-plan-session33.md`: a DOM-attribute parity +
   registry-versioning + concurrent-limiter-pinning cycle (the

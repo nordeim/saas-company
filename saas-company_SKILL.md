@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.66.0 · **Last updated:** 2026-10-18 (Session 67 remediation)
+> **Version:** 2.67.0 · **Last updated:** 2026-10-19 (Session 68 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -2142,6 +2142,38 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     transfer function in either tree sat INSIDE a /SMask dict
     ({1 exch sub}, funcType 4), two levels beneath the census every
     prior session trusted; every empty-set law is depth-scoped.
+
+107. **The gs invocation layer + the print-jitter adjudication law
+    (Session 68)**: the 43rd surface (the content-stream `gs`
+    EXTGSTATE-INVOCATION layer under the pinned-frame contract) — the
+    THIRD name-table sibling (S66 /Pattern + S67 /XObject, now
+    /ExtGState): every `<name> gs` site resolved BY VALUE through each
+    owner's /Resources//ExtGState table. LESSONS: (a) THE
+    INVOCATION-LAYER MULTIPLIER: the invocation census runs at ~4x the
+    object census (132 gs invocations v 33 gs objects on the clone) —
+    ONE /None object invoked SIX times; an object-level law says
+    nothing about the invocation multiplicities, and an
+    invocation-level law nothing about the object dedup — measure the
+    layer you are pinning. (b) THE PHASE-SLOT ATTRIBUTION: a phase-
+    dependent value (the ca230 slot vanishing, the ca128 slot gained
+    across pinned frames) must be attributed to its CONTAINER (the
+    animated 1169x149 phase form) before calling it a law — the same
+    element carries both deltas, and every OTHER container's ca-set
+    stays frame-stable; the S67 shared-phase-form family extends to
+    the gs layer identically on both sides. (c) THE PRINT-JITTER
+    ADJUDICATION LAW: a live-side emission that appears at 1700-only
+    in one print pair, 1000-only in a second, and BOTH frames in a
+    third is EMISSION-UNSTABLE ACROSS PRINTS (the rAF-driven emission
+    variance beneath the WAAPI pin) — never record one print pair's
+    numbers as a frame-law; the honest record is a RANGE with the
+    stable core named (the live's Do sites: 20-21 per print, the 19
+    form sites STABLE). (d) THE SPELLING-CALIBRATION DISCIPLINE: when
+    a recon instrument and a pin spec render the same identity, the
+    SPELLING must be reconciled before the first pin run (the recon's
+    bare-dash `ca255:-:-` v the spec's canonical `ca255:CA-:-` —
+    absent-key and explicit-null must normalize identically, and the
+    distinct-key COUNT at the second frame must account for a
+    vanishing slot: 18 values @T=1700 but 17 @T=1000).
 
 106. **The Do invocation layer + the sort-normalization discipline
     (Session 67)**: the 42nd surface (the content-stream /XObject Do

@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (537 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (541 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,31 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (537/537) — 914 checks across three layers (Session 67:
+→ `npm run test:e2e` (541/541) — 918 checks across three layers (Session 68:
+  the session68-gsinvocation-laws suite +4 e2e — THE FORTY-THIRD-SURFACE
+  pins [the content-stream gs EXTGSTATE-INVOCATION LAYER under the
+  pinned-frame contract — the third name-table sibling (S66 /Pattern +
+  S67 /XObject, now /ExtGState): (a) THE INVOCATION-SITE CENSUS — 132
+  sites = 124 form-container + 8 tiling-container, ZERO page-stream,
+  ZERO unresolved, at BOTH frames; (b) THE VALUE CENSUS — 18 identities
+  (the full-stroke-fill family, the plain alpha family with ca255 x43 +
+  ca26 x30, the ONE /Screen blend, the SMask-bearing states with the
+  /None object invoked SIX times — the dedup family at the invocation
+  layer); (c) THE PHASE-SLOT LAW — the animated 1169x149 phase form
+  carries DIFFERENT gs invocations per pinned frame (the ca230 slot
+  vanishing + the ca128 slot gained at T=1000, both attributed to the
+  same form, identically on both sides); (d) THE T-INVARIANCE BY VALUE
+  — 16 of 18 values T-invariant, the totals 132=132; the cross-side
+  laws: 16 of 18 values at IDENTICAL multiplicities — the two deltas
+  = the clone's ca255 +3 (the CSS-rasterized shimmer family at the gs
+  layer + the mockup's +1) and the live's /Luminosity +2 (the D220
+  hero-band pair confirmed at the invocation layer) — no src/ fix];
+  the TWENTY-FOURTH standing watch all records hold (Phase A 13/13
+  both sides; the live Do-count phase assignment CORRECTED — the
+  len603 sliver is print-jitter-unstable, not frame-dependent; the
+  D223 ledger row's number pair was one print pair, not a law); the
+  D160 mobile-nav record — the clone EXACT again (NO Tailwind v4 bug);
+  Session 67:
   the session67-doinvocation-laws suite +4 e2e — THE FORTY-SECOND-SURFACE
   pins [the content-stream /XObject Do INVOCATION LAYER under the
   pinned-frame contract: (a) THE INVOCATION-SITE CENSUS — 24 sites = 19
