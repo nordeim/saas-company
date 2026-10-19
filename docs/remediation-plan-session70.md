@@ -261,4 +261,20 @@ pass — the S65/S66/S68 duplication family guarded by construction).
 
 ## The pushed-hash record (the closing discipline)
 
-- To be back-filled after the push (the wrapper's verification gate).
+- The remediation commit **e900ac5** (21 files: the session70 spec +4 + the
+  s70 chunk runner + the docs alignment [PAD/AGENTS/CLAUDE/README/SKILL
+  v2.69.0] + the 12 refreshed screenshots + the session log 149 + this
+  plan + the worklog) — **PUSHED AND WRAPPER-VERIFIED**: the push ran
+  `6bc993f..e900ac5 HEAD -> main` through the wrapper v3.1 (the paramiko
+  5.1.0 shim at /home/z/my-project/bin/ssh — the environment-intact
+  session, no re-extraction needed, the `--remote
+  git@github.com:nordeim/saas-company.git` override for the wrapper's
+  task-management default), and the wrapper's own verification gate
+  returned **remote refs/heads/main @ e900ac5 == local HEAD** with exit 0,
+  the remote-tracking ref synced (git status agreeing, no "ahead"
+  residue).
+- The operator key's fingerprint verified through paramiko's own key parse
+  BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU —
+  the exact S1-S69 record); the wrapper's temp key copy shredded per its
+  lifecycle; the operator's key file destroyed after the push (the
+  closing discipline).
