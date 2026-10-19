@@ -215,6 +215,22 @@ family guarded by construction).
 
 ## The pushed-hash record (the closing discipline)
 
-- (to be back-filled at close)
-
-placeholder-for-the-closing-discipline
+- The remediation commit **5a0f4b5** (27 files: the session68 spec +4 + the
+  s68 chunk runner + the docs alignment [PAD/AGENTS/CLAUDE/README/SKILL
+  v2.67.0 + the D223 ledger-row correction] + the 21 refreshed screenshots
+  + the session log 145 + this plan + the worklog) — **PUSHED AND
+  WRAPPER-VERIFIED**: the push ran `a314672..5a0f4b5 HEAD -> main`
+  through the wrapper v3.1 (the paramiko 5.1.0 shim at
+  /home/z/my-project/bin/ssh — re-extracted from docs/ssh.py after the
+  workspace reset, the `--remote git@github.com:nordeim/saas-company.git`
+  override for the wrapper's task-management default), and the wrapper's
+  own verification gate returned **remote refs/heads/main @ 5a0f4b5 ==
+  local HEAD** with exit 0, the remote-tracking ref synced (git status
+  agreeing, no "ahead" residue).
+- The operator key's fingerprint verified through paramiko's own key
+  parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU
+  — the exact S1-S67 record); the wrapper's temp key copy shredded per its
+  lifecycle; the operator's key file destroyed after the push (the
+  closing discipline).
+- Zero zombies at close; the scratch DBs removed (recon68/capture68); the
+  tree clean before the closing commit; no new branches.
