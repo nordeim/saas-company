@@ -1067,6 +1067,119 @@
   the session69 suite row), SKILL v2.68.0 (lesson 108), the
   remediation plan session69, the session log 147, the worklog.
 
+- `[NOTE]` **Session 70 remediation (2026-10-19)** — the
+  FORTY-FIFTH-SURFACE cycle (the worklog S69 candidates answered: the
+  TWENTY-SIXTH standing watch now carrying the D225 G-stream columns;
+  the 45th surface measured as THE TILING-PATTERN STREAM INTERIORS
+  under the pinned-frame contract — the /P# painting streams' own
+  interiors, the S69 G-stream walk's sibling one level into the
+  pattern tree). The workspace SURVIVED the boundary (no reset: the
+  repo pulled 98ae929 -> 6bc993f [the operator's session-log commit
+  creating docs/session_148.md, closing the S69 chain], the
+  environment intact — node_modules, .env, the Chromium v1243
+  binaries, paramiko 5.1.0, the ssh shim; the dev DB canonical 1/6/2
+  md5 081e85a5 held; gotcha 70a verified LIVE again on the first
+  check). F1: the baseline gate 922 = 252 + 125 + 545 in 78 files
+  (the s69 runner; the file-set diff EMPTY 78/78). F2: the audit
+  CLEAN (d88042e..HEAD docs-only — the S69 closing docs + the
+  operator's log; ZERO src/ since S60, the tenth consecutive;
+  npm-audit = the documented braces residual). F3 THE TWENTY-SIXTH
+  STANDING WATCH: ALL RECORDS HOLD both sides — Phase A 13/13 (the
+  working eight 739/24/101/335/390/566/285/36 per-route EQUAL, the
+  404 16=16, the sitemaps 8/7, the raw-status family, the D131 trio,
+  the clone dashboard 233 + the live's soft-404 family); Phase B/C
+  the clone 18/18 + the live 18/18 — THE SECOND CONSECUTIVE
+  FULLY-GREEN TWO-SIDED PRINT WATCH (the pinned constants 33/22/11
+  {21N+1S} @1700 + 32/21 @1000 v the live's 34/21/13 T-INVARIANT,
+  the determinism x2 both sides, the SMask kinds 8/2/1 v 10/2/1, the
+  shading 10={4+6} v 14={6+8}, the scn columns 7 v 8
+  form-container + the tiling extensions 4/6 attributed, the Do
+  columns 24={19+5} v 19 form-stable + the tiling inside the
+  registered jitter range, the gs columns 132={124+8} v 130
+  {123+7}, the transfer routes 9/12 /Normal, the print words
+  251=251) + THE NEW D225 G-STREAM COLUMNS GREEN (the site census
+  the clone 10={8 /Luminosity + 2 /Alpha} at the four operator
+  families 4/4/1/1 v the live's 12 incl. the hero-band pair; the
+  ALIGNED SIX 6/6 holding at 12/18/26/30/47/48; the
+  renumbering-by-one law 122/125/152/172 -> -1 holding). F4 THE
+  D160 MOBILE-NAV RECORD (the kickoff's explicit watch item): the
+  clone EXACT — NO TAILWIND v4 BUG (the seventh consecutive session;
+  the honest at-point adjudication: the burger's OWN SVG PATH at all
+  three registered y-points y21/y28/y35, every raw click opening the
+  canonical 7 rows x 44px in the reference order, aria-expanded=true)
+  + the live's blocked-blocked-healed family HOLDING (y21/y28
+  toaster-blocked by the fixed top-0 z-[100] toast container; y35
+  OPENING the 7-row menu at 44px — verified through the honest
+  row-visibility form after the instrument's blindness catch: the
+  live carries NO #mobile-menu id, NO aria-expanded, NO data-state —
+  its menu open-state invisible to the aria contract, the
+  markup-level difference family; the live's menu works via the
+  direct-DOM click, the 7 canonical rows at 44px). F5 THE FORTY-FIFTH
+  SURFACE (D226 — the richest of the three recorded candidates,
+  probe-decoded: the tiling interiors v the font subsets [the
+  FontFile streams frame-static at parity per S49/S54/S61] v the /TR
+  interiors [the narrow 5-v-7 fn4 census]): (a) THE SITE CENSUS —
+  the clone 6 tiling interiors = 4 tiling-painting (`/P# scn + re +
+  f*`) + 2 q/Q-wrapped form-placing; the bbox multiset [0,0,596,843]
+  x3 (the page-wide trio sharing ONE normalized identity — the /G#+/
+  P# name pairs the only difference, the per-instance gs/pattern
+  naming) + the logo tile [0,0,201,201] + the shimmer strip
+  [0,0,738.00012,26.000122] (the ONE /Matrix carrier
+  [0.99999988,0,0,0.9999972,81,946] — the S65 single-matrix law at
+  the interior layer) + the icon tile [122,150,247,275]; (b) THE
+  HELD PAIR + THE RENUMBERING-BY-FOUR — obj 13/19 hold their numbers
+  at BOTH frames with byte-identical streams (positioned before the
+  vanishing ca230 phase-slot); the four shifted tilings
+  (101/147/153/173 -> 100/146/152/172) each move by EXACTLY -1 with
+  name-only deltas (the S66 renumbering law inside the tiling
+  streams; the magnitude attributed to the S68 phase-slot
+  contraction one layer up); (c) THE LOGO-TILE DECOMPOSITION + THE
+  2^-24/2^-25 EPSILON LAW — the clone's logo tile paints TWO Do
+  placements (the full-size flip `201 0 0 -201 0 201 cm ... Do Q` +
+  an epsilon-scale second placement, len 144) v the live's ONE (len
+  59 — the D125 animated-petals form family cross-side); the second
+  placement's cm carries the DETERMINISTIC T-DEPENDENT carrier:
+  exactly 2^-24 (`-.000000059604645`) @T=1700 v 2^-25
+  (`-.000000029802322`) @T=1000 — the logo-petal scale animation's
+  float residue at the pinned frame, verified deterministic across
+  the a/b print pair (the ONE non-name T-dependence at this layer);
+  (d) THE SHIMMER-STRIP INTERIOR — the clone-only tiling's five-part
+  structure (the full-size /X# Do + the shimmer-blue re-fill
+  `.1059 .2902 1 RG` over the 2^-13-unit sliver + two epsilon Do
+  placements), T-invariant by value. CROSS-SIDE: obj 13/19
+  byte-identical ACROSS SIDES at the same object numbers; the icon
+  tile + the page-wide third normalized-identical (name-shifted
+  only); the live's 7 tilings ALL frame-stable at held numbers with
+  raw byte-identical streams (the renumbering law's two-sided
+  asymmetry — the live's phase-slot contraction sits outside its
+  tiling numbering); the structural deltas — the clone's shimmer
+  strip (no live counterpart) v the live's hero-band pair
+  [0,62,596,587] x2 (no clone counterpart, the D220 family at the
+  tiling layer) — NO src/ fix required. Two instrument catches: the
+  research d160 probe's #mobile-menu blindness (the honest
+  row-visibility form) + the wrapper-trap row census (the committed
+  spec's `#mobile-menu a, button` form). F6: the session70 suite +4
+  (D226a-d GREEN x3 — the determinism discipline; one
+  pin-calibration catch pre-run: the PDF number format's
+  NO-LEADING-ZERO decimals in the epsilon strings). F7: the full
+  gate 922 -> **926 = 252 + 125 + 549** in **79 files** (the s70
+  runner — the s69 list verbatim + the session70 spec appended per
+  gotcha 66c/67; the file-set diff EMPTY 79/79; one chunk-11 timing
+  flake [the registered family] green on the isolated re-runs x3 +
+  the in-runner retry; all 30 chunks). F8: 21 screenshots refreshed
+  (capture70.db — the dev DB canonical before AND after, md5
+  081e85a5, zero mutations) + VLM 8/8 ZERO ADJUDICATIONS (the
+  fourth consecutive clean pass; the mobile menu the canonical rows
+  + the Get Started pill, evenly spaced). DOCUMENTED: PAD (this
+  block + the D226 ledger row + the 7.1 counts 79 specs/549), AGENTS
+  (the counts + the Session-70 gate prefix), CLAUDE (the session-70
+  context + the pre-push checklist refresh), README (the 926 badge +
+  the session70 suite row), SKILL v2.69.0 (lesson 109 — the
+  tiling-interior layer, the epsilon-carrier law, the renumbering
+  asymmetry, the honest open-check), the remediation plan session70,
+  the session log 149, the worklog.
+
+
 - `[NOTE]` **Session 68 remediation (2026-10-19)** — the
   FRESH-CLONE REBUILD session (the fifth in eight — the workspace reset
   at the boundary: a fresh clone at `a314672` [the operator's `update
@@ -4818,6 +4931,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | D223 | THE 42ND SURFACE — the content-stream /XObject Do INVOCATION LAYER under the pinned-frame contract (the S67 candidate, measured on both sides at T=1700 + T=1000 through every page + form + tiling stream, the names resolved BY VALUE through each owner's /Resources//XObject table): (a) THE INVOCATION-SITE CENSUS — the clone 24 sites = 19 form-container + 5 tiling-container, ZERO page-stream, ZERO unresolved, exactly ONE doubly-invoked value (the phase form); (b) THE VALUE CENSUS — 11 form invocations (the 1169x149 family [len4781 near-twin, len112, the len765 phase pair, len67], the 179x83 len2098, the 2023x532 len60, the 29x29 len1003, the 729x770 trio len2084/2106/2116) + 13 image invocations (the shared family incl. the 6220800 video frame + the clone-only CSS-rasterized slivers len2214/57564/603/78); (c) THE SHARED PHASE FORM — the doubly-invoked 1169x149 form is an animated pill whose emitted geometry differs by pinned frame (len765 -> len635, the m/l/c capsule repositioned), IDENTICALLY on both sides — the first two-sided phase-dependent emission at the form-stream layer; (d) THE T-INVARIANCE BY VALUE — the full invoked tree identical across frames modulo the phase pair (the len603 sliver T-invariant on the clone; the live's own len603 emission CORRECTED Session 68: EMISSION-UNSTABLE ACROSS PRINTS — the rAF-driven print variance beneath the WAAPI pin, appearing at 1700-only / 1000-only / both across three print pairs — never a stable function of the pinned frame). CROSS-SIDE: the 1169x149 object numbers ALIGN across sides (obj:42-52, 5 of 6 streams byte-identical renormalized); the trio byte-identical by value across sides and T (the renumbering family); the near-twin delta = ONE extra `1 1 1 RG 1 1 1 rg` color re-establishment on the clone (18 chars, zero visual difference) — NO src/ fix required | Measured (the two-sided pinned-print qpdf Do-invocation walk at T=1700/T=1000: every page + form + tiling stream decoded, the `<name> Do` sites resolved through the owner name tables to XObject VALUE identities) | tests/e2e/session67-doinvocation-laws.spec.ts (D223a-d) | **Registered parity (law-quality)** (Session 67) |
 | D224 | THE 43RD SURFACE — the content-stream `gs` EXTGSTATE-INVOCATION LAYER under the pinned-frame contract (the S68 candidate, measured on both sides at T=1700 + T=1000 through every page + form + tiling stream, the names resolved BY VALUE through each owner's /Resources//ExtGState table — the third name-table sibling): (a) THE INVOCATION-SITE CENSUS — the clone 132 sites = 124 form-container + 8 tiling-container, ZERO page-stream, ZERO unresolved, at BOTH frames; the live 131→130 (123 form STABLE; one tiling invocation print-jitter-unstable); (b) THE VALUE CENSUS — 18 distinct identities (the full-stroke-fill family 17 = ca204×3 + ca255×13 + ca26×1; the plain alpha family ca255×43, ca26×30, ca153×8, ca51×6, ca128×3, ca5×3, the singles ca13/ca179/ca204/ca230/ca77; the ONE /Screen blend; the SMask-bearing 8 /Luminosity + 2 /Alpha + 6 /None — ONE /None object invoked SIX times, the S64 @51 dedup family at the invocation layer, the layer at ~4× the object census); (c) THE PHASE-SLOT LAW — the animated 1169x149 phase form carries DIFFERENT gs invocations per pinned frame (the ca230 slot present @T=1700 absent @T=1000; the ca128 slot GAINED @T=1000, 3→4), BOTH deltas attributed by container to the same form, IDENTICALLY on both sides; every other container's ca-set frame-stable; (d) THE T-INVARIANCE BY VALUE — 16 of 18 values T-invariant, only the two phase slots move, the totals 132=132. CROSS-SIDE: 16 of 18 values at IDENTICAL multiplicities — the two deltas attributed (the clone's ca255 +3 = the border-shimmer tiling's 2 clone-only invocations [the D125/S56 CSS-rasterized family at the gs layer] + the dashboard-mockup form's +1; the live's /Luminosity +2 = the D220 hero-band mask-gradient pair confirmed at the invocation layer) — NO src/ fix required | Measured (the two-sided pinned-print qpdf gs-invocation walk at T=1700/T=1000: every page + form + tiling stream decoded, the `<name> gs` sites resolved through the owner /ExtGState tables to gs VALUE identities) | tests/e2e/session68-gsinvocation-laws.spec.ts (D224a-d) | **Registered parity (law-quality)** (Session 68) |
 | D225 | THE 44TH SURFACE — the /SMask G-STREAM INTERIORS under the pinned-frame contract (the S69 candidate, measured on both sides at T=1700 + T=1000 — every gs object's /SMask resolved, every /G form XObject's interior decoded: the BBox + the /Group/S + the stream bytes + the operator families + the nested resource tables, BY VALUE per lessons 103/104): (a) THE SITE CENSUS — the clone 10 G-streams = 8 /Luminosity + 2 /Alpha, every /G a /Transparency group form, four operator families (tiling-painting `scn re f*` x4, q/Q form-placing x4, the plain re-fill x1, the BARE-DO placement x1 — obj:48's Do with no q/Q wrapper); the bbox multiset [0,0,596,843]x3 + the mockup pairs + the phase form's /Alpha pair [0,0,1169,149]x2 + the logo tile [122,150,247,275]; (b) THE ALIGNED-BYTE-IDENTICAL SIX — obj 12/18/26/30/47/48 holding their object numbers at BOTH frames with byte-identical streams (positioned before the vanishing ca230 phase-slot object); (c) THE T-INVARIANCE BY VALUE + THE RENUMBERING-BY-ONE LAW — all 10 frame-stable after the name normalization (/P150->/P149, /P170->/P169, /X119->/X118, /X123->/X122 — the S66 law INSIDE the mask streams); the four shifted masks (122/125/152/172 -> 121/124/151/171) move by EXACTLY -1, attributed to the S68 ca230 phase-slot contraction (gs 33->32); (d) THE /Alpha PAIR — obj:47 the /TR-bearing re-fill (the S64 {1 exch sub} family at the fixed number), obj:48 the bare-Do painting /X43, both byte-stable; the phase dependence one level deeper (the S67 len765->len635 law). CROSS-SIDE: the live's 12 = 10 + the hero-band pair [0,62,596,587] (the D220 family at the interior layer); the shared six byte-identical across sides; 10/10 shared-bbox normalized identities equal; the /Properties sibling an EMPTY SET both sides (the name-table census closed) — NO src/ fix required | Measured (the two-sided pinned-print qpdf G-stream walk at T=1700/T=1000: every /SMask's /G form interior decoded, compared by value with the name-renumbering normalization) | tests/e2e/session69-gstream-laws.spec.ts (D225a-d) | **Registered parity (law-quality)** (Session 69) |
+| D226 | THE 45TH SURFACE — the TILING-PATTERN STREAM INTERIORS under the pinned-frame contract (the S70 candidate, measured on both sides at T=1700 + T=1000 — every PatternType-1 object's own painting stream decoded: the BBox/XStep/YStep/Matrix dict + the raw stream bytes + the operator census + the nested name tables, BY VALUE per lessons 103/104): (a) THE SITE CENSUS — the clone 6 tiling interiors = 4 tiling-painting (`/P# scn + re + f*`) + 2 q/Q-wrapped form-placing (`q cm RG rg /G3 gs /X# Do Q`); the bbox multiset [0,0,596,843]x3 (the page-wide trio sharing ONE normalized identity — the /G#+/P# name pairs the only difference) + the logo tile [0,0,201,201] + the shimmer strip [0,0,738.00012,26.000122] (the ONE /Matrix carrier [0.99999988,0,0,0.9999972,81,946]) + the icon tile [122,150,247,275]; (b) THE HELD PAIR + THE RENUMBERING-BY-FOUR — obj 13/19 hold their numbers at BOTH frames with byte-identical streams (before the vanishing ca230 phase-slot); the four shifted (101/147/153/173 -> 100/146/152/172) each move by EXACTLY -1 with name-only deltas (the S68 phase-slot attribution one layer up); (c) THE LOGO-TILE DECOMPOSITION + THE 2^-24/2^-25 EPSILON LAW — the clone's logo tile paints TWO Do placements (the full-size flip `201 0 0 -201 0 201 cm` + an epsilon-scale second placement, len 144) v the live's ONE (len 59 — the D125 animated-petals family); the second placement's cm carries the DETERMINISTIC T-DEPENDENT carrier: exactly 2^-24 (`-.000000059604645`) @T=1700 v 2^-25 (`-.000000029802322`) @T=1000 — the petal-scale animation's float residue, verified deterministic across the a/b print pair (the ONE non-name T-dependence at this layer); (d) THE SHIMMER-STRIP INTERIOR — the clone-only tiling's five-part structure (the full-size Do + the shimmer-blue re-fill `.1059 .2902 1 RG` over the 2^-13-unit sliver + two epsilon Do placements), T-invariant by value. CROSS-SIDE: obj 13/19 byte-identical ACROSS SIDES at the same numbers; the icon tile + the page-wide third normalized-identical (name-shifted); the live's 7 tilings ALL frame-stable at held numbers with raw byte-identical streams (the renumbering law's two-sided asymmetry); the structural deltas — the clone's shimmer strip (no live counterpart) v the live's hero-band pair [0,62,596,587]x2 (the D220 family) — NO src/ fix required | Measured (the two-sided pinned-print qpdf tiling-interior walk at T=1700/T=1000: every PatternType-1 stream decoded, compared by value with the name-renumbering normalization + the a/b determinism pair for the epsilon carrier) | tests/e2e/session70-tilinginterior-laws.spec.ts (D226a-d) | **Registered parity (law-quality)** (Session 70) |
 | D219 | THE 38TH SURFACE — the ANIMATION-BAND VALUE LAYER under a PINNED-FRAME PRINT CONTRACT at measured parity (the S63 candidate, measured on its first two-sided pinned capture): pause every Web-Animations-API animation at a deterministic currentTime (T=1700 and T=1000), print, census the gs layer through qpdf — each side's PINNED layer BYTE-IDENTICAL across prints (the S62 "animation band" was pure CSS/WAAPI opacity-phase randomness; the rAF families contribute no gs entries — scale-only geometry); across sides at T=1700: the full-stroke family (5 shapes) EQUAL, 14 of 16 alpha slots EQUAL at identical multiplicities, THE /SCREEN LAW holds both sides — with TWO T-INVARIANT STRUCTURAL DELTAS registered (the live's /SMask pair 13v11, re-attributed from the animation band to a CONSTANT engine family; the clone's extra @51 slot 1v2) and the phase slots pinned as deterministic functions of T (@230 present at T=1700, absent at T=1000). THE ENGINE CENSUS: the live drives its loop family WAAPI(opacity) + rAF(transform — the ambient scale 1↔1.15, the under-glow translateY 0↔-12px, the five mockup dots' scale), the clone consolidates the SAME choreography into CSS keyframes (the mockup section's DOM census identical both sides: 56 elements, 24 shape keys, the same 7 dots) — no invention, no loss, NO src/ fix required | Measured (the two-sided pinned-frame qpdf census + the rAF-proof transform sampling, both sides fresh) | tests/e2e/session63-pinnedframe-laws.spec.ts (D219a–d) | **Registered parity (law-quality)** (Session 63) |
 | D218 | THE 37TH SURFACE — the /ExtGState-adjacent TRANSFER-MODE INTERIORS at FULL PARITY (the S62 candidate, measured on its first honest two-sided capture — 20 PDFs, identical print inputs per the pin-your-own-input law): three censuses — (A) the /BM VALUE census (every ExtGState's blend-mode entry: /Normal on every deterministic route both sides + THE /SCREEN LAW — the landing's hero `mix-blend-mode` renders into print as the /Screen blend mode, ONE entry both sides, identical shape `/BM,/ca` at full opacity, the only non-Normal blend mode in either tree), (B) THE TRANSFER-FUNCTION EMPTY-SET LAW (the PDF 32000-1 Table-59 transfer/halftone family /TR /TR2 /HT /BG /BG2 /UCR /UCR2 /OP /op /OPM /RI /D /FL /AIS /TK /SP /Font — zero entries on every route, both sides), (C) the BM-BEARING SHAPE CENSUS at the D187 255-grid (404 3v3 · login 9v9 · login-typed 9v9 · faq 12v12 · thank-you 4v4 · privacy/terms/accessibility/refund-policy 11v11 each — the live's 8-bit-quantized alphas v the clone's raw CSS decimals converging on every grid point incl. the 179 half-point; the landing's animated slots the REGISTERED animation-band family around the stable core) — NO src/ fix required. INSTRUMENT LAWS (gotcha 72): the reading-order/print columns of any two-sided probe run in a FRESH CONTEXT (an authenticated session makes /login redirect to /dashboard); the D187 grid re-implemented outside JS must use floor(v×255+0.5), never round() — Python banker's rounding read a FALSE 178v179 drift on the four legal routes | Measured (the two-sided qpdf --json gs-dict census, both sides fresh) | tests/e2e/session62-transfermode-laws.spec.ts (D218a–e) | **Registered parity (law-quality)** (Session 62) |
 
@@ -4884,7 +4998,7 @@ _Session 2 additions (post-remediation state):_ D9 and D10 document the two
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit (pure seams) | 20 files | 252 | `src/lib/*.test.ts` + `src/app/api/workflows/generate/route.test.ts` + `src/instrumentation.test.ts` + `tests/db-path.test.ts` | Vitest 5 (`npm run test`) |
-| Browser E2E | 78 specs | 545 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
+| Browser E2E | 79 specs | 549 | `tests/e2e/` | Playwright 1.63 (`npm run test:e2e`) |
 | Production HTTP smoke | 1 | 125 | `scripts/smoke-test.sh` | bash + curl + python3 |
 
 ### 7.2 What each layer pins

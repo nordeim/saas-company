@@ -158,13 +158,46 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run typecheck` exits 0
 - [ ] `npm run test` → 247/247 PASS
 - [ ] `npm run build` compiles clean
-- [ ] `./scripts/smoke-test.sh` → 124/124 PASS
-- [ ] `npm run test:e2e` → 370/370 PASS (needs the build first)
+- [ ] `./scripts/smoke-test.sh` → 125/125 PASS
+- [ ] `npm run test:e2e` → 549/549 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 70 (2026-10-19) remediation** — see
+  `docs/remediation-plan-session70.md`: the FORTY-FIFTH-SURFACE cycle
+  (the worklog S69 candidates, answered by the recon's measurements).
+  **THE HEADLINE: the TILING-PATTERN STREAM INTERIORS under the
+  pinned-frame contract (D226)** — the /P# painting streams' own
+  interiors (the S69 G-stream walk's sibling, one level into the
+  pattern tree), both sides, T=1700 + T=1000. (a) THE SITE CENSUS —
+  the clone 6 = 4 tiling-painting + 2 q/Q form-placing, the page-wide
+  trio sharing ONE normalized identity, the shimmer strip the ONE
+  /Matrix carrier; (b) THE HELD PAIR + THE RENUMBERING-BY-FOUR — obj
+  13/19 byte-identical at both frames; 101/147/153/173 -> -1 with
+  name-only deltas (the S68 phase-slot attribution); (c) THE
+  LOGO-TILE DECOMPOSITION + THE 2^-24/2^-25 EPSILON LAW — the
+  clone's TWO Do placements v the live's ONE (the D125 family), the
+  epsilon-scale second placement's cm the DETERMINISTIC T-dependent
+  carrier (2^-24 @1700 v 2^-25 @1000 — the petal-scale float
+  residue); (d) THE SHIMMER-STRIP INTERIOR — the five-part
+  structure, T-invariant by value. The live's 7 tilings ALL
+  frame-stable at held numbers (the renumbering asymmetry). The 26th
+  standing watch ALL RECORDS HOLD both sides NOW WITH THE D225
+  G-STREAM COLUMNS (the second consecutive fully-green two-sided
+  print watch). The D160 mobile-nav record — the clone EXACT, NO
+  Tailwind v4 bug (the seventh consecutive session); the live's
+  blocked-blocked-healed family holding through the honest
+  row-visibility adjudication (the live has NO #mobile-menu id /
+  aria-expanded / data-state — its open-state invisible to the aria
+  contract; the instrument's blindness catch, the honest form the
+  row-visibility census). Gate 922 -> 926 = 252 + 125 + 549 in 79
+  files (the s70 runner; one registered chunk-11 timing flake green
+  on retry). VLM 8/8 zero adjudications (the fourth consecutive
+  clean pass). 21 screenshots refreshed (the dev DB canonical, zero
+  mutations). ZERO src/ changes (the tenth consecutive session).
 
 - **Session 69 (2026-10-19) remediation** — see
   `docs/remediation-plan-session69.md`: the FORTY-FOURTH-SURFACE cycle

@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.68.0 · **Last updated:** 2026-10-19 (Session 69 remediation)
+> **Version:** 2.69.0 · **Last updated:** 2026-10-19 (Session 70 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -2174,6 +2174,40 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     sides) closes the name-table sibling census — an empty set is a
     law, but a thin one; choose the richest unmeasured layer for the
     surface, register the empty set as its footnote.
+109. **The tiling-interior layer + the epsilon-carrier law (Session
+    70)**: the 45th surface (the TILING-PATTERN STREAM INTERIORS under
+    the pinned-frame contract) — the /P# painting streams' own
+    interiors, the S69 G-stream walk's sibling one level into the
+    pattern tree, both sides at T=1700/T=1000. LESSONS: (a) THE
+    DEDUP-IDENTITY FAMILY: three page-wide tiling streams can share
+    ONE normalized identity (differing only in their /G#+/P# name
+    pairs) — pair cross-frame/cross-side entries by (structural key,
+    ORDINAL), never by find()-first-match (the S69
+    positional-matching law's second sighting, now at the tiling
+    layer). (b) THE EPSILON-CARRIER LAW: an animated element's print
+    residue can live in a cm matrix as an exact float32 power of two
+    (2^-24 @T=1700 v 2^-25 @T=1000 — the petal-scale animation's
+    deterministic value at the pinned frame); verify determinism
+    across the a/b print pair BEFORE recording T-dependence (the
+    print-jitter family ruled out by construction), and read PDF
+    number formats with NO leading zeros (`-.000000059604645`, never
+    `-0.000000059604645` — the pin-calibration catch, caught
+    pre-run). (c) THE RENUMBERING ASYMMETRY: the renumbering-by-one
+    law (the S68 phase-slot attribution) is SIDE-ASYMMETRIC — the
+    clone's four tilings shift -1 while the live's seven ALL hold
+    their numbers (its phase-slot contraction sits outside its tiling
+    numbering); never assume a renumbering law is symmetric without
+    measuring both sides. (d) THE HONEST OPEN-CHECK: an instrument
+    keyed to an id/aria the OTHER side lacks (#mobile-menu,
+    aria-expanded, data-state) reads "closed" for a menu that OPENED
+    — the live's menu open-state is invisible to the aria contract;
+    adjudicate through a side-agnostic row-visibility form (the
+    expected labels rendered at the measured heights below the
+    navbar) before recording any "broken" verdict — and count menu
+    rows through the committed spec's `#mobile-menu a, button` form,
+    never the wrapper's direct children (the S69 wrapper trap met
+    again).
+
 
 107. **The gs invocation layer + the print-jitter adjudication law
     (Session 68)**: the 43rd surface (the content-stream `gs`

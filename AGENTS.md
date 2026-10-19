@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (545 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (549 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,35 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (545/545) — 922 checks across three layers (Session 69:
+→ `npm run test:e2e` (549/549) — 926 checks across three layers (Session 70:
+  the session70-tilinginterior-laws suite +4 e2e — THE FORTY-FIFTH-SURFACE
+  pins [the TILING-PATTERN STREAM INTERIORS under the pinned-frame contract —
+  the /P# painting streams' own interiors, the S69 G-stream walk's sibling
+  one level into the pattern tree: (a) THE SITE CENSUS — the clone 6 = 4
+  tiling-painting + 2 q/Q form-placing, the bbox multiset with the page-wide
+  trio sharing ONE normalized identity + the logo tile + the shimmer strip
+  (the ONE /Matrix carrier) + the icon tile; (b) THE HELD PAIR + THE
+  RENUMBERING-BY-FOUR — obj 13/19 byte-identical at both frames; the four
+  shifted tilings (101/147/153/173 -> 100/146/152/172) moving by EXACTLY -1
+  with name-only deltas (the S68 phase-slot attribution one layer up);
+  (c) THE LOGO-TILE DECOMPOSITION + THE 2^-24/2^-25 EPSILON LAW — the
+  clone's TWO Do placements (len 144) v the live's ONE (len 59, the D125
+  animated-petals family), the second placement's cm the DETERMINISTIC
+  T-DEPENDENT carrier (exactly 2^-24 @T=1700 v 2^-25 @T=1000 — the
+  petal-scale animation's float residue, verified across the a/b
+  determinism pair); (d) THE SHIMMER-STRIP INTERIOR — the five-part
+  structure (the full-size Do + the shimmer-blue `.1059 .2902 1 RG` re-fill
+  over the 2^-13 sliver + two epsilon placements), T-invariant by value;
+  CROSS-SIDE: obj 13/19 byte-identical across sides; the live's 7 tilings
+  ALL frame-stable at held numbers (the renumbering law's two-sided
+  asymmetry); the clone's shimmer strip v the live's hero-band pair the two
+  registered structural deltas]; the TWENTY-SIXTH standing watch ALL
+  RECORDS HOLD both sides NOW WITH THE D225 G-STREAM COLUMNS (the second
+  consecutive fully-green two-sided print watch); the D160 mobile-nav
+  record — the clone EXACT, NO Tailwind v4 bug (the seventh consecutive
+  session; the live's y21/y28 toaster-blocked + y35 opening the 7-row
+  menu — the blocked-blocked-healed family holding, the live's
+  no-#mobile-menu markup family); Session 69:
   the session69-gstream-laws suite +4 e2e — THE FORTY-FOURTH-SURFACE
   pins [the /SMask G-STREAM INTERIORS under the pinned-frame contract —
   the S64 dict census extended INTO the /G painting streams: (a) THE
