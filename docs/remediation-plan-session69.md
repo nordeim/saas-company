@@ -229,4 +229,24 @@ construction).
 
 ## The pushed-hash record (the closing discipline)
 
-- (back-filled at close)
+- The remediation commit **d88042e** (31 files: the session69 spec +4 + the
+  s69 chunk runner + the docs alignment [PAD/AGENTS/CLAUDE/README/SKILL
+  v2.68.0] + the 21 refreshed screenshots + the session log 147 + this
+  plan + the worklog) — **PUSHED AND WRAPPER-VERIFIED**: the push ran
+  `a508762..d88042e HEAD -> main` through the wrapper v3.1 (the paramiko
+  5.1.0 shim at /home/z/my-project/bin/ssh — re-extracted from docs/ssh.py
+  after the workspace reset, the `--remote
+  git@github.com:nordeim/saas-company.git` override for the wrapper's
+  task-management default), and the wrapper's own verification gate
+  returned **remote refs/heads/main @ d88042e == local HEAD** with exit 0,
+  the remote-tracking ref synced (git status agreeing, no "ahead"
+  residue).
+- The operator key's fingerprint verified through paramiko's own key parse
+  BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU —
+  the exact S1-S68 record); the wrapper's temp key copy shredded per its
+  lifecycle; the operator's key file destroyed after the push (the
+  closing discipline).
+- Zero zombies at close (the port sweep :3000/:3100/:3200/:3400/:3500 all
+  free, no server processes); the scratch DBs removed (recon69/capture69);
+  the dev DB canonical (md5 `081e85a5`, 1/6/2, zero mutations across the
+  session); the tree clean before the closing commit; no new branches.
