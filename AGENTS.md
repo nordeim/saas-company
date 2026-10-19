@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (541 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (545 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,25 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (541/541) — 918 checks across three layers (Session 68:
+→ `npm run test:e2e` (545/545) — 922 checks across three layers (Session 69:
+  the session69-gstream-laws suite +4 e2e — THE FORTY-FOURTH-SURFACE
+  pins [the /SMask G-STREAM INTERIORS under the pinned-frame contract —
+  the S64 dict census extended INTO the /G painting streams: (a) THE
+  SITE CENSUS — 10 G-streams = 8 /Luminosity + 2 /Alpha, every /G a
+  /Transparency group, four operator families (the tiling-painting 4 +
+  the q/Q form-placing 4 + the plain re-fill 1 + the BARE-DO placement
+  1); (b) THE ALIGNED-BYTE-IDENTICAL SIX — obj 12/18/26/30/47/48
+  holding their numbers at both frames, byte-identical; (c) THE
+  T-INVARIANCE BY VALUE + THE RENUMBERING-BY-ONE LAW — all 10
+  frame-stable after the name normalization; the four shifted masks
+  moving by EXACTLY -1, attributed to the S68 ca230 phase-slot
+  contraction (gs 33->32); (d) THE /Alpha PAIR — obj:47 the /TR-bearing
+  re-fill + obj:48 the bare-Do painting /X43, both byte-stable; the
+  phase dependence one level deeper (the S67 law)]; the TWENTY-FIFTH
+  standing watch all records hold both sides (the first fully-green
+  two-sided print watch since S65); the D160 mobile-nav record — the
+  clone EXACT via the honest elementFromPoint adjudication (NO
+  Tailwind v4 bug, the sixth consecutive session); Session 68:
   the session68-gsinvocation-laws suite +4 e2e — THE FORTY-THIRD-SURFACE
   pins [the content-stream gs EXTGSTATE-INVOCATION LAYER under the
   pinned-frame contract — the third name-table sibling (S66 /Pattern +

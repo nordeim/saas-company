@@ -166,6 +166,29 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 ## Known Context
 
+- **Session 69 (2026-10-19) remediation** — see
+  `docs/remediation-plan-session69.md`: the FORTY-FOURTH-SURFACE cycle
+  (the worklog S68 candidates, answered by the recon's measurements).
+  **THE HEADLINE: the /SMask G-STREAM INTERIORS under the pinned-frame
+  contract (D225)** — the S64 dict census extended INTO the /G painting
+  streams, both sides, T=1700 + T=1000. (a) THE SITE CENSUS — the clone
+  10 = 8 /Luminosity + 2 /Alpha, four operator families (incl. the
+  BARE-DO placement — obj:48's Do with no q/Q wrapper, its own shape);
+  (b) THE ALIGNED SIX — obj 12/18/26/30/47/48 byte-identical across
+  frames at held numbers; (c) THE RENUMBERING-BY-ONE LAW — the four
+  shifted masks move by exactly -1, ATTRIBUTED to the S68 ca230
+  phase-slot contraction (gs 33->32); (d) THE /Alpha PAIR — obj:47 the
+  /TR-bearing re-fill + obj:48 the bare-Do painting /X43, byte-stable,
+  the phase dependence one level deeper (the S67 law). The live's 12 =
+  10 + the hero-band pair [0,62,596,587] (the D220 family at the
+  interior layer); the /Properties sibling probe an EMPTY SET both
+  sides (the name-table census closed). The 25th standing watch ALL
+  RECORDS HOLD (the first fully-green two-sided print watch since
+  S65); the D160 mobile-nav record — the clone EXACT (NO Tailwind v4
+  bug, the sixth consecutive session; the live's toaster-blocked
+  y21/y28 + the y35 opening). Gate 918 -> 922 = 252 + 125 + 545 in 78
+  files; zero src/ changes (the ninth consecutive session).
+
 - **Session 68 (2026-10-19) remediation** — see
   `docs/remediation-plan-session68.md`: the FORTY-THIRD-SURFACE cycle
   (the worklog S67 candidates, answered by the recon's measurements).

@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.67.0 · **Last updated:** 2026-10-19 (Session 68 remediation)
+> **Version:** 2.68.0 · **Last updated:** 2026-10-19 (Session 69 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -2142,6 +2142,38 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     transfer function in either tree sat INSIDE a /SMask dict
     ({1 exch sub}, funcType 4), two levels beneath the census every
     prior session trusted; every empty-set law is depth-scoped.
+
+108. **The G-stream interior layer + the renumbering-by-one
+    attribution (Session 69)**: the 44th surface (the /SMask G-STREAM
+    INTERIORS under the pinned-frame contract) — the S64 dict census
+    extended INTO the mask groups' own painting streams, both sides at
+    T=1700/T=1000. LESSONS: (a) THE MASK INTERIORS ARE THE STABLE LAYER:
+    every G-stream frame-stable by value (the name-renumbering
+    normalization absorbs the /P150->/P149 + /X119->/X118 token shifts)
+    — the phase dependence lives in the PLACED form's own emission one
+    level deeper (the S67 len765->len635 law), never in the mask
+    interiors; the /Alpha pair (the /TR-bearing re-fill + the bare-Do)
+    byte-identical across frames at HELD object numbers. (b) THE
+    RENUMBERING-BY-ONE ATTRIBUTION: when an object-count contraction
+    one layer up (the S68 ca230 phase-slot vanishing, gs 33->32) shifts
+    later object numbers by exactly one, the masks BEFORE the vanishing
+    slot hold their numbers while every mask AFTER shifts -1 — measure
+    the renumbering MAGNITUDE and attribute it to the contraction
+    before recording any "renumbering family". (c) THE BARE-DO SHAPE:
+    a Do placement with NO q/Q wrapper is its own operator family —
+    classifying it under the q/Q-wrapped form-placing family produces a
+    false census split (the pin-calibration catch); let the classifier
+    enumerate the shapes the streams actually carry. (d) THE
+    POSITIONAL-MATCHING DISCIPLINE: when a census has multiple entries
+    sharing the identity key (two /Alpha at the same bbox), a
+    find()-by-first-match compares #1@frame-A against #0@frame-B — the
+    "VALUE-DIFF" dissolves under the dump probe into a matching bug;
+    match PAIRS by (key, ordinal) or dump both sides before recording
+    a cross-frame delta. (e) THE EMPTY-SET SIBLING: the /Properties
+    name-table probe (zero BDC/EMC, zero /Properties tables, both
+    sides) closes the name-table sibling census — an empty set is a
+    law, but a thin one; choose the richest unmeasured layer for the
+    surface, register the empty set as its footnote.
 
 107. **The gs invocation layer + the print-jitter adjudication law
     (Session 68)**: the 43rd surface (the content-stream `gs`
