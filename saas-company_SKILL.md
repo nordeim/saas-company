@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.71.0 · **Last updated:** 2026-10-20 (Session 72 remediation)
+> **Version:** 2.72.0 · **Last updated:** 2026-10-20 (Session 73 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -2239,6 +2239,40 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     when the recorded one is wrong (the honest open-check extended:
     an empty-set reading may mean the LAYER is misnamed, not absent).
 
+
+112. **The width+encoding layer + the cross-layer echo
+    discipline (Session 73)**: the 48th surface (THE /Widths + /Encoding
+    DIFFERENCES LAYER under the pinned-frame contract) — the D228
+    /CharProcs walk's unmeasured sibling: the same 10 Type3 fonts'
+    OBJECT-DICT tables (the /Widths advance-width arrays + the
+    /FirstChar//LastChar bounds + the /Encoding /Differences glyph-name
+    maps), every table compared BY VALUE across frames and sides.
+    LESSONS: (a) THE SIBLING-COMPLETION MOVE: when a walk decodes a
+    rich payload layer (the /CharProcs streams), the SAME objects'
+    unmeasured dict siblings (the /Widths + /Encoding tables) are the
+    natural next surface — the harness, the font census, and the
+    numbering laws all carry over, so the sibling walk is one new
+    census function on the existing instrument. (b) THE CROSS-LAYER
+    ECHO: the glyph-payload layer's set-width pair (D228c's 17-byte
+    `203 0 0 0 0 0 d1` x6 + `204 ...` x3 family) appears VERBATIM at
+    the width layer as the width values 203x6 + 204x3, and the nonzero
+    width census equals the glyph-stream census exactly (278=278) —
+    when two layers describe the same objects, their independent
+    censuses must RECONCILE, and a mismatch would localize the defect
+    to one layer; register the echo when it holds. (c) THE
+    FONT-NUMBERING RUN-JITTER AT THE DICT LAYER: the live's font
+    object numbers landed on per-load baselines this run (@1700
+    104/141/142/205 v @1000 102/139/140/203 — two apart across loads,
+    values identical in every branch), extending the S72 fn4
+    re-attribution to the font-numbering layer: NEVER record one print
+    pair's cross-frame numbering shift as a frame law without the
+    same-load a/b control; the honest value-paired T-invariance holds
+    regardless. (d) THE SPARSE-ENCODING FILLER LAW: the /Differences
+    maps are 86% filler (1662/1930 tokens the literal /g0) — the
+    vocabulary is tiny (69 names) against the code space (0-253);
+    pin the filler count + the vocabulary size, and the minimal
+    [/Type,/Differences] dict shape, so any engine change to the
+    encoding emission surfaces at the gate.
 
 111. **The glyph-payload layer + the run-jitter re-attribution
     discipline (Session 72)**: the 47th surface (THE /CharProcs

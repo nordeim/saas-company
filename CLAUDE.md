@@ -44,7 +44,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (125) | 252 unit + 400 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (125) | 252 unit + 561 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -159,12 +159,46 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run test` → 252/252 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 125/125 PASS
-- [ ] `npm run test:e2e` → 557/557 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 561/561 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 73 (2026-10-20) remediation** — see
+  `docs/remediation-plan-session73.md`: the FORTY-EIGHTH-SURFACE cycle
+  (the worklog S72 candidates answered: the TWENTY-NINTH standing watch
+  now carrying the D228 glyph-stream columns; the 48th surface measured
+  as THE /Widths + /Encoding DIFFERENCES LAYER — the D228 walk's
+  unmeasured sibling, the Type3 fonts' OBJECT-DICT tables at FULL
+  VALUE PARITY ACROSS SIDES: all 10 fonts' /Widths arrays +
+  /Encoding /Differences maps + /FirstChar//LastChar bounds
+  value-identical clone-v-live; the (FirstChar-LastChar:Widths.len)
+  signature [0-185:186, 0-183:184, 0-253:254, 0-203:204, 0-241:242,
+  0-183:184, 0-185:186, 0-198:199, 0-241:242, 0-48:49]; 1930 width
+  slots + 1940 diff tokens + the 69-name vocabulary; the clone's
+  last-four -1 numbering law at the font-dict layer; the live's font
+  numbering on per-load baselines this run (@1700 104/141/142/205 v
+  @1000 102/139/140/203 — the run-jitter family); the /g0 filler law
+  (1662/1930); the nonzero-width census EXACTLY 278 (= the glyph
+  streams) with the D228c set-width pair 203x6 + 204x3 ECHOED at the
+  width layer; the minimal [/Type,/Differences] Encoding shape. NO
+  src/ fix. The 29th standing watch ALL RECORDS HOLD both sides NOW
+  WITH THE D228 GLYPH-STREAM COLUMNS (the fifth consecutive fully-green
+  two-sided print watch; the live's D227 dedup pair at 181/187 this
+  run — within the run-jitter family). The D160 mobile-nav record
+  exact (NO Tailwind v4 bug, the TENTH consecutive session, zero
+  instrument catches). The eighth fresh-clone rebuild (the gotcha-70a
+  seed pin caught live on the first DB command and re-pinned in-repo).
+  Gate: 934 -> 938 = 252 + 125 + 561 in 82 files (the s73 runner; the
+  file-set diff EMPTY 82/82; all 33 chunks, ZERO failures — the third
+  consecutive zero-flake gate; the F1 baseline's chunk-overlap tally
+  contamination caught + reconciled by direct re-measurement 566-9=557).
+  21 screenshots refreshed (capture73.db, the dev DB canonical md5
+  99cea6ba unchanged, zero mutations). VLM 8/8 zero adjudications (the
+  sixth consecutive clean pass — the hero question scoped from the
+  start).
 
 - **Session 72 (2026-10-20) remediation** — see
   `docs/remediation-plan-session72.md`: the FORTY-SEVENTH-SURFACE cycle

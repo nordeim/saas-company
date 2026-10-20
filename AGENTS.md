@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (557 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (561 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,31 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (557/557) — 934 checks across three layers (Session 72:
+→ `npm run test:e2e` (561/561) — 938 checks across three layers (Session 73:
+  the session73-widthsencoding-laws suite +4 e2e — THE FORTY-EIGHTH-SURFACE
+  pins [THE /Widths + /Encoding DIFFERENCES LAYER under the pinned-frame
+  contract — the D228 /CharProcs walk's unmeasured sibling, the same 10
+  Type3 fonts' OBJECT-DICT tables: (a) THE SITE CENSUS — the (FirstChar-
+  LastChar:Widths.len) signature [0-185:186, 0-183:184, 0-253:254,
+  0-203:204, 0-241:242, 0-183:184, 0-185:186, 0-198:199, 0-241:242,
+  0-48:49], 1930 width slots + 1940 /Differences tokens + the 69-name
+  vocabulary; (b) THE T-INVARIANCE + THE NUMBERING LAW — every font's
+  tables value-identical across T=1700/T=1000; the clone's LAST FOUR
+  fonts at EXACTLY -1 @T=1000 (the S68 phase-slot law at the font-dict
+  layer); (c) THE SET-WIDTH-PAIR ECHO — the nonzero width census at
+  EXACTLY 278 nonzero slots (= the 278 /CharProcs streams) with the
+  D228c minimal family's values 203 x6 + 204 x3 carried INTO the width
+  arrays, the range 203-916; (d) THE STRUCTURE LAWS — the /g0 filler
+  law (1662/1930 tokens the literal /g0), every /Differences array the
+  base-0 head [0, /g0, ...], every /Encoding dict the minimal
+  [/Type,/Differences] shape — cross-side at FULL VALUE PARITY (the
+  S73 walk: ALL 10 fonts' tables value-identical clone-v-live)]; the
+  TWENTY-NINTH standing watch ALL RECORDS HOLD both sides NOW WITH THE
+  D228 GLYPH-STREAM COLUMNS (the fifth consecutive fully-green two-sided
+  print watch; the live's D227 dedup pair this run at objs 181/187 —
+  within the run-jitter family); the D160 mobile-nav record — the clone
+  EXACT, NO TAILWIND v4 BUG (the TENTH consecutive session; zero
+  instrument catches); Session 72:
   the session72-charprocs-laws suite +4 e2e — THE FORTY-SEVENTH-SURFACE
   pins [the /CharProcs GLYPH-STREAM INTERIORS under the pinned-frame
   contract — the Type3 fonts' per-glyph painting programs, the corrected
