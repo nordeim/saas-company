@@ -269,4 +269,21 @@ markers single).
 
 ## The pushed-hash record (the closing discipline)
 
-- (back-filled after the push)
+- The remediation commit **e5107c3** (28 files: the session72 spec +4 + the
+  s72 chunk runner + the docs alignment [PAD/AGENTS/CLAUDE/README/SKILL
+  v2.71.0] + the prisma allowScripts approval + the 16 refreshed
+  screenshots + the session log 153 + this plan + the worklog) —
+  **PUSHED AND WRAPPER-VERIFIED**: the push ran
+  `7c3c3ff..e5107c3 HEAD -> main` through the wrapper v3.1 (the paramiko
+  5.1.0 shim at /home/z/my-project/bin/ssh — the fresh-clone session's
+  re-extracted shim, the `--remote
+  git@github.com:nordeim/saas-company.git` override for the wrapper's
+  task-management default), and the wrapper's own verification gate
+  returned **remote refs/heads/main @ e5107c3 == local HEAD** with exit 0,
+  the remote-tracking ref synced (git status agreeing, no "ahead"
+  residue).
+- The operator key's fingerprint verified through paramiko's own key parse
+  BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU —
+  the exact S1-S71 record); the wrapper's temp key copy shredded per its
+  lifecycle; the operator's key file destroyed after the push (the
+  closing discipline).
