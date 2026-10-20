@@ -242,17 +242,18 @@ checks PASS — all new markers single, all stale markers gone).
 
 ## The pushed-hash record (the closing discipline)
 
-- The remediation commit **<PUSHED_HASH>** (N files: the session73
-  spec +4 + the s73 chunk runner + the docs alignment [PAD/AGENTS/
-  CLAUDE/README/SKILL v2.72.0] + the refreshed screenshots + the
-  session log 155 + this plan + the worklog) — **PUSHED AND
-  WRAPPER-VERIFIED** through the wrapper v3.1 (the paramiko 5.1.0
-  shim at /home/z/my-project/bin/ssh — the fresh-clone session's
+- The remediation commit **38d9878** (26 files: the session73 spec +4 + the
+  s73 chunk runner + the docs alignment [PAD/AGENTS/CLAUDE/README/SKILL
+  v2.72.0] + the 16 refreshed screenshots + the session log 155 + this
+  plan + the worklog) — **PUSHED AND WRAPPER-VERIFIED**: the push ran
+  `a2bbe30..38d9878 HEAD -> main` through the wrapper v3.1 (the paramiko
+  5.1.0 shim at /home/z/my-project/bin/ssh — the fresh-clone session's
   re-extracted shim, the `--remote
   git@github.com:nordeim/saas-company.git` override for the wrapper's
-  task-management default), the wrapper's own verification gate
-  returning **remote refs/heads/main @ <PUSHED_HASH> == local HEAD**
-  with exit 0, the remote-tracking ref synced.
+  task-management default), and the wrapper's own verification gate
+  returned **remote refs/heads/main @ 38d9878 == local HEAD** with exit
+  0, the remote-tracking ref synced (git status agreeing, no "ahead"
+  residue).
 - The operator key's fingerprint verified through paramiko's own key
   parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU —
   the exact S1-S72 record); the wrapper's temp key copy shredded per its
