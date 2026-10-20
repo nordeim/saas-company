@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.70.0 · **Last updated:** 2026-10-19 (Session 71 remediation)
+> **Version:** 2.71.0 · **Last updated:** 2026-10-20 (Session 72 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -2238,6 +2238,40 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     BEFORE building the walk, and register the corrected premise
     when the recorded one is wrong (the honest open-check extended:
     an empty-set reading may mean the LAYER is misnamed, not absent).
+
+
+111. **The glyph-payload layer + the run-jitter re-attribution
+    discipline (Session 72)**: the 47th surface (THE /CharProcs
+    GLYPH-STREAM INTERIORS under the pinned-frame contract) — the
+    Type3 fonts' per-glyph painting programs, the corrected premise
+    of the S71 font-subset candidate (no /FontFile exists on either
+    side). LESSONS: (a) THE FULL-CROSS-SIDE-BYTE-PARITY LAYER EXISTS:
+    all 163 distinct glyph bodies and all 278 per-glyph streams
+    byte-identical ACROSS SIDES — an entire payload layer can be
+    shared by both trees even when the cross-side OBJECT NUMBERING
+    diverges mid-census (clone 62/89/104/142/143/198 v live
+    63/90/102/139/140/203 after the fifth font): pair by POSITION +
+    name, never by number, when the numbering baselines differ.
+    (b) THE FONT-NUMBERING -1 LAW: the clone's last four fonts shift
+    by EXACTLY -1 @T=1000 — the ca230 phase-slot contraction
+    measures at EVERY layer that stores objects after the phase
+    slot (gs, G-streams, tilings, fn4 bodies, and now fonts), while
+    the live stays frame-stable; the -1 law is layer-universal on
+    the clone side. (c) THE RUN-JITTER RE-ATTRIBUTION DISCIPLINE:
+    a "renumbering law" recorded from TWO PRINTS OF DIFFERENT PAGE
+    LOADS may be emission-baseline variance, not a frame law —
+    the live's fn4 "+2" (S71) dissolved under the two-run
+    re-measurement (frame-stable within each print pair, +2 across
+    loads); before recording any cross-frame numbering shift,
+    re-measure with the a/b pair sharing ONE load, and register
+    run-to-run families separately from frame laws. (d) THE
+    RUN-DEPENDENT-FAMILY REGISTRATION: a live-side emission that
+    alternates across loads (the logo tile's {59,145,149} family —
+    the epsilon-scale second placement emitted only when the petal
+    animation is mid-flight at the print moment) is registered as a
+    FAMILY with its observed form set, never pinned to one branch;
+    the honest check accepts the registered set and flags only a
+    NEW form.
 
 107. **The gs invocation layer + the print-jitter adjudication law
     (Session 68)**: the 43rd surface (the content-stream `gs`

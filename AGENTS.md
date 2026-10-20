@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (549 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (557 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,41 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (553/553) — 930 checks across three layers (Session 71:
+→ `npm run test:e2e` (557/557) — 934 checks across three layers (Session 72:
+  the session72-charprocs-laws suite +4 e2e — THE FORTY-SEVENTH-SURFACE
+  pins [the /CharProcs GLYPH-STREAM INTERIORS under the pinned-frame
+  contract — the Type3 fonts' per-glyph painting programs, the corrected
+  premise of the S71 font-subset candidate, measured at FULL BYTE PARITY
+  across sides: (a) THE SITE CENSUS — the 10 Type3 fonts both sides,
+  the per-font glyph-count signature [22,9,56,29,52,25,26,15,29,15],
+  278 streams / 163 distinct bodies / 228846 bytes / lengths 17-3932,
+  the uniform FontMatrix [0.00100000005,0,0,-0.00100000005,0,0], the 76
+  shared-body dedup families at max sharing 6; (b) THE T-INVARIANCE +
+  THE FONT-NUMBERING LAW — every glyph body byte-identical across
+  frames on both sides (the clone position-paired, the live at held
+  numbers); the clone's LAST FOUR fonts shift by EXACTLY -1 @T=1000
+  (104->103, 142->141, 143->142, 198->197 — the S68 ca230 phase-slot
+  law measured at the font layer), the live frame-stable at held
+  numbers; (c) THE CROSS-SIDE FULL-BYTE PARITY — ALL 163 distinct
+  bodies AND ALL 278 per-glyph streams byte-identical ACROSS SIDES
+  (the deepest cross-side parity yet measured: the whole font payload
+  layer shared by both trees); (d) THE GLYPH PROGRAM STRUCTURE — the
+  operator census identical cross-side (d1=278, d0=0, f=269, f*=0,
+  m=462, c=2955, l=1964, h=462), every glyph the d1 set-width + bbox
+  head, the 17-byte zero-bbox minimal family the set-width pair
+  (203 x6 + 204 x3 = 9 streams — the space-class glyphs at two
+  font-size classes)]; the TWENTY-EIGHTH standing watch ALL RECORDS
+  HOLD both sides NOW WITH THE D227 FUNCTION-BODY COLUMNS (the fourth
+  consecutive fully-green two-sided print watch) + THE TWO HONEST S72
+  CORRECTIONS (the live's fn4 "+2 renumbering law" re-attributed to
+  RUN-TO-RUN emission jitter — frame-stable within a print pair, the
+  +2 family measured across loads at 141/161/179/185 v 143/163/181/187;
+  the live's logo tile now a RUN-DEPENDENT family {59,145,149} — the
+  two-placement epsilon form sighted with its own T-phase
+  2^-31@1700/2^-24@1000, the S70 one-placement reading a per-load
+  branch); the D160 mobile-nav record — the clone EXACT, NO TAILWIND
+  v4 BUG (the ninth consecutive session; the side-aware honest forms
+  by construction, zero instrument catches); Session 71:
   the session71-fn4interior-laws suite +4 e2e — THE FORTY-SIXTH-SURFACE
   pins [the TYPE-4 FUNCTION-STREAM INTERIORS under the pinned-frame
   contract — the {pop dup ...} postfix color programs, the deepest

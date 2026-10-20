@@ -156,16 +156,45 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 
 - [ ] `npm run lint` exits 0
 - [ ] `npm run typecheck` exits 0
-- [ ] `npm run test` → 247/247 PASS
+- [ ] `npm run test` → 252/252 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 125/125 PASS
-- [ ] `npm run test:e2e` → 553/553 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 557/557 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
 
+- **Session 72 (2026-10-20) remediation** — see
+  `docs/remediation-plan-session72.md`: the FORTY-SEVENTH-SURFACE cycle
+  (the worklog S71 candidates, answered by the recon's measurements).
+  **THE HEADLINE: THE /CharProcs GLYPH-STREAM INTERIORS under the
+  pinned-frame contract (D228)** — the Type3 fonts' per-glyph painting
+  programs (the corrected premise of the S71 font-subset candidate:
+  no /FontFile exists on either side — all 10 fonts Type3), both
+  sides, T=1700 + T=1000, measured at FULL BYTE PARITY ACROSS SIDES:
+  (a) the site census — 10 fonts, the glyph-count signature
+  [22,9,56,29,52,25,26,15,29,15], 278 streams / 163 distinct bodies /
+  228846 bytes, the 76 shared-body dedup families; (b) the
+  T-invariance + the font-numbering law — every glyph body
+  byte-identical across frames both sides; the clone's LAST FOUR
+  fonts at exactly -1 @T=1000 (the S68 phase-slot law at the font
+  layer), the live frame-stable; (c) THE CROSS-SIDE FULL-BYTE PARITY
+  — all 163 distinct bodies + all 278 per-glyph streams
+  byte-identical ACROSS SIDES (the deepest parity yet measured);
+  (d) the glyph program structure — the operator census identical
+  cross-side, the d1-only head form, the 17-byte set-width-pair
+  minimal family. TWO HONEST S72 CORRECTIONS: the live's fn4 "+2
+  renumbering law" (S71) re-attributed to RUN-TO-RUN emission jitter
+  (frame-stable within a print pair; the +2 family measured across
+  loads); the live's logo tile a RUN-DEPENDENT family {59,145,149}
+  (the two-placement epsilon form sighted, its own T-phase
+  2^-31@1700/2^-24@1000). The 28th standing watch all records hold
+  both sides (Phase A 13/13 + B/C 18/18+18/18 — the fourth
+  consecutive fully-green two-sided print watch); the mobile-nav
+  record exact (NO Tailwind v4 bug, the ninth consecutive session).
+  Gate 930 -> 934 = 252 + 125 + 557 in 81 files (the s72 runner).
 - **Session 71 (2026-10-19) remediation** — see
   `docs/remediation-plan-session71.md`: the FORTY-SIXTH-SURFACE cycle
   (the worklog S70 candidates, answered by the recon's measurements).
