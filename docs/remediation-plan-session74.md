@@ -233,12 +233,26 @@ content-idempotent).
 
 ## The pushed-hash record (the closing discipline)
 
-- The remediation commit **<PUSHED_HASH>** — **PUSHED AND
-  WRAPPER-VERIFIED** through the wrapper v3.1 (the paramiko 5.1.0 shim
-  at /home/z/my-project/bin/ssh, the `--remote
-  git@github.com:nordeim/saas-company.git` override), the wrapper's own
-  verification gate returning remote refs/heads/main == local HEAD.
+- The remediation commit **48c3a4a** (27 files: the session74 spec +4 + the
+  s74 chunk runner + the reconcile script + the docs alignment
+  [PAD/AGENTS/CLAUDE/README/SKILL v2.73.0] + the 16 refreshed screenshots +
+  the session log 157 + this plan + the worklog) — **PUSHED AND
+  WRAPPER-VERIFIED**: the push ran `c0ef75e..48c3a4a HEAD -> main` through
+  the wrapper v3.1 (the paramiko 5.1.0 shim at /home/z/my-project/bin/ssh —
+  the fresh-clone session's re-extracted shim, the `--remote
+  git@github.com:nordeim/saas-company.git` override for the wrapper's
+  task-management default), and the wrapper's own verification gate
+  returned **remote refs/heads/main @ 48c3a4a == local HEAD** with exit
+  0, the remote-tracking ref synced (git status agreeing, no "ahead"
+  residue). ONE PUSH RETRY HONESTLY RECORDED: the first push attempt was
+  REJECTED non-fast-forward — the remote had moved ahead by two
+  operator commits (`2b177a6` + `c0ef75e`, both "update session log",
+  adding then REMOVING an early session_157.md draft — the net tree
+  IDENTICAL to our clone base `429aeb2`); the commit rebased cleanly
+  onto `c0ef75e` (the rebase content-identical — the diff EMPTY), then
+  pushed wrapper-verified on the retry.
 - The operator key's fingerprint verified through paramiko's own key
-  parse BEFORE the push; the wrapper's temp key copy shredded per its
+  parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU —
+  the exact S1-S73 record); the wrapper's temp key copy shredded per its
   lifecycle; the operator's key file destroyed after the push (the
   closing discipline).
