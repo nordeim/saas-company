@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.73.0 · **Last updated:** 2026-10-20 (Session 74 remediation)
+> **Version:** 2.74.0 · **Last updated:** 2026-10-20 (Session 75 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -2239,6 +2239,42 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     when the recorded one is wrong (the honest open-check extended:
     an empty-set reading may mean the LAYER is misnamed, not absent).
 
+
+114. **The CMap layer + the all-ten -1 numbering law + the
+    print-browser-build law (Session 75)**: the 50th surface (THE
+    /ToUnicode CMap INTERIORS under the pinned-frame contract) — the
+    D230-registered presence-only sibling measured BY VALUE: every Type3
+    font's code-to-Unicode CMap stream + the /CIDToGIDMap identity family,
+    compared BYTE-LEVEL across frames and sides. LESSONS: (a) THE
+    FONT-FAMILY COMPLETION: D228 glyph streams -> D229 widths -> D230
+    descriptors -> D231 CMaps — the FOURTH consecutive byte-parity layer
+    of the 10-font family; ALL 10 CMap streams sha-identical ACROSS SIDES
+    (position-paired): the code-to-Unicode tables shared by both trees
+    whole. (b) THE ALL-TEN -1 NUMBERING LAW: at the CMap layer every one
+    of the ten objects shifts by EXACTLY -1 @T=1000 — NOT the font-dict
+    layer's last-four-only law — because every CMap is allocated AFTER
+    the vanishing ca230 phase-slot object, so the S68 contraction
+    propagates through the whole CMap range; the numbering-law's
+    magnitude is an ALLOCATION-ORDER property (which objects sit after
+    the phase slot), never a per-layer constant — check the allocation
+    range before predicting which objects shift. (c) THE LIGATURE LAW:
+    exactly ONE multi-char Unicode target in the whole tree (font 62's
+    <79> <00660066> — the "ff" ligature, in its own SECOND bfchar
+    block); count bfchar/bfrange entries across ALL blocks (the CMap
+    grammar allows multiple beginbfchar sections; a first-block-only
+    census undercounts). (d) THE WIDTH-MAPPING DELTA: 278 nonzero
+    widths v 268 mapped codes — 10 glyphs with widths but no Unicode
+    mapping (the non-text family); the CMap census + the width census
+    are INDEPENDENT laws that must be reconciled, never assumed equal.
+    (e) THE PRINT-BROWSER-BUILD LAW (the S75 instrument catch, the
+    gotcha-70 family's browser sibling): the python-playwright
+    1.57/chromium-1200 pair DROPS the never-intersected opacity-0
+    sections from page.pdf entirely (207 v 251 words, 17 duplicate font
+    subsets, the ca=0/ca=0.02 gs slots absent) — the pinned-frame print
+    contract is BROWSER-BUILD-SPECIFIC; collect prints through the
+    REPO's own playwright (v1.63.0/chromium v1243), never a foreign
+    browser build, and distrust any print census whose word count
+    disagrees with the committed record before debugging the analyzer.
 
 113. **The descriptor layer + the weight-signature law + the
     subset-identity family (Session 74)**: the 49th surface (THE

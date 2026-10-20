@@ -44,7 +44,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (125) | 252 unit + 565 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (125) | 252 unit + 569 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -159,13 +159,39 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run test` → 252/252 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 125/125 PASS
-- [ ] `npm run test:e2e` → 565/565 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 569/569 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
 
+- **Session 75 (2026-10-20) remediation** — see
+  `docs/remediation-plan-session75.md`: the FIFTIETH-SURFACE cycle
+  (the worklog S74 candidates answered: the THIRTY-FIRST standing
+  watch now carrying the D230 descriptor columns; the 50th surface
+  measured as THE /ToUnicode CMap INTERIORS — the D230-registered
+  presence-only sibling). THE HEADLINE: **D231, THE CMap LAYER AT
+  FULL BYTE PARITY ACROSS SIDES** — all 10 CMap streams
+  sha-identical clone-v-live (position-paired), the fifth
+  consecutive font-family layer at full byte parity (D228 glyph
+  streams -> D229 widths -> D230 descriptors -> D231 CMaps). The
+  ALL-TEN -1 numbering law (every CMap allocated after the vanishing
+  ca230 phase-slot object); the uniform structure constants; the
+  ligature law (font 62's <79> <00660066>); the 278-v-268
+  width-mapping delta. NO src/ fix. The 31st standing watch ALL
+  RECORDS HOLD both sides (Phase A 6/6 + Phase B/C the clone 24/24 +
+  the live 24/24 — the seventh consecutive fully-green two-sided
+  print watch, now with the D230 descriptor columns); the D160
+  mobile-nav clone EXACT, NO TAILWIND v4 BUG (the TWELFTH
+  consecutive session). Gate: 942 -> 946 = 252 + 125 + 569 in 84
+  files (the s75 runner; all 35 chunks GREEN, zero failures — the
+  fifth consecutive zero-flake gate). The S75 INSTRUMENT CATCH: the
+  python-playwright 1.57/chromium-1200 pair DROPS the
+  never-intersected opacity-0 sections from page.pdf (207 v 251
+  words + 17 duplicate font subsets) — collect prints through the
+  REPO's own playwright (v1.63.0/chromium v1243), never a foreign
+  browser build.
 - **Session 74 (2026-10-20) remediation** — see
   `docs/remediation-plan-session74.md`: the FORTY-NINTH-SURFACE cycle
   (the worklog S73 candidates answered: the THIRTIETH standing watch now

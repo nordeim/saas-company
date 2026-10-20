@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (565 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (569 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,39 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (565/565) — 942 checks across three layers (Session 74:
+→ `npm run test:e2e` (569/569) — 946 checks across three layers (Session 75:
+  the session75-tounicode-laws suite +4 e2e — THE FIFTIETH-SURFACE
+  pins [THE /ToUnicode CMap INTERIORS under the pinned-frame
+  contract — the D230-registered presence-only sibling measured BY
+  VALUE: (a) THE SITE CENSUS — 10 CMaps both sides (one per Type3
+  font) + the /CIDToGIDMap /Identity family; the byte-length census
+  [559,416,840,624,798,590,581,501,605,476]; the bfchar
+  [12,8,24,16,21,16,11,10,13,8] + bfrange [4,0,12,5,10,3,6,2,6,2]
+  entry censuses; (b) THE T-INVARIANCE + THE ALL-TEN -1 NUMBERING
+  LAW — every CMap byte-identical across T=1700/T=1000; ALL TEN CMap
+  object numbers shift by EXACTLY -1 @T=1000 (249->248..523->522 —
+  every CMap allocated AFTER the vanishing ca230 phase-slot object,
+  the S68 contraction through the whole CMap range); (c) THE
+  STRUCTURE LAWS — the uniform constants (the 12-dict CIDInit
+  prologue, Registry Adobe / Ordering UCS / Supplement 0, CMapName
+  /Adobe-Identity-UCS, CMapType 2, the single <00> <FF>
+  codespacerange, the defineresource epilogue) + the expanded
+  mapped-code census [21,8,55,28,51,24,25,14,28,14] (sum 268); (d)
+  THE VALUE LAWS — exactly ONE multi-char Unicode target in the
+  whole tree (font 62's <79> <00660066>, the "ff" ligature, its own
+  second bfchar block); the union Unicode vocabulary 67 (the
+  printable-ASCII family + U+00A9 + U+2014); the 278-nonzero-width v
+  268-mapped-code delta (10 glyphs with widths but no mapping) —
+  cross-side at FULL BYTE PARITY (the S75 walk: ALL 10 CMap streams
+  sha-identical clone-v-live position-paired — the fifth consecutive
+  font-family layer at full byte parity after D228/D229/D230; the
+  live's CMap numbering frame-stable this run)]; the THIRTY-FIRST
+  standing watch ALL RECORDS HOLD both sides NOW WITH THE D230
+  DESCRIPTOR COLUMNS (the seventh consecutive fully-green two-sided
+  print watch; Phase A 6/6 both sides + Phase B/C the clone 24/24 +
+  the live 24/24); the D160 mobile-nav record — the clone EXACT, NO
+  TAILWIND v4 BUG (the TWELFTH consecutive session; zero instrument
+  catches); Session 74:
   the session74-fontdescriptor-laws suite +4 e2e — THE FORTY-NINTH-SURFACE
   pins [THE /FontBBox + /FontDescriptor LAYER under the pinned-frame
   contract — the D229 walk's remaining unmeasured dict siblings, the same
