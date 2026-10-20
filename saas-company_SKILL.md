@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.72.0 · **Last updated:** 2026-10-20 (Session 73 remediation)
+> **Version:** 2.73.0 · **Last updated:** 2026-10-20 (Session 74 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -2239,6 +2239,41 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     when the recorded one is wrong (the honest open-check extended:
     an empty-set reading may mean the LAYER is misnamed, not absent).
 
+
+113. **The descriptor layer + the weight-signature law + the
+    subset-identity family (Session 74)**: the 49th surface (THE
+    /FontBBox + /FontDescriptor LAYER under the pinned-frame contract)
+    — the D229 walk's remaining unmeasured dict siblings: the same 10
+    Type3 fonts' bounding-box arrays + the full descriptor dicts +
+    the /CIDToGIDMap + /ToUnicode presence, every value compared BY
+    VALUE across frames and sides. LESSONS: (a) THE SIBLING-COMPLETION
+    MOVE COMPLETED THE FAMILY: the font-dict layer family (D228 glyph
+    streams -> D229 widths+encoding -> D230 bbox+descriptors) is now
+    fully measured — the third sibling walk took ONE new census
+    function on the SAME instrument (the font census + the numbering
+    laws carrying verbatim), confirming the D229 lesson: when a walk
+    opens an object family, enumerate ALL its dict siblings as
+    candidate surfaces immediately. (b) THE WEIGHT-SIGNATURE LAW: the
+    per-font /FontWeight census [500,600,400,500,400,600,700,500,400,
+    600] maps 1:1 onto the metric values — StemV {400->109, 500->125,
+    600->141, 700->156} and XHeight {400->550, 500->553, 600->556,
+    700->560} — the metrics are PURE FUNCTIONS of the weight class;
+    pin the MAP, never the flat per-font arrays (a reordered font set
+    breaks the array pin but never the map pin), and pin the map
+    sorted-by-key (a JS Map preserves insertion order — the S74
+    pin-calibration catch). (c) THE SUBSET-IDENTITY FAMILY: the
+    /FontName census is the A-J subset prefix family (/AAAAAA+..
+    /JAAAAA+ all + VendSans-Light) — TEN subset tags over ONE face:
+    the descriptor layer states outright what the glyph/width layers
+    implied (all 10 fonts the same self-hosted Vend Sans Light at
+    different weights/subsets); the FontFamily string carries the
+    engine's own registered prefix ('u:Vend Sans Light') — the gotcha-5
+    font-identity law now measured at the deepest dict layer. (d) THE
+    PRESENCE-ONLY SIBLINGS: /CIDToGIDMap + /ToUnicode are pinned as
+    PRESENCE + key-shape only on this surface — their VALUES (the CMap
+    streams, the identity maps) are their own future surface; register
+    them in the ledger as measured-at-presence so the next sibling walk
+    starts from the record.
 
 112. **The width+encoding layer + the cross-layer echo
     discipline (Session 73)**: the 48th surface (THE /Widths + /Encoding

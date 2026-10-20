@@ -44,7 +44,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (125) | 252 unit + 561 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (125) | 252 unit + 565 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -159,12 +159,47 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run test` → 252/252 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 125/125 PASS
-- [ ] `npm run test:e2e` → 561/561 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 565/565 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
+
+- **Session 74 (2026-10-20) remediation** — see
+  `docs/remediation-plan-session74.md`: the FORTY-NINTH-SURFACE cycle
+  (the worklog S73 candidates answered: the THIRTIETH standing watch now
+  carrying the D229 width+encoding columns; the 49th surface measured as
+  THE /FontBBox + /FontDescriptor LAYER — the D229 walk's remaining
+  unmeasured dict siblings at FULL VALUE PARITY ACROSS SIDES: all 10
+  fonts' bounding boxes + descriptor values identical clone-v-live; the
+  12-key font-dict shape on every font incl /CIDToGIDMap + /ToUnicode; the
+  clone's last-four -1 numbering law at the descriptor layer; the
+  weight-signature law [500,600,400,500,400,600,700,500,400,600] with the
+  1:1 StemV {109,125,141,156} + XHeight {550,553,556,560} metric maps; the
+  uniform constants Flags=4 + CapHeight=-700 + ItalicAngle=0 +
+  FontStretch=/Normal + FontFamily='u:Vend Sans Light'; the A-J
+  subset-identity family over ONE face. NO src/ fix. The 30th standing
+  watch ALL RECORDS HOLD both sides NOW WITH THE D229 COLUMNS (the sixth
+  consecutive fully-green two-sided print watch: Phase A 6/6 both sides
+  with the working eight at word parity 739/101/24/335/390/566/285/36 +
+  the 404 16=16 + the sitemaps 8/7 + the raw-status family + the D131/
+  D133 pair + the clone dashboard 233 + the live's localStorage-token
+  family; Phase B/C the clone 22/22 + the live 22/22 — the pinned
+  constants, determinism x2, SMask kinds, shading, scn/Do/gs tokens,
+  transfer routes, print words 251=251 + the D225-D229 columns carried).
+  The D160 mobile-nav record exact (NO Tailwind v4 bug, the ELEVENTH
+  consecutive session, zero instrument catches; the live's
+  blocked-blocked-healed family holding). The ninth fresh-clone rebuild
+  (the gotcha-70a pin applied proactively from the first DB command — no
+  out-of-repo artifact this run). Gate: 938 -> 942 = 252 + 125 + 565 in
+  83 files (the s74 runner — the s73 list verbatim + the session74 spec
+  appended; the file-set diff EMPTY 83/83; all 34 chunks, ZERO failures —
+  the fourth consecutive zero-flake gate). 21 screenshots refreshed
+  (capture74.db, the dev DB canonical md5 677a1b15 unchanged, zero
+  mutations). VLM 8/8 with ONE registered adjudication (the hero-CTA
+  question counted the navbar chrome — the S72-registered family; the
+  programmatic census ONE hero CTA 'Book a Demo' at y497/w190 exact).
 
 - **Session 73 (2026-10-20) remediation** — see
   `docs/remediation-plan-session73.md`: the FORTY-EIGHTH-SURFACE cycle

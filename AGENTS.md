@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (561 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (565 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,35 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (561/561) — 938 checks across three layers (Session 73:
+→ `npm run test:e2e` (565/565) — 942 checks across three layers (Session 74:
+  the session74-fontdescriptor-laws suite +4 e2e — THE FORTY-NINTH-SURFACE
+  pins [THE /FontBBox + /FontDescriptor LAYER under the pinned-frame
+  contract — the D229 walk's remaining unmeasured dict siblings, the same
+  10 Type3 fonts' bounding boxes + descriptor dicts + the /CIDToGIDMap +
+  /ToUnicode presence, measured BY VALUE at FULL CROSS-SIDE PARITY: (a)
+  THE SITE CENSUS — 10 fonts at [22,31,35,58,62,89,104,142,143,198]
+  @T=1700, every font the 12-key dict shape + the 10-key descriptor shape
+  [/CapHeight,/Flags,/FontFamily,/FontName,/FontStretch,/FontWeight,
+  /ItalicAngle,/StemV,/Type,/XHeight]; (b) THE T-INVARIANCE + THE
+  NUMBERING LAW — every font's FontBBox + descriptor values identical
+  across T=1700/T=1000; the LAST FOUR fonts at EXACTLY -1 @T=1000
+  (104->103, 142->141, 143->142, 198->197 — the S68 phase-slot law at
+  the descriptor layer, the same -1 family as D228/D229); (c) THE
+  WEIGHT-SIGNATURE LAW — the per-font /FontWeight census [500,600,400,
+  500,400,600,700,500,400,600] with the 1:1 metric maps {400,500,600,700}
+  -> StemV {109,125,141,156} + XHeight {550,553,556,560}; the uniform
+  constants Flags=4, CapHeight=-700, ItalicAngle=0, FontStretch=/Normal,
+  FontFamily='u:Vend Sans Light'; (d) THE SUBSET-IDENTITY LAW — the
+  /FontName census the A-J subset prefix family (/AAAAAA+ .. /JAAAAA+ all
+  + VendSans-Light — ten subset tags over ONE face); cross-side at FULL
+  VALUE PARITY (the S74 walk: ALL 10 fonts' bboxes + descriptors
+  value-identical clone-v-live; the live's numbering [22,31,35,58,63,90,
+  102,139,140,203] frame-stable this run)]; the THIRTIETH standing watch
+  ALL RECORDS HOLD both sides NOW WITH THE D229 WIDTH+ENCODING COLUMNS
+  (the sixth consecutive fully-green two-sided print watch; Phase A 6/6
+  both sides + Phase B/C the clone 22/22 + the live 22/22); the D160
+  mobile-nav record — the clone EXACT, NO TAILWIND v4 BUG (the ELEVENTH
+  consecutive session; zero instrument catches); Session 73:
   the session73-widthsencoding-laws suite +4 e2e — THE FORTY-EIGHTH-SURFACE
   pins [THE /Widths + /Encoding DIFFERENCES LAYER under the pinned-frame
   contract — the D228 /CharProcs walk's unmeasured sibling, the same 10
