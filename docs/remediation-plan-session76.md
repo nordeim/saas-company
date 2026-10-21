@@ -260,4 +260,22 @@ placement family), the remediation plan (this file), the session log
 
 ## The pushed-hash record (the closing discipline)
 
-- (to be recorded at the push)
+- The remediation commit **99ed922** (28 files: the session76 spec +4 + the
+  s76 chunk runner + the reconcile script + the boot scripts + the docs
+  alignment [PAD/AGENTS/CLAUDE/README/SKILL v2.75.0] + the 15 refreshed
+  screenshots + the session log 161 + this plan + the worklog) — **PUSHED
+  AND WRAPPER-VERIFIED**: the push ran `1cdb102..99ed922 HEAD -> main`
+  through the wrapper v3.1 (the paramiko 5.1.0 shim at
+  /home/z/my-project/bin/ssh — the fresh-clone session's re-extracted shim
+  with the venv-python shebang, the `--remote
+  git@github.com:nordeim/saas-company.git` override for the wrapper's
+  task-management default), and the wrapper's own verification gate
+  returned **remote refs/heads/main @ 99ed922 == local HEAD** with exit
+  0, the remote-tracking ref synced (git status agreeing, no "ahead"
+  residue). ZERO push retries this session (the remote unmoved since the
+  clone).
+- The operator key's fingerprint verified through paramiko's own key
+  parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU —
+  the exact S1-S75 record); the wrapper's temp key copy shredded per its
+  lifecycle; the operator's key file destroyed after the push (the
+  closing discipline).
