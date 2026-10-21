@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.74.0 · **Last updated:** 2026-10-20 (Session 75 remediation)
+> **Version:** 2.75.0 · **Last updated:** 2026-10-21 (Session 76 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -2239,6 +2239,40 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     when the recorded one is wrong (the honest open-check extended:
     an empty-set reading may mean the LAYER is misnamed, not absent).
 
+
+115. **The image-placement layer + the animation-carrier law + the
+    static-pair discipline (Session 76)**: the 51st surface (THE NESTED
+    IMAGE-XObject PLACEMENT CONTEXTS under the pinned-frame contract) —
+    the D125/S56/S57-registered object-level image family's unmeasured
+    remainder: the placement contexts (which owner streams place which
+    images through Do, at what cm transforms), compared BY VALUE across
+    frames and sides. LESSONS: (a) THE PLACEMENT-PARITY MOVE: enumerate
+    the placements BY VALUE (owner-kind + target dims + the full
+    6-number cm), never positionally — the clone's 13 placements carry
+    4 extras interleaved, so a positional diff reads 8 false deltas
+    where the value-matched census reads exactly NINE shared + FOUR
+    clone-only (the live's placement set a strict value-SUBSET of the
+    clone's — the placement-layer statement of the D125 superset law).
+    (b) THE ANIMATION-CARRIER LAW: in an SMask pair the /DeviceRGB
+    member can be the frame-dependent carrier while its /DeviceGray
+    alpha mate stays T-invariant — BUT the law is a PER-PAIR census,
+    never a global rule: the S76 pin's first draft over-generalized
+    "every RGB member is a carrier" and the gate caught the 1165x103
+    STATIC pair (both members T-invariant) within the same print —
+    register the frame-dependent family as an EXPLICIT OBJECT LIST
+    ({4, 37, 38, 53, 97, 99}), then derive the per-pair verdicts from
+    it (three carrier pairs + one both-carry exception + one static
+    pair). (c) THE NINE-IMAGE -1 LAW: the S68 phase-slot contraction
+    at the image layer hits EVERY image allocated after the vanishing
+    slot — the whole tail from obj 97 on (9 images), the same
+    allocation-order family as the D231 CMap layer's all-ten law; the
+    numbering-law's magnitude is never a per-layer constant — always
+    check which objects sit after the phase slot before predicting.
+    (d) THE EPSILON PLACEMENT FAMILY: the petal-scale carrier prints
+    at EXACTLY 2^-24 @T=1700 v 2^-25 @T=1000 in the sliver's cm (the
+    D226 float-residue law confirmed one layer deeper at the image
+    placement), and the shimmer slivers at 2^-13 — pin the cm VALUES,
+    they are deterministic functions of the pinned frame.
 
 114. **The CMap layer + the all-ten -1 numbering law + the
     print-browser-build law (Session 75)**: the 50th surface (THE

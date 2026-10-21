@@ -44,7 +44,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (125) | 252 unit + 569 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (125) | 252 unit + 573 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -159,13 +159,41 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run test` → 252/252 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 125/125 PASS
-- [ ] `npm run test:e2e` → 569/569 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 573/573 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
 
+- **Session 76 (2026-10-21) remediation** — see
+  `docs/remediation-plan-session76.md`: the FIFTY-FIRST-SURFACE cycle
+  (the worklog S75 candidates answered: the THIRTY-SECOND standing watch
+  now carrying the D231 CMap columns; the 51st surface measured as THE
+  NESTED IMAGE-XObject PLACEMENT CONTEXTS — the D125/S56/S57-registered
+  image family's unmeasured remainder). THE HEADLINE: **D232, THE
+  PLACEMENT LAYER AT FULL VALUE PARITY ACROSS SIDES** — all nine of the
+  live's placements have identical clone counterparts (target dims + the
+  full 6-number cm transform; the live's 13/9 a strict subset of the
+  clone's 18/13); the nine-image -1 numbering law (the S68 phase-slot
+  contraction at the image layer); the animation-carrier law (the RGB
+  member frame-dependent + its Gray alpha mate T-invariant in the three
+  carrier pairs; the 1047x105 both-carry exception; the 1165x103 static
+  pair); the 2^-24 petal-scale epsilon measured at the image layer (the
+  D226 law's placement-context confirmation). The watch: the 32nd
+  standing watch ALL RECORDS HOLD both sides (Phase A 6/6 + Phase B/C
+  37/37 clone + 33/33 live — the eighth consecutive fully-green
+  two-sided print watch, the D231 CMap columns green on their first
+  carried run); the D160 mobile-nav record exact (NO Tailwind v4 bug,
+  the thirteenth consecutive session); gate 946 -> 950 = 252 + 125 +
+  573 in 85 files (the s76 runner; all 36 chunks green, zero failures
+  — the sixth consecutive zero-flake gate); VLM 8/8 (one registered
+  adjudication — the hero-CTA navbar-inclusive reading, the S72
+  family); zero src/ changes (the sixteenth consecutive session); TWO
+  honest pin-calibration catches registered (the 1165x103 static-pair
+  over-generalization + the obj-99 carrier mislabel — both fixed to
+  the measured truth).
+  
 - **Session 75 (2026-10-20) remediation** — see
   `docs/remediation-plan-session75.md`: the FIFTIETH-SURFACE cycle
   (the worklog S74 candidates answered: the THIRTY-FIRST standing

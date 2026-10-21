@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (569 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (573 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,36 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (569/569) — 946 checks across three layers (Session 75:
+→ `npm run test:e2e` (573/573) — 950 checks across three layers (Session 76:
+  the session76-imagexobject-placement-laws suite +4 e2e — THE
+  FIFTY-FIRST-SURFACE pins [THE NESTED IMAGE-XObject PLACEMENT
+  CONTEXTS under the pinned-frame contract — the D125/S56/S57-registered
+  object-level image family's unmeasured remainder: (a) THE SITE CENSUS —
+  18 image objects [4,23,28,37,38,40,41,53,54,97,98,99,100,119,123,144,
+  145,146] / 13 placements = 8 form + 5 tiling, ZERO page-stream; the 5
+  RGB+Gray SMask pairs; the DCT family 4 + the ICC singleton; (b) THE
+  T-INVARIANCE + THE NINE-IMAGE -1 NUMBERING LAW — the T-invariant
+  payload family 12 byte-identical across T=1700/T=1000; the
+  frame-dependent carrier family 6; ALL NINE images from 97 on shift by
+  EXACTLY -1 @T=1000 (the S68 phase-slot contraction at the image layer);
+  (c) THE PLACEMENT VALUE CENSUS — the exact cm transforms (the six shared
+  form placements + the logo tile + the two grayscale DCTs + the 201x1
+  sliver + the shimmer trio), the epsilon family at 2^-24 @T=1700 (the
+  D226 petal-scale carrier law at the image layer) + 2^-13 (the shimmer
+  slivers); (d) THE ANIMATION-CARRIER LAW — in the three carrier pairs
+  ([53,54],[97,98],[99,100]) the /DeviceRGB member is the frame-dependent
+  carrier while its /DeviceGray alpha mate is T-invariant; the 1047x105
+  pair [37,38] the BOTH-carry exception; the 1165x103 pair [40,41] the
+  STATIC pair; the clone-only family the 201x1 pair (603/201 bytes) +
+  the shimmer trio (738x26/1x26/738x1) — cross-side ALL NINE of the
+  live's placements have IDENTICAL clone counterparts by value (the live
+  13 images / 9 placements {8 form + 1 tiling} a strict subset); the
+  THIRTY-SECOND standing watch ALL RECORDS HOLD both sides NOW WITH THE
+  D231 CMAP COLUMNS (the eighth consecutive fully-green two-sided print
+  watch; Phase A 6/6 both sides + Phase B/C the clone 37/37 + the live
+  33/33 incl. the cross-side D228-D231 byte/value-parity columns); the
+  D160 mobile-nav record — the clone EXACT, NO TAILWIND v4 BUG (the
+  THIRTEENTH consecutive session; zero instrument catches); Session 75:
   the session75-tounicode-laws suite +4 e2e — THE FIFTIETH-SURFACE
   pins [THE /ToUnicode CMap INTERIORS under the pinned-frame
   contract — the D230-registered presence-only sibling measured BY
