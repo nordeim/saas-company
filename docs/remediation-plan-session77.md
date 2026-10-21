@@ -271,4 +271,22 @@ scripts (research/doc-edits-s77-part1.py + part2.py, content-idempotent).
 
 ## The pushed-hash record (the closing discipline)
 
-- (to be back-filled after the push)
+- The remediation commit **98367a0** (28 files: the session77 spec +4 + the
+  s77 chunk runner + the reconcile script + the boot scripts + the docs
+  alignment [PAD/AGENTS/CLAUDE/README/SKILL v2.76.0] + the 14 refreshed
+  screenshots + the session log 163 + this plan + the worklog) — **PUSHED
+  AND WRAPPER-VERIFIED**: the push ran `c6b31c2..98367a0 HEAD -> main`
+  through the wrapper v3.1 (the paramiko 5.1.0 shim at
+  /home/z/my-project/bin/ssh — the fresh-clone session's re-extracted shim
+  with the venv-python shebang, the `--remote
+  git@github.com:nordeim/saas-company.git` override for the wrapper's
+  task-management default), and the wrapper's own verification gate
+  returned **remote refs/heads/main @ 98367a0 == local HEAD** with exit
+  0, the remote-tracking ref synced (git status agreeing, no "ahead"
+  residue). ZERO push retries this session (the remote unmoved since the
+  clone).
+- The operator key's fingerprint verified through paramiko's own key
+  parse BEFORE the push (SHA256:3ddaNlFhMz1JXiGEDgVEaRsUzI4Ev0IpGEEB7NnU4PU —
+  the exact S1-S76 record); the wrapper's temp key copy shredded per its
+  lifecycle; the operator's key file destroyed after the push (the
+  closing discipline).
