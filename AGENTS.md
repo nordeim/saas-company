@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` |
 | Unit tests (252 checks) | `npm run test` |
-| Browser E2E (573 checks; needs a build) | `npm run test:e2e` |
+| Browser E2E (577 checks; needs a build) | `npm run test:e2e` |
 | Prisma client after schema change | `npx prisma generate` |
 | Recreate DB from schema | `npm run db:push` |
 | Seed demo workspace | `npm run db:seed` |
@@ -28,7 +28,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `npm run lint` → `npm run typecheck` →
 `npm run test` (252/252) → `npm run build` → `./scripts/smoke-test.sh` (125/125)
-→ `npm run test:e2e` (573/573) — 950 checks across three layers (Session 76:
+→ `npm run test:e2e` (577/577) — 954 checks across three layers (Session 77:
   the session76-imagexobject-placement-laws suite +4 e2e — THE
   FIFTY-FIRST-SURFACE pins [THE NESTED IMAGE-XObject PLACEMENT
   CONTEXTS under the pinned-frame contract — the D125/S56/S57-registered

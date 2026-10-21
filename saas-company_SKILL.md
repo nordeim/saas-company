@@ -1,6 +1,6 @@
 # SAAS Company — Engineering Skill Document
 
-> **Version:** 2.75.0 · **Last updated:** 2026-10-21 (Session 76 remediation)
+> **Version:** 2.76.0 · **Last updated:** 2026-10-21 (Session 77 remediation)
 > **Scope:** Every design decision, anti-pattern, debugging procedure, and
 > parity method a future agent needs to work in this codebase.
 > **Companion docs:** `README.md` (user-facing) · `AGENTS.md` (operator) ·
@@ -2239,6 +2239,42 @@ Then: Conventional Commits with emoji (`:art: feat:`, `:bug: fix:`,
     when the recorded one is wrong (the honest open-check extended:
     an empty-set reading may mean the LAYER is misnamed, not absent).
 
+
+116. **The JPEG interior layer + the shared-table law + the
+    probe-first discipline re-verified (Session 77)**: the 52nd
+    surface (THE DCT INTERIOR STRUCTURE LAYER under the pinned-frame
+    contract) — the four grayscale-logo JPEGs' own marker chains
+    decoded segment by segment (APP0/DQT/SOF0/DHT/SOS). LESSONS:
+    (a) THE INTERIOR-DECODE MOVE: a DCT image XObject's payload is a
+    complete JPEG file — decode its OWN marker chain (APP0 header
+    values, the DQT table bytes, the SOF sampling, the DHT code-length
+    counts, the SOS scan params) instead of shas alone; the interior
+    layer carries LAWS the payload hash cannot express (the shared
+    quantization table, the per-image Huffman signatures). Mind the
+    APP0 offset: the payload is "JFIF\0" (5 bytes) + version (2) +
+    units (1) + density (4) + thumbnail (2) — a misaligned read
+    invents impossible densities. (b) THE SHARED-TABLE LAW: all four
+    logos (and all 16 image-instances across sides x frames) share ONE
+    quantization table — the STANDARD IJG luminance values
+    [16,11,12,14,12,10,16,14...] — while the HUFFMAN tables are
+    per-image custom (the encoder optimized them per content: the DC
+    two-family split + four distinct AC shapes). Pin both censuses
+    separately: the shared DQT is a constant, the DHT signature is a
+    per-dims property. (c) THE STABLE-CORE re-verification: the DCT
+    family's payloads are byte-identical across frames AND sides — the
+    family carries no animation phase and no per-load capture; when a
+    probe shows payload-level T-invariance, the interior layer is the
+    right NEXT surface (the structure below a stable byte layer is
+    itself stable and comparable). (d) THE PROBE-FIRST DISCIPLINE
+    (the gotcha-64e/65a law, S77's clean pass): all three S77
+    candidates probed on the raw shape FIRST — the ICC profile
+    (byte-identical across all four frames, a ONE-VALUE LAW) and the
+    video-poster structure (T-invariant + cross-side identical, a
+    STRUCTURAL LAW) measured as laws while the DCT interiors measured
+    RICH — the richest candidate became the surface, the two laws
+    registered in the walk record; ZERO pin-calibration catches
+    followed because every pin value was extracted from the walk
+    output by construction.
 
 115. **The image-placement layer + the animation-carrier law + the
     static-pair discipline (Session 76)**: the 51st surface (THE NESTED

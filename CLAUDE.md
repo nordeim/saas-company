@@ -44,7 +44,7 @@ PAD's deviations table) rather than silently picking a side.
 | Data | Prisma 6 + SQLite | `db/custom.db` at repo root; `db push`, no migrations |
 | Auth | Node crypto (scrypt + HMAC-SHA256 cookies) | zero external auth services |
 | AI | z-ai-web-dev-sdk (server-side only) | deterministic fallback in `src/lib/workflow.ts` |
-| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (125) | 252 unit + 573 browser checks |
+| Tests | Vitest 5 (unit) + Playwright 1.63 (E2E) + bash/curl smoke (125) | 252 unit + 577 browser checks |
 | Fonts | Self-hosted Google "Vend Sans" (variable 300-700) + next/font (Playfair/DM Serif) | the exact gstatic bytes the live serves |
 
 ## Foundational Principles
@@ -159,13 +159,40 @@ scripts/smoke-test.sh       # 38-check curl suite against the prod build
 - [ ] `npm run test` → 252/252 PASS
 - [ ] `npm run build` compiles clean
 - [ ] `./scripts/smoke-test.sh` → 125/125 PASS
-- [ ] `npm run test:e2e` → 573/573 PASS (needs the build first)
+- [ ] `npm run test:e2e` → 577/577 PASS (needs the build first)
 - [ ] Schema changes regenerated (`npx prisma generate`) and reseeded
 - [ ] No `.env`, keys, or `db/*.db` staged (`git status` review)
 - [ ] Commit message follows `:art: feat:` / `:memo: docs:` / `:bug: fix:` on `main`
 
 ## Known Context
 
+- **Session 77 (2026-10-21) remediation** — see
+  `docs/remediation-plan-session77.md`: the FIFTY-SECOND-SURFACE cycle
+  (the worklog S76 candidates answered: the THIRTY-THIRD standing watch
+  now carrying the D232 placement columns; the 52nd surface measured as
+  THE DCT INTERIOR STRUCTURE LAYER — the four grayscale-logo JPEGs'
+  own interior marker chains decoded segment by segment on the
+  two-sided pinned walk: the site census (4 DCT images, the shared
+  prefix [23,28] + the tail -1 @T=1000); the payload byte law (all
+  four T-invariant + cross-side byte-identical — the stable-shared
+  core); the uniform structure laws (the minimal APP0 JFIF v1.1, the
+  ONE shared DQT at the standard IJG luminance values across all 16
+  image-instances, the SOF0 baseline 8-bit 1-component no-subsampling
+  contract, the SOS full-spectrum sequential scan); the DHT signature
+  law (the per-dims Huffman census with the DC two-family split + the
+  four distinct custom AC tables)). The watch: the 33rd standing watch
+  ALL RECORDS HOLD both sides (Phase A 6/6 + Phase B/C 22/22 deep +
+  the shallow columns — the ninth consecutive fully-green two-sided
+  print watch, the D232 placement columns green on their first carried
+  run); the D160 mobile-nav record exact (NO Tailwind v4 bug, the
+  fourteenth consecutive session — the live's blocked-blocked-healed
+  family holding); gate 950 -> 954 = 252 + 125 + 577 in 86 files (the
+  s77 runner; all 37 chunks green, zero failures — the seventh
+  consecutive zero-flake gate); VLM 8/8 zero adjudications (the eighth
+  consecutive clean pass); zero src/ changes (the seventeenth
+  consecutive session); ZERO pin-calibration catches (all values
+  extracted from the walk output by construction).
+  
 - **Session 76 (2026-10-21) remediation** — see
   `docs/remediation-plan-session76.md`: the FIFTY-FIRST-SURFACE cycle
   (the worklog S75 candidates answered: the THIRTY-SECOND standing watch
